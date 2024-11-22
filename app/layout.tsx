@@ -18,9 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.className} flex flex-col items-center px-16 pt-20 antialiased`}
+        className={`${montserrat.className} flex flex-col items-center px-8 pt-20 antialiased md:px-16`}
       >
-        <div className="fixed left-0 right-0 top-0 z-10 flex justify-center px-16">
+        <div className="fixed left-0 right-0 top-0 z-10 flex justify-center px-8 md:px-16">
           <nav className="flex w-full max-w-[90rem] items-center justify-between bg-white/80 pb-3 pt-8 backdrop-blur">
             <Left />
             <Logo />

@@ -23,7 +23,7 @@ export default function Left() {
           <Link
             key={name}
             href={href}
-            className={`rounded-md px-4 py-1 ${pathname === href && "bg-stone-100"}`}
+            className={`rounded-md px-4 py-1 ${pathname === href ? "border border-black/5 bg-stone-100" : "hover:bg-stone-100"}`}
           >
             <p className="hidden font-medium md:block">{name}</p>
           </Link>
