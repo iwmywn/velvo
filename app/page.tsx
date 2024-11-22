@@ -22,15 +22,15 @@ const categories = [
       "Explore adorable, comfortable, and safe collections for kids, perfect for everyday activities.",
     href: "/category/kids",
   },
-];
+] as const;
 
 export default function Home() {
   return (
-    <main className="mt-8 w-full max-w-[90rem]">
+    <main className="relative z-10 mt-8 flex flex-col items-center gap-7 bg-white px-8 md:px-20">
       {categories.map(({ src, alt, describe, href }, index) => (
         <section
           key={index}
-          className={`mb-7 flex flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
+          className={`flex w-full flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
           <div className="flex max-h-[25rem] justify-center px-3 md:w-[50%]">
             <img
@@ -45,7 +45,7 @@ export default function Home() {
             {/* todo: text should not be scale */}
             <Link
               href={href}
-              className="rounded-md border border-white bg-black/70 px-5 py-3 text-sm text-white transition-all duration-500 hover:scale-95"
+              className="rounded-md border border-white bg-black px-5 py-3 text-sm text-white transition-all duration-500 hover:scale-95"
             >
               EXPLORE THE SELECTION
             </Link>

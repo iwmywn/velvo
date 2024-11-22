@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { montserrat } from "./ui/fonts";
-import Left from "./ui/header/left";
-import Logo from "./ui/header/logo";
-import Right from "./ui/header/right";
+import Header from "./ui/header";
+import Footer from "./ui/footer";
 
 export const metadata: Metadata = {
   title: "StyleWave",
@@ -18,16 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${montserrat.className} flex flex-col items-center px-8 pt-20 antialiased md:px-16`}
+        className={`${montserrat.className} mb-[35rem] pt-20 antialiased xl:mb-[17rem]`}
       >
-        <div className="fixed left-0 right-0 top-0 z-10 flex justify-center px-8 md:px-16">
-          <nav className="flex w-full max-w-[90rem] items-center justify-between bg-white/80 pb-3 pt-8 backdrop-blur">
-            <Left />
-            <Logo />
-            <Right />
-          </nav>
-        </div>
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
