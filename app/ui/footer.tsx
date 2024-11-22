@@ -53,7 +53,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 flex flex-col items-center gap-10 bg-stone-100 px-8 pb-4 pt-10 md:px-20">
+    <footer className="fixed bottom-0 left-0 right-0 z-[9] flex flex-col items-center gap-10 bg-stone-100 px-8 pb-4 pt-10 md:px-20">
       <div className="flex w-full flex-wrap justify-between gap-8">
         {sections.map(({ title, links }, index) => (
           <div
@@ -95,7 +95,12 @@ export default function Footer() {
         </span>
         <span className="flex gap-7">
           {socials.map(({ icon: Icon, href }, index) => (
-            <a href={href} rel="noopener" key={index}>
+            <a
+              className="transition-all duration-500 hover:scale-125"
+              href={href}
+              rel="noopener"
+              key={index}
+            >
               <Icon fontSize={20} />
             </a>
           ))}
