@@ -10,22 +10,22 @@ const links = [
     href: "/category/men",
   },
   { name: "Women", href: "/category/women" },
-  { name: "Children", href: "/category/children" },
+  { name: "Kids", href: "/category/kids" },
 ];
 
 export default function Left() {
   const pathname = usePathname();
 
   return (
-    <div className="flex w-[31.25rem] items-center gap-10">
+    <div className="hidden w-[25rem] items-center gap-5 lg:flex">
       {links.map(({ name, href }) => {
         return (
           <Link
             key={name}
             href={href}
-            className={`rounded px-4 py-1 ${pathname === href && "bg-stone-100"}`}
+            className={`rounded-md px-4 py-1 ${pathname === href && "bg-stone-100"}`}
           >
-            <p className="hidden md:block">{name}</p>
+            <p className="hidden font-medium md:block">{name}</p>
           </Link>
         );
       })}

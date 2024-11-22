@@ -17,15 +17,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>
-        <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
-      </head>
-      <body className={`${montserrat.className} antialiased`}>
-        <nav className="fixed left-0 right-0 top-0 flex items-center justify-between px-16 pt-8 backdrop-blur-sm">
-          <Left />
-          <Logo />
-          <Right />
-        </nav>
+      <body
+        className={`${montserrat.className} flex flex-col items-center px-16 pt-20 antialiased`}
+      >
+        <div className="fixed left-0 right-0 top-0 z-10 flex justify-center px-16">
+          <nav className="flex w-full max-w-[90rem] items-center justify-between bg-white/80 pb-3 pt-8 backdrop-blur">
+            <Left />
+            <Logo />
+            <Right />
+          </nav>
+        </div>
         {children}
       </body>
     </html>

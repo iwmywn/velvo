@@ -6,7 +6,7 @@ import { GiShoppingCart } from "react-icons/gi";
 
 export default function Right() {
   return (
-    <div className="flex w-[31.25rem] items-center justify-end gap-10 text-base">
+    <div className="flex items-center justify-end gap-5 text-base lg:w-[25rem] lg:gap-10">
       <CiSearch
         className="cursor-pointer"
         fontSize={24}
