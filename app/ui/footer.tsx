@@ -1,62 +1,10 @@
 "use client";
 
-import links from "../data/nav-links";
-import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 import { Fragment, useEffect, useRef } from "react";
 import { useFooterHeight } from "../hooks/footer-height";
 import Link from "next/link";
-
-const sections = [
-  {
-    title: "May We Help You?",
-    links: [
-      {
-        name: "NNVA",
-        href: "mailto:anhnnv21@uef.edu.vn",
-      },
-      {
-        name: "HAT",
-        href: "mailto:tuanha321@uef.edu.vn",
-      },
-    ],
-  },
-  {
-    title: "Categories",
-    links: links,
-  },
-  {
-    title: "The company",
-    links: [
-      {
-        name: "Privacy",
-        href: "#",
-      },
-      {
-        name: "Term & conditions",
-        href: "#",
-      },
-    ],
-  },
-] as const;
-
-const socials = [
-  {
-    icon: FaFacebook,
-    href: "#",
-  },
-  {
-    icon: FaInstagram,
-    href: "#",
-  },
-  {
-    icon: FaYoutube,
-    href: "#",
-  },
-  {
-    icon: FaLinkedin,
-    href: "#",
-  },
-] as const;
+import socials from "../data/footer/socials";
+import sections from "../data/footer/sections";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);

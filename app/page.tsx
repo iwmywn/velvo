@@ -18,7 +18,7 @@ export default function Home() {
           key={index}
           className={`flex w-full flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
-          <div className="flex max-h-[25rem] justify-center px-3 md:w-[50%]">
+          <div className="flex max-h-[25rem] justify-center px-12 md:w-[50%] md:px-6">
             <img
               className="max-h-full max-w-full object-contain"
               src={src}
