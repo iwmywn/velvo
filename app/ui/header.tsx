@@ -19,7 +19,7 @@ export default function Header() {
               <Link
                 key={name}
                 href={href}
-                className={`rounded-md border border-transparent px-4 py-1 ${pathname === href ? "bg-stone-100" : "transition-all duration-300 hover:border-black/5 hover:bg-stone-100"}`}
+                className={`rounded-md border px-4 py-1 ${pathname === href ? "bg-stone-100" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-stone-100"}`}
               >
                 <span className="hidden font-medium md:block">{name}</span>
               </Link>

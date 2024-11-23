@@ -11,6 +11,8 @@ export default function ScrollToTop() {
       setShowButton(window.scrollY > 700);
     };
 
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
