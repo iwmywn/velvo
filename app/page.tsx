@@ -1,32 +1,9 @@
 import Link from "next/link";
-
-const categories = [
-  {
-    src: "/men.png",
-    alt: "men",
-    describe:
-      "Discover a collection of stylish, dynamic, and versatile fashion pieces for men, perfect for any occasion.",
-    href: "/category/men",
-  },
-  {
-    src: "/women.png",
-    alt: "women",
-    describe:
-      "Express your personality and unique style with elegant and modern designs crafted for women.",
-    href: "/category/women",
-  },
-  {
-    src: "/kids.png",
-    alt: "kids",
-    describe:
-      "Explore adorable, comfortable, and safe collections for kids, perfect for everyday activities.",
-    href: "/category/kids",
-  },
-] as const;
+import categories from "./data/categories";
 
 export default function Home() {
   return (
-    <main className="relative z-10 mt-8 flex flex-col items-center gap-7 bg-white px-8 md:px-20">
+    <main className="relative z-10 flex flex-col items-center gap-7 bg-white px-8 pt-8 md:px-20">
       {categories.map(({ src, alt, describe, href }, index) => (
         <section
           key={index}

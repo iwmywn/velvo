@@ -5,7 +5,7 @@ import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
 const sections = [
   {
-    title: "May We Help You",
+    title: "May We Help You?",
     links: [
       {
         name: "Contact us",
@@ -74,14 +74,14 @@ export default function Footer() {
         ))}
         <div className="">
           <span className="font-medium">Sign up for our newsletter</span>
-          <form>
+          <form onSubmit={(e) => e.preventDefault()}>
             <input
               className="my-2 mr-4 h-9 w-60 rounded-md border border-black/20 px-4 py-2 text-sm text-black/80"
               type="email"
               placeholder="Email"
             />
             <button
-              className="h-9 rounded-md bg-black px-5 py-1 text-white transition-all duration-500 hover:scale-95"
+              className="h-9 rounded-md bg-black px-5 py-1 text-sm text-white transition-all duration-500 hover:scale-95"
               type="submit"
             >
               Sign up
@@ -90,9 +90,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="flex w-full flex-col items-center gap-y-4 sm:flex-row sm:justify-between">
-        <span className="text-xs text-black/65">
-          © 2024 hat - nnva, Inc. All rights reserved.
-        </span>
+        <span className="text-xs text-black/65">© 2024 hat - nnva.</span>
         <span className="flex gap-7">
           {socials.map(({ icon: Icon, href }, index) => (
             <a

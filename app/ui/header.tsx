@@ -12,7 +12,7 @@ export default function Header() {
 
   return (
     <header className="fixed left-0 right-0 top-0 z-20 flex justify-center">
-      <nav className="mx-8 flex w-full items-center justify-between bg-white/80 pb-3 pt-8 backdrop-blur md:mx-20">
+      <nav className="mx-8 flex w-full items-center justify-between bg-white/80 pb-1 pt-5 backdrop-blur md:mx-20 md:pb-3 md:pt-8">
         <div className="hidden w-[25rem] items-center gap-5 lg:flex">
           {links.map(({ name, href }) => {
             return (
@@ -31,16 +31,16 @@ export default function Header() {
 
         <div className="flex items-center justify-end gap-5 text-base lg:w-[25rem] lg:gap-10">
           <CiSearch
-            className="cursor-pointer"
+            className="cursor-pointer text-[22px] md:text-2xl"
             fontSize={24}
             // todo: search
             // onClick={() => console.log("hello")}
           />
           <Link href="/account">
-            <CiUser fontSize={24} />
+            <CiUser fontSize={24} className="text-[22px] md:text-2xl" />
           </Link>
           <Link href="/cart">
-            <GiShoppingCart fontSize={24} />
+            <GiShoppingCart fontSize={24} className="text-[22px] md:text-2xl" />
           </Link>
         </div>
       </nav>
