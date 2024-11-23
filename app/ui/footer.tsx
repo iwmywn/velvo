@@ -52,7 +52,7 @@ const socials = [
     icon: FaLinkedin,
     href: "#",
   },
-];
+] as const;
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);
@@ -85,7 +85,7 @@ export default function Footer() {
             <span className="font-medium">{title}</span>
             {links.map(({ name, href }, index) => (
               <Fragment key={index}>
-                {index > 0 && (
+                {name !== "Home" && (
                   <Link
                     className="text-sm text-black/80 hover:underline"
                     href={href}
