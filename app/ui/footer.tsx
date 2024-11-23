@@ -11,7 +11,11 @@ const sections = [
     title: "May We Help You?",
     links: [
       {
-        name: "Contact us",
+        name: "NNVA",
+        href: "mailto:anhnnv21@uef.edu.vn",
+      },
+      {
+        name: "HAT",
         href: "mailto:tuanha321@uef.edu.vn",
       },
     ],
