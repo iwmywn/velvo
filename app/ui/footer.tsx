@@ -2,8 +2,9 @@
 
 import links from "../data/nav-links";
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { useFooterHeight } from "../hooks/footer-height";
+import Link from "next/link";
 
 const sections = [
   {
@@ -83,13 +84,16 @@ export default function Footer() {
           >
             <span className="font-medium">{title}</span>
             {links.map(({ name, href }, index) => (
-              <a
-                className="text-sm text-black/80 hover:underline"
-                href={href}
-                key={index}
-              >
-                {name}
-              </a>
+              <Fragment key={index}>
+                {index > 0 && (
+                  <Link
+                    className="text-sm text-black/80 hover:underline"
+                    href={href}
+                  >
+                    {name}
+                  </Link>
+                )}
+              </Fragment>
             ))}
           </div>
         ))}
@@ -114,14 +118,14 @@ export default function Footer() {
         <span className="text-xs text-black/65">© 2024 hat - nnva.</span>
         <span className="flex gap-7">
           {socials.map(({ icon: Icon, href }, index) => (
-            <a
+            <Link
               className="transition-all duration-500 hover:scale-125"
               href={href}
               rel="noopener"
               key={index}
             >
               <Icon fontSize={20} />
-            </a>
+            </Link>
           ))}
         </span>
       </div>
