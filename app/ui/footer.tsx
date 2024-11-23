@@ -2,6 +2,8 @@
 
 import links from "../data/nav-links";
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
+import { useEffect, useRef } from "react";
+import { useFooterHeight } from "../hooks/footer-height";
 
 const sections = [
   {
@@ -52,8 +54,27 @@ const socials = [
 ];
 
 export default function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+  const { setFooterHeight } = useFooterHeight();
+
+  useEffect(() => {
+    const updateFooterHeight = () => {
+      if (footerRef.current) {
+        setFooterHeight(footerRef.current.offsetHeight);
+      }
+    };
+
+    updateFooterHeight();
+
+    window.addEventListener("resize", updateFooterHeight);
+    return () => window.removeEventListener("resize", updateFooterHeight);
+  }, [setFooterHeight]);
+
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-[9] flex flex-col items-center gap-10 bg-stone-100 px-8 pb-4 pt-10 md:px-20">
+    <footer
+      ref={footerRef}
+      className="fixed bottom-0 left-0 right-0 z-[9] flex flex-col items-center gap-10 bg-stone-100 px-8 pb-4 pt-10 md:px-20"
+    >
       <div className="flex w-full flex-wrap justify-between gap-8">
         {sections.map(({ title, links }, index) => (
           <div
