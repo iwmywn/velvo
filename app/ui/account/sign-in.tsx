@@ -38,7 +38,9 @@ export default function SignIn() {
           </label>
         </div>
         <button className={buttonClass} type="submit">
-          SIGN IN
+          <span className="relative after:absolute after:-bottom-[6px] after:left-0 after:right-0 after:h-[2px] after:transition-all after:duration-300 group-hover:after:bg-white">
+            SIGN IN
+          </span>
         </button>
       </form>
     </div>

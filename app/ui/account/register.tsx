@@ -59,7 +59,9 @@ export default function Register() {
           </label>
         </div>
         <button className={buttonClass} type="submit">
-          CONTINUE
+          <span className="relative after:absolute after:-bottom-[6px] after:left-0 after:right-0 after:h-[2px] after:transition-all after:duration-300 group-hover:after:bg-white">
+            CONTINUE
+          </span>
         </button>
       </form>
     </div>
