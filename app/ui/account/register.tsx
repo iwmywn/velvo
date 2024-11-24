@@ -22,7 +22,7 @@ export default function Register() {
             placeholder="FirstName"
           />
           <label className={labelClass} htmlFor="FirstName">
-            FirstName
+            First Name
           </label>
         </div>
         <div className={boxClass}>
@@ -33,7 +33,7 @@ export default function Register() {
             placeholder="LastName"
           />
           <label className={labelClass} htmlFor="LastName">
-            LastName
+            Last Name
           </label>
         </div>
         <div className={boxClass}>
