@@ -5,6 +5,7 @@ import Header from "./ui/header";
 import Footer from "./ui/footer";
 import ScrollToTop from "./ui/to-top";
 import { FooterHeightProvider } from "./hooks/footer-height";
+import Gap from "./ui/gap";
 
 export const metadata: Metadata = {
   title: "StyleWave",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <FooterHeightProvider>
           {children}
           <Footer />
+          <Gap />
         </FooterHeightProvider>
         <ScrollToTop />
       </body>

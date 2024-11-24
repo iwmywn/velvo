@@ -1,4 +1,4 @@
-const categories = [
+export default [
   {
     src: "/men.png",
     alt: "men",
@@ -21,5 +21,3 @@ const categories = [
     href: "/category/kids",
   },
 ] as const;
-
-export default categories;

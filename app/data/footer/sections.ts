@@ -1,6 +1,6 @@
 import links from "../nav-links";
 
-const sections = [
+export default [
   {
     title: "May We Help You?",
     links: [
@@ -32,5 +32,3 @@ const sections = [
     ],
   },
 ] as const;
-
-export default sections;

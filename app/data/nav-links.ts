@@ -1,4 +1,4 @@
-const links = [
+export default [
   { name: "Home", href: "/" },
   {
     name: "Men",
@@ -7,5 +7,3 @@ const links = [
   { name: "Women", href: "/category/women" },
   { name: "Kids", href: "/category/kids" },
 ] as const;
-
-export default links;

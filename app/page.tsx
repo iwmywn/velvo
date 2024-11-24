@@ -1,17 +1,11 @@
-"use client";
-
 import Link from "next/link";
 import categories from "./data/categories";
-import { useFooterHeight } from "./hooks/footer-height";
 // import Image from "next/image";
 
 export default function Home() {
-  const { footerHeight } = useFooterHeight();
-
   return (
     <main
       className={`relative z-10 flex flex-col items-center gap-7 bg-white px-8 pt-8 md:px-20`}
-      style={{ marginBottom: `${footerHeight + 10}px` }}
     >
       {categories.map(({ src, alt, describe, href }, index) => (
         <section

@@ -1,6 +1,6 @@
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
-const socials = [
+export default [
   {
     icon: FaFacebook,
     href: "#",
@@ -18,5 +18,3 @@ const socials = [
     href: "#",
   },
 ] as const;
-
-export default socials;
