@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { GiShoppingCart } from "react-icons/gi";
 import Logo from "./logo";
-import links from "../data/nav-links";
+import links from "@/app/data/nav-links";
 
 export default function Header() {
   const pathname = usePathname();

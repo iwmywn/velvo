@@ -1,6 +1,6 @@
 "use client";
 
-import { useFooterHeight } from "../hooks/footer-height";
+import { useFooterHeight } from "@/app/hooks/footer-height";
 
 export default function Gap() {
   const { footerHeight } = useFooterHeight();
