@@ -29,7 +29,7 @@ export default function PopUp() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 text-base"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 text-base"
       onClick={handleDismiss}
     >
       <div
@@ -37,7 +37,7 @@ export default function PopUp() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center justify-center gap-1 text-center">
-          <h3 className="text-lg">ĐỒ ÁN 2024</h3>
+          <h3 className="text-lg font-medium">ĐỒ ÁN 2024</h3>
           <span>Ngô Nguyễn Việt Anh - 215052056</span>
           <Link
             className={linkClass}
@@ -55,14 +55,17 @@ export default function PopUp() {
             tuanha321@uef.edu.vn
           </Link>
           <div className="mt-1 flex h-8 w-8 animate-bounce items-center justify-center rounded-full">
-            <GoArrowDown fontSize={25} className="fill-blue-400" />
+            <GoArrowDown fontSize={24} className="fill-blue-400" />
           </div>
           <a
             href="https://github.com/iwmywn/doan"
             target="_blank"
             rel="noopener"
           >
-            <FaGithub fontSize={25} />
+            <FaGithub
+              className="transition-all duration-300 hover:scale-110"
+              fontSize={24}
+            />
           </a>
         </div>
       </div>
