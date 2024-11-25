@@ -22,7 +22,7 @@ export default function Menu({
 
   return (
     <div
-      className={`animate-fadeIn fixed inset-0 z-[9999] bg-black/70 ${isAnimating && "animate-fadeOut"}`}
+      className={`fixed inset-0 z-[9999] animate-fadeIn bg-black/70 ${isAnimating && "animate-fadeOut"}`}
       onClick={handleCloseMenu}
     >
       <div
@@ -34,6 +34,7 @@ export default function Menu({
             key={index}
             className="w-full py-[6px] text-center text-sm font-medium transition-all duration-300 hover:bg-stone-100"
             href={href}
+            onClick={handleCloseMenu}
           >
             {name}
           </Link>
