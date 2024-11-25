@@ -8,7 +8,7 @@ export default function Logo() {
         src="/logo.png"
         alt="logo"
         fill
-        priority
+        loading="eager"
         style={{ objectFit: "contain" }}
       />
     </Link>

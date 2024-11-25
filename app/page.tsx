@@ -17,7 +17,7 @@ export default function Home() {
               src={src}
               alt={alt}
               fill
-              priority
+              loading="eager"
               style={{ objectFit: "contain" }}
             />
           </div>
