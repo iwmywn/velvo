@@ -4,7 +4,7 @@ import { montserrat } from "@/ui/fonts";
 import Header from "@/ui/header";
 import Footer from "@/ui/footer";
 import ScrollToTop from "@/ui/to-top";
-import { FooterHeightProvider } from "@/hooks/footer-height";
+import { HeightProvider } from "@/hooks/useHeight";
 import Gap from "@/ui/gap";
 
 export const metadata: Metadata = {
@@ -22,15 +22,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.className} pt-[52px] antialiased md:pt-20`}
-      >
-        <Header />
-        <FooterHeightProvider>
-          {children}
-          <Footer />
+      <body className={`${montserrat.className} antialiased`}>
+        <HeightProvider>
+          <Header />
           <Gap />
-        </FooterHeightProvider>
+        </HeightProvider>
+        {children}
+        <HeightProvider>
+          <Gap />
+          <Footer />
+        </HeightProvider>
         <ScrollToTop />
       </body>
     </html>

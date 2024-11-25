@@ -1,14 +1,14 @@
 "use client";
 
-import { useFooterHeight } from "@/hooks/footer-height";
+import { useHeight } from "@/hooks/useHeight";
 
 export default function Gap() {
-  const { footerHeight } = useFooterHeight();
+  const { heights } = useHeight();
 
   return (
     <div
-      className="relative -z-[9999]"
-      style={{ height: `${footerHeight + 10}px` }}
+      className="relative -z-[9999] bg-white"
+      style={{ height: `${heights + 10}px` }}
     />
   );
 }
