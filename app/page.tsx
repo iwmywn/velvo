@@ -1,5 +1,6 @@
 import Link from "next/link";
 import categories from "./data/categories";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -11,12 +12,8 @@ export default function Home() {
           key={index}
           className={`flex w-full flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
-          <div className="flex max-h-[25rem] justify-center px-12 md:w-[50%] md:px-6">
-            <img
-              className="max-h-full max-w-full object-contain"
-              src={src}
-              alt={alt}
-            />
+          <div className="relative flex h-[18rem] justify-center px-12 md:w-[50%] md:px-6">
+            <Image className="object-contain" src={src} alt={alt} fill />
           </div>
           <div className="flex flex-col items-center justify-center gap-4 px-4 text-center md:w-[50%]">
             <span>{describe}</span>

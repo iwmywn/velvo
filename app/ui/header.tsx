@@ -7,7 +7,7 @@ import { IoIosMenu } from "react-icons/io";
 import { GiShoppingCart } from "react-icons/gi";
 import Logo from "./logo";
 import links from "@/data/nav-links";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Menu from "@/ui/menu";
 import useOverflow from "@/hooks/overflow";
 
