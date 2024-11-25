@@ -22,23 +22,23 @@ export default {
             transform: "translateY(0)",
           },
           "100%": {
-            transform: "translateY(-100%)",
+            transform: "translateY(-150%)",
           },
         },
-        whiteToBlack: {
-          "0%": { backgroundColor: "transparent" },
-          "100%": { backgroundColor: "rgba(0, 0, 0, .6)" },
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
         },
-        blackToWhite: {
-          "0%": { backgroundColor: "rgba(0, 0, 0, .6)" },
-          "100%": { backgroundColor: "transparent" },
+        fadeOut: {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" },
         },
       },
       animation: {
         moveDown: "moveDown 0.3s ease-in-out",
         moveUp: "moveUp 0.3s ease-in-out",
-        whiteToBlack: "whiteToBlack 0.3s ease-in-out",
-        blackToWhite: "blackToWhite 0.3s ease-in-out",
+        fadeIn: "fadeIn 0.3s ease-in-out",
+        fadeOut: "fadeOut 0.3s ease-in-out",
       },
     },
   },

@@ -4,8 +4,6 @@ import { useState } from "react";
 import SignIn from "@/ui/account/sign-in";
 import Register from "@/ui/account/register";
 
-const className = `after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black`;
-
 const tabs = [
   {
     name: "SIGN IN",
@@ -18,7 +16,7 @@ const tabs = [
 ] as const;
 
 export default function AccountPage() {
-  const [isSignIn, setIsSignIn] = useState<boolean>(false);
+  const [isSignIn, setIsSignIn] = useState<boolean>(true);
 
   return (
     <main className="relative z-10 flex items-center justify-center bg-white p-4">
@@ -28,7 +26,7 @@ export default function AccountPage() {
           {tabs.map(({ name, isActive }, index) => (
             <div
               key={index}
-              className={`relative flex w-[50%] cursor-pointer items-center justify-center py-3 ${isSignIn === isActive && className}`}
+              className={`relative flex w-[50%] cursor-pointer items-center justify-center py-3 ${isSignIn === isActive && "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black"}`}
               onClick={() => setIsSignIn(isActive)}
             >
               {name}

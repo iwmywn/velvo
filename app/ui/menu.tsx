@@ -22,7 +22,7 @@ export default function Menu({
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] animate-whiteToBlack bg-black/60 ${isAnimating && "animate-blackToWhite"}`}
+      className={`animate-fadeIn fixed inset-0 z-[9999] bg-black/70 ${isAnimating && "animate-fadeOut"}`}
       onClick={handleCloseMenu}
     >
       <div

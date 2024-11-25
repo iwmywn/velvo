@@ -29,7 +29,7 @@ export default function PopUp() {
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 text-base"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 text-base"
       onClick={handleDismiss}
     >
       <div
