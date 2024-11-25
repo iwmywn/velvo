@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import links from "@/app/data/nav-links";
+import links from "@/data/nav-links";
 import Link from "next/link";
 import { Dispatch, SetStateAction } from "react";
 
@@ -22,11 +22,11 @@ export default function Menu({
 
   return (
     <div
-      className={`animate-whiteToBlack fixed inset-0 z-50 bg-black/60 ${isAnimating && "animate-blackToWhite"}`}
+      className={`fixed inset-0 z-[9999] animate-whiteToBlack bg-black/60 ${isAnimating && "animate-blackToWhite"}`}
       onClick={handleCloseMenu}
     >
       <div
-        className={`animate-moveDown flex flex-col items-center justify-center gap-2 rounded-bl-lg rounded-br-lg bg-white py-3 ${isAnimating && "animate-moveUp"}`}
+        className={`flex animate-moveDown flex-col items-center justify-center gap-2 rounded-bl-lg rounded-br-lg bg-white py-3 ${isAnimating && "animate-moveUp"}`}
       >
         {links.map(({ name, href }, index) => (
           <Fragment key={index}>

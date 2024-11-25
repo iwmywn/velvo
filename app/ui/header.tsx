@@ -6,13 +6,16 @@ import { CiSearch, CiUser } from "react-icons/ci";
 import { IoIosMenu } from "react-icons/io";
 import { GiShoppingCart } from "react-icons/gi";
 import Logo from "./logo";
-import links from "@/app/data/nav-links";
-import { useState } from "react";
-import Menu from "@/app/ui/menu";
+import links from "@/data/nav-links";
+import { useEffect, useState } from "react";
+import Menu from "@/ui/menu";
+import useOverflow from "@/hooks/overflow";
 
 export default function Header() {
   const pathname = usePathname();
   const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
+
+  useOverflow(isShowMenu);
 
   return (
     <>
@@ -49,7 +52,6 @@ export default function Header() {
             </Link>
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
-              // todo: menu
               onClick={() => setIsShowMenu(true)}
             />
           </div>

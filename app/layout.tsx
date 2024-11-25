@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { montserrat } from "@/app/ui/fonts";
-import Header from "@/app/ui/header";
-import Footer from "@/app/ui/footer";
-import ScrollToTop from "@/app/ui/to-top";
-import { FooterHeightProvider } from "@/app/hooks/footer-height";
-import Gap from "@/app/ui/gap";
+import { montserrat } from "@/ui/fonts";
+import Header from "@/ui/header";
+import Footer from "@/ui/footer";
+import ScrollToTop from "@/ui/to-top";
+import { FooterHeightProvider } from "@/hooks/footer-height";
+import Gap from "@/ui/gap";
 
 export const metadata: Metadata = {
-  title: "StyleWave",
+  title: {
+    template: "%s - StyleWave",
+    default: "StyleWave",
+  },
   description: "fashion",
 };
 

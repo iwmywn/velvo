@@ -1,10 +1,10 @@
 "use client";
 
 import { Fragment, useEffect, useRef } from "react";
-import { useFooterHeight } from "@/app/hooks/footer-height";
+import { useFooterHeight } from "@/hooks/footer-height";
 import Link from "next/link";
-import socials from "@/app/data/footer/socials";
-import sections from "@/app/data/footer/sections";
+import socials from "@/data/footer/socials";
+import sections from "@/data/footer/sections";
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement>(null);

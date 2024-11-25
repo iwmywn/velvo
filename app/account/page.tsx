@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import SignIn from "@/app/ui/account/sign-in";
-import Register from "@/app/ui/account/register";
+import SignIn from "@/ui/account/sign-in";
+import Register from "@/ui/account/register";
 
 const className = `after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black after:content-['']`;
 
