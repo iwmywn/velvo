@@ -26,7 +26,7 @@ export function HeightProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useHeight() {
+export function useHeightContext() {
   const context = useContext(HeightContext);
   if (!context) {
     throw new Error("useHeight must be used within HeightContext");
@@ -35,7 +35,7 @@ export function useHeight() {
 }
 
 export function useElementHeight(ref: RefObject<HTMLElement>) {
-  const { setHeight } = useHeight();
+  const { setHeight } = useHeightContext();
 
   useEffect(() => {
     const updateFooterHeight = () => {

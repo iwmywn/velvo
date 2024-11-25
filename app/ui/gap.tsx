@@ -1,9 +1,9 @@
 "use client";
 
-import { useHeight } from "@/hooks/useHeight";
+import { useHeightContext } from "@/hooks/useHeight";
 
 export default function Gap() {
-  const { heights } = useHeight();
+  const { heights } = useHeightContext();
 
   return (
     <div
