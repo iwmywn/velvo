@@ -29,7 +29,7 @@ export function HeightProvider({ children }: { children: ReactNode }) {
 export function useHeightContext() {
   const context = useContext(HeightContext);
   if (!context) {
-    throw new Error("useHeight must be used within HeightContext");
+    throw new Error("useHeightContext must be used within HeightProvider");
   }
   return context;
 }
@@ -48,5 +48,5 @@ export function useElementHeight(ref: RefObject<HTMLElement>) {
 
     window.addEventListener("resize", updateFooterHeight);
     return () => window.removeEventListener("resize", updateFooterHeight);
-  }, [setHeight]);
+  }, [ref, setHeight]);
 }

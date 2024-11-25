@@ -1,7 +1,7 @@
 "use client";
 
-import { Fragment, useEffect, useRef } from "react";
-import { useElementHeight, useHeight } from "@/hooks/useHeight";
+import { Fragment, useRef } from "react";
+import { useElementHeight } from "@/hooks/useHeight";
 import Link from "next/link";
 import socials from "@/data/footer/socials";
 import sections from "@/data/footer/sections";
