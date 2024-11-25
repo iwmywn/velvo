@@ -13,7 +13,7 @@ export default function Home() {
           className={`flex w-full flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
           <div className="relative flex h-[18rem] justify-center px-12 md:w-[50%] md:px-6">
-            <Image className="object-contain" src={src} alt={alt} fill />
+            <Image src={src} alt={alt} fill style={{ objectFit: "contain" }} />
           </div>
           <div className="flex flex-col items-center justify-center gap-4 px-4 text-center md:w-[50%]">
             <span>{describe}</span>
