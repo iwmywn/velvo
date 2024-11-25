@@ -1,4 +1,4 @@
-import links from "../nav-links";
+import links from "@/data/nav-links";
 
 export default [
   {

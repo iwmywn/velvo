@@ -1,6 +1,11 @@
 "use client";
 
-import { boxClass, inputClass, labelClass, buttonClass } from "./class";
+import {
+  boxClass,
+  inputClass,
+  labelClass,
+  buttonClass,
+} from "@/ui/account/class";
 
 export default function Register() {
   return (

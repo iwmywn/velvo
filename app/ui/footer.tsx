@@ -37,7 +37,7 @@ export default function Footer() {
             ))}
           </div>
         ))}
-        <div className="">
+        <div>
           <span className="font-medium">Sign up for our newsletter</span>
           <form onSubmit={(e) => e.preventDefault()}>
             <input

@@ -27,6 +27,7 @@ export default function Menu({
     >
       <div
         className={`flex animate-moveDown flex-col items-center justify-center gap-2 rounded-bl-lg rounded-br-lg bg-white py-3 ${isAnimating && "animate-moveUp"}`}
+        onClick={(e) => e.stopPropagation()}
       >
         {links.map(({ name, href }, index) => (
           <Link

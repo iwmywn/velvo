@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/globals.css";
 import { montserrat } from "@/ui/fonts";
 import Header from "@/ui/header";
 import Footer from "@/ui/footer";
 import ScrollToTop from "@/ui/to-top";
 import { HeightProvider } from "@/hooks/useHeight";
 import Gap from "@/ui/gap";
+import PopUp from "@/ui/pop-up";
 
 export const metadata: Metadata = {
   title: {
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
+        <PopUp />
         <HeightProvider>
           <Header />
           <Gap />

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { IoIosMenu } from "react-icons/io";
 import { GiShoppingCart } from "react-icons/gi";
-import Logo from "./logo";
+import Logo from "@ui/logo";
 import links from "@/data/nav-links";
 import { useRef, useState } from "react";
 import Menu from "@/ui/menu";
