@@ -1,14 +1,17 @@
 "use client";
 
 import Order from "@/ui/cart/order";
+import { useWindowHeight } from "@/hooks/useWindowHeight";
 
 const heads = ["Product", "Price", "Quantity", "Total", "Action"] as const;
 
 export default function CartPage() {
+  const minHeight = useWindowHeight();
+
   return (
     <main
       className="relative z-10 bg-white px-8 py-10 md:px-20"
-      style={{ minHeight: `${window.innerHeight}px` }}
+      style={{ minHeight: minHeight ? `${minHeight}px` : undefined }}
     >
       <h3 className="mb-5 text-xl font-medium">REVIEW YOUR ORDER (mock)</h3>
       <div className="overflow-x-auto text-sm">
