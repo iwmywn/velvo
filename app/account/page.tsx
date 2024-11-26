@@ -19,8 +19,11 @@ export default function AccountPage() {
   const [isSignIn, setIsSignIn] = useState<boolean>(true);
 
   return (
-    <main className="relative z-10 flex items-center justify-center bg-white p-4">
-      <div className="flex w-full max-w-[30rem] flex-col items-center pb-28 pt-10 text-sm">
+    <main
+      className="relative z-10 flex justify-center bg-white p-4"
+      style={{ minHeight: `${window.innerHeight}px` }}
+    >
+      <div className="flex w-full max-w-[30rem] flex-col items-center pt-10 text-sm">
         <h1 className="mb-7 text-3xl font-semibold">ACCOUNT</h1>
         <div className="mb-3 flex w-full text-xs font-medium">
           {tabs.map(({ name, isActive }, index) => (

@@ -27,11 +27,11 @@ export default function RootLayout({
         <PopUp />
         <HeightProvider>
           <Header />
-          <Gap />
+          <Gap z={10} />
         </HeightProvider>
         {children}
         <HeightProvider>
-          <Gap />
+          <Gap z={-9999} />
           <Footer />
         </HeightProvider>
         <ScrollToTop />

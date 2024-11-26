@@ -2,13 +2,13 @@
 
 import { useHeightContext } from "@/hooks/useHeight";
 
-export default function Gap() {
+export default function Gap({ z }: { z: number }) {
   const { heights } = useHeightContext();
 
   return (
     <div
-      className="relative -z-[9999] bg-white"
-      style={{ height: `${heights + 10}px` }}
+      className="relative bg-white"
+      style={{ height: `${heights + 10}px`, zIndex: `${z}` }}
     />
   );
 }
