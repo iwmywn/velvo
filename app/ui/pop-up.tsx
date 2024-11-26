@@ -14,8 +14,7 @@ export default function PopUp() {
 
   useOverflow(isPopUpVisible);
   useEffect(() => {
-    const isPopupDismissed = sessionStorage.getItem("popup") === "true";
-    if (!isPopupDismissed) {
+    if (!(sessionStorage.getItem("popup") === "true")) {
       setIsPopUpVisible(true);
     }
   }, []);

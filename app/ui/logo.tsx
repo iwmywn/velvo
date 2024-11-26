@@ -10,6 +10,7 @@ export default function Logo() {
         fill
         loading="eager"
         style={{ objectFit: "contain" }}
+        sizes="(min-width: 768px) 32px, 28px"
       />
     </Link>
   );
