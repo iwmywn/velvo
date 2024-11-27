@@ -28,10 +28,10 @@ export default function CartOverlay({
       onClick={handleCloseCart}
     >
       <div
-        className={`fixed bottom-0 left-0 right-0 h-[80%] bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
+        className={`scrollbar-thin fixed bottom-0 left-0 right-0 h-[80%] overflow-y-auto bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex h-full flex-col p-6">
+        <div className="flex h-full flex-col px-6 pt-6">
           <h2 className="text-xl font-semibold">Shopping Cart</h2>
           <div className="mt-4 text-sm">
             {mockProducts.map(({ href, name, priceCents, quantity }) => (
@@ -52,7 +52,7 @@ export default function CartOverlay({
             ))}
           </div>
 
-          <div className="mt-auto">
+          <div className="mt-auto pb-6">
             <div className="float-right mb-2 text-sm">
               <span className="font-medium">Total:</span> $
               {formatCurrency(totalPriceCents(mockProducts))}
