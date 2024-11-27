@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Order from "@ui/cart/order";
 import OrderHistory from "@ui/cart/order-history";
 import useWindowHeight from "@/ui/hooks/window-heights";
+import Loading from "@/ui/loading";
 
 const tabs = [
   { key: "to-pay", label: "To Pay", component: Order },
   { key: "completed", label: "Completed", component: OrderHistory },
 ] as const;
 
-export default function PurchasePage() {
+function PurchaseContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
@@ -24,16 +25,14 @@ export default function PurchasePage() {
   }, [searchParams]);
 
   const handleTabClick = (key: string) => {
-    router.push(`?tab=${key}`);
-    setActiveTabKey(key);
+    if (activeTabKey !== key) {
+      router.push(`?tab=${key}`);
+      setActiveTabKey(key);
+    }
   };
 
   if (!activeTabKey) {
-    return (
-      <div className="relative z-10 flex h-screen justify-center bg-white pt-52">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-black"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   const activeTab = tabs.find((tab) => tab.key === activeTabKey);
@@ -66,5 +65,13 @@ export default function PurchasePage() {
         </main>
       )}
     </div>
+  );
+}
+
+export default function PurchasePage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <PurchaseContent />
+    </Suspense>
   );
 }
