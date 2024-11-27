@@ -7,13 +7,14 @@ import { IoIosMenu } from "react-icons/io";
 import { GiShoppingCart } from "react-icons/gi";
 import Logo from "@ui/logo";
 import { navLinks } from "@ui/data/constants";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Menu from "@ui/menu";
 import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
 import CartOverlay from "@ui/cart/cart-overlay";
 import useDeviceType from "@ui/hooks/device-type";
 import AccountMenu from "@ui/account/account-menu";
+import useHideMenu from "@ui/hooks/hide-menu";
 
 export default function Header() {
   const pathname = usePathname();
@@ -26,14 +27,7 @@ export default function Header() {
   useOverflow(isShowMenu);
   useOverflow(isShowCart);
   useElementHeight(ref);
-
-  useEffect(() => {
-    if (deviceType !== "desktop" && isShowAccount) {
-      const handleOutsideClick = () => setIsShowAccount(false);
-      document.addEventListener("click", handleOutsideClick);
-      return () => document.removeEventListener("click", handleOutsideClick);
-    }
-  }, [deviceType, isShowAccount]);
+  useHideMenu(isShowAccount, setIsShowAccount);
 
   return (
     <>
@@ -81,7 +75,7 @@ export default function Header() {
               <Link href="/user/account">
                 <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
               </Link>
-              <AccountMenu isShowAccount={isShowAccount} />
+              {isShowAccount && <AccountMenu />}
             </div>
             <div
               className="relative cursor-pointer"
