@@ -40,7 +40,7 @@ function PurchaseContent() {
 
   return (
     <div className="relative z-10 overflow-x-auto bg-white">
-      <div className="mx-8 my-5 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] overflow-hidden rounded-md border text-center font-medium md:mx-20">
+      <div className="mx-8 my-5 grid min-w-[600px] grid-cols-[repeat(auto-fit,minmax(150px,1fr))] overflow-hidden rounded-md border text-center font-medium md:mx-20">
         {tabs.map(({ key, label }) => (
           <div
             key={key}
