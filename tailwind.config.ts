@@ -25,6 +25,22 @@ export default {
             transform: "translateY(-150%)",
           },
         },
+        moveRight: {
+          "0%": {
+            transform: "translateX(100%)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+          },
+        },
+        moveLeft: {
+          "0%": {
+            transform: "translateX(0)",
+          },
+          "100%": {
+            transform: "translateX(150%)",
+          },
+        },
         fadeIn: {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
@@ -39,6 +55,8 @@ export default {
         moveUp: "moveUp 0.3s ease-in-out",
         fadeIn: "fadeIn 0.3s ease-in-out",
         fadeOut: "fadeOut 0.3s ease-in-out",
+        moveRight: "moveRight 0.3s ease-in-out",
+        moveLeft: "moveLeft 0.3s ease-in-out",
       },
     },
   },
