@@ -9,7 +9,7 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        moveDown: {
+        topToCenter: {
           "0%": {
             transform: "translateY(-100%)",
           },
@@ -17,7 +17,7 @@ export default {
             transform: "translateY(0)",
           },
         },
-        moveUp: {
+        centerToTop: {
           "0%": {
             transform: "translateY(0)",
           },
@@ -25,7 +25,7 @@ export default {
             transform: "translateY(-150%)",
           },
         },
-        moveRight: {
+        rightToLeft: {
           "0%": {
             transform: "translateX(100%)",
           },
@@ -33,12 +33,44 @@ export default {
             transform: "translateX(0)",
           },
         },
-        moveLeft: {
+        leftToRight: {
           "0%": {
             transform: "translateX(0)",
           },
           "100%": {
             transform: "translateX(150%)",
+          },
+        },
+        bottomToCenter: {
+          "0%": {
+            transform: "translateY(100%)",
+          },
+          "100%": {
+            transform: "translateY(0)",
+          },
+        },
+        centerToBottom: {
+          "0%": {
+            transform: "translateY(0)",
+          },
+          "100%": {
+            transform: "translateY(150%)",
+          },
+        },
+        popUpIn: {
+          "0%": {
+            transform: "translateY(-150%)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+          },
+        },
+        popUpOut: {
+          "0%": {
+            transform: "translateY(0%)",
+          },
+          "100%": {
+            transform: "translateY(150%)",
           },
         },
         fadeIn: {
@@ -51,12 +83,16 @@ export default {
         },
       },
       animation: {
-        moveDown: "moveDown 0.3s ease-in-out",
-        moveUp: "moveUp 0.3s ease-in-out",
-        fadeIn: "fadeIn 0.3s ease-in-out",
-        fadeOut: "fadeOut 0.3s ease-in-out",
-        moveRight: "moveRight 0.3s ease-in-out",
-        moveLeft: "moveLeft 0.3s ease-in-out",
+        topToCenter: "topToCenter 0.4s ease-in-out",
+        centerToTop: "centerToTop 0.4s ease-in-out",
+        fadeIn: "fadeIn 0.4s ease-in-out",
+        fadeOut: "fadeOut 0.4s ease-in-out",
+        rightToLeft: "rightToLeft 0.4s ease-in-out",
+        leftToRight: "leftToRight 0.4s ease-in-out",
+        bottomToCenter: "bottomToCenter 0.4s ease-in-out",
+        centerToBottom: "centerToBottom 0.4s ease-in-out",
+        popUpIn: "popUpIn 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)",
+        popUpOut: "popUpOut 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)",
       },
     },
   },

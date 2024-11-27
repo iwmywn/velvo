@@ -1,6 +1,6 @@
 "use client";
 
-import useOverflow from "@/hooks/useOverflow";
+import useOverflow from "@ui/hooks/overflow";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
@@ -11,6 +11,7 @@ const linkClass =
 
 export default function PopUp() {
   const [isPopUpVisible, setIsPopUpVisible] = useState<boolean>(false);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   useOverflow(isPopUpVisible);
   useEffect(() => {
@@ -20,19 +21,23 @@ export default function PopUp() {
   }, []);
 
   const handleDismiss = () => {
-    setIsPopUpVisible(false);
     sessionStorage.setItem("popup", "true");
+    setIsAnimating(true);
+    setTimeout(() => {
+      setIsAnimating(false);
+      setIsPopUpVisible(false);
+    }, 250);
   };
 
   if (!isPopUpVisible) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 text-base"
+      className={`fixed inset-0 z-[9999] flex animate-fadeIn items-center justify-center bg-black/70 text-base ${isAnimating && "animate-fadeOut"}`}
       onClick={handleDismiss}
     >
       <div
-        className="relative mx-6 w-full max-w-[35rem] rounded-2xl bg-white p-8 text-black"
+        className={`animate-popUpIn relative mx-6 w-full max-w-[35rem] rounded-2xl bg-white p-8 text-black ${isAnimating && "animate-popUpOut"}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex flex-col items-center justify-center gap-1 text-center">

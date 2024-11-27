@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Order from "@/ui/cart/order";
-import OrderHistory from "@/ui/cart/order-history";
-import { useWindowHeight } from "@/hooks/useWindowHeight";
+import Order from "@ui/cart/order";
+import OrderHistory from "@ui/cart/order-history";
+import useWindowHeight from "@/ui/hooks/window-heights";
 
 const tabs = [
   { key: "to-pay", label: "To Pay", component: Order },

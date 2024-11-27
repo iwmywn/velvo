@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import "@/globals.css";
-import { montserrat } from "@/ui/fonts";
-import Header from "@/ui/header";
-import Footer from "@/ui/footer";
-import ScrollToTop from "@/ui/to-top";
-import { HeightProvider } from "@/hooks/useHeight";
-import Gap from "@/ui/gap";
-import PopUp from "@/ui/pop-up";
+import { montserrat } from "@ui/fonts";
+import Header from "@ui/header";
+import Footer from "@ui/footer";
+import ScrollToTop from "@ui/to-top";
+import { HeightProvider } from "@ui/hooks/height";
+import Gap from "@ui/gap";
+import PopUp from "@ui/pop-up";
 
 export const metadata: Metadata = {
   title: {

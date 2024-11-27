@@ -5,7 +5,7 @@ import {
   inputClass,
   labelClass,
   buttonClass,
-} from "@/ui/account/class";
+} from "@ui/account/class";
 
 export default function Register() {
   return (

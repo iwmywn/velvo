@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import links from "@/data/nav-links";
+import { navLinks } from "@ui/data/constants";
 import Link from "next/link";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 export default function Menu({
   setIsShowMenu,
@@ -17,7 +16,7 @@ export default function Menu({
     setTimeout(() => {
       setIsAnimating(false);
       setIsShowMenu(false);
-    }, 250);
+    }, 350);
   };
 
   return (
@@ -26,10 +25,10 @@ export default function Menu({
       onClick={handleCloseMenu}
     >
       <div
-        className={`flex animate-moveDown flex-col items-center justify-center gap-2 rounded-bl-lg rounded-br-lg bg-white py-3 ${isAnimating && "animate-moveUp"}`}
+        className={`flex flex-col items-center justify-center gap-2 rounded-bl-lg rounded-br-lg bg-white py-3 ${isAnimating ? "animate-centerToTop" : "animate-topToCenter"}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {links.map(({ name, href }, index) => (
+        {navLinks.map(({ name, href }, index) => (
           <Link
             key={index}
             className="w-full py-[6px] text-center text-sm font-medium transition-all duration-300 hover:bg-stone-100"

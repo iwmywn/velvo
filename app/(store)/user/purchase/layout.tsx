@@ -1,10 +1,10 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Account",
+  title: "My purchase",
 };
 
-export default function AccountLayout({
+export default function PurchaseLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

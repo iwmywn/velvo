@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import SignIn from "@/ui/account/sign-in";
-import Register from "@/ui/account/register";
-import { useWindowHeight } from "@/hooks/useWindowHeight";
+import SignIn from "@ui/account/sign-in";
+import Register from "@ui/account/register";
+import useWindowHeight from "@/ui/hooks/window-heights";
 
 const tabs = [
   {

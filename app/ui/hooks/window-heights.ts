@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export function useWindowHeight() {
+export default function useWindowHeight() {
   const [height, setHeight] = useState<number | null>(null);
 
   useEffect(() => {
