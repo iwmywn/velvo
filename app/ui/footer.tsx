@@ -58,6 +58,7 @@ export default function Footer() {
               href={href}
               rel="noopener"
               key={index}
+              aria-label="social"
             >
               <Icon fontSize={20} />
             </Link>
