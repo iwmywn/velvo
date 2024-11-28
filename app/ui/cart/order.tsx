@@ -15,9 +15,7 @@ export default function Order() {
 
   return (
     <>
-      <div className="text-sm">
-        {deviceType === "desktop" ? <DeskTop /> : <Mobile />}
-      </div>
+      {deviceType === "desktop" ? <DeskTop /> : <Mobile />}
       {/* <EmptyState emptyState="cart" /> */}
     </>
   );
@@ -33,13 +31,13 @@ function DeskTop() {
           </div>
         ))}
       </div>
-      {mockProducts.map(({ href, name, priceCents, quantity }) => (
+      {mockProducts.map(({ src, name, priceCents, quantity }) => (
         <div
           className="mb-2 grid min-w-[600px] grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-2 rounded-md border"
-          key={href}
+          key={src}
         >
           <div className="flex flex-col items-center justify-center gap-2 p-2 text-center sm:flex-row sm:justify-start sm:text-left">
-            <ImageTag href={href} name={name} />
+            <ImageTag src={src} name={name} />
             <span className="md:line-clamp-1">{name}</span>
           </div>
           <div className="flex items-center justify-center">
@@ -76,13 +74,13 @@ function DeskTop() {
 function Mobile() {
   return (
     <>
-      {mockProducts.map(({ href, name, priceCents, quantity }) => (
+      {mockProducts.map(({ src, name, priceCents, quantity }) => (
         <div
           className="mb-2 flex min-w-[250px] items-center gap-2 rounded-md border p-2"
-          key={href}
+          key={src}
         >
           <div className="flex items-center justify-center">
-            <ImageTag className="h-16 w-16" href={href} name={name} />
+            <ImageTag className="h-16 w-16" src={src} name={name} />
           </div>
           <div className="flex flex-1 flex-col gap-2 text-xs">
             <span className="line-clamp-2">{name}</span>

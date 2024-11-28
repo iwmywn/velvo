@@ -3,13 +3,13 @@ const mockOrders = [
     id: "ShBg5PDzEFBrW3dT",
     products: [
       {
-        href: "/men_1.png",
+        src: "/men_1.png",
         name: "Young Green College Varsity Jacket",
         quantity: 2,
         priceCents: 4545,
       },
       {
-        href: "/women_1.png",
+        src: "/women_1.png",
         name: "Cardigan",
         quantity: 1,
         priceCents: 7000,
@@ -20,7 +20,7 @@ const mockOrders = [
     id: "7qSZpM7NQ2RMhzBP",
     products: [
       {
-        href: "/women_2.png",
+        src: "/women_2.png",
         name: "Tiffany Dress",
         quantity: 1,
         priceCents: 12000,
@@ -37,13 +37,13 @@ const mockOrders = [
 
 const mockProducts = [
   {
-    href: "/men_1.png",
+    src: "/men_1.png",
     name: "Young Green College Varsity Jacket",
     priceCents: 4545,
     quantity: 2,
   },
   {
-    href: "/women_1.png",
+    src: "/women_1.png",
     name: "Cardigan",
     priceCents: 7000,
     quantity: 1,
@@ -53,4 +53,37 @@ const mockProducts = [
   totalPriceCents: product.priceCents * product.quantity,
 }));
 
-export { mockOrders, mockProducts };
+const productsByCategory: Record<
+  string,
+  {
+    id: number;
+    name: string;
+    priceCents: number;
+    image: string;
+    saleOff: number;
+  }[]
+> = {
+  men: Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    name: `Men's Product ${i + 1}`,
+    priceCents: Math.random() * 100 * 100,
+    image: "/men.png",
+    saleOff: Math.random() > 0.7 ? Math.floor(Math.random() * 50) : 0,
+  })),
+  women: Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    name: `Women's Product ${i + 1}`,
+    priceCents: Math.random() * 100 * 100,
+    image: "/women.png",
+    saleOff: Math.random() > 0.7 ? Math.floor(Math.random() * 50) : 0,
+  })),
+  kids: Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    name: `Kids' Product ${i + 1}`,
+    priceCents: Math.random() * 100 * 100,
+    image: "/kids.png",
+    saleOff: Math.random() > 0.7 ? Math.floor(Math.random() * 50) : 0,
+  })),
+};
+
+export { mockOrders, mockProducts, productsByCategory };

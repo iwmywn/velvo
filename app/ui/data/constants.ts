@@ -1,13 +1,13 @@
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
 const navLinks = [
-  { name: "Home", href: "/" },
+  { name: "HOME", href: "/" },
   {
-    name: "Men",
+    name: "MEN",
     href: "/category/men",
   },
-  { name: "Women", href: "/category/women" },
-  { name: "Kids", href: "/category/kids" },
+  { name: "WOMEN", href: "/category/women" },
+  { name: "KIDS", href: "/category/kids" },
 ] as const;
 
 const footerSections = [

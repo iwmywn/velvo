@@ -82,7 +82,9 @@ export default function PurchaseOverview() {
           className="p-8 md:px-20"
           style={{ minHeight: minHeight ? `${minHeight}px` : undefined }}
         >
-          <ActiveComponent />
+          <div className="text-sm">
+            <ActiveComponent />
+          </div>
         </main>
       )}
     </div>

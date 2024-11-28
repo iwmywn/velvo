@@ -11,13 +11,7 @@ import { GiShoppingCart } from "react-icons/gi";
 export default function OrderHistory() {
   const deviceType = useDeviceType();
 
-  return (
-    <>
-      <div className="text-sm">
-        {deviceType === "desktop" ? <DeskTop /> : <Mobile />}
-      </div>
-    </>
-  );
+  return <>{deviceType === "desktop" ? <DeskTop /> : <Mobile />}</>;
 }
 
 function DeskTop() {
@@ -38,13 +32,13 @@ function DeskTop() {
               </div>
             </div>
             <div className="flex flex-col gap-4 p-4">
-              {products.map(({ href, name, quantity, priceCents }, index) => (
+              {products.map(({ src, name, quantity, priceCents }, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-4">
-                    <ImageTag href={href} name={name} />
+                    <ImageTag src={src} name={name} />
                     <div>
                       <h4 className="mb-1 text-sm text-gray-900">{name}</h4>
                       <p className="text-sm text-gray-600">
@@ -92,13 +86,13 @@ function Mobile() {
               </div>
             </div>
             <div className="flex flex-col gap-2 p-2">
-              {products.map(({ href, name, quantity, priceCents }) => (
+              {products.map(({ src, name, quantity, priceCents }) => (
                 <div
                   className="flex items-center gap-2 rounded-md border p-2"
-                  key={href}
+                  key={src}
                 >
                   <div className="flex items-center justify-center">
-                    <ImageTag className="h-16 w-16" href={href} name={name} />
+                    <ImageTag className="h-16 w-16" src={src} name={name} />
                   </div>
                   <div className="flex flex-1 flex-col gap-2">
                     <span className="line-clamp-2">{name}</span>

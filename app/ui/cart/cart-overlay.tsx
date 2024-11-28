@@ -40,11 +40,11 @@ export default function CartOverlay({
         >
           <h2 className="text-base font-semibold">Shopping Cart</h2>
           <div className="mt-4">
-            {mockProducts.map(({ href, name, priceCents, quantity }) => (
-              <div className="mb-2 flex items-center gap-2" key={href}>
+            {mockProducts.map(({ src, name, priceCents, quantity }) => (
+              <div className="mb-2 flex items-center gap-2" key={src}>
                 <ImageTag
                   className="hidden min-[350px]:inline"
-                  href={href}
+                  src={src}
                   name={name}
                 />
                 <div className="flex-1">
