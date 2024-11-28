@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { categories } from "@ui/data/constants";
+import { categories } from "@/ui/data/constants";
 import Image from "next/image";
 
 export default function Home() {

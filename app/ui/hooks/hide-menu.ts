@@ -1,5 +1,7 @@
+"use client";
+
 import { useEffect, Dispatch, SetStateAction } from "react";
-import useDeviceType from "./device-type";
+import useDeviceType from "@ui/hooks/device-type";
 
 export default function useHideMenu(
   isShow: boolean,

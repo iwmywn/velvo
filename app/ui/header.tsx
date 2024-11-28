@@ -13,7 +13,7 @@ import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
 import CartOverlay from "@ui/cart/cart-overlay";
 import useDeviceType from "@ui/hooks/device-type";
-import AccountMenu from "@ui/account/account-menu";
+import AccountMenu from "@/ui/account/menu";
 import useHideMenu from "@ui/hooks/hide-menu";
 
 export default function Header() {

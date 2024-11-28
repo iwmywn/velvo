@@ -13,7 +13,7 @@ export default function SignIn() {
       <h3 className="mb-2 mt-5 text-left font-medium text-black/75">
         WELCOME BACK
       </h3>
-      <span className="mb-8 text-black/70">
+      <span className="mb-8 text-center text-black/70">
         Sign in with your email end password.
       </span>
       <form

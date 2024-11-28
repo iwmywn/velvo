@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function NotFound() {
   return (
     <main className="relative z-10 flex h-screen flex-col items-center gap-2 bg-white pt-52">
-      <h2 className="text-xl font-semibold">NOT FOUND</h2>
+      <h2 className="text-lg font-semibold">NOT FOUND</h2>
       <p>This page does not exist.</p>
       <Link
         href="/"

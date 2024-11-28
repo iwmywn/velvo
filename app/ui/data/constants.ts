@@ -1,6 +1,6 @@
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
-export const navLinks = [
+const navLinks = [
   { name: "Home", href: "/" },
   {
     name: "Men",
@@ -10,7 +10,7 @@ export const navLinks = [
   { name: "Kids", href: "/category/kids" },
 ] as const;
 
-export const footerSections = [
+const footerSections = [
   {
     title: "May We Help You?",
     links: [
@@ -43,7 +43,7 @@ export const footerSections = [
   },
 ] as const;
 
-export const socialLinks = [
+const socialLinks = [
   {
     icon: FaFacebook,
     href: "#",
@@ -62,7 +62,7 @@ export const socialLinks = [
   },
 ] as const;
 
-export const categories = [
+const categories = [
   {
     src: "/men.png",
     alt: "men",
@@ -85,3 +85,5 @@ export const categories = [
     href: "/category/kids",
   },
 ] as const;
+
+export { navLinks, footerSections, socialLinks, categories };
