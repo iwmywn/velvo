@@ -40,17 +40,18 @@ export default function Header() {
         <nav className="mx-8 flex w-full items-center justify-between pb-1 pt-5 backdrop-blur md:mx-20 md:pb-3 md:pt-8">
           {/* Left */}
           <div className="hidden w-[25rem] items-center gap-5 lg:flex">
-            {navLinks.map(({ name, href }) => {
-              return (
-                <Link
-                  key={name}
-                  href={href}
-                  className={`rounded-md border px-4 py-1 ${pathname === href ? "bg-stone-100" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-stone-100"}`}
-                >
-                  <span className="hidden font-medium md:block">{name}</span>
-                </Link>
-              );
-            })}
+            <Link className="text-2xl font-bold" href="/">
+              StyleWave
+            </Link>
+            {navLinks.map(({ name, href }) => (
+              <Link
+                key={name}
+                href={href}
+                className={`rounded-md border px-4 py-1 text-sm ${pathname === href ? "bg-stone-100" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-stone-100"}`}
+              >
+                <span className="hidden font-medium md:block">{name}</span>
+              </Link>
+            ))}
           </div>
 
           <Logo />

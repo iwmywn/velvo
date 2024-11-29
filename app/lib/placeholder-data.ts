@@ -59,29 +59,29 @@ const productsByCategory: Record<
     id: number;
     name: string;
     priceCents: number;
-    image: string;
+    images: string[];
     saleOff: number;
   }[]
 > = {
   men: Array.from({ length: 20 }, (_, i) => ({
     id: i + 1,
     name: `Men's Product ${i + 1}`,
-    priceCents: Math.random() * 100 * 100,
-    image: "/men.png",
+    priceCents: Math.floor(Math.random() * 100 * 100),
+    images: ["/men.png", "/women.png", "/kids.png"],
     saleOff: Math.random() > 0.7 ? Math.floor(Math.random() * 50) : 0,
   })),
   women: Array.from({ length: 20 }, (_, i) => ({
-    id: i + 1,
-    name: `Women's Product ${i + 1}`,
-    priceCents: Math.random() * 100 * 100,
-    image: "/women.png",
+    id: i + 21,
+    name: `Women's Product ${i + 21}`,
+    priceCents: Math.floor(Math.random() * 100 * 100),
+    images: ["/women.png", "/men.png", "/kids.png"],
     saleOff: Math.random() > 0.7 ? Math.floor(Math.random() * 50) : 0,
   })),
   kids: Array.from({ length: 20 }, (_, i) => ({
-    id: i + 1,
-    name: `Kids' Product ${i + 1}`,
-    priceCents: Math.random() * 100 * 100,
-    image: "/kids.png",
+    id: i + 41,
+    name: `Kids' Product ${i + 41}`,
+    priceCents: Math.floor(Math.random() * 100 * 100),
+    images: ["/kids.png", "/women.png", "/men.png"],
     saleOff: Math.random() > 0.7 ? Math.floor(Math.random() * 50) : 0,
   })),
 };

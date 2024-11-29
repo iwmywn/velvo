@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import { useElementHeight } from "@ui/hooks/height";
 import Link from "next/link";
 import { socialLinks, footerSections } from "@ui/data/constants";
@@ -23,18 +23,17 @@ export default function Footer() {
             key={index}
           >
             <span className="font-medium">{title}</span>
-            {links.map(({ name, href }, index) => (
-              <>
+            {links.map(({ name, href }) => (
+              <Fragment key={href}>
                 {name !== "HOME" && (
                   <Link
                     className="text-sm text-black/80 hover:underline"
                     href={href}
-                    key={index}
                   >
                     {name}
                   </Link>
                 )}
-              </>
+              </Fragment>
             ))}
           </div>
         ))}
@@ -53,12 +52,12 @@ export default function Footer() {
       <div className="flex w-full flex-col items-center gap-y-4 sm:flex-row sm:justify-between">
         <span className="text-xs text-black/65">© 2024 hat - nnva.</span>
         <span className="flex gap-7">
-          {socialLinks.map(({ icon: Icon, href }, index) => (
+          {socialLinks.map(({ icon: Icon, href }) => (
             <Link
               className="transition-all duration-500 hover:scale-125"
               href={href}
               rel="noopener"
-              key={index}
+              key={href}
               aria-label="social"
             >
               <Icon fontSize={20} />

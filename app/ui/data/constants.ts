@@ -37,7 +37,7 @@ const footerSections = [
       },
       {
         name: "Term & conditions",
-        href: "#",
+        href: "##",
       },
     ],
   },
@@ -50,15 +50,15 @@ const socialLinks = [
   },
   {
     icon: FaInstagram,
-    href: "#",
+    href: "##",
   },
   {
     icon: FaYoutube,
-    href: "#",
+    href: "###",
   },
   {
     icon: FaLinkedin,
-    href: "#",
+    href: "####",
   },
 ] as const;
 
