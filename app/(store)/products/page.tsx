@@ -1,4 +1,4 @@
-import shuffleArray from "@/lib/utils";
+import { shuffleArray } from "@/lib/utils";
 import { products } from "@/lib/placeholder-data";
 import ProductGrid from "@/ui/product/grid";
 

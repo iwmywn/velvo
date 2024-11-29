@@ -10,10 +10,10 @@ import { Product } from "@/lib/definition";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const productId = parseInt((await params).id);
-  const name = products.find((p) => p.id === productId)?.name;
+  const productSlug = (await params).slug;
+  const name = products.find((p) => p.slug === productSlug)?.name;
 
   if (!name) notFound();
 
@@ -25,14 +25,14 @@ export async function generateMetadata({
 export default async function ProductPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const productId = parseInt((await params).id);
+  const productSlug = (await params).slug;
 
-  const product = products.find((p) => p.id === productId);
+  const product = products.find((p) => p.slug === productSlug);
   const category = categories.find((cat) => cat.id === product?.category_id);
   const similarProducts: Product[] = products.filter(
-    (p) => p.category_id === category?.id && p.id !== productId,
+    (p) => p.category_id === category?.id && p.slug !== productSlug,
   );
 
   if (!product) notFound();
@@ -60,6 +60,6 @@ export default async function ProductPage({
 
 export async function generateStaticParams() {
   return products.map((p) => ({
-    id: p.id.toString(),
+    slug: p.slug,
   }));
 }

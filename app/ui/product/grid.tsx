@@ -10,12 +10,12 @@ import { Fragment } from "react";
 export default function ProductGrid({ products }: { products: Product[] }) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {products.map(({ id, name, priceCents, images, saleOff }) => (
+      {products.map(({ id, name, priceCents, images, saleOff, slug }) => (
         <Fragment key={id}>
           <Link
             key={id}
             className="relative overflow-hidden rounded-lg border bg-white"
-            href={`/product/${id}`}
+            href={`/product/${slug}`}
           >
             {saleOff > 0 && (
               <div className="absolute left-0 top-0 z-[1] rounded-tl-lg bg-[#FEEEEA] px-3 py-2 text-xs font-bold text-[#EE4D2D]">

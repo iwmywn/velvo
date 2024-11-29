@@ -42,6 +42,7 @@ export type Product = {
   description: string;
   category_id: number;
   saleOff: number;
+  slug: string;
 };
 
 export type Category = {
