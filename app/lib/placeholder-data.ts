@@ -30,63 +30,6 @@ export const customers: Customer[] = [
   },
 ];
 
-export const productSizes: ProductSize[] = [
-  {
-    id: 1,
-    product_id: 1,
-    size: "S",
-    quantity: 50,
-  },
-  {
-    id: 2,
-    product_id: 1,
-    size: "M",
-    quantity: 30,
-  },
-  {
-    id: 3,
-    product_id: 2,
-    size: "L",
-    quantity: 20,
-  },
-  {
-    id: 4,
-    product_id: 3,
-    size: "XL",
-    quantity: 10,
-  },
-];
-
-export const invoices: Invoice[] = [
-  {
-    id: 1,
-    customer_id: 1,
-    shipAddress: "123 Main St",
-    phone: 1234567890,
-    status: "Processing",
-  },
-  {
-    id: 2,
-    customer_id: 2,
-    shipAddress: "456 Elm St",
-    phone: 9876543210,
-    status: "Completed",
-  },
-  {
-    id: 3,
-    customer_id: 3,
-    shipAddress: "789 Oak St",
-    phone: 1122334455,
-    status: "Rejected",
-  },
-];
-
-export const invoiceDetails: InvoiceDetails[] = [
-  { id: 1, invoice_id: 1, productSize_id: 1, quantity: 2 },
-  { id: 2, invoice_id: 1, productSize_id: 2, quantity: 1 },
-  { id: 3, invoice_id: 2, productSize_id: 3, quantity: 4 },
-];
-
 export const carts: Cart[] = [
   {
     id: 1,
@@ -96,33 +39,52 @@ export const carts: Cart[] = [
     id: 2,
     customer_id: 2,
   },
+  {
+    id: 3,
+    customer_id: 3,
+  },
 ];
 
 export const cartDetails: CartDetails[] = [
-  { id: 1, cart_id: 1, product_id: 1, quantity: 2 },
-  { id: 2, cart_id: 1, product_id: 3, quantity: 1 },
-  { id: 3, cart_id: 2, product_id: 2, quantity: 5 },
+  { id: 1, cart_id: 1, product_id: 10, quantity: 2 },
+  { id: 2, cart_id: 2, product_id: 20, quantity: 1 },
+  { id: 3, cart_id: 3, product_id: 30, quantity: 5 },
 ];
 
-export const categories: Category[] = [
+export const invoices: Invoice[] = [
   {
     id: 1,
-    name: "men",
-    description:
-      "Discover a collection of stylish, dynamic, and versatile fashion pieces for men, perfect for any occasion.",
+    customer_id: 1,
+    recipientName: "John Doe",
+    phone: "1234567890",
+    shipAddress: "123 Main St",
+    date: new Date("2024-11-15"),
+    status: "Processing",
   },
   {
     id: 2,
-    name: "women",
-    description:
-      "Express your personality and unique style with elegant and modern designs crafted for women.",
+    customer_id: 2,
+    recipientName: "Jane Smith",
+    phone: "9876543210",
+    shipAddress: "456 Elm St",
+    date: new Date("2024-11-20"),
+    status: "Completed",
   },
   {
     id: 3,
-    name: "kids",
-    description:
-      "Explore adorable, comfortable, and safe collections for kids, perfect for everyday activities.",
+    customer_id: 3,
+    recipientName: "Charlie",
+    phone: "1122334455",
+    shipAddress: "789 Oak St",
+    date: new Date("2024-11-10"),
+    status: "Rejected",
   },
+];
+
+export const invoiceDetails: InvoiceDetails[] = [
+  { id: 1, invoice_id: 1, product_id: 10, quantity: 2 },
+  { id: 2, invoice_id: 2, product_id: 20, quantity: 1 },
+  { id: 3, invoice_id: 3, product_id: 30, quantity: 4 },
 ];
 
 export const products: Product[] = [
@@ -395,6 +357,54 @@ export const products: Product[] = [
     description: "description",
     category_id: 3,
     saleOff: 41,
+  },
+];
+
+export const categories: Category[] = [
+  {
+    id: 1,
+    name: "men",
+    description:
+      "Discover a collection of stylish, dynamic, and versatile fashion pieces for men, perfect for any occasion.",
+  },
+  {
+    id: 2,
+    name: "women",
+    description:
+      "Express your personality and unique style with elegant and modern designs crafted for women.",
+  },
+  {
+    id: 3,
+    name: "kids",
+    description:
+      "Explore adorable, comfortable, and safe collections for kids, perfect for everyday activities.",
+  },
+];
+
+export const productSizes: ProductSize[] = [
+  {
+    id: 1,
+    product_id: 1,
+    size: "S",
+    quantity: 50,
+  },
+  {
+    id: 2,
+    product_id: 1,
+    size: "M",
+    quantity: 30,
+  },
+  {
+    id: 3,
+    product_id: 2,
+    size: "L",
+    quantity: 20,
+  },
+  {
+    id: 4,
+    product_id: 3,
+    size: "XL",
+    quantity: 10,
   },
 ];
 

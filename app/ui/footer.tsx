@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef } from "react";
+import { useRef } from "react";
 import { useElementHeight } from "@ui/hooks/height";
 import Link from "next/link";
 import { socialLinks, footerSections } from "@ui/data/constants";
@@ -24,16 +24,13 @@ export default function Footer() {
           >
             <span className="font-medium">{title}</span>
             {links.map(({ name, href }) => (
-              <Fragment key={href}>
-                {name !== "HOME" && (
-                  <Link
-                    className="text-sm text-black/80 hover:underline"
-                    href={href}
-                  >
-                    {name}
-                  </Link>
-                )}
-              </Fragment>
+              <Link
+                className="text-sm text-black/80 hover:underline"
+                href={href}
+                key={href}
+              >
+                {name}
+              </Link>
             ))}
           </div>
         ))}
