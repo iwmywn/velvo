@@ -9,9 +9,9 @@ import { capitalizeFirstLetter } from "@/utils/format-text";
 export async function generateMetadata({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }): Promise<Metadata> {
-  const productId = parseInt(params.id);
+  const productId = parseInt((await params).id);
 
   let product = null;
   for (const category in productsByCategory) {
@@ -26,8 +26,12 @@ export async function generateMetadata({
   };
 }
 
-export default function ProductPage({ params }: { params: { id: string } }) {
-  const productId = parseInt(params.id);
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const productId = parseInt((await params).id);
 
   let product = null;
   let category: string = "";
