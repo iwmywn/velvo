@@ -39,7 +39,7 @@ export default function Header() {
       >
         <nav className="mx-8 flex w-full items-center justify-between pb-1 pt-5 backdrop-blur md:mx-20 md:pb-3 md:pt-8">
           {/* Left */}
-          <div className="hidden w-[25rem] items-center gap-5 lg:flex">
+          <div className="hidden max-w-[28rem] flex-1 lg:flex lg:items-center lg:justify-between">
             <Link className="text-2xl font-bold" href="/">
               StyleWave
             </Link>
@@ -57,7 +57,7 @@ export default function Header() {
           <Logo />
 
           {/* Right */}
-          <div className="flex items-center justify-end gap-5 text-base lg:w-[25rem] lg:gap-10">
+          <div className="flex items-center justify-end gap-5 text-base lg:max-w-[28rem] lg:flex-1 lg:gap-10">
             <CiSearch
               className="cursor-pointer text-[22px] md:text-2xl"
               // todo: search
