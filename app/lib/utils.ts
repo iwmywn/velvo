@@ -1,12 +1,6 @@
-interface Props {
-  id: number;
-  name: string;
-  priceCents: number;
-  images: string[];
-  saleOff: number;
-}
+import { Product } from "./definition";
 
-export default function shuffleArray(array: Props[]) {
+export default function shuffleArray(array: Product[]) {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

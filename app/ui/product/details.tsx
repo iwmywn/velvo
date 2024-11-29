@@ -4,28 +4,18 @@ import { useState } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@/utils/currency";
 import Button from "../button";
+import { Product } from "@/lib/definition";
 
-interface ProductDetailsProps {
-  name: string;
-  priceCents: number;
-  saleOff: number;
-  images: string[];
-}
-
-export default function ProductDetails({
-  name,
-  priceCents,
-  saleOff,
-  images,
-}: ProductDetailsProps) {
+export default function ProductDetails({ product }: { product: Product }) {
+  const { id, name, priceCents, saleOff, description, images } = product;
   const [selectedImage, setSelectedImage] = useState(images[0]);
 
   return (
     <div className="mx-auto grid grid-cols-4 gap-x-5 gap-y-5 pb-5 lg:grid-cols-12 lg:gap-6">
       <div className="flex flex-col space-y-4">
-        {images.map((img, index) => (
+        {images.map((img) => (
           <div
-            key={index}
+            key={`${id}${img}`}
             onClick={() => setSelectedImage(img)}
             className={`relative h-[100px] cursor-pointer overflow-hidden rounded-lg border p-2 ${
               selectedImage === img ? "border-black" : "border-gray-300"
@@ -33,7 +23,7 @@ export default function ProductDetails({
           >
             <Image
               src={img}
-              alt={`Thumbnail ${index + 1}`}
+              alt={description}
               fill
               style={{ objectFit: "contain" }}
             />

@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
-import { productsByCategory } from "@/lib/placeholder-data";
+import { categories, products } from "@/lib/placeholder-data";
+import { Product } from "@/lib/definition";
 import ProductGrid from "@/ui/product/grid";
-import { Fragment } from "react";
 import { capitalizeFirstLetter } from "@/utils/format-text";
 
-const validCategories = new Set(["men", "women", "kids"]);
+const validCategories = new Set(categories.map((cat) => cat.name));
 
 export async function generateMetadata({
   params,
@@ -24,29 +24,20 @@ export default async function CategoryPage({
   params: Promise<{ category: string }>;
 }) {
   const category = (await params).category;
+  const categoryId = categories.find((cat) => cat.name === category)?.id;
 
-  if (!validCategories.has(category)) notFound();
+  if (!categoryId) notFound();
 
-  const products = productsByCategory[category];
+  const productsByCategory: Product[] = products.filter(
+    (p) => p.category_id === categoryId,
+  );
 
   return (
     <div className="relative z-10 bg-white px-8 pt-8 md:px-20">
       <h1 className="mb-5 text-3xl font-bold">
         {capitalizeFirstLetter(category)}
       </h1>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {products.map(({ id, name, priceCents, images, saleOff }) => (
-          <Fragment key={id}>
-            <ProductGrid
-              id={id}
-              name={name}
-              priceCents={priceCents}
-              images={images}
-              saleOff={saleOff}
-            />
-          </Fragment>
-        ))}
-      </div>
+      <ProductGrid products={productsByCategory} />
     </div>
   );
 }
