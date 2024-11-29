@@ -12,7 +12,7 @@ interface BreadcrumbProps {
 }
 export default function BreadCrumb({ breadcrumb }: BreadcrumbProps) {
   return (
-    <div className="mb-10 flex items-center gap-2 text-sm">
+    <div className="mb-10 flex flex-wrap items-center gap-2 text-sm">
       {breadcrumb.map(({ label, href }, index) => (
         <Fragment key={index}>
           {href ? (
