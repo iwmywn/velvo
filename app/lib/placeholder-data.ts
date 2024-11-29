@@ -99,7 +99,7 @@ export const products: Product[] = [
   },
   {
     id: 2,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 9935,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -126,7 +126,7 @@ export const products: Product[] = [
   },
   {
     id: 5,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 5112,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -153,7 +153,7 @@ export const products: Product[] = [
   },
   {
     id: 8,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 4714,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -180,7 +180,7 @@ export const products: Product[] = [
   },
   {
     id: 11,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 5926,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -207,7 +207,7 @@ export const products: Product[] = [
   },
   {
     id: 14,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 3859,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -234,7 +234,7 @@ export const products: Product[] = [
   },
   {
     id: 17,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 3817,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -261,7 +261,7 @@ export const products: Product[] = [
   },
   {
     id: 20,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 5298,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -288,7 +288,7 @@ export const products: Product[] = [
   },
   {
     id: 23,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 3030,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -315,7 +315,7 @@ export const products: Product[] = [
   },
   {
     id: 26,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 9436,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
@@ -342,7 +342,7 @@ export const products: Product[] = [
   },
   {
     id: 29,
-    name: "Cardigan",
+    name: "Tiffany Dress",
     priceCents: 8574,
     images: ["/women.png", "/men.png", "/kids.png"],
     description: "description",
