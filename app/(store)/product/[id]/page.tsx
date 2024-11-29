@@ -57,3 +57,9 @@ export default async function ProductPage({
     </div>
   );
 }
+
+export async function generateStaticParams() {
+  return products.map((p) => ({
+    id: p.id.toString(),
+  }));
+}
