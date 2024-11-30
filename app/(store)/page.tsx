@@ -2,7 +2,7 @@ import Link from "next/link";
 import { categories } from "@lib/placeholder-data";
 import Image from "next/image";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <main
       className={`relative z-10 flex flex-col items-center gap-7 bg-white px-8 pt-8 md:px-20`}
