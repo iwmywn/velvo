@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Order from "@ui/cart/order";
-import OrderHistory from "@ui/cart/order-history";
+import ToPay from "@/ui/cart/to-pay";
+import Completed from "@/ui/cart/completed";
 import Loading from "@/ui/loading";
 import useDeviceType from "@/ui/hooks/device-type";
 import useHideMenu from "@/ui/hooks/hide-menu";
 
 const tabs = [
-  { key: "to-pay", label: "To Pay", component: Order },
-  { key: "completed", label: "Completed", component: OrderHistory },
+  { key: "to-pay", label: "To Pay", component: ToPay },
+  { key: "completed", label: "Completed", component: Completed },
 ] as const;
 
 export default function PurchaseOverview() {
@@ -27,7 +27,7 @@ export default function PurchaseOverview() {
       const validTab = tabs.find(({ key }) => key === tabKey);
       setActiveTabKey(validTab ? validTab.key : tabs[0].key);
     }
-  }, [router, searchParams]);
+  }, [searchParams]);
 
   if (!activeTabKey) {
     return <Loading />;
@@ -69,16 +69,14 @@ export default function PurchaseOverview() {
           )}
         </div>
       ) : (
-        <div className="mx-8 my-5 grid min-w-[600px] grid-cols-[repeat(auto-fit,minmax(150px,1fr))] overflow-hidden rounded-md border text-center font-medium md:mx-20">
+        <div className="mx-8 my-5 grid min-w-[600px] grid-cols-[repeat(auto-fit,minmax(150px,1fr))] overflow-hidden border text-center font-medium md:mx-20">
           {tabsHTML}
         </div>
       )}
 
       {ActiveComponent && (
-        <main className="min-h-screen p-8 md:px-20">
-          <div className="text-sm">
-            <ActiveComponent />
-          </div>
+        <main className="min-h-screen p-8 text-sm md:px-20">
+          <ActiveComponent />
         </main>
       )}
     </div>

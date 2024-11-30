@@ -9,7 +9,7 @@ import useDeviceType from "@ui/hooks/device-type";
 
 const heads = ["Product", "Price", "Quantity", "Total", "Action"] as const;
 
-export default function Order() {
+export default function ToPay() {
   const deviceType = useDeviceType();
 
   return (

@@ -7,7 +7,7 @@ import Button from "@ui/button";
 import { mockOrders } from "@lib/placeholder-data";
 import { GiShoppingCart } from "react-icons/gi";
 
-export default function OrderHistory() {
+export default function Completed() {
   const deviceType = useDeviceType();
 
   return <>{deviceType === "desktop" ? <DeskTop /> : <Mobile />}</>;
