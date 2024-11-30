@@ -3,7 +3,6 @@
 import { useState } from "react";
 import SignIn from "@ui/account/sign-in";
 import Register from "@ui/account/register";
-import useWindowHeight from "@/ui/hooks/window-heights";
 
 const tabs = [
   {
@@ -18,13 +17,9 @@ const tabs = [
 
 export default function AccountOverview() {
   const [isSignIn, setIsSignIn] = useState<boolean>(true);
-  const minHeight = useWindowHeight();
 
   return (
-    <main
-      className="relative z-10 flex justify-center bg-white p-4"
-      style={{ minHeight: minHeight ? `${minHeight}px` : undefined }}
-    >
+    <main className="relative z-10 flex min-h-screen justify-center bg-white p-4">
       <div className="flex w-full max-w-[30rem] flex-col items-center pt-10 text-sm">
         <h1 className="mb-7 text-3xl font-semibold">ACCOUNT</h1>
         <div className="mb-3 flex w-full text-xs font-medium">

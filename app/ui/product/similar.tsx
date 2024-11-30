@@ -1,5 +1,3 @@
-"use client";
-
 import ProductList from "./grid";
 import { Product } from "@/lib/definition";
 

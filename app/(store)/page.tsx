@@ -12,7 +12,10 @@ export default function HomePage() {
           key={id}
           className={`flex w-full flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
-          <div className="relative flex h-[18rem] justify-center px-12 md:w-[50%] md:px-6">
+          <div
+            className="flex justify-center px-12 md:w-[50%] md:px-6"
+            style={{ height: "18.75rem", position: "relative" }}
+          >
             <Image
               src={`/${name}.png`}
               alt={name}

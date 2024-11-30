@@ -8,6 +8,7 @@ import { formatCurrency, totalPriceCents } from "@/utils/currency";
 import ImageTag from "@ui/image";
 import useDeviceType from "@ui/hooks/device-type";
 import { useRouter } from "next/navigation";
+import useOverflow from "../hooks/overflow";
 
 export default function CartOverlay() {
   const [isShowCart, setIsShowCart] = useState<boolean>(true);
@@ -16,6 +17,7 @@ export default function CartOverlay() {
   const router = useRouter();
   const fontSize = deviceType === "desktop" ? "text-sm" : "text-xs";
 
+  useOverflow(isShowCart);
   const handleCloseCart = () => {
     setIsAnimating(true);
     setTimeout(() => {

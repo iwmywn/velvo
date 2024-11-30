@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Order from "@ui/cart/order";
 import OrderHistory from "@ui/cart/order-history";
-import useWindowHeight from "@/ui/hooks/window-heights";
 import Loading from "@/ui/loading";
 import useDeviceType from "@/ui/hooks/device-type";
 import useHideMenu from "@/ui/hooks/hide-menu";
@@ -17,7 +16,6 @@ const tabs = [
 export default function PurchaseOverview() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const minHeight = useWindowHeight();
   const deviceType = useDeviceType();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
   const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
@@ -78,10 +76,7 @@ export default function PurchaseOverview() {
       )}
 
       {ActiveComponent && (
-        <main
-          className="p-8 md:px-20"
-          style={{ minHeight: minHeight ? `${minHeight}px` : undefined }}
-        >
+        <main className="min-h-screen p-8 md:px-20">
           <div className="text-sm">
             <ActiveComponent />
           </div>
