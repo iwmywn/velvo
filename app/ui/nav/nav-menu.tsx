@@ -4,7 +4,7 @@ import { navLinks } from "@ui/data/constants";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useState } from "react";
 
-export default function Menu({
+export default function NavMenu({
   setIsShowMenu,
 }: {
   setIsShowMenu: Dispatch<SetStateAction<boolean>>;

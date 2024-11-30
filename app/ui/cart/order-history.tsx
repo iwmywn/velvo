@@ -1,7 +1,6 @@
 "use client";
 
 import { formatCurrency } from "@/utils/currency";
-// import EmptyState from "@ui/cart/empty";
 import useDeviceType from "@ui/hooks/device-type";
 import ImageTag from "@ui/image";
 import Button from "@ui/button";

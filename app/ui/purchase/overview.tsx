@@ -18,16 +18,15 @@ export default function PurchaseOverview() {
   const searchParams = useSearchParams();
   const deviceType = useDeviceType();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
-  const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
+  const [isShowTab, setIsShowTab] = useState<boolean>(false);
 
-  useHideMenu(isShowMenu, setIsShowMenu);
+  useHideMenu(isShowTab, setIsShowTab);
   useEffect(() => {
-    const tabKey = searchParams.get("tab");
-    const validTab = tabs.find(({ key }) => key === tabKey);
-    if (!validTab) {
-      router.push("/user/purchase");
-      setActiveTabKey(tabs[0].key);
-    } else setActiveTabKey(validTab.key);
+    if (window.location.pathname !== "/cart-overlay") {
+      const tabKey = searchParams.get("tab");
+      const validTab = tabs.find(({ key }) => key === tabKey);
+      setActiveTabKey(validTab ? validTab.key : tabs[0].key);
+    }
   }, [router, searchParams]);
 
   if (!activeTabKey) {
@@ -58,12 +57,12 @@ export default function PurchaseOverview() {
       {deviceType !== "desktop" ? (
         <div
           className="relative z-20 mx-8 mt-5 min-w-[250px] text-center text-sm md:mx-20"
-          onClick={() => setIsShowMenu(true)}
+          onClick={() => setIsShowTab(true)}
         >
           <div className="cursor-pointer rounded-md border p-2">
             {tabs.find((tab) => tab.key === activeTabKey)?.label}
           </div>
-          {isShowMenu && (
+          {isShowTab && (
             <div className="absolute left-0 top-[100%] mt-1 w-full rounded-md border bg-white shadow-md">
               {tabsHTML}
             </div>

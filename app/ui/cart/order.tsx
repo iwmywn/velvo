@@ -1,7 +1,6 @@
 "use client";
 
 import { formatCurrency } from "@/utils/currency";
-// import EmptyState from "@ui/cart/empty";
 import { MdDelete } from "react-icons/md";
 import ImageTag from "@ui/image";
 import Button from "@ui/button";

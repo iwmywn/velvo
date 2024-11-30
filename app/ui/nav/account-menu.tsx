@@ -1,6 +1,38 @@
-import Link from "next/link";
+"use client";
 
-export default function AccountMenu() {
+import Link from "next/link";
+import { useState } from "react";
+import useHideMenu from "@ui/hooks/hide-menu";
+import useDeviceType from "@ui/hooks/device-type";
+import { CiUser } from "react-icons/ci";
+
+export default function AccountSummary() {
+  const [isShowAccount, setIsShowAccount] = useState<boolean>(false);
+  const deviceType = useDeviceType();
+
+  useHideMenu(isShowAccount, setIsShowAccount);
+
+  return (
+    <div
+      className="relative flex items-center"
+      onMouseEnter={() => setIsShowAccount(true)}
+      onMouseLeave={() => setIsShowAccount(false)}
+      onClick={() => {
+        if (deviceType !== "desktop") {
+          setIsShowAccount(true);
+        }
+      }}
+    >
+      {/* todo: check sign in */}
+      <Link href="/user/account" aria-label="user account">
+        <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
+      </Link>
+      {isShowAccount && <AccountMenu />}
+    </div>
+  );
+}
+
+function AccountMenu() {
   return (
     <div className="absolute left-1/2 top-full z-10 mt-2 w-32 -translate-x-1/2 text-sm">
       <div className="absolute -top-2 left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-b-8 border-stone-100 border-x-transparent"></div>

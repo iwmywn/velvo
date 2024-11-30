@@ -11,23 +11,24 @@ import { useRouter } from "next/navigation";
 import useOverflow from "../hooks/overflow";
 
 export default function CartOverlay() {
-  const [isShowCart, setIsShowCart] = useState<boolean>(true);
+  const [isOpen, setisOpen] = useState<boolean>(true);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const deviceType = useDeviceType();
   const router = useRouter();
   const fontSize = deviceType === "desktop" ? "text-sm" : "text-xs";
+  console.log(isOpen);
 
-  useOverflow(isShowCart);
+  useOverflow(isOpen);
   const handleCloseCart = () => {
     setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
-      setIsShowCart(false);
+      setisOpen(false);
       router.back();
     }, 350);
   };
 
-  if (!isShowCart) return null;
+  if (!isOpen) return null;
 
   return (
     <div
@@ -67,7 +68,10 @@ export default function CartOverlay() {
               <span className="font-medium">Total:</span> $
               {formatCurrency(totalPriceCents(mockProducts))}
             </div>
-            <Link href="/user/purchase?tab=to-pay" onClick={handleCloseCart}>
+            <Link
+              href="/user/purchase?tab=to-pay"
+              onClick={() => setisOpen(false)}
+            >
               <Button className={`w-full ${fontSize}`}>Go to Payment</Button>
             </Link>
           </div>
