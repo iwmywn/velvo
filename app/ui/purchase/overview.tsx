@@ -54,7 +54,7 @@ export default function PurchaseOverview() {
   ));
 
   return (
-    <div className="relative z-10 overflow-x-auto bg-white scrollbar-thin">
+    <div className="relative z-10 overflow-x-auto bg-white">
       {deviceType !== "desktop" ? (
         <div
           className="relative z-20 mx-8 mt-5 min-w-[250px] text-center text-sm md:mx-20"

@@ -35,7 +35,7 @@ export default function CartOverlay() {
       onClick={handleCloseCart}
     >
       <div
-        className={`fixed bottom-0 left-0 right-0 h-[80%] overflow-y-auto bg-white scrollbar-thin sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
+        className={`fixed bottom-0 left-0 right-0 h-[80%] overflow-y-auto bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
         onClick={(e) => e.stopPropagation()}
       >
         <div

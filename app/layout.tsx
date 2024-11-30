@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html className="scrollbar-thin" lang="en">
+    <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
         <PopUp />
         <HeightProvider>
