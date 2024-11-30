@@ -4,10 +4,7 @@ import { formatCurrency } from "@/utils/currency";
 import { Product } from "@lib/definition";
 import { Fragment } from "react";
 
-// interface Props
-//   extends Pick<Product, "id" | "name" | "priceCents" | "images" | "saleOff"> {}
-
-export default function ProductGrid({ products }: { products: Product[] }) {
+export default function ProductList({ products }: { products: Product[] }) {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {products.map(({ id, name, priceCents, images, saleOff, slug }) => (

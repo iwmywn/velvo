@@ -1,20 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import Button from "@ui/button";
 import { mockProducts } from "@/lib/placeholder-data";
 import { formatCurrency, totalPriceCents } from "@/utils/currency";
 import ImageTag from "@ui/image";
 import useDeviceType from "@ui/hooks/device-type";
+import { useRouter } from "next/navigation";
 
-export default function CartOverlay({
-  setIsShowCart,
-}: {
-  setIsShowCart: Dispatch<SetStateAction<boolean>>;
-}) {
+export default function CartOverlay() {
+  const [isShowCart, setIsShowCart] = useState<boolean>(true);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const deviceType = useDeviceType();
+  const router = useRouter();
   const fontSize = deviceType === "desktop" ? "text-sm" : "text-xs";
 
   const handleCloseCart = () => {
@@ -22,8 +21,11 @@ export default function CartOverlay({
     setTimeout(() => {
       setIsAnimating(false);
       setIsShowCart(false);
+      router.back();
     }, 350);
   };
+
+  if (!isShowCart) return null;
 
   return (
     <div

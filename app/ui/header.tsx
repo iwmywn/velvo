@@ -4,40 +4,37 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CiSearch, CiUser } from "react-icons/ci";
 import { IoIosMenu } from "react-icons/io";
-import { GiShoppingCart } from "react-icons/gi";
 import Logo from "@ui/logo";
 import { navLinks } from "@ui/data/constants";
 import { useRef, useState } from "react";
 import Menu from "@ui/menu";
 import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
-import CartOverlay from "@ui/cart/cart-overlay";
+// import CartOverlay from "@ui/cart/cart-overlay";
 import useDeviceType from "@ui/hooks/device-type";
-import AccountMenu from "@/ui/account/menu";
+import AccountMenu from "@/ui/nav/account-menu";
 import useHideMenu from "@ui/hooks/hide-menu";
+import CartSummary from "./nav/cart";
 
 export default function Header() {
   const pathname = usePathname();
   const deviceType = useDeviceType();
   const ref = useRef<HTMLElement>(null);
   const [isShowAccount, setIsShowAccount] = useState<boolean>(false);
-  const [isShowCart, setIsShowCart] = useState<boolean>(false);
   const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
 
   useOverflow(isShowMenu);
-  useOverflow(isShowCart);
   useElementHeight(ref);
   useHideMenu(isShowAccount, setIsShowAccount);
 
   return (
     <>
       {isShowMenu && <Menu setIsShowMenu={setIsShowMenu} />}
-      {isShowCart && <CartOverlay setIsShowCart={setIsShowCart} />}
       <header
         ref={ref}
-        className="fixed left-0 right-0 top-0 z-20 flex justify-center bg-white/80"
+        className="fixed left-0 right-0 top-0 z-20 flex justify-center bg-white/80 backdrop-blur"
       >
-        <nav className="mx-8 flex w-full items-center justify-between pb-1 pt-5 backdrop-blur md:mx-20 md:pb-3 md:pt-8">
+        <nav className="mx-8 flex w-full items-center justify-between pb-1 pt-5 md:mx-20 md:pb-3 md:pt-8">
           {/* Left */}
           <div className="hidden max-w-[28rem] flex-1 lg:flex lg:items-center lg:justify-between">
             <Link className="text-2xl font-bold" href="/">
@@ -73,20 +70,13 @@ export default function Header() {
                 }
               }}
             >
+              {/* todo: check sign in */}
               <Link href="/user/account" aria-label="user account">
                 <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
               </Link>
               {isShowAccount && <AccountMenu />}
             </div>
-            <div
-              className="relative cursor-pointer"
-              onClick={() => setIsShowCart(true)}
-            >
-              <GiShoppingCart className="text-[22px] md:text-2xl" />
-              <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
-                2
-              </span>
-            </div>
+            <CartSummary />
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
               onClick={() => setIsShowMenu(true)}

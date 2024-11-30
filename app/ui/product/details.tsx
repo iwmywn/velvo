@@ -8,7 +8,7 @@ import { Product } from "@/lib/definition";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const { id, name, priceCents, saleOff, description, images } = product;
-  const [selectedImage, setSelectedImage] = useState(images[0]);
+  const [selectedImage, setSelectedImage] = useState<string>(images[0]);
 
   return (
     <div className="mx-auto grid grid-cols-4 gap-x-5 gap-y-5 pb-5 lg:grid-cols-12 lg:gap-6">

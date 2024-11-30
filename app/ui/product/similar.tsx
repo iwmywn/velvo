@@ -1,6 +1,6 @@
 "use client";
 
-import ProductGrid from "./grid";
+import ProductList from "./grid";
 import { Product } from "@/lib/definition";
 
 export default function SimilarProducts({
@@ -11,7 +11,7 @@ export default function SimilarProducts({
   return (
     <div className="mt-10">
       <h2 className="mb-6 text-2xl font-bold">You may also like</h2>
-      <ProductGrid products={similarProducts} />
+      <ProductList products={similarProducts} />
     </div>
   );
 }
