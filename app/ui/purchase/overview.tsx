@@ -59,11 +59,11 @@ export default function PurchaseOverview() {
           className="relative z-20 mx-8 mt-5 min-w-[250px] text-center text-sm md:mx-20"
           onClick={() => setIsShowTab(true)}
         >
-          <div className="cursor-pointer rounded-md border p-2">
+          <div className="cursor-pointer border p-2">
             {tabs.find((tab) => tab.key === activeTabKey)?.label}
           </div>
           {isShowTab && (
-            <div className="absolute left-0 top-[100%] mt-1 w-full rounded-md border bg-white shadow-md">
+            <div className="absolute left-0 top-[100%] mt-1 w-full border bg-white shadow-md">
               {tabsHTML}
             </div>
           )}
