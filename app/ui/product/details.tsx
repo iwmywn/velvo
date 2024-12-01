@@ -18,14 +18,17 @@ export default function ProductDetails({ product }: { product: Product }) {
           <div
             key={`${id}${img}`}
             onClick={() => setSelectedImage(img)}
-            className={`relative h-[100px] cursor-pointer overflow-hidden rounded-lg border p-2 ${
-              selectedImage === img ? "border-black" : "border-gray-300"
+            className={`relative h-[100px] cursor-pointer overflow-hidden rounded-lg border p-2 hover:bg-gray-100 ${
+              selectedImage === img
+                ? "border-black bg-gray-50"
+                : "border-gray-300"
             }`}
           >
             <Image
               src={img}
               alt={description}
               fill
+              sizes="(max-width: 640px) 33vw, 20vw"
               style={{ objectFit: "contain" }}
             />
           </div>
@@ -42,7 +45,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             src={selectedImage}
             alt={name}
             fill
-            sizes="100vw"
+            sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 50vw"
             style={{ objectFit: "contain" }}
           />
         </div>
@@ -75,7 +78,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             {["S", "M", "L", "XL"].map((size) => (
               <label
                 key={size}
-                className={`flex items-center gap-x-2 rounded border px-4 py-2 text-sm ${selectedSize === size ? "border-black bg-gray-200" : "border-gray-300"} cursor-pointer`}
+                className={`flex items-center gap-x-2 rounded border px-4 py-2 text-sm hover:bg-gray-100 ${selectedSize === size ? "border-black bg-gray-50" : "border-gray-300"} cursor-pointer`}
               >
                 <input
                   type="radio"

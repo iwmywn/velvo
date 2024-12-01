@@ -3,10 +3,10 @@ import { twMerge } from "tailwind-merge";
 
 interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
-  name: string;
+  alt: string;
 }
 
-export default function ImageTag({ src, name, className }: ImageProps) {
+export default function ImageTag({ src, alt, className }: ImageProps) {
   return (
     <span
       className={twMerge(
@@ -16,9 +16,9 @@ export default function ImageTag({ src, name, className }: ImageProps) {
     >
       <Image
         src={src}
-        alt={name}
+        alt={alt}
         fill
-        priority
+        sizes="(max-width: 640px) 80px, 96px"
         style={{ objectFit: "contain" }}
       />
     </span>

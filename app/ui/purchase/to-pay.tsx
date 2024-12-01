@@ -25,7 +25,7 @@ export default function ToPay() {
           key={src}
         >
           <div className="flex items-center gap-2 sm:flex-col sm:justify-center sm:gap-1 sm:py-1 sm:text-center">
-            <ImageTag src={src} name={name} />
+            <ImageTag src={src} alt={name} />
             <span className="line-clamp-2 text-sm">{name}</span>
           </div>
 

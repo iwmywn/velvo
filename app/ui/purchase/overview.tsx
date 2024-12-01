@@ -3,24 +3,30 @@
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ToPay from "@/ui/purchase/to-pay";
+import ToShipAndReceive from "@/ui/purchase/to-ship-receive";
 import Completed from "@/ui/purchase/completed";
+import Cancelled from "@/ui/purchase/cancelled";
 import Loading from "@/ui/loading";
-import useDeviceType from "@/ui/hooks/device-type";
 import useHideMenu from "@/ui/hooks/hide-menu";
 
 const tabs = [
   { key: "to-pay", label: "TO PAY", component: ToPay },
+  {
+    key: "to-ship-and-receive",
+    label: "TO SHIP & RECEIVE",
+    component: ToShipAndReceive,
+  },
   { key: "completed", label: "COMPLETED", component: Completed },
+  { key: "cancelled", label: "CANCELLED", component: Cancelled },
 ] as const;
 
 export default function PurchaseOverview() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const deviceType = useDeviceType();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
-  const [isShowTab, setIsShowTab] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  useHideMenu(isShowTab, setIsShowTab);
+  useHideMenu(isOpen, setIsOpen);
   useEffect(() => {
     if (window.location.pathname !== "/cart-overlay") {
       const tabKey = searchParams.get("tab");
@@ -54,25 +60,25 @@ export default function PurchaseOverview() {
 
   return (
     <div className="overflow-x-auto">
-      {deviceType !== "desktop" ? (
-        <div
-          className="relative z-[11] mb-5 min-w-[250px] text-center text-sm font-medium"
-          onClick={() => setIsShowTab(true)}
-        >
-          <div className="cursor-pointer border p-2">
-            {tabs.find((tab) => tab.key === activeTabKey)?.label}
+      <div
+        className="relative z-[11] mb-5 block min-w-[250px] text-center text-sm font-medium lg:hidden"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
+      >
+        <div className="cursor-pointer border p-2">
+          {tabs.find((tab) => tab.key === activeTabKey)?.label}
+        </div>
+        {isOpen && (
+          <div className="absolute left-0 top-[100%] mt-1 w-full border bg-white shadow-md">
+            {tabsHTML}
           </div>
-          {isShowTab && (
-            <div className="absolute left-0 top-[100%] mt-1 w-full border bg-white shadow-md">
-              {tabsHTML}
-            </div>
-          )}
-        </div>
-      ) : (
-        <div className="mb-5 grid min-w-[600px] grid-cols-[1fr_1fr] overflow-hidden border text-center font-medium">
-          {tabsHTML}
-        </div>
-      )}
+        )}
+      </div>
+      <div className="mb-5 hidden grid-cols-[1fr_1fr_1fr_1fr] overflow-hidden border text-center font-medium lg:grid">
+        {tabsHTML}
+      </div>
 
       {ActiveComponent && (
         <div className="min-h-screen text-sm">

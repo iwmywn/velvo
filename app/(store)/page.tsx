@@ -18,6 +18,7 @@ export default function HomePage() {
               src={`/${name}.png`}
               alt={name}
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               loading="eager"
               style={{ objectFit: "contain" }}
             />

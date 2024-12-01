@@ -32,7 +32,7 @@ export default function Completed() {
                 className="flex flex-wrap items-center justify-between gap-4 border p-2 sm:flex-nowrap"
               >
                 <div className="flex items-center gap-4 sm:gap-2">
-                  <ImageTag src={src} name={name} />
+                  <ImageTag src={src} alt={name} />
                   <div className="">
                     <h4 className="mb-1 line-clamp-2 max-w-fit text-sm">
                       {name}

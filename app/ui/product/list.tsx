@@ -16,17 +16,16 @@ export default function ProductList({
   return (
     <>
       <h1 className="mb-7 text-xl font-bold uppercase">{title}</h1>
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 min-[2000px]:grid-cols-5 min-[3000px]:grid-cols-6">
         {products.map(({ name, priceCents, images, saleOff, slug }) => (
-          <Fragment key={slug}>
-            <ProductCard
-              name={name}
-              priceCents={priceCents}
-              images={images}
-              saleOff={saleOff}
-              slug={slug}
-            />
-          </Fragment>
+          <ProductCard
+            name={name}
+            priceCents={priceCents}
+            images={images}
+            saleOff={saleOff}
+            slug={slug}
+            key={slug}
+          />
         ))}
       </div>
     </>
@@ -46,7 +45,7 @@ function ProductCard({
   saleOff: number;
   slug: string;
 }) {
-  const [hovered, setHovered] = useState(false);
+  const [hovered, setHovered] = useState<boolean>(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -82,12 +81,12 @@ function ProductCard({
           {saleOff}% OFF
         </div>
       )}
-      <div className="group relative h-60 w-full bg-stone-100">
+      <div className="l relative h-60 bg-stone-100">
         <Image
           src={images[currentImageIndex]}
           alt={name}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 25vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, (max-width: 2000px) 25vw, (max-width: 3000px) 20vw, 16.67vw"
           style={{ objectFit: "contain" }}
         />
       </div>

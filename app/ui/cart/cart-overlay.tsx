@@ -8,7 +8,7 @@ import { formatCurrency, totalPriceCents } from "@/utils/currency";
 import { useRouter } from "next/navigation";
 import useOverflow from "@ui/hooks/overflow";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+import ImageTag from "../image";
 
 export default function CartOverlay() {
   const [isOpen, setisOpen] = useState<boolean>(false);
@@ -48,13 +48,7 @@ export default function CartOverlay() {
             <div className="mt-4">
               {mockProducts.map(({ src, name, priceCents, quantity }) => (
                 <div className="mb-2 flex items-center gap-2" key={src}>
-                  <Image
-                    src={src}
-                    alt={name}
-                    width={70}
-                    height={70}
-                    style={{ objectFit: "contain" }}
-                  />
+                  <ImageTag src={src} alt={name} />
                   <div className="flex-1">
                     <span className="mb-1 line-clamp-1 text-sm font-medium">
                       {name}
