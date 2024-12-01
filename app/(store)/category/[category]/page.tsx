@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { categories, products } from "@/lib/placeholder-data";
 import { Product } from "@/lib/definition";
-import ProductList from "@/ui/product/grid";
+import ProductList from "@/ui/product/list";
 import { capitalizeFirstLetter } from "@/utils/format-text";
 
 const validCategories = new Set(categories.map((cat) => cat.name));
@@ -33,12 +33,9 @@ export default async function CategoryPage({
   );
 
   return (
-    <div className="relative z-10 bg-white px-8 pt-8 md:px-20">
-      <h1 className="mb-5 text-3xl font-bold">
-        {capitalizeFirstLetter(category)}
-      </h1>
-      <ProductList products={productsByCategory} />
-    </div>
+    <>
+      <ProductList products={productsByCategory} title={category} />
+    </>
   );
 }
 

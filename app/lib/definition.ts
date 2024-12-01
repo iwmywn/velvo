@@ -24,7 +24,7 @@ export type Invoice = {
   phone: string;
   shipAddress: string;
   date: Date;
-  status: "Processing" | "Completed" | "Rejected";
+  status: "PROCESSING" | "COMPLETED" | "CANCELLED";
 };
 
 export type InvoiceDetails = {

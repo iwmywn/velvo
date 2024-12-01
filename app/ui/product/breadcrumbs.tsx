@@ -7,13 +7,13 @@ interface BreadcrumbItem {
   href?: string;
 }
 
-interface BreadcrumbProps {
-  breadcrumb: BreadcrumbItem[];
+interface BreadcrumbsProps {
+  breadcrumbs: BreadcrumbItem[];
 }
-export default function BreadCrumb({ breadcrumb }: BreadcrumbProps) {
+export default function BreadCrumb({ breadcrumbs }: BreadcrumbsProps) {
   return (
     <div className="mb-10 flex flex-wrap items-center gap-2 text-sm">
-      {breadcrumb.map(({ label, href }, index) => (
+      {breadcrumbs.map(({ label, href }, index) => (
         <Fragment key={index}>
           {href ? (
             <Link
@@ -25,7 +25,7 @@ export default function BreadCrumb({ breadcrumb }: BreadcrumbProps) {
           ) : (
             <span>{label}</span>
           )}
-          {index < breadcrumb.length - 1 && <PiGreaterThanThin />}
+          {index < breadcrumbs.length - 1 && <PiGreaterThanThin />}
         </Fragment>
       ))}
     </div>

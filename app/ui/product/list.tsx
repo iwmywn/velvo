@@ -6,21 +6,30 @@ import { formatCurrency } from "@/utils/currency";
 import { Product } from "@lib/definition";
 import { Fragment, useState, useEffect } from "react";
 
-export default function ProductList({ products }: { products: Product[] }) {
+export default function ProductList({
+  products,
+  title,
+}: {
+  products: Product[];
+  title: string;
+}) {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {products.map(({ name, priceCents, images, saleOff, slug }) => (
-        <Fragment key={slug}>
-          <ProductCard
-            name={name}
-            priceCents={priceCents}
-            images={images}
-            saleOff={saleOff}
-            slug={slug}
-          />
-        </Fragment>
-      ))}
-    </div>
+    <>
+      <h1 className="mb-7 text-xl font-bold uppercase">{title}</h1>
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {products.map(({ name, priceCents, images, saleOff, slug }) => (
+          <Fragment key={slug}>
+            <ProductCard
+              name={name}
+              priceCents={priceCents}
+              images={images}
+              saleOff={saleOff}
+              slug={slug}
+            />
+          </Fragment>
+        ))}
+      </div>
+    </>
   );
 }
 

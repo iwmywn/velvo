@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import Button from "@ui/button";
 import { mockProducts } from "@/lib/placeholder-data";
 import { formatCurrency, totalPriceCents } from "@/utils/currency";
-import ImageTag from "@ui/image";
 import { useRouter } from "next/navigation";
-import useOverflow from "../hooks/overflow";
+import useOverflow from "@ui/hooks/overflow";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function CartOverlay() {
   const [isOpen, setisOpen] = useState<boolean>(false);
@@ -36,25 +36,27 @@ export default function CartOverlay() {
   return (
     isOpen && (
       <div
-        className={`fixed inset-0 z-[9999] bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
+        className={`fixed inset-0 z-[9998] bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
         onClick={() => handleCloseCart(true)}
       >
         <div
-          className={`fixed bottom-0 left-0 right-0 h-[80%] overflow-y-auto bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
+          className={`fixed bottom-0 left-0 right-0 z-[9999] h-[80%] overflow-y-auto bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className={`text- flex h-full flex-col px-6 pt-6 text-sm`}>
-            <h2 className="text-base font-semibold">Shopping Cart</h2>
+          <div className="flex h-full flex-col px-6 pt-6 text-xs sm:text-sm">
+            <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
             <div className="mt-4">
               {mockProducts.map(({ src, name, priceCents, quantity }) => (
                 <div className="mb-2 flex items-center gap-2" key={src}>
-                  <ImageTag
-                    className="hidden min-[350px]:inline"
+                  <Image
                     src={src}
-                    name={name}
+                    alt={name}
+                    width={70}
+                    height={70}
+                    style={{ objectFit: "contain" }}
                   />
                   <div className="flex-1">
-                    <span className="mb-1 line-clamp-1 font-medium">
+                    <span className="mb-1 line-clamp-1 text-sm font-medium">
                       {name}
                     </span>
                     <span className="line-clamp-1 text-gray-500">
@@ -75,7 +77,7 @@ export default function CartOverlay() {
                 href="/user/purchase?tab=to-pay"
                 onClick={() => handleCloseCart(false)}
               >
-                <Button className={`w-full text-sm`}>Go to Payment</Button>
+                <Button className="w-full">Go to Payment</Button>
               </Link>
             </div>
           </div>

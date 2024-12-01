@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { categories, products } from "@/lib/placeholder-data";
 import ProductDetails from "@/ui/product/details";
 import SimilarProducts from "@/ui/product/similar";
-import BreadCrumb from "@/ui/product/breadcrumb";
+import BreadCrumbs from "@/ui/product/breadcrumbs";
 import { capitalizeFirstLetter } from "@/utils/format-text";
 import { Product } from "@/lib/definition";
 
@@ -48,8 +48,8 @@ export default async function ProductPage({
   ];
 
   return (
-    <div className="relative z-10 min-h-[90vh] bg-white px-8 pt-8 md:px-10 lg:px-20">
-      <BreadCrumb breadcrumb={breadcrumb} />
+    <div className="min-h-[90vh]">
+      <BreadCrumbs breadcrumbs={breadcrumb} />
 
       <ProductDetails product={product} />
 

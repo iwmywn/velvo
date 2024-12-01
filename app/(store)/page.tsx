@@ -4,9 +4,7 @@ import Image from "next/image";
 
 export default function HomePage() {
   return (
-    <main
-      className={`relative z-10 flex flex-col items-center gap-7 bg-white px-8 pt-8 md:px-20`}
-    >
+    <div className="flex flex-col items-center gap-7">
       {categories.map(({ id, name, description }, index) => (
         <section
           key={id}
@@ -36,6 +34,6 @@ export default function HomePage() {
           </div>
         </section>
       ))}
-    </main>
+    </div>
   );
 }

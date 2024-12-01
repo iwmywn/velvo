@@ -11,7 +11,7 @@ import NavMenu from "@/ui/nav/nav-menu";
 import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "./nav/cart-aside";
-import AccountSummary from "@/ui/nav/account-menu";
+import AccountMenu from "@/ui/nav/account-menu";
 
 export default function Header() {
   const pathname = usePathname();
@@ -39,7 +39,7 @@ export default function Header() {
                 href={href}
                 className={`rounded-md border px-4 py-1 text-sm ${pathname === href ? "bg-stone-100" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-stone-100"}`}
               >
-                <span className="hidden font-medium md:block">{name}</span>
+                <span className="hidden font-semibold md:block">{name}</span>
               </Link>
             ))}
           </div>
@@ -52,7 +52,7 @@ export default function Header() {
               // todo: search
               // onClick={() => console.log("hello")}
             />
-            <AccountSummary />
+            <AccountMenu />
             <CartSummary />
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"

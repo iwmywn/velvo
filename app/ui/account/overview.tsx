@@ -19,7 +19,7 @@ export default function AccountOverview() {
   const [isSignIn, setIsSignIn] = useState<boolean>(true);
 
   return (
-    <main className="relative z-10 flex min-h-screen justify-center bg-white p-4">
+    <div className="flex min-h-screen justify-center">
       <div className="flex w-full max-w-[30rem] flex-col items-center pt-10 text-sm">
         <h1 className="mb-7 text-3xl font-semibold">ACCOUNT</h1>
         <div className="mb-3 flex w-full text-xs font-medium">
@@ -35,6 +35,6 @@ export default function AccountOverview() {
         </div>
         {isSignIn ? <SignIn /> : <Register />}
       </div>
-    </main>
+    </div>
   );
 }

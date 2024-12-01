@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import ToPay from "@/ui/cart/to-pay";
-import Completed from "@/ui/cart/completed";
+import ToPay from "@/ui/purchase/to-pay";
+import Completed from "@/ui/purchase/completed";
 import Loading from "@/ui/loading";
 import useDeviceType from "@/ui/hooks/device-type";
 import useHideMenu from "@/ui/hooks/hide-menu";
 
 const tabs = [
-  { key: "to-pay", label: "To Pay", component: ToPay },
-  { key: "completed", label: "Completed", component: Completed },
+  { key: "to-pay", label: "TO PAY", component: ToPay },
+  { key: "completed", label: "COMPLETED", component: Completed },
 ] as const;
 
 export default function PurchaseOverview() {
@@ -53,10 +53,10 @@ export default function PurchaseOverview() {
   ));
 
   return (
-    <div className="relative z-10 overflow-x-auto bg-white">
+    <div className="overflow-x-auto">
       {deviceType !== "desktop" ? (
         <div
-          className="relative z-20 mx-8 mt-5 min-w-[250px] text-center text-sm md:mx-20"
+          className="relative z-[11] mb-5 min-w-[250px] text-center text-sm font-medium"
           onClick={() => setIsShowTab(true)}
         >
           <div className="cursor-pointer border p-2">
@@ -69,15 +69,15 @@ export default function PurchaseOverview() {
           )}
         </div>
       ) : (
-        <div className="mx-8 my-5 grid min-w-[600px] grid-cols-[repeat(auto-fit,minmax(150px,1fr))] overflow-hidden border text-center font-medium md:mx-20">
+        <div className="mb-5 grid min-w-[600px] grid-cols-[1fr_1fr] overflow-hidden border text-center font-medium">
           {tabsHTML}
         </div>
       )}
 
       {ActiveComponent && (
-        <main className="min-h-screen p-8 text-sm md:px-20">
+        <div className="min-h-screen text-sm">
           <ActiveComponent />
-        </main>
+        </div>
       )}
     </div>
   );

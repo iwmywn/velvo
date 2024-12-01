@@ -1,26 +1,30 @@
 "use client";
 
 import { emptyStates } from "@ui/data/empty-state";
+import { GiShoppingCart } from "react-icons/gi";
+import Link from "next/link";
 
 interface EmptyStateProps {
   emptyState: keyof typeof emptyStates;
 }
 
 export default function EmptyState({ emptyState }: EmptyStateProps) {
-  const { icon, title, description, href, text } = emptyStates[emptyState];
+  const { title, description } = emptyStates[emptyState];
 
   return (
     <div className="flex min-h-screen flex-col items-center">
       <div className="flex flex-col items-center gap-4">
-        <div>{icon}</div>
+        <div>
+          <GiShoppingCart fontSize={50} />
+        </div>
         <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
         <p className="text-center text-gray-500">{description}</p>
-        <a
+        <Link
           className="mt-2 rounded-md border border-white bg-black px-5 py-3 text-sm text-white transition-all duration-500 hover:scale-95"
-          href={href}
+          href="/"
         >
-          {text}
-        </a>
+          Continue shopping
+        </Link>
       </div>
     </div>
   );

@@ -38,7 +38,7 @@ export default function Footer() {
           <span className="font-medium">Sign up for our newsletter</span>
           <form onSubmit={(e) => e.preventDefault()}>
             <input
-              className="my-2 mr-4 h-9 w-60 rounded-md border border-black/20 px-4 py-2 text-sm text-black/80"
+              className="my-2 mr-4 h-9 w-60 rounded border border-black/20 px-4 py-2 text-sm text-black/80"
               type="email"
               placeholder="Email"
             />

@@ -3,12 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@/utils/currency";
-import Button from "../button";
+import Button from "@ui/button";
 import { Product } from "@/lib/definition";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const { id, name, priceCents, saleOff, description, images } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   return (
     <div className="mx-auto grid grid-cols-5 gap-x-5 gap-y-5 pb-5 lg:grid-cols-12 lg:gap-6">
@@ -72,16 +73,26 @@ export default function ProductDetails({ product }: { product: Product }) {
           <p className="text-sm font-medium text-gray-700">Size</p>
           <div className="flex gap-4">
             {["S", "M", "L", "XL"].map((size) => (
-              <button
+              <label
                 key={size}
-                className="rounded border border-gray-300 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className={`flex items-center gap-x-2 rounded border px-4 py-2 text-sm ${selectedSize === size ? "border-black bg-gray-200" : "border-gray-300"} cursor-pointer`}
               >
-                {size}
-              </button>
+                <input
+                  type="radio"
+                  name="size"
+                  value={size}
+                  checked={selectedSize === size}
+                  onChange={() => setSelectedSize(size)}
+                  className="hidden"
+                />
+                <span className="select-none">{size}</span>
+              </label>
             ))}
           </div>
         </div>
-        <Button className="h-10 w-full">ADD TO CART</Button>
+        <Button className="h-10 w-full" type="submit">
+          ADD TO CART
+        </Button>
       </div>
     </div>
   );

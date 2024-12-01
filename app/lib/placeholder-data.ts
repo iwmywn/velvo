@@ -59,7 +59,7 @@ export const invoices: Invoice[] = [
     phone: "1234567890",
     shipAddress: "123 Main St",
     date: new Date("2024-11-15"),
-    status: "Processing",
+    status: "PROCESSING",
   },
   {
     id: 2,
@@ -68,7 +68,7 @@ export const invoices: Invoice[] = [
     phone: "9876543210",
     shipAddress: "456 Elm St",
     date: new Date("2024-11-20"),
-    status: "Completed",
+    status: "COMPLETED",
   },
   {
     id: 3,
@@ -77,7 +77,7 @@ export const invoices: Invoice[] = [
     phone: "1122334455",
     shipAddress: "789 Oak St",
     date: new Date("2024-11-10"),
-    status: "Rejected",
+    status: "CANCELLED",
   },
 ];
 

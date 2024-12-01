@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { twMerge } from "tailwind-merge";
 
 interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
@@ -8,7 +9,10 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 export default function ImageTag({ src, name, className }: ImageProps) {
   return (
     <span
-      className={`relative h-20 w-20 flex-shrink-0 sm:h-24 sm:w-24 ${className}`}
+      className={twMerge(
+        "relative h-20 w-20 flex-shrink-0 sm:h-24 sm:w-24",
+        className,
+      )}
     >
       <Image
         src={src}
