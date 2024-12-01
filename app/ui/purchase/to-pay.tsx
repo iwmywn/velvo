@@ -21,15 +21,15 @@ export default function ToPay() {
 
       {mockProducts.map(({ src, name, priceCents, quantity }) => (
         <div
-          className="flex flex-col gap-4 rounded-md border p-2 text-xs sm:grid sm:grid-cols-[2fr_1fr_1fr_1fr_1fr] sm:gap-2 sm:p-0 sm:text-sm"
+          className="flex flex-col gap-4 rounded-md border p-2 text-sm sm:grid sm:grid-cols-[2fr_1fr_1fr_1fr_1fr] sm:gap-2 sm:p-0"
           key={src}
         >
           <div className="flex items-center gap-2 sm:flex-col sm:justify-center sm:gap-1 sm:py-1 sm:text-center">
             <ImageTag src={src} alt={name} />
-            <span className="line-clamp-2 text-sm">{name}</span>
+            <span className="line-clamp-2 font-medium">{name}</span>
           </div>
 
-          <div className="hidden items-center justify-center sm:flex">
+          <div className="hidden items-center justify-center opacity-65 sm:flex">
             ${formatCurrency(priceCents)}
           </div>
 
@@ -47,7 +47,7 @@ export default function ToPay() {
             </div>
           </div>
 
-          <div className="hidden items-center justify-center sm:flex">
+          <div className="hidden items-center justify-center opacity-65 sm:flex">
             ${formatCurrency(priceCents * quantity)}
           </div>
 

@@ -43,29 +43,33 @@ export default function CartOverlay() {
           className={`fixed bottom-0 left-0 right-0 z-[9999] h-[80%] overflow-y-auto bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex h-full flex-col px-6 pt-6 text-xs sm:text-sm">
+          <div className="flex h-full flex-col px-6 pt-6 text-sm">
             <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
             <div className="mt-4">
               {mockProducts.map(({ src, name, priceCents, quantity }) => (
                 <div className="mb-2 flex items-center gap-2" key={src}>
                   <ImageTag src={src} alt={name} />
                   <div className="flex-1">
-                    <span className="mb-1 line-clamp-1 text-sm font-medium">
+                    <span className="mb-1 line-clamp-1 font-medium">
                       {name}
                     </span>
-                    <span className="line-clamp-1 text-gray-500">
+                    <span className="line-clamp-1 opacity-65">
                       Quantity: {quantity}
                     </span>
                   </div>
-                  <span className="">${formatCurrency(priceCents)}</span>
+                  <span className="opacity-65">
+                    ${formatCurrency(priceCents)}
+                  </span>
                 </div>
               ))}
             </div>
 
             <div className="mt-auto pb-6">
               <div className="float-right mb-2">
-                <span className="font-medium">Total:</span> $
-                {formatCurrency(totalPriceCents(mockProducts))}
+                <span className="font-medium">Total: </span>
+                <span className="opacity-65">
+                  ${formatCurrency(totalPriceCents(mockProducts))}
+                </span>
               </div>
               <Link
                 href="/user/purchase?tab=to-pay"

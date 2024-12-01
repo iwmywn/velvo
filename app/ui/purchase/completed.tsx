@@ -14,18 +14,16 @@ export default function Completed() {
           <div className="flex justify-between border-b bg-stone-100 p-4">
             <div>
               <span className="font-medium">Order ID:</span>{" "}
-              <span className="line-clamp-1 truncate text-xs sm:text-sm">
-                {id}
-              </span>
+              <span className="opacity-65">{id}</span>
             </div>
             <div className="text-right">
               <span className="font-medium">Total Price: </span>
-              <span className="text-xs sm:text-sm">
+              <span className="opacity-65">
                 ${formatCurrency(totalPriceCents)}
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-4 p-2 text-xs sm:text-sm">
+          <div className="flex flex-col gap-4 p-2">
             {products.map(({ src, name, quantity, priceCents }, index) => (
               <div
                 key={index}
@@ -33,11 +31,9 @@ export default function Completed() {
               >
                 <div className="flex items-center gap-4 sm:gap-2">
                   <ImageTag src={src} alt={name} />
-                  <div className="">
-                    <h4 className="mb-1 line-clamp-2 max-w-fit text-sm">
-                      {name}
-                    </h4>
-                    <p className="flex flex-wrap gap-y-1 text-gray-600">
+                  <div>
+                    <h4 className="mb-1 line-clamp-2 font-medium">{name}</h4>
+                    <p className="flex flex-wrap gap-y-1 opacity-65">
                       <span>Quantity: {quantity}</span>
                       <span className="mx-2">|</span>
                       <span>Price: ${formatCurrency(priceCents)}</span>

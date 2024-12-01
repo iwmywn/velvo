@@ -19,6 +19,7 @@ export default function ImageTag({ src, alt, className }: ImageProps) {
         alt={alt}
         fill
         sizes="(max-width: 640px) 80px, 96px"
+        priority
         style={{ objectFit: "contain" }}
       />
     </span>
