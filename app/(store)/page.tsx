@@ -11,7 +11,7 @@ export default function HomePage() {
           key={id}
           className={`flex w-full flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
-          <div className="h-[18.75rem] px-12 md:w-[50%] md:px-6">
+          <div className="flex h-[18.75rem] justify-center px-12 md:w-[50%] md:px-6">
             <Image
               src={`/${name}.png`}
               alt={name}
@@ -19,6 +19,7 @@ export default function HomePage() {
               height={300}
               sizes="(max-width: 768px) 100vw, 300px"
               loading="eager"
+              priority
               style={{ objectFit: "cover", objectPosition: "center" }}
             />
           </div>
