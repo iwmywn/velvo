@@ -52,11 +52,11 @@ export default function ProductRow({
       <div className="flex flex-col gap-2 sm:hidden">
         <div className="flex justify-between">
           <span>Price:</span>
-          <span>{formattedPrice}</span>
+          <span className="opacity-65">{formattedPrice}</span>
         </div>
         <div className="flex justify-between">
           <span>Total:</span>
-          <span>{formattedTotal}</span>
+          <span className="opacity-65">{formattedTotal}</span>
         </div>
       </div>
 

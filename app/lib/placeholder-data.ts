@@ -1,6 +1,5 @@
 import {
   Cart,
-  CartDetails,
   Category,
   Customer,
   Invoice,
@@ -30,25 +29,10 @@ const customers: Customer[] = [
   },
 ];
 
-const carts: Cart[] = [
+const cart: Cart[] = [
   {
     id: 1,
     customer_id: 1,
-  },
-  {
-    id: 2,
-    customer_id: 2,
-  },
-  {
-    id: 3,
-    customer_id: 3,
-  },
-];
-
-const cartDetails: CartDetails[] = [
-  {
-    id: 1,
-    cart_id: 1,
     products: [
       { product_id: 10, quantity: 2 },
       { product_id: 26, quantity: 3 },
@@ -56,12 +40,12 @@ const cartDetails: CartDetails[] = [
   },
   {
     id: 2,
-    cart_id: 2,
+    customer_id: 2,
     products: [{ product_id: 20, quantity: 1 }],
   },
   {
     id: 3,
-    cart_id: 3,
+    customer_id: 3,
     products: [{ product_id: 30, quantity: 5 }],
   },
 ];
@@ -521,9 +505,8 @@ const productSizes: ProductSize[] = [
 ];
 
 export {
+  cart,
   customers,
-  carts,
-  cartDetails,
   invoices,
   invoiceDetails,
   products,

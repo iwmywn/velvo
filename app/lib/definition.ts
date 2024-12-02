@@ -8,11 +8,6 @@ export type Customer = {
 export type Cart = {
   id: number;
   customer_id: number;
-};
-
-export type CartDetails = {
-  id: number;
-  cart_id: number;
   products: { product_id: number; quantity: number }[];
 };
 

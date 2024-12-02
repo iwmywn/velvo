@@ -1,7 +1,6 @@
 import {
   // customers,
-  carts,
-  cartDetails,
+  cart,
   invoices,
   invoiceDetails,
   products,
@@ -11,7 +10,6 @@ import {
 import {
   // Customer,
   // Cart,
-  // CartDetails,
   // Invoice,
   // InvoiceDetails,
   Product,
@@ -68,20 +66,20 @@ function getTotalPriceCents(
 }
 
 function getCartIdByCustomerId(customerId: number): number | null {
-  const cart = carts.find((cart) => cart.customer_id === customerId);
-  return cart ? cart.id : null;
+  const cartItem = cart.find((cart) => cart.customer_id === customerId);
+  return cartItem ? cartItem.id : null;
 }
 
 function getProductDetailsByCartId(
   cartId: number,
 ): { product_id: number; quantity: number }[] {
-  const cart = cartDetails.find((detail) => detail.cart_id === cartId);
+  const cartItem = cart.find((detail) => detail.id === cartId);
 
-  if (!cart) {
+  if (!cartItem) {
     return [];
   }
 
-  return cart.products;
+  return cartItem.products;
 }
 
 function getCartProductsByCustomerId(
