@@ -16,7 +16,7 @@ export default function NavMenu({
     setTimeout(() => {
       setIsAnimating(false);
       setIsOpen(false);
-    }, 350);
+    }, 250);
   };
 
   return (
@@ -25,7 +25,7 @@ export default function NavMenu({
       onClick={handleCloseMenu}
     >
       <div
-        className={`flex flex-col items-center justify-center gap-2 rounded-bl-lg rounded-br-lg bg-white py-3 ${isAnimating ? "animate-centerToTop" : "animate-topToCenter"}`}
+        className={`flex flex-col items-center justify-center gap-2 rounded-b-lg bg-white py-3 ${isAnimating ? "animate-centerToTop" : "animate-topToCenter"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {navLinks.map(({ name, href }, index) => (

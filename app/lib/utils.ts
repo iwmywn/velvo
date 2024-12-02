@@ -17,8 +17,8 @@ import {
   // ProductSize,
 } from "./definition";
 
-function shuffleProduct(array: Product[]) {
-  const shuffledProduct = [...array];
+function shuffleProduct(product: Product[]) {
+  const shuffledProduct = [...product];
   for (let i = shuffledProduct.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [shuffledProduct[i], shuffledProduct[j]] = [

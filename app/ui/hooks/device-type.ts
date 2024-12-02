@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-export default function useDeviceType(): "desktop" | "other" {
+export default function useDeviceType() {
   const [deviceType, setDeviceType] = useState<"desktop" | "other">("desktop");
 
   useEffect(() => {

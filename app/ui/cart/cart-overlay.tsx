@@ -36,7 +36,7 @@ export default function CartOverlay() {
       setIsAnimating(false);
       setIsOpen(false);
       if (shouldNavigate) router.back();
-    }, 350);
+    }, 250);
   };
 
   return (
@@ -46,7 +46,7 @@ export default function CartOverlay() {
         onClick={() => handleCloseCart(true)}
       >
         <div
-          className={`fixed bottom-0 left-0 right-0 z-[9999] h-[80%] overflow-y-auto bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
+          className={`fixed bottom-0 left-0 right-0 z-[9999] h-[80%] overflow-y-auto rounded-t-lg bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] sm:rounded-l-lg lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex h-full flex-col px-6 pt-6 text-sm">
