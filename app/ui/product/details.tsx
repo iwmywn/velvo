@@ -43,7 +43,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             height={384}
             loading="eager"
             sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 384px"
-            style={{ objectFit: "contain" }}
+            style={{ width: "auto", height: "100%", objectFit: "contain" }}
           />
         </div>
       </div>
