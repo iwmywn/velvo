@@ -19,7 +19,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           <div
             key={`${id}${img}`}
             onClick={() => setSelectedImage(img)}
-            className={`flex cursor-pointer justify-center rounded-lg border p-2 hover:bg-gray-100 ${
+            className={`flex cursor-pointer justify-center rounded-lg border hover:bg-gray-100 ${
               selectedImage === img
                 ? "border-black bg-gray-50"
                 : "border-gray-300"
