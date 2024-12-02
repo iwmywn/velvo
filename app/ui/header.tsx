@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CiSearch } from "react-icons/ci";
 import { IoIosMenu } from "react-icons/io";
 import Logo from "@ui/logo";
 import { navLinks } from "@ui/data/constants";
@@ -12,6 +11,7 @@ import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "./nav/cart-aside";
 import AccountMenu from "@/ui/nav/account-menu";
+import SearchAside from "./nav/search-aside";
 
 export default function Header() {
   const pathname = usePathname();
@@ -47,11 +47,7 @@ export default function Header() {
           <Logo />
 
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[28rem] lg:flex-1 lg:gap-10">
-            <CiSearch
-              className="cursor-pointer text-[22px] md:text-2xl"
-              // todo: search
-              // onClick={() => console.log("hello")}
-            />
+            <SearchAside />
             <AccountMenu />
             <CartSummary />
             <IoIosMenu

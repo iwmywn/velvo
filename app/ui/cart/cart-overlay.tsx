@@ -30,7 +30,7 @@ export default function CartOverlay() {
   }, [pathname]);
 
   useOverflow(isOpen);
-  const handleCloseCart = (shouldNavigate: boolean) => {
+  const handleClose = (shouldNavigate: boolean) => {
     setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
@@ -43,10 +43,10 @@ export default function CartOverlay() {
     isOpen && (
       <div
         className={`fixed inset-0 z-[9998] bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
-        onClick={() => handleCloseCart(true)}
+        onClick={() => handleClose(true)}
       >
         <div
-          className={`fixed bottom-0 left-0 right-0 z-[9999] h-[80%] overflow-y-auto rounded-t-lg bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] sm:rounded-l-lg lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
+          className={`fixed bottom-0 left-0 right-0 z-[9999] h-[80%] overflow-y-auto rounded-tl-lg rounded-tr-lg bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] sm:rounded-bl-lg sm:rounded-tr-none lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex h-full flex-col px-6 pt-6 text-sm">
@@ -90,10 +90,7 @@ export default function CartOverlay() {
                   ${formatCurrency(totalPriceCents)}
                 </span>
               </div>
-              <Link
-                href="/user/purchase"
-                onClick={() => handleCloseCart(false)}
-              >
+              <Link href="/user/purchase" onClick={() => handleClose(false)}>
                 <Button className="w-full">Go to Payment</Button>
               </Link>
             </div>
