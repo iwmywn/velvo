@@ -5,9 +5,9 @@ import Link from "next/link";
 import { Dispatch, SetStateAction, useState } from "react";
 
 export default function NavMenu({
-  setIsShowMenu,
+  setIsOpen,
 }: {
-  setIsShowMenu: Dispatch<SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
@@ -15,7 +15,7 @@ export default function NavMenu({
     setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
-      setIsShowMenu(false);
+      setIsOpen(false);
     }, 350);
   };
 

@@ -16,14 +16,14 @@ import AccountMenu from "@/ui/nav/account-menu";
 export default function Header() {
   const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
-  const [isShowMenu, setIsShowMenu] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  useOverflow(isShowMenu);
+  useOverflow(isOpen);
   useElementHeight(ref);
 
   return (
     <>
-      {isShowMenu && <NavMenu setIsShowMenu={setIsShowMenu} />}
+      {isOpen && <NavMenu setIsOpen={setIsOpen} />}
       <header
         ref={ref}
         className="fixed left-0 right-0 top-0 z-20 flex justify-center bg-white/80 backdrop-blur"
@@ -56,7 +56,7 @@ export default function Header() {
             <CartSummary />
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
-              onClick={() => setIsShowMenu(true)}
+              onClick={() => setIsOpen(true)}
             />
           </div>
         </nav>

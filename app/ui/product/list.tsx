@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { formatCurrency } from "@/utils/currency";
+import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
 import { Product } from "@lib/definition";
-import { Fragment, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function ProductList({
   products,
@@ -17,36 +17,18 @@ export default function ProductList({
     <>
       <h1 className="mb-7 text-xl font-bold uppercase">{title}</h1>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 min-[2000px]:grid-cols-5 min-[3000px]:grid-cols-6">
-        {products.map(({ name, priceCents, images, saleOff, slug }) => (
-          <ProductCard
-            name={name}
-            priceCents={priceCents}
-            images={images}
-            saleOff={saleOff}
-            slug={slug}
-            key={slug}
-          />
+        {products.map((product) => (
+          <ProductCard key={product.slug} {...product} />
         ))}
       </div>
     </>
   );
 }
 
-function ProductCard({
-  name,
-  priceCents,
-  images,
-  saleOff,
-  slug,
-}: {
-  name: string;
-  priceCents: number;
-  images: string[];
-  saleOff: number;
-  slug: string;
-}) {
+function ProductCard({ name, priceCents, images, saleOff, slug }: Product) {
   const [hovered, setHovered] = useState<boolean>(false);
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const priceAfterDiscount = getPriceAfterDiscount(priceCents, saleOff);
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout | null = null;
@@ -81,7 +63,7 @@ function ProductCard({
           {saleOff}% OFF
         </div>
       )}
-      <div className="l relative h-60 bg-stone-100">
+      <div className="relative h-60 bg-stone-100">
         <Image
           src={images[currentImageIndex]}
           alt={name}
@@ -93,7 +75,7 @@ function ProductCard({
       <div className="p-4">
         <div className="truncate text-sm font-medium">{name}</div>
         <div className="mt-2 font-semibold">
-          ${formatCurrency(priceCents - (priceCents * saleOff) / 100)}
+          ${formatCurrency(priceAfterDiscount)}
         </div>
       </div>
     </Link>

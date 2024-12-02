@@ -1,11 +1,7 @@
 "use client";
 
-import {
-  boxClass,
-  inputClass,
-  labelClass,
-  buttonClass,
-} from "@ui/account/class";
+import { boxClass, inputClass, labelClass } from "@ui/account/class";
+import Button from "@ui/button";
 
 export default function SignIn() {
   return (
@@ -42,11 +38,9 @@ export default function SignIn() {
             Password
           </label>
         </div>
-        <button className={buttonClass} type="submit">
-          <span className="relative after:absolute after:-bottom-[6px] after:left-0 after:right-0 after:h-[2px] after:transition-all after:duration-300 group-hover:after:bg-white">
-            SIGN IN
-          </span>
-        </button>
+        <Button className="h-10" type="submit">
+          SIGN IN
+        </Button>
       </form>
     </div>
   );

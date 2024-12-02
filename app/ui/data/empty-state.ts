@@ -18,4 +18,4 @@ export const emptyStates = {
     description:
       "You don't have any cancelled orders yet. Shop with confidence and place your order today!",
   },
-};
+} as const;

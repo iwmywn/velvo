@@ -1,12 +1,34 @@
-import { Product } from "./definition";
+import {
+  // customers,
+  carts,
+  cartDetails,
+  invoices,
+  invoiceDetails,
+  products,
+  // categories,
+  // productSizes,
+} from "@lib/placeholder-data";
+import {
+  // Customer,
+  // Cart,
+  // CartDetails,
+  // Invoice,
+  // InvoiceDetails,
+  Product,
+  // Category,
+  // ProductSize,
+} from "./definition";
 
-function shuffleArray(array: Product[]) {
-  const shuffledArray = [...array];
-  for (let i = shuffledArray.length - 1; i > 0; i--) {
+function shuffleProduct(array: Product[]) {
+  const shuffledProduct = [...array];
+  for (let i = shuffledProduct.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+    [shuffledProduct[i], shuffledProduct[j]] = [
+      shuffledProduct[j],
+      shuffledProduct[i],
+    ];
   }
-  return shuffledArray;
+  return shuffledProduct;
 }
 
 function generateSlugWithRandom(
@@ -28,4 +50,117 @@ function generateSlugWithRandom(
   return `${normalize(category)}-${normalize(name)}-${normalize(description)}-${randomString}`;
 }
 
-export { shuffleArray, generateSlugWithRandom };
+function formatCurrency(priceCents: number): string {
+  return (Math.round(priceCents) / 100).toFixed(2);
+}
+
+function getPriceAfterDiscount(priceCents: number, saleOff: number): number {
+  return priceCents - (priceCents * saleOff) / 100;
+}
+
+function getTotalPriceCents(
+  products: (Product & { quantity: number })[],
+): number {
+  return products.reduce(
+    (total, product) => total + product.priceCents * product.quantity,
+    0,
+  );
+}
+
+function getCartIdByCustomerId(customerId: number): number | null {
+  const cart = carts.find((cart) => cart.customer_id === customerId);
+  return cart ? cart.id : null;
+}
+
+function getProductDetailsByCartId(
+  cartId: number,
+): { product_id: number; quantity: number }[] {
+  const cart = cartDetails.find((detail) => detail.cart_id === cartId);
+
+  if (!cart) {
+    return [];
+  }
+
+  return cart.products;
+}
+
+function getCartProductsByCustomerId(
+  customerId: number,
+): (Product & { quantity: number })[] {
+  const cartId = getCartIdByCustomerId(customerId);
+  if (!cartId) return [];
+
+  const productDetails = getProductDetailsByCartId(cartId);
+  return getProductsByDetails(productDetails);
+}
+
+function getInvoiceIdsByCustomerId(
+  customerId: number,
+  status: string,
+): number[] {
+  const invoicesForCustomer = invoices.filter(
+    (invoice) =>
+      invoice.customer_id === customerId && invoice.status === status,
+  );
+  return invoicesForCustomer.map((invoice) => invoice.id);
+}
+
+function getProductDetailsByInvoiceId(
+  invoiceId: number,
+): { product_id: number; quantity: number }[] {
+  const invoice = invoiceDetails.find(
+    (detail) => detail.invoice_id === invoiceId,
+  );
+
+  if (!invoice) {
+    return [];
+  }
+
+  return invoice.products;
+}
+
+function getInvoiceProductsByCustomerId(
+  customerId: number,
+  status: "PROCESSING" | "COMPLETED" | "CANCELLED",
+): { invoiceId: number; products: (Product & { quantity: number })[] }[] {
+  const invoiceIds = getInvoiceIdsByCustomerId(customerId, status);
+
+  if (invoiceIds.length === 0) return [];
+
+  const invoicesWithProducts = invoiceIds.map((invoiceId) => {
+    const productDetails = getProductDetailsByInvoiceId(invoiceId);
+    const products = getProductsByDetails(productDetails);
+
+    return {
+      invoiceId,
+      products,
+    };
+  });
+
+  return invoicesWithProducts;
+}
+
+function getProductsByDetails(
+  productDetails: { product_id: number; quantity: number }[],
+): (Product & { quantity: number })[] {
+  return productDetails
+    .map((detail) => {
+      const product = products.find(
+        (product) => product.id === detail.product_id,
+      );
+      return product ? { ...product, quantity: detail.quantity } : null;
+    })
+    .filter(
+      (result): result is Product & { quantity: number } => result !== null,
+    );
+}
+
+export {
+  shuffleProduct,
+  generateSlugWithRandom,
+  formatCurrency,
+  getPriceAfterDiscount,
+  getTotalPriceCents,
+  getCartProductsByCustomerId,
+  getInvoiceProductsByCustomerId,
+};

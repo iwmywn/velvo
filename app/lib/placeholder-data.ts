@@ -9,7 +9,7 @@ import {
   ProductSize,
 } from "./definition";
 
-export const customers: Customer[] = [
+const customers: Customer[] = [
   {
     id: 1,
     name: "John Doe",
@@ -30,7 +30,7 @@ export const customers: Customer[] = [
   },
 ];
 
-export const carts: Cart[] = [
+const carts: Cart[] = [
   {
     id: 1,
     customer_id: 1,
@@ -45,13 +45,28 @@ export const carts: Cart[] = [
   },
 ];
 
-export const cartDetails: CartDetails[] = [
-  { id: 1, cart_id: 1, product_id: 10, quantity: 2 },
-  { id: 2, cart_id: 2, product_id: 20, quantity: 1 },
-  { id: 3, cart_id: 3, product_id: 30, quantity: 5 },
+const cartDetails: CartDetails[] = [
+  {
+    id: 1,
+    cart_id: 1,
+    products: [
+      { product_id: 10, quantity: 2 },
+      { product_id: 26, quantity: 3 },
+    ],
+  },
+  {
+    id: 2,
+    cart_id: 2,
+    products: [{ product_id: 20, quantity: 1 }],
+  },
+  {
+    id: 3,
+    cart_id: 3,
+    products: [{ product_id: 30, quantity: 5 }],
+  },
 ];
 
-export const invoices: Invoice[] = [
+const invoices: Invoice[] = [
   {
     id: 1,
     customer_id: 1,
@@ -59,7 +74,7 @@ export const invoices: Invoice[] = [
     phone: "1234567890",
     shipAddress: "123 Main St",
     date: new Date("2024-11-15"),
-    status: "PROCESSING",
+    status: "COMPLETED",
   },
   {
     id: 2,
@@ -68,7 +83,7 @@ export const invoices: Invoice[] = [
     phone: "9876543210",
     shipAddress: "456 Elm St",
     date: new Date("2024-11-20"),
-    status: "COMPLETED",
+    status: "PROCESSING",
   },
   {
     id: 3,
@@ -79,15 +94,82 @@ export const invoices: Invoice[] = [
     date: new Date("2024-11-10"),
     status: "CANCELLED",
   },
+  {
+    id: 4,
+    customer_id: 1,
+    recipientName: "John Doe",
+    phone: "1234567890",
+    shipAddress: "123 Main St",
+    date: new Date("2024-11-15"),
+    status: "COMPLETED",
+  },
+  {
+    id: 5,
+    customer_id: 1,
+    recipientName: "John Doe",
+    phone: "8888777765",
+    shipAddress: "123 Main St",
+    date: new Date("2024-11-15"),
+    status: "PROCESSING",
+  },
+  {
+    id: 6,
+    customer_id: 1,
+    recipientName: "John Doe",
+    phone: "8888777765",
+    shipAddress: "123 Main St",
+    date: new Date("2024-11-15"),
+    status: "CANCELLED",
+  },
 ];
 
-export const invoiceDetails: InvoiceDetails[] = [
-  { id: 1, invoice_id: 1, product_id: 10, quantity: 2 },
-  { id: 2, invoice_id: 2, product_id: 20, quantity: 1 },
-  { id: 3, invoice_id: 3, product_id: 30, quantity: 4 },
+const invoiceDetails: InvoiceDetails[] = [
+  {
+    id: 1,
+    invoice_id: 1,
+    products: [
+      { product_id: 29, quantity: 2 },
+      { product_id: 9, quantity: 3 },
+    ],
+  },
+  {
+    id: 2,
+    invoice_id: 2,
+    products: [{ product_id: 20, quantity: 1 }],
+  },
+  {
+    id: 3,
+    invoice_id: 3,
+    products: [{ product_id: 30, quantity: 5 }],
+  },
+  {
+    id: 4,
+    invoice_id: 4,
+    products: [
+      { product_id: 18, quantity: 1 },
+      { product_id: 11, quantity: 4 },
+    ],
+  },
+  {
+    id: 5,
+    invoice_id: 5,
+    products: [
+      { product_id: 2, quantity: 2 },
+      { product_id: 24, quantity: 2 },
+    ],
+  },
+  {
+    id: 6,
+    invoice_id: 6,
+    products: [
+      { product_id: 5, quantity: 3 },
+      { product_id: 6, quantity: 2 },
+      { product_id: 7, quantity: 1 },
+    ],
+  },
 ];
 
-export const products: Product[] = [
+const products: Product[] = [
   {
     id: 1,
     name: "Young Green College Varsity Jacket",
@@ -390,7 +472,7 @@ export const products: Product[] = [
   },
 ];
 
-export const categories: Category[] = [
+const categories: Category[] = [
   {
     id: 1,
     name: "men",
@@ -411,7 +493,7 @@ export const categories: Category[] = [
   },
 ];
 
-export const productSizes: ProductSize[] = [
+const productSizes: ProductSize[] = [
   {
     id: 1,
     product_id: 1,
@@ -438,59 +520,13 @@ export const productSizes: ProductSize[] = [
   },
 ];
 
-const mockOrders = [
-  {
-    id: "ShBg5PDzEFBrW3dT",
-    products: [
-      {
-        src: "/men_1.png",
-        name: "Young Green College Varsity Jacket",
-        quantity: 2,
-        priceCents: 4545,
-      },
-      {
-        src: "/women_1.png",
-        name: "Cardigan",
-        quantity: 1,
-        priceCents: 7000,
-      },
-    ],
-  },
-  {
-    id: "7qSZpM7NQ2RMhzBP",
-    products: [
-      {
-        src: "/women_2.png",
-        name: "Tiffany Dress",
-        quantity: 1,
-        priceCents: 12000,
-      },
-    ],
-  },
-].map((order) => ({
-  ...order,
-  totalPriceCents: order.products.reduce(
-    (total, product) => total + product.priceCents * product.quantity,
-    0,
-  ),
-}));
-
-const mockProducts = [
-  {
-    src: "/men_1.png",
-    name: "Young Green College Varsity Jacket",
-    priceCents: 4545,
-    quantity: 2,
-  },
-  {
-    src: "/women_1.png",
-    name: "Cardigan",
-    priceCents: 7000,
-    quantity: 1,
-  },
-].map((product) => ({
-  ...product,
-  totalPriceCents: product.priceCents * product.quantity,
-}));
-
-export { mockOrders, mockProducts };
+export {
+  customers,
+  carts,
+  cartDetails,
+  invoices,
+  invoiceDetails,
+  products,
+  categories,
+  productSizes,
+};

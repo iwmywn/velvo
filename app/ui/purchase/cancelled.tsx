@@ -1,5 +1,5 @@
-"use client";
+import OrderList from "@ui/purchase/components/order-list";
 
 export default function Cancelled() {
-  return <></>;
+  return <OrderList customerId={1} status="CANCELLED" />;
 }

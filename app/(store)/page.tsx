@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { categories } from "@lib/placeholder-data";
 import Image from "next/image";
+import Button from "@/ui/button";
 
 export default function HomePage() {
   return (
@@ -26,11 +27,8 @@ export default function HomePage() {
           <div className="flex flex-col items-center justify-center gap-4 px-4 text-center md:w-[50%]">
             <span>{description}</span>
             {/* todo: text should not be scale */}
-            <Link
-              href={`/category/${name}`}
-              className="rounded-md border border-white bg-black px-5 py-3 text-sm text-white transition-all duration-500 hover:scale-95"
-            >
-              EXPLORE THE SELECTION
+            <Link href={`/category/${name}`}>
+              <Button className="h-10">EXPLORE THE SELECTION</Button>
             </Link>
           </div>
         </section>

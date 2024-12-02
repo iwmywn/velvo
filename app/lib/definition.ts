@@ -13,8 +13,7 @@ export type Cart = {
 export type CartDetails = {
   id: number;
   cart_id: number;
-  product_id: number;
-  quantity: number;
+  products: { product_id: number; quantity: number }[];
 };
 
 export type Invoice = {
@@ -30,8 +29,7 @@ export type Invoice = {
 export type InvoiceDetails = {
   id: number;
   invoice_id: number;
-  product_id: number;
-  quantity: number;
+  products: { product_id: number; quantity: number }[];
 };
 
 export type Product = {

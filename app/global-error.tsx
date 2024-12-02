@@ -1,5 +1,8 @@
 "use client";
 
+import { montserrat } from "./ui/fonts";
+import Button from "@ui/button";
+
 export default function GlobalError({
   error,
   reset,
@@ -9,16 +12,11 @@ export default function GlobalError({
 }) {
   return (
     <html>
-      <body>
-        <main className="relative z-10 flex h-screen flex-col items-center gap-2 bg-white pt-52">
+      <body className={`${montserrat.className} antialiased`}>
+        <main className="relative z-10 flex h-screen flex-col items-center gap-2 bg-white px-8 pt-52 text-center md:px-20">
           <h2 className="text-lg font-semibold">Something went wrong!</h2>
           <p>{error.message}</p>
-          <button
-            className="mt-2 rounded-md bg-black px-4 py-2 text-sm text-white transition-all duration-300 hover:scale-95"
-            onClick={() => reset()}
-          >
-            Try again
-          </button>
+          <Button onClick={() => reset()}>Try again</Button>
         </main>
       </body>
     </html>

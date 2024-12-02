@@ -18,7 +18,7 @@ export default function BreadCrumb({ breadcrumbs }: BreadcrumbsProps) {
           {href ? (
             <Link
               href={href}
-              className="text-gray-700 transition-colors duration-200 hover:text-black"
+              className="opacity-65 transition-all duration-300 hover:opacity-100"
             >
               {label}
             </Link>

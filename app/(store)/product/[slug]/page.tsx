@@ -1,11 +1,11 @@
-import { notFound } from "next/navigation";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { categories, products } from "@/lib/placeholder-data";
 import ProductDetails from "@/ui/product/details";
 import SimilarProducts from "@/ui/product/similar";
 import BreadCrumbs from "@/ui/product/breadcrumbs";
 import { capitalizeFirstLetter } from "@/utils/format-text";
 import { Product } from "@/lib/definition";
+import NotFound from "@/not-found";
 
 export async function generateMetadata({
   params,
@@ -15,10 +15,8 @@ export async function generateMetadata({
   const productSlug = (await params).slug;
   const name = products.find((p) => p.slug === productSlug)?.name;
 
-  if (!name) notFound();
-
   return {
-    title: name,
+    title: !name ? "NOT FOUND" : name,
   };
 }
 
@@ -35,7 +33,7 @@ export default async function ProductPage({
     (p) => p.category_id === category?.id && p.slug !== productSlug,
   );
 
-  if (!product) notFound();
+  if (!product) return <NotFound />;
 
   const { name } = product;
   const breadcrumb = [
