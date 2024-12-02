@@ -5,6 +5,7 @@ import Image from "next/image";
 import { formatCurrency } from "@lib/utils";
 import Button from "@ui/button";
 import { Product } from "@/lib/definition";
+import ImageTag from "../image";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const { id, name, priceCents, images, description, saleOff } = product;
@@ -18,19 +19,13 @@ export default function ProductDetails({ product }: { product: Product }) {
           <div
             key={`${id}${img}`}
             onClick={() => setSelectedImage(img)}
-            className={`relative h-[100px] cursor-pointer overflow-hidden rounded-lg border p-2 hover:bg-gray-100 ${
+            className={`flex cursor-pointer justify-center rounded-lg border p-2 hover:bg-gray-100 ${
               selectedImage === img
                 ? "border-black bg-gray-50"
                 : "border-gray-300"
             }`}
           >
-            <Image
-              src={img}
-              alt={description}
-              fill
-              sizes="(max-width: 640px) 33vw, 20vw"
-              style={{ objectFit: "contain" }}
-            />
+            <ImageTag src={img} alt={description} />
           </div>
         ))}
       </div>
@@ -40,12 +35,14 @@ export default function ProductDetails({ product }: { product: Product }) {
             {saleOff}% OFF
           </div>
         )}
-        <div className="relative h-96 w-full rounded-lg bg-stone-100 p-5">
+        <div className="flex h-96 w-full justify-center rounded-lg bg-stone-100 p-5">
           <Image
             src={selectedImage}
             alt={name}
-            fill
-            sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 50vw"
+            width={384}
+            height={384}
+            loading="eager"
+            sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 384px"
             style={{ objectFit: "contain" }}
           />
         </div>

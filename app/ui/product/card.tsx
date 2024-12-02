@@ -50,12 +50,14 @@ export default function ProductCard({
           {saleOff}% OFF
         </div>
       )}
-      <div className="relative h-60 bg-stone-100">
+      <div className="flex h-60 justify-center bg-stone-100">
         <Image
           src={images[currentImageIndex]}
           alt={name}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, (max-width: 2000px) 25vw, (max-width: 3000px) 20vw, 16.67vw"
+          width={240}
+          height={240}
+          loading="eager"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, (max-width: 2000px) 25vw, (max-width: 3000px) 20vw, 240px"
           style={{ objectFit: "contain" }}
         />
       </div>
