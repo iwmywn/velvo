@@ -11,7 +11,7 @@ import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "./nav/cart-aside";
 import AccountMenu from "@/ui/nav/account-menu";
-import SearchAside from "./nav/search-aside";
+import SearchSummary from "./nav/search-aside";
 
 export default function Header() {
   const pathname = usePathname();
@@ -47,7 +47,7 @@ export default function Header() {
           <Logo />
 
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[28rem] lg:flex-1 lg:gap-10">
-            <SearchAside />
+            <SearchSummary />
             <AccountMenu />
             <CartSummary />
             <IoIosMenu
