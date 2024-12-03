@@ -21,7 +21,7 @@ export default function AccountOverview() {
   return (
     <div className="flex min-h-screen justify-center">
       <div className="flex w-full max-w-[30rem] flex-col items-center pt-10 text-sm">
-        <h1 className="mb-7 text-3xl font-semibold">ACCOUNT</h1>
+        <h1 className="mb-7 text-2xl font-semibold">ACCOUNT</h1>
         <div className="mb-3 flex w-full text-xs font-medium">
           {tabs.map(({ name, isActive }, index) => (
             <div

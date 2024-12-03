@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { categories, products } from "@/lib/placeholder-data";
 import ProductDetails from "@/ui/product/details";
 import SimilarProducts from "@/ui/product/similar";
-import BreadCrumbs from "@/ui/product/breadcrumbs";
+import BreadCrumbs from "@/ui/breadcrumbs";
 import { capitalizeFirstLetter } from "@/utils/format-text";
 import { Product } from "@/lib/definition";
 import NotFound from "@/not-found";

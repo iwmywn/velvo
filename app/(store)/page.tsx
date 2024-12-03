@@ -9,7 +9,7 @@ export default function HomePage() {
       {categories.map(({ id, name, description }, index) => (
         <section
           key={id}
-          className={`flex w-full flex-col rounded border border-black/5 bg-stone-100 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
+          className={`flex w-full flex-col rounded border border-slate-200 bg-slate-50 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
           <div className="flex h-[18.75rem] justify-center px-12 md:w-[50%] md:px-6">
             <Image

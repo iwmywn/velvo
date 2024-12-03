@@ -2,6 +2,8 @@
 
 import { Product } from "@lib/definition";
 import ProductCard from "./card";
+import BreadCrumbs from "../breadcrumbs";
+import { capitalizeFirstLetter } from "@/utils/format-text";
 
 export default function ProductList({
   products,
@@ -10,9 +12,17 @@ export default function ProductList({
   products: Product[];
   title: string;
 }) {
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: `${capitalizeFirstLetter(title)}` },
+  ];
+
   return (
     <>
-      <h1 className="mb-7 text-xl font-bold uppercase">{title}</h1>
+      {title !== "You may also like" && (
+        <BreadCrumbs breadcrumbs={breadcrumbs} />
+      )}
+      <h3 className="mb-7 text-center text-xl font-bold uppercase">{title}</h3>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 min-[2000px]:grid-cols-5 min-[3000px]:grid-cols-6">
         {products.map((product) => (
           <ProductCard key={product.slug} {...product} />

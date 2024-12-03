@@ -3,7 +3,11 @@ import Image from "next/image";
 
 export default function Logo() {
   return (
-    <Link className="relative h-7 w-7 md:h-8 md:w-8 lg:mx-3" href="/">
+    <Link
+      className="relative h-7 w-7 md:h-8 md:w-8 lg:mx-3"
+      href="/"
+      title="Home"
+    >
       <Image
         src="/logo.png"
         alt="logo"

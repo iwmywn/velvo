@@ -13,16 +13,16 @@ export default function ProductDetails({ product }: { product: Product }) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   return (
-    <div className="grid grid-cols-5 gap-x-5 gap-y-5 pb-5 lg:grid-cols-12 lg:gap-6">
+    <div className="mt-10 grid grid-cols-5 gap-x-5 gap-y-5 pb-5 lg:grid-cols-12 lg:gap-6">
       <div className="col-span-5 grid grid-cols-[1fr_1fr_1fr] gap-4 sm:col-span-1 sm:flex sm:flex-col lg:col-span-2 min-[1400px]:col-span-1">
         {images.map((img) => (
           <div
             key={`${id}${img}`}
             onClick={() => setSelectedImage(img)}
-            className={`flex cursor-pointer justify-center rounded-lg border hover:bg-gray-100 ${
+            className={`flex cursor-pointer items-center justify-center rounded-lg border hover:bg-slate-100 ${
               selectedImage === img
-                ? "border-black bg-gray-50"
-                : "border-gray-300"
+                ? "border-black bg-slate-50"
+                : "border-slate-200"
             }`}
           >
             <ImageTag src={img} alt={description} />
@@ -31,11 +31,11 @@ export default function ProductDetails({ product }: { product: Product }) {
       </div>
       <div className="relative col-span-5 sm:col-span-4 lg:col-span-6 min-[1400px]:col-span-7">
         {saleOff > 0 && (
-          <div className="absolute left-0 top-0 z-[1] rounded-tl-lg bg-rose-100 px-4 py-3 text-sm font-bold text-rose-600">
+          <div className="absolute left-0 top-0 z-[1] rounded-tl-lg bg-red-600 px-5 py-2 text-sm font-bold text-white">
             {saleOff}% OFF
           </div>
         )}
-        <div className="flex h-96 w-full justify-center rounded-lg bg-stone-100 p-5">
+        <div className="flex h-96 w-full items-center justify-center rounded-lg bg-slate-50/50 p-5">
           <Image
             src={selectedImage}
             alt={name}
@@ -75,7 +75,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             {["S", "M", "L", "XL"].map((size) => (
               <label
                 key={size}
-                className={`flex items-center gap-x-2 rounded border px-4 py-2 text-sm hover:bg-gray-100 ${selectedSize === size ? "border-black bg-gray-50" : "border-gray-300"} cursor-pointer`}
+                className={`flex items-center gap-x-2 rounded border px-4 py-2 text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
               >
                 <input
                   type="radio"

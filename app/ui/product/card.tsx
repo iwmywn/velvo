@@ -25,7 +25,7 @@ export default function ProductCard({
         setCurrentImageIndex((prevIndex) =>
           prevIndex === images.length - 1 ? 0 : prevIndex + 1,
         );
-      }, 1000);
+      }, 800);
     } else if (intervalId) {
       clearInterval(intervalId);
     }
@@ -38,33 +38,42 @@ export default function ProductCard({
   return (
     <Link
       href={`/product/${slug}`}
-      className="relative overflow-hidden rounded-lg border bg-white transition-all duration-300 hover:shadow-md"
+      className="group relative flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition-transform duration-300 hover:scale-105"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => {
         setHovered(false);
         setCurrentImageIndex(0);
       }}
+      title={name}
     >
       {saleOff > 0 && (
-        <div className="absolute left-0 top-0 z-10 rounded-tl-lg bg-rose-100 px-3 py-2 text-xs font-bold text-rose-600">
+        <div className="absolute left-0 top-0 z-10 rounded-tl-lg bg-red-600 px-3 py-1 text-xs font-bold text-white">
           {saleOff}% OFF
         </div>
       )}
-      <div className="flex h-60 justify-center bg-stone-100">
+      <div className="flex h-64 items-center justify-center bg-slate-50/35">
         <Image
           src={images[currentImageIndex]}
           alt={name}
           width={240}
           height={240}
           loading="eager"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, (max-width: 2000px) 25vw, (max-width: 3000px) 20vw, 240px"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
+          className="transition-transform duration-300 group-hover:scale-105"
           style={{ objectFit: "contain" }}
         />
       </div>
-      <div className="p-4">
-        <div className="truncate text-sm font-medium">{name}</div>
-        <div className="mt-2 font-semibold">
-          ${formatCurrency(priceAfterDiscount)}
+      <div className="flex flex-col gap-1 p-4">
+        <h3 className="truncate text-base font-medium text-gray-900">{name}</h3>
+        <div className="flex items-center justify-center gap-4">
+          {saleOff > 0 && (
+            <span className="text-sm text-gray-400 line-through">
+              ${formatCurrency(priceCents)}
+            </span>
+          )}
+          <span className="text-lg font-semibold text-black">
+            ${formatCurrency(priceAfterDiscount)}
+          </span>
         </div>
       </div>
     </Link>

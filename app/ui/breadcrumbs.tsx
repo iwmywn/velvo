@@ -10,9 +10,10 @@ interface BreadcrumbItem {
 interface BreadcrumbsProps {
   breadcrumbs: BreadcrumbItem[];
 }
-export default function BreadCrumb({ breadcrumbs }: BreadcrumbsProps) {
+
+export default function BreadCrumbs({ breadcrumbs }: BreadcrumbsProps) {
   return (
-    <div className="mb-10 flex flex-wrap items-center gap-2 text-sm">
+    <div className="flex flex-wrap items-center gap-2 text-sm">
       {breadcrumbs.map(({ label, href }, index) => (
         <Fragment key={index}>
           {href ? (

@@ -14,7 +14,7 @@ export default function Footer() {
   return (
     <footer
       ref={ref}
-      className="fixed bottom-0 left-0 right-0 z-[9] flex flex-col items-center gap-10 bg-stone-100 px-8 pb-4 pt-10 md:px-20"
+      className="fixed bottom-0 left-0 right-0 z-[9] flex flex-col items-center gap-10 bg-slate-50/60 px-8 pb-4 pt-10 md:px-20"
     >
       <div className="flex w-full flex-wrap justify-between gap-8 text-sm">
         {footerSections.map(({ title, links }, index) => (
