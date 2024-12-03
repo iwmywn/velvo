@@ -7,7 +7,7 @@ export default function AllProductsPage() {
 
   return (
     <>
-      <ProductList products={allProducts} title="ALL PRODUCTS" />
+      <ProductList products={allProducts} title="All Products" />
     </>
   );
 }

@@ -14,6 +14,10 @@ export default function ProductList({
 }) {
   const breadcrumbs = [
     { label: "Home", href: "/" },
+    {
+      label: `${title !== "All Products" && "All Products"}`,
+      href: "/products",
+    },
     { label: `${capitalizeFirstLetter(title)}` },
   ];
 
