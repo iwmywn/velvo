@@ -2,18 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Loading from "@/ui/loading";
-import { useRouter } from "next/navigation";
 
 export default function RedirectToPreviousPage() {
   const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter();
 
   useEffect(() => {
-    router.back();
-    setTimeout(() => {
+    window.history.back();
+    const timeoutId = setTimeout(() => {
       setLoading(false);
-    }, 0);
-  }, [router]);
+    }, 200);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   return loading ? <Loading /> : null;
 }
