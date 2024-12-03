@@ -56,7 +56,7 @@ export default function PurchaseOverview() {
     <div
       key={key}
       className={`cursor-pointer whitespace-nowrap p-2 text-sm transition-all duration-300 ${
-        activeTabKey === key ? "bg-stone-100" : "hover:bg-gray-100"
+        activeTabKey === key ? "bg-slate-100" : "hover:bg-slate-100"
       }`}
       onClick={() => {
         if (activeTabKey !== key) {

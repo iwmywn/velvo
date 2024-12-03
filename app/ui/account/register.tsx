@@ -1,9 +1,38 @@
 "use client";
 
-import { boxClass, inputClass, labelClass } from "@ui/account/class";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  boxClass,
+  inputClass,
+  labelClass,
+  errorClass,
+} from "@ui/account/class";
 import Button from "@ui/button";
 
+const registerSchema = z.object({
+  firstName: z.string().min(4, "First name must be at least 4 characters"),
+  lastName: z.string().min(4, "Last name must be at least 4 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+type RegisterFormData = z.infer<typeof registerSchema>;
+
 export default function Register() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = (data: RegisterFormData) => {
+    console.log(data);
+  };
+
   return (
     <div className="flex w-full flex-col items-center px-5">
       <span className="mb-2 mt-5 text-center text-black/70">
@@ -12,7 +41,7 @@ export default function Register() {
       </span>
       <span className="mb-8 text-black/70">All fields are mandatory.</span>
       <form
-        onSubmit={(e) => e.preventDefault()}
+        onSubmit={handleSubmit(onSubmit)}
         className="flex w-full flex-col gap-1 text-black/65"
       >
         <div className={boxClass}>
@@ -20,22 +49,30 @@ export default function Register() {
             className={inputClass}
             id="FirstName"
             type="text"
-            placeholder="FirstName"
+            placeholder="First Name"
+            {...register("firstName")}
           />
           <label className={labelClass} htmlFor="FirstName">
             First Name
           </label>
+          {errors.firstName && (
+            <p className={errorClass}>{errors.firstName.message}</p>
+          )}
         </div>
         <div className={boxClass}>
           <input
             className={inputClass}
             id="LastName"
             type="text"
-            placeholder="LastName"
+            placeholder="Last Name"
+            {...register("lastName")}
           />
           <label className={labelClass} htmlFor="LastName">
             Last Name
           </label>
+          {errors.lastName && (
+            <p className={errorClass}>{errors.lastName.message}</p>
+          )}
         </div>
         <div className={boxClass}>
           <input
@@ -43,10 +80,12 @@ export default function Register() {
             id="Email"
             type="email"
             placeholder="Email"
+            {...register("email")}
           />
           <label className={labelClass} htmlFor="Email">
             Email
           </label>
+          {errors.email && <p className={errorClass}>{errors.email.message}</p>}
         </div>
         <div className={boxClass}>
           <input
@@ -54,10 +93,14 @@ export default function Register() {
             id="Password"
             type="password"
             placeholder="Password"
+            {...register("password")}
           />
           <label className={labelClass} htmlFor="Password">
             Password
           </label>
+          {errors.password && (
+            <p className={errorClass}>{errors.password.message}</p>
+          )}
         </div>
         <Button className="h-10" type="submit">
           CONTINUE

@@ -25,7 +25,7 @@ export default function OrderList({ customerId, status }: OrderListProps) {
           >
             {status}
           </div>
-          <div className="flex justify-between border-b bg-stone-100 px-4 pb-4 pt-8">
+          <div className="flex justify-between border-b bg-slate-50 px-4 pb-4 pt-8">
             <div>
               <span className="font-medium">Order ID:</span>{" "}
               <span className="opacity-65">

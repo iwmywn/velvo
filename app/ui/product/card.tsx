@@ -64,14 +64,16 @@ export default function ProductCard({
         />
       </div>
       <div className="flex flex-col gap-2 p-4">
-        <h3 className="truncate text-base font-medium text-gray-900">{name}</h3>
+        <h3 className="truncate text-sm font-medium text-gray-900 sm:text-base">
+          {name}
+        </h3>
         <div className="flex items-center justify-center gap-4">
           {saleOff > 0 && (
-            <span className="text-sm text-gray-400 line-through">
+            <span className="text-xs text-gray-400 line-through sm:text-sm">
               ${formatCurrency(priceCents)}
             </span>
           )}
-          <span className="text-lg font-semibold text-black">
+          <span className="text-base font-semibold text-black sm:text-lg">
             ${priceAfterDiscount}
           </span>
         </div>

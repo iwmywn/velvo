@@ -4,5 +4,6 @@ const inputClass =
   "peer w-full border-gray-300 bg-transparent py-[6px] text-black placeholder-transparent outline-none";
 const labelClass =
   "pointer-events-none absolute left-0 top-[50%] translate-y-[-50%] transition-all duration-300 peer-focus:top-[-50%] peer-focus:translate-y-0 peer-focus:text-xs peer-[&:not(:placeholder-shown)]:top-[-50%] peer-[&:not(:placeholder-shown)]:translate-y-0 peer-[&:not(:placeholder-shown)]:text-xs";
+const errorClass = "absolute top-[105%] text-red-500 text-xs";
 
-export { boxClass, inputClass, labelClass };
+export { boxClass, inputClass, labelClass, errorClass };

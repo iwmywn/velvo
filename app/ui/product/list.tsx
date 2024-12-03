@@ -26,7 +26,9 @@ export default function ProductList({
       {title !== "You may also like" && (
         <BreadCrumbs breadcrumbs={breadcrumbs} />
       )}
-      <h3 className="mb-7 text-center text-xl font-bold uppercase">{title}</h3>
+      <h3 className="mb-7 mt-5 text-center text-xl font-bold uppercase">
+        {title}
+      </h3>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 min-[2000px]:grid-cols-5 min-[3000px]:grid-cols-6">
         {products.map((product) => (
           <ProductCard key={product.slug} {...product} />

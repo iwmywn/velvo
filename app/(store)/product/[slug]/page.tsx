@@ -37,6 +37,7 @@ export default async function ProductPage({
 
   const { name } = product;
   const breadcrumb = [
+    { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
       label: `${capitalizeFirstLetter(category?.name ?? "Category")}`,
