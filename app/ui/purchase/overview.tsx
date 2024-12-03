@@ -8,6 +8,7 @@ import Completed from "@/ui/purchase/completed";
 import Cancelled from "@/ui/purchase/cancelled";
 import Loading from "@/ui/loading";
 import useHideMenu from "@/ui/hooks/hide-menu";
+import BreadCrumbs from "../breadcrumbs";
 
 const tabs = [
   { key: "to-pay", label: "TO PAY", component: ToPay },
@@ -19,6 +20,16 @@ const tabs = [
   { key: "completed", label: "COMPLETED", component: Completed },
   { key: "cancelled", label: "CANCELLED", component: Cancelled },
 ] as const;
+
+const breadcrumbs = [
+  {
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "My purchase",
+  },
+];
 
 export default function PurchaseOverview() {
   const router = useRouter();
@@ -59,32 +70,35 @@ export default function PurchaseOverview() {
   ));
 
   return (
-    <div className="overflow-x-auto">
-      <div
-        className="relative z-[11] mb-5 block min-w-[250px] text-center text-sm font-medium lg:hidden"
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsOpen(!isOpen);
-        }}
-      >
-        <div className="cursor-pointer border p-2">
-          {tabs.find((tab) => tab.key === activeTabKey)?.label}
+    <>
+      <BreadCrumbs breadcrumbs={breadcrumbs} />
+      <div className="mt-5 overflow-x-auto">
+        <div
+          className="relative z-[11] mb-5 block min-w-[250px] text-center text-sm font-medium lg:hidden"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
+        >
+          <div className="cursor-pointer border p-2">
+            {tabs.find((tab) => tab.key === activeTabKey)?.label}
+          </div>
+          {isOpen && (
+            <div className="absolute left-0 top-[100%] mt-1 w-full border bg-white shadow-md">
+              {tabsHTML}
+            </div>
+          )}
         </div>
-        {isOpen && (
-          <div className="absolute left-0 top-[100%] mt-1 w-full border bg-white shadow-md">
-            {tabsHTML}
+        <div className="mb-5 hidden grid-cols-[1fr_1fr_1fr_1fr] overflow-hidden border text-center font-medium lg:grid">
+          {tabsHTML}
+        </div>
+
+        {ActiveComponent && (
+          <div className="min-h-screen text-sm">
+            <ActiveComponent />
           </div>
         )}
       </div>
-      <div className="mb-5 hidden grid-cols-[1fr_1fr_1fr_1fr] overflow-hidden border text-center font-medium lg:grid">
-        {tabsHTML}
-      </div>
-
-      {ActiveComponent && (
-        <div className="min-h-screen text-sm">
-          <ActiveComponent />
-        </div>
-      )}
-    </div>
+    </>
   );
 }

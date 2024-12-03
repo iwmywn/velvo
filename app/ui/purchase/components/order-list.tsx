@@ -1,5 +1,4 @@
 import {
-  formatCurrency,
   getPriceAfterDiscount,
   getTotalPriceCents,
   getInvoiceProductsByCustomerId,
@@ -36,7 +35,7 @@ export default function OrderList({ customerId, status }: OrderListProps) {
             <div className="text-right">
               <span className="font-medium">Total Price: </span>
               <span className="opacity-65">
-                ${formatCurrency(getTotalPriceCents(products))}
+                ${getTotalPriceCents(products)}
               </span>
             </div>
           </div>
@@ -71,16 +70,15 @@ export default function OrderList({ customerId, status }: OrderListProps) {
                             <span className="mx-2">|</span>
                             <span>
                               Price: $
-                              {formatCurrency(
-                                getPriceAfterDiscount(priceCents, saleOff),
-                              )}
+                              {getPriceAfterDiscount(priceCents, saleOff)}
                             </span>
                             <span className="mx-2">|</span>
                             <span>
                               Total: $
-                              {formatCurrency(
-                                getPriceAfterDiscount(priceCents, saleOff) *
-                                  quantity,
+                              {getPriceAfterDiscount(
+                                priceCents,
+                                saleOff,
+                                quantity,
                               )}
                             </span>
                           </p>

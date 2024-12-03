@@ -51,7 +51,7 @@ export default function ProductCard({
           {saleOff}% OFF
         </div>
       )}
-      <div className="flex h-64 items-center justify-center bg-slate-50/35">
+      <div className="flex h-64 items-center justify-center bg-slate-50/50">
         <Image
           src={images[currentImageIndex]}
           alt={name}
@@ -63,7 +63,7 @@ export default function ProductCard({
           style={{ objectFit: "contain" }}
         />
       </div>
-      <div className="flex flex-col gap-1 p-4">
+      <div className="flex flex-col gap-2 p-4">
         <h3 className="truncate text-base font-medium text-gray-900">{name}</h3>
         <div className="flex items-center justify-center gap-4">
           {saleOff > 0 && (
@@ -72,7 +72,7 @@ export default function ProductCard({
             </span>
           )}
           <span className="text-lg font-semibold text-black">
-            ${formatCurrency(priceAfterDiscount)}
+            ${priceAfterDiscount}
           </span>
         </div>
       </div>

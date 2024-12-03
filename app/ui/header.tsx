@@ -30,7 +30,7 @@ export default function Header() {
       >
         <nav className="mx-8 flex w-full items-center justify-between pb-1 pt-5 md:mx-20 md:pb-3 md:pt-8">
           <div className="hidden max-w-[28rem] flex-1 lg:flex lg:items-center lg:justify-between">
-            <Link className="text-2xl font-bold" href="/">
+            <Link className="text-2xl font-bold" href="/" title="StyleWave">
               StyleWave
             </Link>
             {navLinks.map(({ name, href }) => (
@@ -38,6 +38,7 @@ export default function Header() {
                 key={name}
                 href={href}
                 className={`rounded-md border px-4 py-1 text-sm ${pathname === href ? "bg-stone-100" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-stone-100"}`}
+                title={`${name} Category`}
               >
                 <span className="hidden font-semibold md:block">{name}</span>
               </Link>

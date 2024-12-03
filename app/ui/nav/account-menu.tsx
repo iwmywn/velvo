@@ -24,7 +24,7 @@ export default function AccountMenu() {
       }}
     >
       {/* todo: check sign in */}
-      <Link href="/user/account" aria-label="user account">
+      <Link href="/user/account" title="Account">
         <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
       </Link>
       {isOpen && (

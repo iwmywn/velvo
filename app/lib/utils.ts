@@ -52,16 +52,22 @@ function formatCurrency(priceCents: number): string {
   return (Math.round(priceCents) / 100).toFixed(2);
 }
 
-function getPriceAfterDiscount(priceCents: number, saleOff: number): number {
-  return priceCents - (priceCents * saleOff) / 100;
+function getPriceAfterDiscount(
+  priceCents: number,
+  saleOff: number,
+  quantity: number = 1,
+): string {
+  return formatCurrency((priceCents - (priceCents * saleOff) / 100) * quantity);
 }
 
 function getTotalPriceCents(
   products: (Product & { quantity: number })[],
-): number {
-  return products.reduce(
-    (total, product) => total + product.priceCents * product.quantity,
-    0,
+): string {
+  return formatCurrency(
+    products.reduce(
+      (total, product) => total + product.priceCents * product.quantity,
+      0,
+    ),
   );
 }
 

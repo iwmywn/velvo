@@ -7,6 +7,7 @@ export default function SearchSummary() {
       className="relative cursor-pointer"
       href="/search-overlay"
       scroll={false}
+      title="Search"
     >
       <CiSearch className="text-[22px] md:text-2xl" />
     </Link>

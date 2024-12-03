@@ -1,5 +1,5 @@
 import { Product } from "@/lib/definition";
-import { formatCurrency, getPriceAfterDiscount } from "@/lib/utils";
+import { getPriceAfterDiscount } from "@/lib/utils";
 import Button from "@/ui/button";
 import ImageTag from "@/ui/image";
 import Link from "next/link";
@@ -36,9 +36,8 @@ export default function ProductRow({
   slug,
   quantity,
 }: Product & { quantity: number }) {
-  const priceAfterDiscount = getPriceAfterDiscount(priceCents, saleOff);
-  const formattedPrice = `$${formatCurrency(priceAfterDiscount)}`;
-  const formattedTotal = `$${formatCurrency(priceAfterDiscount * quantity)}`;
+  const formattedPrice = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
+  const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
 
   return (
     <div className="flex flex-col gap-4 rounded-md border p-2 text-sm sm:grid sm:grid-cols-[2fr_1fr_1fr_1fr_1fr] sm:gap-2 sm:p-0">

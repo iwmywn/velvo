@@ -8,7 +8,6 @@ import useOverflow from "@ui/hooks/overflow";
 import { usePathname } from "next/navigation";
 import ImageTag from "@ui/image";
 import {
-  formatCurrency,
   getPriceAfterDiscount,
   getTotalPriceCents,
   getCartProductsByCustomerId,
@@ -73,10 +72,7 @@ export default function CartOverlay() {
                       </span>
                     </div>
                     <span className="opacity-65">
-                      $
-                      {formatCurrency(
-                        getPriceAfterDiscount(priceCents, saleOff),
-                      )}
+                      ${getPriceAfterDiscount(priceCents, saleOff)}
                     </span>
                   </div>
                 ),
@@ -86,9 +82,7 @@ export default function CartOverlay() {
             <div className="mt-auto pb-6">
               <div className="float-right mb-2">
                 <span className="font-medium">Total: </span>
-                <span className="opacity-65">
-                  ${formatCurrency(totalPriceCents)}
-                </span>
+                <span className="opacity-65">${totalPriceCents}</span>
               </div>
               <Link href="/user/purchase" onClick={() => handleClose(false)}>
                 <Button className="w-full">Go to Payment</Button>
