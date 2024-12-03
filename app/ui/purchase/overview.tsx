@@ -39,7 +39,10 @@ export default function PurchaseOverview() {
 
   useHideMenu(isOpen, setIsOpen);
   useEffect(() => {
-    if (window.location.pathname !== "/cart-overlay") {
+    if (
+      window.location.pathname !== "/cart-overlay" &&
+      window.location.pathname !== "/search-overlay"
+    ) {
       const tabKey = searchParams.get("tab");
       const validTab = tabs.find(({ key }) => key === tabKey);
       setActiveTabKey(validTab ? validTab.key : tabs[0].key);
