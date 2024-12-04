@@ -81,6 +81,14 @@ export default {
           "0%": { opacity: "1" },
           "100%": { opacity: "0" },
         },
+        zoomIn: {
+          "0%": { transform: "scale(0)" },
+          "100%": { transform: "scale(1)" },
+        },
+        zoomOut: {
+          "0%": { transform: "scale(1)" },
+          "100%": { transform: "scale(0)" },
+        },
       },
       animation: {
         topToCenter: "topToCenter 0.3s ease-in-out",
@@ -93,6 +101,8 @@ export default {
         centerToBottom: "centerToBottom 0.3s ease-in-out",
         popUpIn: "popUpIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1)",
         popUpOut: "popUpOut 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
+        zoomIn: "zoomIn 0.3s ease-in-out",
+        zoomOut: "zoomOut 0.3s ease-in-out",
       },
     },
   },

@@ -28,14 +28,14 @@ export default function NavMenu({
         className={`flex flex-col items-center justify-center gap-2 rounded-b-lg bg-white py-3 ${isAnimating ? "animate-centerToTop" : "animate-topToCenter"}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {navLinks.map(({ name, href }, index) => (
+        {navLinks.map(({ label, href }, index) => (
           <Link
             key={index}
             className="w-full py-[6px] text-center text-sm font-medium transition-all duration-300 hover:bg-stone-100"
             href={href}
             onClick={handleCloseMenu}
           >
-            {name}
+            {label}
           </Link>
         ))}
       </div>

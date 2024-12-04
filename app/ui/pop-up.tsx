@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowDown } from "react-icons/go";
+import Backdrop from "./overlays/backdrop";
 
 const contact = [
   {
@@ -41,10 +42,7 @@ export default function PopUp() {
 
   return (
     isOpen && (
-      <div
-        className={`fixed inset-0 z-[9999] flex animate-fadeIn items-center justify-center bg-black/70 text-base ${isAnimating && "animate-fadeOut"}`}
-        onClick={handleClose}
-      >
+      <Backdrop isAnimating={isAnimating} onClick={handleClose}>
         <div
           className={`relative mx-6 w-full max-w-[30rem] animate-popUpIn rounded-2xl bg-white px-8 py-6 text-black ${isAnimating && "animate-popUpOut"}`}
           onClick={(e) => e.stopPropagation()}
@@ -80,7 +78,7 @@ export default function PopUp() {
             </a>
           </div>
         </div>
-      </div>
+      </Backdrop>
     )
   );
 }

@@ -1,5 +1,6 @@
 import { getTotalPriceCents, getCartProductsByCustomerId } from "@lib/utils";
-import ProductRow from "./components/product-row";
+import ProductRow from "./product-row";
+import Checkout from "./checkout";
 
 export default function ToPay() {
   const cartProducts = getCartProductsByCustomerId(1);
@@ -25,7 +26,9 @@ export default function ToPay() {
           <div className="hidden p-2 sm:block"></div>
           <div className="p-2 font-semibold">Total</div>
           <div className="p-2">${totalPriceCents}</div>
-          <div className="p-2"></div>
+          <div className="p-2">
+            <Checkout />
+          </div>
         </div>
       </div>
     </>

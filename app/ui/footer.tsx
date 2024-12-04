@@ -23,13 +23,13 @@ export default function Footer() {
             key={index}
           >
             <span className="font-medium">{title}</span>
-            {links.map(({ name, href }) => (
+            {links.map(({ label, href }) => (
               <Link
                 className="text-black/80 hover:underline"
                 href={href}
                 key={href}
               >
-                {name}
+                {label}
               </Link>
             ))}
           </div>

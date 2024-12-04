@@ -33,14 +33,14 @@ export default function Header() {
             <Link className="text-2xl font-bold" href="/" title="StyleWave">
               StyleWave
             </Link>
-            {navLinks.map(({ name, href }) => (
+            {navLinks.map(({ label, href }) => (
               <Link
-                key={name}
+                key={label}
                 href={href}
                 className={`rounded-md border px-4 py-1 text-sm ${pathname === href ? "bg-slate-100" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-slate-100"}`}
-                title={`${name} Category`}
+                title={`${label} Category`}
               >
-                <span className="hidden font-semibold md:block">{name}</span>
+                <span className="hidden font-semibold md:block">{label}</span>
               </Link>
             ))}
           </div>

@@ -22,9 +22,10 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
+    mode: "onChange",
   });
 
   const onSubmit = (data: SignInFormData) => {
@@ -72,7 +73,7 @@ export default function SignIn() {
             <p className={errorClass}>{errors.password.message}</p>
           )}
         </div>
-        <Button className="h-10" type="submit">
+        <Button disabled={!isValid} className="h-10" type="submit">
           SIGN IN
         </Button>
       </form>

@@ -2,11 +2,11 @@ import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
 const navLinks = [
   {
-    name: "MEN",
+    label: "MEN",
     href: "/category/men",
   },
-  { name: "WOMEN", href: "/category/women" },
-  { name: "KIDS", href: "/category/kids" },
+  { label: "WOMEN", href: "/category/women" },
+  { label: "KIDS", href: "/category/kids" },
 ] as const;
 
 const footerSections = [
@@ -14,11 +14,11 @@ const footerSections = [
     title: "May We Help You?",
     links: [
       {
-        name: "NNVA",
+        label: "NNVA",
         href: "mailto:anhnnv21@uef.edu.vn",
       },
       {
-        name: "HAT",
+        label: "HAT",
         href: "mailto:tuanha321@uef.edu.vn",
       },
     ],
@@ -31,11 +31,11 @@ const footerSections = [
     title: "The company",
     links: [
       {
-        name: "Privacy",
+        label: "Privacy",
         href: "#",
       },
       {
-        name: "Term & conditions",
+        label: "Term & conditions",
         href: "##",
       },
     ],

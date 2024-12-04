@@ -24,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
+        <div id="popups" className="relative z-[9999]" />
         <PopUp />
         <HeightProvider>
           <Header />

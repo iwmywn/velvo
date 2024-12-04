@@ -1,4 +1,4 @@
-import OrderList from "@ui/purchase/components/order-list";
+import OrderList from "@/ui/purchase/order-list";
 
 export default function Cancelled() {
   return <OrderList customerId={1} status="CANCELLED" />;

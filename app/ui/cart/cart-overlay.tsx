@@ -12,6 +12,8 @@ import {
   getTotalPriceCents,
   getCartProductsByCustomerId,
 } from "@/lib/utils";
+import Backdrop from "@ui/overlays/backdrop";
+import SlidingContainer from "@ui/overlays/sliding-container";
 
 export default function CartOverlay() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -41,14 +43,8 @@ export default function CartOverlay() {
   if (!isOpen) return null;
 
   return (
-    <div
-      className={`fixed inset-0 z-[9998] bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
-      onClick={() => handleClose(true)}
-    >
-      <div
-        className={`fixed bottom-0 left-0 right-0 z-[9999] h-[80%] overflow-y-auto rounded-tl-lg rounded-tr-lg bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] sm:rounded-bl-lg sm:rounded-tr-none lg:w-[33%] ${isAnimating ? "animate-centerToBottom sm:animate-leftToRight" : "animate-bottomToCenter sm:animate-rightToLeft"}`}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Backdrop isAnimating={isAnimating} onClick={() => handleClose(true)}>
+      <SlidingContainer isAnimating={isAnimating}>
         <div className="flex h-full flex-col px-6 pt-6 text-sm">
           <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
           <div className="mt-4">
@@ -90,7 +86,7 @@ export default function CartOverlay() {
             </Link>
           </div>
         </div>
-      </div>
-    </div>
+      </SlidingContainer>
+    </Backdrop>
   );
 }

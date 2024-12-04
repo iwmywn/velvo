@@ -24,9 +24,10 @@ export default function Register() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    mode: "onChange",
   });
 
   const onSubmit = (data: RegisterFormData) => {
@@ -102,7 +103,7 @@ export default function Register() {
             <p className={errorClass}>{errors.password.message}</p>
           )}
         </div>
-        <Button className="h-10" type="submit">
+        <Button disabled={!isValid} className="h-10" type="submit">
           CONTINUE
         </Button>
       </form>

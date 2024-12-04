@@ -64,7 +64,6 @@ export default function PurchaseOverview() {
       onClick={() => {
         if (activeTabKey !== key) {
           router.push(`?tab=${key}`);
-          setActiveTabKey(key);
         }
       }}
     >
