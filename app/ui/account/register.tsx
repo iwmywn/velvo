@@ -3,12 +3,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import {
-  boxClass,
-  inputClass,
-  labelClass,
-  errorClass,
-} from "@ui/account/class";
+import { boxClass, inputClass, labelClass, errorClass } from "@/ui/form-class";
 import Button from "@ui/button";
 
 const registerSchema = z.object({
