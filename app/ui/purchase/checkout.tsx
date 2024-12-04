@@ -7,6 +7,7 @@ import { boxClass, inputClass, labelClass, errorClass } from "../form-class";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import useOverflow from "../hooks/overflow";
 
 const placeOrderSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),
@@ -41,6 +42,8 @@ export default function Checkout() {
   const onSubmit = (data: PlaceOrderFormData) => {
     console.log(data);
   };
+
+  useOverflow(isOpen);
 
   return (
     <>
@@ -91,7 +94,7 @@ export default function Checkout() {
                 <input
                   className={inputClass}
                   id="Address"
-                  type="email"
+                  type="text"
                   placeholder="Address"
                   {...register("address")}
                 />

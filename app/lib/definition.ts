@@ -5,6 +5,16 @@ export type Customer = {
   password: string;
 };
 
+export type ShippingAddress = {
+  id: number;
+  customer_id: number;
+  shippingaddresses: {
+    recipientName: string;
+    phone: string;
+    address: string;
+  }[];
+};
+
 export type Cart = {
   id: number;
   customer_id: number;
@@ -42,6 +52,7 @@ export type Category = {
   id: number;
   name: string;
   description: string;
+  image: string;
 };
 
 export type ProductSize = {

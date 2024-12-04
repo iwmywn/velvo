@@ -6,14 +6,14 @@ import Button from "@/ui/button";
 export default function HomePage() {
   return (
     <div className="flex flex-col items-center gap-7">
-      {categories.map(({ id, name, description }, index) => (
+      {categories.map(({ name, description, image }, index) => (
         <section
-          key={id}
+          key={image}
           className={`flex w-full flex-col rounded border border-slate-200 bg-slate-50 py-4 md:flex-row ${index % 2 !== 0 && "md:flex-row-reverse"}`}
         >
           <div className="flex h-[18.75rem] justify-center px-12 md:w-[50%] md:px-6">
             <Image
-              src={`/${name}.png`}
+              src={image}
               alt={name}
               width={300}
               height={300}

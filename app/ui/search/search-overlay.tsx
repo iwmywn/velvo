@@ -68,7 +68,7 @@ export default function SearchOverlay() {
             />
           </div>
           {searchTerm.trim() === "" ? (
-            <div className="mx-4 text-center">
+            <div className="mx-4 text-center text-sm">
               Search for the latest fashion trends that match your style.
             </div>
           ) : filteredProducts.length > 0 ? (
@@ -78,7 +78,7 @@ export default function SearchOverlay() {
               ))}
             </div>
           ) : (
-            <div className="mx-4 text-center">No products found.</div>
+            <div className="mx-4 text-center text-sm">No products found.</div>
           )}
         </SlidingContainer>
       </Backdrop>
