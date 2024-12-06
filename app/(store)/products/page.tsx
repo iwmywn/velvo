@@ -1,10 +1,11 @@
 import { shuffleProduct } from "@/lib/utils";
-import { products } from "@/lib/placeholder-data";
 import ProductList from "@/ui/product/list";
 import BreadCrumbs from "@/ui/breadcrumbs";
+import { fetchProducts } from "@/lib/data";
 
-export default function AllProductsPage() {
-  const allProducts = shuffleProduct(products);
+export default async function AllProductsPage() {
+  const products = await fetchProducts();
+  // const allProducts = shuffleProduct(products);
   const breadcrumbs = [
     {
       label: "Home",
@@ -18,7 +19,7 @@ export default function AllProductsPage() {
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <ProductList products={allProducts} title="All Products" />
+      <ProductList products={products} title="All Products" />
     </>
   );
 }
