@@ -1,5 +1,5 @@
 import ProductList from "./list";
-import { Product } from "@/lib/definition";
+import { Product } from "@/lib/data";
 
 export default function SimilarProducts({
   similarProducts,

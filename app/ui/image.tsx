@@ -14,7 +14,6 @@ export default function ImageTag({ src, alt, className }: ImageProps) {
         alt={alt}
         width={85}
         height={85}
-        loading="eager"
         priority
         sizes="(max-width: 640px) 33vw, 85px"
         style={{ objectFit: "cover", objectPosition: "center" }}

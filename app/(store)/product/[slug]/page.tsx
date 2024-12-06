@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { categories, products } from "@/lib/placeholder-data";
+import { fetchCategories, fetchProducts } from "@/lib/data";
 import ProductDetails from "@/ui/product/details";
 import SimilarProducts from "@/ui/product/similar";
 import BreadCrumbs from "@/ui/breadcrumbs";
 import { capitalizeFirstLetter } from "@/utils/format-text";
-import { Product } from "@/lib/definition";
+import { Product } from "@/lib/data";
 import NotFound from "@/not-found";
 
 export async function generateMetadata({
@@ -12,11 +12,14 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const productSlug = (await params).slug;
+  const [products, { slug: productSlug }] = await Promise.all([
+    fetchProducts(),
+    params,
+  ]);
   const name = products.find((p) => p.slug === productSlug)?.name;
 
   return {
-    title: !name ? "NOT FOUND" : name,
+    title: name || "NOT FOUND",
   };
 }
 
@@ -25,14 +28,21 @@ export default async function ProductPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const productSlug = (await params).slug;
+  const [categories, products, { slug: productSlug }] = await Promise.all([
+    fetchCategories(),
+    fetchProducts(),
+    params,
+  ]);
   const product = products.find((p) => p.slug === productSlug);
 
   if (!product) return <NotFound />;
 
-  const category = categories.find((cat) => cat.id === product.category_id)!;
+  const category = categories.find((cat) => cat.id === product.categoryId);
+
+  if (!category) return <NotFound />;
+
   const similarProducts: Product[] = products.filter(
-    (p) => p.category_id === category.id && p.slug !== productSlug,
+    (p) => p.categoryId === category.id && p.slug !== productSlug,
   );
   const breadcrumbs = [
     { label: "Home", href: "/" },
@@ -56,7 +66,10 @@ export default async function ProductPage({
 }
 
 export async function generateStaticParams() {
+  const products = await fetchProducts();
   return products.map((p) => ({
     slug: p.slug,
   }));
 }
+
+export const revalidate = 1800;

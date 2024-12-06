@@ -24,7 +24,7 @@ export default function SearchOverlay() {
       setTimeout(() => {
         setIsAnimating(false);
         setIsOpen(false);
-        if (shouldNavigate && !pathname.includes("/product/")) router.back();
+        if (shouldNavigate && !pathname?.includes("/product/")) router.back();
       }, 250);
       setWasInProductPage(false);
     },
@@ -35,7 +35,7 @@ export default function SearchOverlay() {
 
   useEffect(() => {
     if (pathname === "/search-overlay") setIsOpen(true);
-    if (pathname.includes("/product/") && !wasInProductPage) {
+    if (pathname?.includes("/product/") && !wasInProductPage) {
       setWasInProductPage(true);
       handleClose(true);
     }

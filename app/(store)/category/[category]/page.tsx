@@ -1,24 +1,26 @@
 import type { Metadata } from "next";
-import { categories, products } from "@/lib/placeholder-data";
-import { Product } from "@/lib/definition";
+import { fetchCategories, fetchProducts } from "@/lib/data";
+// import { Category, Product } from "@/lib/definition";
 import ProductList from "@/ui/product/list";
 import { capitalizeFirstLetter } from "@/utils/format-text";
 import NotFound from "@/not-found";
 import BreadCrumbs from "@/ui/breadcrumbs";
-
-const validCategories = new Set(categories.map((cat) => cat.name));
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
-  const category = (await params).category;
+  const [categories, { category: categoryName }] = await Promise.all([
+    fetchCategories(),
+    params,
+  ]);
+  const validCategories = new Set(categories.map((cat) => cat.name));
 
   return {
-    title: !validCategories.has(category)
+    title: !validCategories.has(categoryName)
       ? "NOT FOUND"
-      : `${capitalizeFirstLetter(category)} Category`,
+      : `${capitalizeFirstLetter(categoryName)} Category`,
   };
 }
 
@@ -27,13 +29,17 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ category: string }>;
 }) {
-  const categoryName = (await params).category;
-  const categoryId = categories.find((cat) => cat.name === categoryName)?.id;
+  const [categories, products, { category: categoryName }] = await Promise.all([
+    fetchCategories(),
+    fetchProducts(),
+    params,
+  ]);
+  const category = categories.find((cat) => cat.name === categoryName);
 
-  if (!categoryId) return <NotFound />;
+  if (!category) return <NotFound />;
 
-  const productsByCategory: Product[] = products.filter(
-    (p) => p.category_id === categoryId,
+  const productsByCategory = products.filter(
+    (p) => p.categoryId === category.id,
   );
   const breadcrumbs = [
     { label: "Home", href: "/" },
@@ -50,7 +56,10 @@ export default async function CategoryPage({
 }
 
 export async function generateStaticParams() {
-  return Array.from(validCategories).map((category) => ({
-    category,
+  const categories = await fetchCategories();
+  return categories.map((category) => ({
+    category: category.name,
   }));
 }
+
+export const revalidate = 1800;

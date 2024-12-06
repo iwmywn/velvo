@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
 import { useState, useEffect } from "react";
-import { Product } from "@lib/definition";
+import { Product } from "@lib/data";
 
 export default function ProductCard({
   name,
@@ -57,7 +57,6 @@ export default function ProductCard({
           alt={name}
           width={240}
           height={240}
-          loading="eager"
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
           className="transition-transform duration-300 group-hover:scale-105"
           style={{ objectFit: "contain" }}

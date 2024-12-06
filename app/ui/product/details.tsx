@@ -4,20 +4,20 @@ import { useState } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@lib/utils";
 import Button from "@ui/button";
-import { Product } from "@/lib/definition";
+import { Product } from "@/lib/data";
 import ImageTag from "@ui/image";
 
 export default function ProductDetails({ product }: { product: Product }) {
-  const { id, name, priceCents, images, description, saleOff } = product;
+  const { name, priceCents, images, description, saleOff } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   return (
     <div className="mt-10 grid grid-cols-5 gap-x-5 gap-y-5 pb-5 lg:grid-cols-12 lg:gap-6">
       <div className="col-span-5 grid grid-cols-[1fr_1fr_1fr] gap-4 sm:col-span-1 sm:flex sm:flex-col lg:col-span-2 min-[1400px]:col-span-1">
-        {images.map((img) => (
+        {images.map((img, index) => (
           <div
-            key={`${id}${img}`}
+            key={index}
             onClick={() => setSelectedImage(img)}
             className={`flex cursor-pointer items-center justify-center rounded-lg border hover:bg-slate-100 ${
               selectedImage === img
@@ -35,15 +35,14 @@ export default function ProductDetails({ product }: { product: Product }) {
             {saleOff}% OFF
           </div>
         )}
-        <div className="flex h-96 w-full items-center justify-center rounded-lg bg-slate-50/50 p-5">
+        <div className="flex h-[18.75rem] items-center justify-center rounded-lg bg-slate-50/50 p-5">
           <Image
             src={selectedImage}
             alt={name}
-            width={384}
-            height={384}
-            loading="eager"
-            sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 384px"
-            style={{ width: "auto", height: "100%", objectFit: "contain" }}
+            width={300}
+            height={300}
+            sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 300px"
+            style={{ objectFit: "contain" }}
           />
         </div>
       </div>
