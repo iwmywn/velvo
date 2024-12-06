@@ -10,7 +10,7 @@ import Link from "next/link";
 
 interface OrderListProps {
   customerId: number;
-  status: "PROCESSING" | "COMPLETED" | "CANCELLED";
+  status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
 }
 
 export default function OrderList({ customerId, status }: OrderListProps) {
@@ -19,9 +19,9 @@ export default function OrderList({ customerId, status }: OrderListProps) {
   return (
     <div className="flex flex-col gap-6 text-sm">
       {invoiceData.map(({ invoiceId, products }) => (
-        <div key={invoiceId} className="relative rounded-md border shadow-sm">
+        <div key={invoiceId} className="relative rounded-md border">
           <div
-            className={`absolute left-0 top-0 z-[1] ml-auto rounded-tl-md px-2 text-center text-[10px] text-white ${status === "PROCESSING" ? "bg-yellow-500" : status === "COMPLETED" ? "bg-green-500" : "bg-red-500"}`}
+            className={`absolute left-0 top-0 z-[1] ml-auto rounded-tl-md px-2 text-center text-[10px] text-white ${status === "WAITING" ? "bg-blue-500" : status === "PROCESSING" ? "bg-yellow-500" : status === "COMPLETED" ? "bg-green-500" : "bg-red-500"}`}
           >
             {status}
           </div>

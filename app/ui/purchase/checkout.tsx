@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import Button from "../button";
+import Button from "@ui/button";
 import Backdrop from "@ui/overlays/backdrop";
-import { boxClass, inputClass, labelClass, errorClass } from "../form-class";
+import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import useOverflow from "../hooks/overflow";
+import useOverflow from "@ui/hooks/overflow";
 
 const placeOrderSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),
   phone: z
     .string()
-    .min(1, "Phone is required")
-    .regex(/^\d+$/, "Phone must be a valid number"),
+    .min(10, "Phone must have at least 10 digits")
+    .max(11, "Phone must have at most 11 digits")
+    .regex(/^(0)[1-9][0-9]{8,9}$/, "Phone must be a valid number"),
   address: z.string().min(1, "Address is required"),
 });
 
@@ -82,6 +83,7 @@ export default function Checkout() {
                   type="text"
                   placeholder="Phone"
                   {...register("phone")}
+                  maxLength={11}
                 />
                 <label className={labelClass} htmlFor="Phone">
                   Phone

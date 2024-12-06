@@ -4,6 +4,7 @@ import { Product } from "@/lib/definition";
 import ProductList from "@/ui/product/list";
 import { capitalizeFirstLetter } from "@/utils/format-text";
 import NotFound from "@/not-found";
+import BreadCrumbs from "@/ui/breadcrumbs";
 
 const validCategories = new Set(categories.map((cat) => cat.name));
 
@@ -26,18 +27,24 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ category: string }>;
 }) {
-  const category = (await params).category;
-  const categoryId = categories.find((cat) => cat.name === category)?.id;
+  const categoryName = (await params).category;
+  const categoryId = categories.find((cat) => cat.name === categoryName)?.id;
 
   if (!categoryId) return <NotFound />;
 
   const productsByCategory: Product[] = products.filter(
     (p) => p.category_id === categoryId,
   );
+  const breadcrumbs = [
+    { label: "Home", href: "/" },
+    { label: "All Products", href: "/products" },
+    { label: capitalizeFirstLetter(categoryName) },
+  ];
 
   return (
     <>
-      <ProductList products={productsByCategory} title={category} />
+      <BreadCrumbs breadcrumbs={breadcrumbs} />
+      <ProductList products={productsByCategory} title={categoryName} />
     </>
   );
 }

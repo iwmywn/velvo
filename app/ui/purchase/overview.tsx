@@ -8,7 +8,7 @@ import Completed from "@/ui/purchase/completed";
 import Cancelled from "@/ui/purchase/cancelled";
 import Loading from "@/ui/loading";
 import useHideMenu from "@/ui/hooks/hide-menu";
-import BreadCrumbs from "../breadcrumbs";
+import BreadCrumbs from "@ui/breadcrumbs";
 
 const tabs = [
   { key: "to-pay", label: "TO PAY", component: ToPay },
@@ -43,7 +43,7 @@ export default function PurchaseOverview() {
       window.location.pathname !== "/cart-overlay" &&
       window.location.pathname !== "/search-overlay"
     ) {
-      const tabKey = searchParams.get("tab");
+      const tabKey = searchParams?.get("tab");
       const validTab = tabs.find(({ key }) => key === tabKey);
       setActiveTabKey(validTab ? validTab.key : tabs[0].key);
     }

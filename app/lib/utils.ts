@@ -125,7 +125,7 @@ function getProductDetailsByInvoiceId(
 
 function getInvoiceProductsByCustomerId(
   customerId: number,
-  status: "PROCESSING" | "COMPLETED" | "CANCELLED",
+  status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED",
 ): { invoiceId: number; products: (Product & { quantity: number })[] }[] {
   const invoiceIds = getInvoiceIdsByCustomerId(customerId, status);
 

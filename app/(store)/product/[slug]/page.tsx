@@ -26,29 +26,27 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const productSlug = (await params).slug;
-
   const product = products.find((p) => p.slug === productSlug);
-  const category = categories.find((cat) => cat.id === product?.category_id);
-  const similarProducts: Product[] = products.filter(
-    (p) => p.category_id === category?.id && p.slug !== productSlug,
-  );
 
   if (!product) return <NotFound />;
 
-  const { name } = product;
-  const breadcrumb = [
+  const category = categories.find((cat) => cat.id === product.category_id)!;
+  const similarProducts: Product[] = products.filter(
+    (p) => p.category_id === category.id && p.slug !== productSlug,
+  );
+  const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: `${capitalizeFirstLetter(category?.name ?? "Category")}`,
-      href: `/category/${category?.name ?? "unknown"}`,
+      label: capitalizeFirstLetter(category.name),
+      href: `/category/${category.name}`,
     },
-    { label: name },
+    { label: product.name },
   ];
 
   return (
     <div className="min-h-[90vh]">
-      <BreadCrumbs breadcrumbs={breadcrumb} />
+      <BreadCrumbs breadcrumbs={breadcrumbs} />
 
       <ProductDetails product={product} />
 

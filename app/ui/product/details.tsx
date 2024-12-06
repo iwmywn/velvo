@@ -5,7 +5,7 @@ import Image from "next/image";
 import { formatCurrency } from "@lib/utils";
 import Button from "@ui/button";
 import { Product } from "@/lib/definition";
-import ImageTag from "../image";
+import ImageTag from "@ui/image";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const { id, name, priceCents, images, description, saleOff } = product;
