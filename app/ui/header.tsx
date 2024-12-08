@@ -6,24 +6,32 @@ import { IoIosMenu } from "react-icons/io";
 import Logo from "@ui/logo";
 import { navLinks } from "@ui/data/constants";
 import { useRef, useState } from "react";
-import NavMenu from "@/ui/nav/nav-menu";
+import NavMenu from "@ui/nav/nav-menu";
 import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "./nav/cart-aside";
-import AccountMenu from "@/ui/nav/account-menu";
+import AccountMenu from "@ui/nav/account-menu";
 import SearchSummary from "./nav/search-aside";
+import { useSession } from "next-auth/react";
+import useDeviceType from "@ui/hooks/device-type";
+import useHideMenu from "@ui/hooks/hide-menu";
+import { CiUser } from "react-icons/ci";
 
 export default function Header() {
   const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const [isOpenAccount, setIsOpenAccount] = useState<boolean>(false);
+  const deviceType = useDeviceType();
+  const { data: session, status } = useSession();
 
-  useOverflow(isOpen);
+  useHideMenu(isOpenAccount, setIsOpenAccount);
+  useOverflow(isOpenMenu);
   useElementHeight(ref);
 
   return (
     <>
-      {isOpen && <NavMenu setIsOpen={setIsOpen} />}
+      {isOpenMenu && <NavMenu setIsOpen={setIsOpenMenu} />}
       <header
         ref={ref}
         className="fixed left-0 right-0 top-0 z-20 flex justify-center bg-white/80 backdrop-blur"
@@ -49,11 +57,34 @@ export default function Header() {
 
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[28rem] lg:flex-1 lg:gap-10">
             <SearchSummary />
-            <AccountMenu />
+            <div
+              className="relative flex items-center"
+              onMouseEnter={() => {
+                if (session && deviceType === "desktop") setIsOpenAccount(true);
+              }}
+              onMouseLeave={() => {
+                if (session && deviceType === "desktop")
+                  setIsOpenAccount(false);
+              }}
+              onClick={() => {
+                if (session && deviceType !== "desktop") {
+                  setIsOpenAccount((prev) => !prev);
+                }
+              }}
+            >
+              <Link
+                href={`/user/${session ? "account" : "signin"}`}
+                title="Account"
+              >
+                <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
+              </Link>
+              {isOpenAccount && session && <AccountMenu />}
+            </div>
+
             <CartSummary />
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
-              onClick={() => setIsOpen(true)}
+              onClick={() => setIsOpenMenu(true)}
             />
           </div>
         </nav>

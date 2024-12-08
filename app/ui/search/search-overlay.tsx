@@ -4,9 +4,9 @@ import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useOverflow from "@ui/hooks/overflow";
 import { usePathname } from "next/navigation";
-import { products } from "@/lib/placeholder-data";
+import { products } from "@lib/placeholder-data";
 import ProductCard from "@ui/product/card";
-import { Product } from "@/lib/definition";
+import { Product } from "@lib/definition";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
 

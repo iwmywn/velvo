@@ -1,12 +1,11 @@
-import {
-  // customers,
-  carts,
-  invoices,
-  invoiceDetails,
-  products,
-  // categories,
-  // productSizes,
-} from "@lib/placeholder-data";
+import {} from // customers,
+// carts,
+// invoices,
+// invoiceDetails,
+// products,
+// categories,
+// productSizes,
+"@lib/placeholder-data";
 import {
   // Customer,
   // Cart,
@@ -32,7 +31,7 @@ function shuffleProduct(product: Product[]) {
 function generateSlugWithRandom(
   category: string,
   name: string,
-  description: string,
+  description?: string,
 ): string {
   const randomString = Array.from(crypto.getRandomValues(new Uint8Array(12)))
     .map((byte) => byte.toString(36).padStart(2, "0"))

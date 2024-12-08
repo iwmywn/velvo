@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@lib/utils";
 import Button from "@ui/button";
-import { Product } from "@/lib/data";
+import { Product } from "@lib/definition";
 import ImageTag from "@ui/image";
 
 export default function ProductDetails({ product }: { product: Product }) {

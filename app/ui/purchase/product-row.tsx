@@ -1,7 +1,7 @@
-import { Product } from "@/lib/definition";
-import { getPriceAfterDiscount } from "@/lib/utils";
-import Button from "@/ui/button";
-import ImageTag from "@/ui/image";
+import { Product } from "@lib/definition";
+import { getPriceAfterDiscount } from "@lib/utils";
+import Button from "@ui/button";
+import ImageTag from "@ui/image";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
 

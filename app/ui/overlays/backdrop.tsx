@@ -11,7 +11,7 @@ export default function Backdrop({
 }) {
   const backdropContent = (
     <div
-      className={`fixed inset-0 flex items-center justify-center bg-black/70 ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 ${
         isAnimating ? "animate-fadeOut" : "animate-fadeIn"
       }`}
       onClick={onClick}
@@ -20,5 +20,5 @@ export default function Backdrop({
     </div>
   );
 
-  return createPortal(backdropContent, document.getElementById("popups")!);
+  return createPortal(backdropContent, document.body);
 }

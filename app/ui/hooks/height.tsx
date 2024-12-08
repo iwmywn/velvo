@@ -34,7 +34,7 @@ export function useHeightContext() {
   return context;
 }
 
-export function useElementHeight(ref: RefObject<HTMLElement>) {
+export function useElementHeight(ref: RefObject<HTMLElement | null>) {
   const { setHeight } = useHeightContext();
 
   useEffect(() => {

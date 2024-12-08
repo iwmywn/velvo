@@ -1,10 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
-import Button from "@/ui/button";
-import { fetchCategories } from "@/lib/data";
+import Button from "@ui/button";
+import { fetchCategories, fetchProducts } from "@lib/data";
 
 export default async function HomePage() {
   const categories = await fetchCategories();
+  // const products = await fetchProducts();
+  // console.log(categories, products);
 
   return (
     <div className="flex flex-col items-center gap-7">
@@ -26,7 +28,7 @@ export default async function HomePage() {
           </div>
           <div className="flex flex-col items-center justify-center gap-4 px-4 text-center md:w-[50%]">
             <span>{description}</span>
-            <Link href={`/category/${name}`}>
+            <Link href={`/category/${name.toLowerCase()}`}>
               <Button className="h-10">EXPLORE THE SELECTION</Button>
             </Link>
           </div>

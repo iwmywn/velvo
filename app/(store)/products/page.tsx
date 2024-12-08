@@ -1,7 +1,7 @@
-import { shuffleProduct } from "@/lib/utils";
-import ProductList from "@/ui/product/list";
-import BreadCrumbs from "@/ui/breadcrumbs";
-import { fetchProducts } from "@/lib/data";
+import { shuffleProduct } from "@lib/utils";
+import ProductList from "@ui/product/list";
+import BreadCrumbs from "@ui/breadcrumbs";
+import { fetchProducts } from "@lib/data";
 
 export default async function AllProductsPage() {
   const products = await fetchProducts();

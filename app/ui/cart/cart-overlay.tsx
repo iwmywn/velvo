@@ -11,7 +11,7 @@ import {
   getPriceAfterDiscount,
   getTotalPriceCents,
   getCartProductsByCustomerId,
-} from "@/lib/utils";
+} from "@lib/utils";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
 

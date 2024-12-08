@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { fetchCategories, fetchProducts } from "@/lib/data";
-import ProductDetails from "@/ui/product/details";
-import SimilarProducts from "@/ui/product/similar";
-import BreadCrumbs from "@/ui/breadcrumbs";
-import { capitalizeFirstLetter } from "@/utils/format-text";
-import { Product } from "@/lib/data";
-import NotFound from "@/not-found";
+import { fetchCategories, fetchProducts } from "@lib/data";
+import ProductDetails from "@ui/product/details";
+import SimilarProducts from "@ui/product/similar";
+import BreadCrumbs from "@ui/breadcrumbs";
+import NotFound from "@app/not-found";
+import { REVALIDATE_TIME } from "@lib/config";
+
+export const revalidate = REVALIDATE_TIME;
 
 export async function generateMetadata({
   params,
@@ -41,15 +42,15 @@ export default async function ProductPage({
 
   if (!category) return <NotFound />;
 
-  const similarProducts: Product[] = products.filter(
+  const similarProducts = products.filter(
     (p) => p.categoryId === category.id && p.slug !== productSlug,
   );
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: capitalizeFirstLetter(category.name),
-      href: `/category/${category.name}`,
+      label: category.name,
+      href: `/category/${category.name.toLowerCase()}`,
     },
     { label: product.name },
   ];
@@ -71,5 +72,3 @@ export async function generateStaticParams() {
     slug: p.slug,
   }));
 }
-
-export const revalidate = 1800;

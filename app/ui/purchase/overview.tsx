@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import ToPay from "@/ui/purchase/to-pay";
-import ToShipAndReceive from "@/ui/purchase/to-ship-receive";
-import Completed from "@/ui/purchase/completed";
-import Cancelled from "@/ui/purchase/cancelled";
-import Loading from "@/ui/loading";
-import useHideMenu from "@/ui/hooks/hide-menu";
+import ToPay from "@ui/purchase/to-pay";
+import ToShipAndReceive from "@ui/purchase/to-ship-receive";
+import Completed from "@ui/purchase/completed";
+import Cancelled from "@ui/purchase/cancelled";
+import Loading from "@ui/loading";
+import useHideMenu from "@ui/hooks/hide-menu";
 import BreadCrumbs from "@ui/breadcrumbs";
 
 const tabs = [

@@ -5,8 +5,8 @@ import {
   Invoice,
   InvoiceDetails,
   Product,
-  ProductSize,
-  ShippingAddress,
+  Size,
+  DeliveryAddress,
 } from "./definition";
 
 const categories: Category[] = [
@@ -336,7 +336,7 @@ const products: Product[] = [
   },
 ];
 
-const productSizes: ProductSize[] = [
+const sizes: Size[] = [
   {
     id: 1,
     product_id: products[0].id,
@@ -384,18 +384,18 @@ const customers: Customer[] = [
   },
 ];
 
-const shippingaddresses: ShippingAddress[] = [
+const deliveryAddresses: DeliveryAddress[] = [
   {
     id: 1,
     customer_id: customers[0].id,
-    shippingaddresses: [
+    addresses: [
       {
-        recipientName: "John Doe",
+        recipient: "John Doe",
         phone: "1234567890",
         address: "123 Main St",
       },
       {
-        recipientName: "John Doe 2",
+        recipient: "John Doe 2",
         phone: "1234567890",
         address: "123 Main St",
       },
@@ -404,9 +404,9 @@ const shippingaddresses: ShippingAddress[] = [
   {
     id: 2,
     customer_id: customers[1].id,
-    shippingaddresses: [
+    addresses: [
       {
-        recipientName: "Charlie",
+        recipient: "Charlie",
         phone: "9876543210",
         address: "456 Elm St",
       },
@@ -441,7 +441,7 @@ const invoices: Invoice[] = [
     customer_id: customers[0].id,
     recipientName: "John Doe",
     phone: "1234567890",
-    shipAddress: "123 Main St",
+    address: "123 Main St",
     date: new Date("2024-11-15"),
     status: "COMPLETED",
   },
@@ -450,7 +450,7 @@ const invoices: Invoice[] = [
     customer_id: customers[1].id,
     recipientName: "Jane Smith",
     phone: "9876543210",
-    shipAddress: "456 Elm St",
+    address: "456 Elm St",
     date: new Date("2024-11-20"),
     status: "PROCESSING",
   },
@@ -459,7 +459,7 @@ const invoices: Invoice[] = [
     customer_id: customers[2].id,
     recipientName: "Charlie",
     phone: "1122334455",
-    shipAddress: "789 Oak St",
+    address: "789 Oak St",
     date: new Date("2024-11-10"),
     status: "CANCELLED",
   },
@@ -468,7 +468,7 @@ const invoices: Invoice[] = [
     customer_id: customers[0].id,
     recipientName: "John Doe",
     phone: "1234567890",
-    shipAddress: "123 Main St",
+    address: "123 Main St",
     date: new Date("2024-11-15"),
     status: "COMPLETED",
   },
@@ -477,7 +477,7 @@ const invoices: Invoice[] = [
     customer_id: customers[0].id,
     recipientName: "John Doe",
     phone: "8888777765",
-    shipAddress: "123 Main St",
+    address: "123 Main St",
     date: new Date("2024-11-15"),
     status: "PROCESSING",
   },
@@ -486,7 +486,7 @@ const invoices: Invoice[] = [
     customer_id: customers[0].id,
     recipientName: "John Doe",
     phone: "8888777765",
-    shipAddress: "123 Main St",
+    address: "123 Main St",
     date: new Date("2024-11-15"),
     status: "CANCELLED",
   },
@@ -538,13 +538,13 @@ const invoiceDetails: InvoiceDetails[] = [
   },
 ];
 
-export {
-  carts,
-  customers,
-  shippingaddresses,
-  invoices,
-  invoiceDetails,
-  products,
-  categories,
-  productSizes,
-};
+// export {
+//   carts,
+//   customers,
+//   deliveryAddresses,
+//   invoices,
+//   invoiceDetails,
+//   products,
+//   categories,
+//   sizes,
+// };

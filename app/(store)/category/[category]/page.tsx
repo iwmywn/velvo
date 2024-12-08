@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { fetchCategories, fetchProducts } from "@/lib/data";
-// import { Category, Product } from "@/lib/definition";
-import ProductList from "@/ui/product/list";
-import { capitalizeFirstLetter } from "@/utils/format-text";
-import NotFound from "@/not-found";
-import BreadCrumbs from "@/ui/breadcrumbs";
+import { fetchCategories, fetchProducts } from "@lib/data";
+import ProductList from "@ui/product/list";
+import NotFound from "@app/not-found";
+import BreadCrumbs from "@ui/breadcrumbs";
+import { REVALIDATE_TIME } from "@lib/config";
+
+export const revalidate = REVALIDATE_TIME;
 
 export async function generateMetadata({
   params,
@@ -20,7 +21,7 @@ export async function generateMetadata({
   return {
     title: !validCategories.has(categoryName)
       ? "NOT FOUND"
-      : `${capitalizeFirstLetter(categoryName)} Category`,
+      : `${categoryName} Category`,
   };
 }
 
@@ -44,7 +45,7 @@ export default async function CategoryPage({
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: capitalizeFirstLetter(categoryName) },
+    { label: categoryName },
   ];
 
   return (
@@ -58,8 +59,6 @@ export default async function CategoryPage({
 export async function generateStaticParams() {
   const categories = await fetchCategories();
   return categories.map((category) => ({
-    category: category.name,
+    category: category.name.toLowerCase(),
   }));
 }
-
-export const revalidate = 1800;
