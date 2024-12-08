@@ -3,22 +3,9 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { connectToDatabase } from "@lib/mongodb";
 import { authConfig } from "./auth.config";
 import { z } from "zod";
-import { Customer } from "./app/lib/definition";
-
-export async function getUser(email: string) {
-  try {
-    const db = await connectToDatabase();
-    const user = await db.collection<Customer>("customers").findOne({ email });
-
-    return user;
-  } catch (e) {
-    console.error("Failed to fetch user:", e);
-    throw new Error("Failed to fetch user.");
-  }
-}
+import { getUserByEmail } from "@/app/lib/data";
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -31,20 +18,15 @@ export const { auth, signIn, signOut } = NextAuth({
 
         if (parsedCredentials.success) {
           const { email, password } = parsedCredentials.data;
-          const user = await getUser(email);
-          if (!user) {
-            throw new Error("Invalid credentials.");
-          }
+          const user = await getUserByEmail(email);
+          if (!user || !user.password) return null;
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
+          console.log(user);
 
-          if (!passwordsMatch) throw new Error("Invalid credentials.");
-          if (!user.isVerified) throw new Error("Account not verified.");
-
-          return user;
+          if (passwordsMatch && user.isVerified) return user;
         }
 
-        console.error("Authorization failed");
         return null;
       },
     }),

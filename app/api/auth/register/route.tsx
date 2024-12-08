@@ -4,14 +4,11 @@ import { connectToDatabase } from "@lib/mongodb";
 import bcrypt from "bcryptjs";
 import { sendVerificationEmail } from "@lib/actions";
 import { nanoid } from "nanoid";
-import { Customer } from "@/app/lib/definition";
+import { getUserByEmail } from "@/app/lib/data";
 
 export async function POST(req: Request) {
   const { firstName, lastName, email, password } = await req.json();
-  const db = await connectToDatabase();
-  const existingUser = await db
-    .collection<Customer>("customers")
-    .findOne({ email });
+  const existingUser = await getUserByEmail(email);
 
   if (existingUser) {
     return new Response(
@@ -25,6 +22,7 @@ export async function POST(req: Request) {
   const hashedPassword = await bcrypt.hash(password, 10);
   const verificationToken = nanoid();
 
+  const db = await connectToDatabase();
   await db.collection("customers").insertOne({
     name: `${firstName} ${lastName}`,
     email,

@@ -29,32 +29,22 @@ export default function SignIn() {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      const result = await signIn("credentials", {
+      const res = await signIn("credentials", {
         email: data.email,
         password: data.password,
         redirect: false,
       });
 
-      if (!result?.ok) {
-        switch (result?.error) {
-          case "Invalid credentials.":
-            toast.error("Email or password is incorrect.");
-            break;
-          case "Account not verified.":
-            toast.error(
-              "Your account is not verified. Please check your email for verification instructions.",
-            );
-            break;
-          default:
-            toast.error("An unexpected error occurred.");
-        }
-        return;
-      }
+      console.log("Sign in response:", res);
 
-      window.location.href = "/";
-    } catch (e) {
-      console.error("Sign-in error:", e);
-      toast.error("An unexpected error occurred. Please try again.");
+      if (res && res.ok) {
+        window.location.href = "/";
+      } else {
+        toast.error(res?.error || "Authentication failed");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An unexpected authentication error occurred");
     }
   };
 

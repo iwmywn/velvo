@@ -38,13 +38,14 @@ export async function fetchProducts() {
   }
 }
 
-// export async function getCustomerByEmail(email: string) {
-//   try {
-//     const db = await connectToDatabase();
-//     const user = await db.collection<Customer>("customers").findOne({ email });
-//     return user;
-//   } catch (error) {
-//     console.error("MongoDB fetch error:", error);
-//     throw new Error("Failed to fetch customers.");
-//   }
-// }
+export async function getUserByEmail(email: string) {
+  try {
+    const db = await connectToDatabase();
+    const user = await db.collection<Customer>("customers").findOne({ email });
+
+    return user;
+  } catch (e) {
+    console.error("Failed to fetch user:", e);
+    throw new Error("Failed to fetch user.");
+  }
+}
