@@ -1,7 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
-import jwt from "jsonwebtoken";
 
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/user/signin",
@@ -13,9 +12,10 @@ export const authConfig = {
         nextUrl.pathname.startsWith("/user/account") ||
         nextUrl.pathname.startsWith("/user/purchase")
       ) {
-        if (isSignedIn) return true;
-        return false;
-      } else if (isSignedIn) return Response.redirect(new URL("/", nextUrl));
+        return isSignedIn;
+      } else if (isSignedIn) {
+        return Response.redirect(new URL("/", nextUrl));
+      }
       return true;
     },
   },
@@ -25,15 +25,33 @@ export const authConfig = {
   },
   jwt: {
     encode: async ({ token, secret }) => {
-      if (!token || !secret) throw new Error("Token or secret missing");
-      return jwt.sign(token, secret as string, {
-        algorithm: "HS256",
-      });
+      const encoder = new TextEncoder();
+      const header = encoder.encode(
+        JSON.stringify({ alg: "HS256", typ: "JWT" }),
+      );
+      const payload = encoder.encode(
+        JSON.stringify({
+          ...token,
+          exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+        }),
+      );
+      const base64UrlEncode = (input: Uint8Array) =>
+        btoa(String.fromCharCode(...input))
+          .replace(/\+/g, "-")
+          .replace(/\//g, "_")
+          .replace(/=+$/, "");
+      const encodedHeader = base64UrlEncode(header);
+      const encodedPayload = base64UrlEncode(payload);
+
+      return `${encodedHeader}.${encodedPayload}`;
     },
     decode: async ({ token, secret }) => {
-      if (!token || !secret) return null;
       try {
-        return jwt.verify(token, secret as string) as Record<string, unknown>;
+        if (!token) return null;
+
+        const [encodedHeader, encodedPayload] = token.split(".");
+        const decodedPayload = JSON.parse(atob(encodedPayload));
+        return decodedPayload;
       } catch (error) {
         console.error("JWT decode error:", error);
         return null;
@@ -41,4 +59,4 @@ export const authConfig = {
     },
   },
   providers: [],
-} satisfies NextAuthConfig;
+};

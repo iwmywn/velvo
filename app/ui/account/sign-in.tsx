@@ -43,7 +43,7 @@ export default function SignIn() {
         toast.error(res.error);
       } else {
         toast.success("Login successful!");
-        window.location.href = "/";
+        // window.location.href = "/";
       }
     } catch (err) {
       toast.error("Something went wrong! Please try again.");
