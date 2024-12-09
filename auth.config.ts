@@ -1,32 +1,20 @@
 import type { NextAuthConfig } from "next-auth";
 import jwt from "jsonwebtoken";
 
-export const authConfig: NextAuthConfig = {
+export const authConfig = {
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/user/signin",
   },
-  cookies: {
-    sessionToken: {
-      name: "__Secure-next-auth.session-token",
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
-  },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
       const isSignedIn = !!auth?.user;
-
       if (
         nextUrl.pathname.startsWith("/user/account") ||
         nextUrl.pathname.startsWith("/user/purchase")
       ) {
         if (isSignedIn) return true;
         return false;
-        // return Response.redirect(new URL("/user/signin", nextUrl));
       } else if (isSignedIn) return Response.redirect(new URL("/", nextUrl));
       return true;
     },
@@ -53,4 +41,4 @@ export const authConfig: NextAuthConfig = {
     },
   },
   providers: [],
-};
+} satisfies NextAuthConfig;

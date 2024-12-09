@@ -4,12 +4,7 @@ export type Customer = {
   email: string;
   password: string;
   isVerified: boolean;
-};
-
-export type DeliveryAddress = {
-  id: string;
-  customerId: string;
-  addresses: [
+  address: [
     {
       recipient: string;
       phone: string;
@@ -61,11 +56,10 @@ export type Product = {
   categoryId: string;
   saleOff: number;
   slug: string;
-};
-
-export type Size = {
-  id: string;
-  productId: string;
-  size: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
-  quantity: number;
+  size: {
+    S: number;
+    M: number;
+    L: number;
+    XL: number;
+  };
 };
