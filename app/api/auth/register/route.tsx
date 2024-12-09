@@ -1,7 +1,7 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 import { sendVerificationEmail } from "@lib/actions";
 import { nanoid } from "nanoid";
 import { getUserByEmail } from "@/app/lib/data";
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
       message: "Registration successful! Check your email for verification.",
     }),
     {
-      status: 200,
+      status: 201,
     },
   );
 }

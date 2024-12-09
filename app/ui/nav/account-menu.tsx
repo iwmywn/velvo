@@ -1,9 +1,7 @@
-"use server";
-
 import Link from "next/link";
-import { signOut } from "@/auth";
+import { handleSignOut } from "@/app/lib/actions";
 
-export default async function AccountMenu() {
+export default function AccountMenu() {
   return (
     <>
       <div className="absolute left-1/2 top-full z-10 mt-2 w-32 -translate-x-1/2 text-sm">
@@ -19,12 +17,8 @@ export default async function AccountMenu() {
             >
               My Purchase
             </Link>
-            <form
-              action={async () => {
-                await signOut();
-              }}
-            >
-              <button className="px-4 py-2 text-left hover:bg-stone-100">
+            <form action={handleSignOut}>
+              <button className="w-full px-4 py-2 text-left hover:bg-stone-100">
                 Sign out
               </button>
             </form>

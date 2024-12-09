@@ -1,6 +1,11 @@
 "use server";
 
 import nodemailer from "nodemailer";
+import { signOut } from "@/auth";
+
+export async function handleSignOut() {
+  await signOut();
+}
 
 export async function sendVerificationEmail(email: string, token: string) {
   const transporter = nodemailer.createTransport({
