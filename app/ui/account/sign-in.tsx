@@ -11,10 +11,15 @@ import { createPortal } from "react-dom";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
 import { useEffect, useState } from "react";
+import { AuthError } from "next-auth";
+// import { useSearchParams } from "next/navigation";
+// import { CustomAuthError } from "@/app/lib/auth-errors";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
 export default function SignIn() {
+  // const searchParams = useSearchParams();
+  // const callbackUrl = searchParams.get("callbackUrl");
   const {
     register,
     handleSubmit,
@@ -31,22 +36,23 @@ export default function SignIn() {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      const res = await signIn("credentials", {
-        redirect: false,
+      await signIn("credentials", {
         email: data.email,
         password: data.password,
+        // redirectTo: callbackUrl || "/",
       });
-
-      console.log(res);
-
-      if (res?.error) {
-        toast.error(res.error);
-      } else {
-        toast.success("Login successful!");
-        // window.location.href = "/";
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case "CredentialsSignin":
+            return "Invalid email or password.";
+          // case "UnverifiedAccount":
+          //   return "Your account is not verified.";
+          default:
+            return "Something went wrong.";
+        }
       }
-    } catch (err) {
-      toast.error("Something went wrong! Please try again.");
+      throw error;
     }
   };
 

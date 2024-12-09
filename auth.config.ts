@@ -32,7 +32,7 @@ export const authConfig: NextAuthConfig = {
       const payload = encoder.encode(
         JSON.stringify({
           ...token,
-          exp: Math.floor(Date.now() / 1000) + 24 * 60 * 60,
+          exp: 24 * 60 * 60,
         }),
       );
       const base64UrlEncode = (input: Uint8Array) =>

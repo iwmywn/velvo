@@ -6,6 +6,10 @@ import bcrypt from "bcrypt";
 import { authConfig } from "@/auth.config";
 import { getUserByEmail } from "@/app/lib/data";
 import { signInSchema } from "@/schemas";
+import {
+  InvalidCredentialsError,
+  UnverifiedAccountError,
+} from "@lib/auth-errors";
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -21,15 +25,16 @@ export const { auth, signIn, signOut } = NextAuth({
 
           const passwordsMatch = await bcrypt.compare(password, user.password);
 
-          if (passwordsMatch && user.isVerified)
-            return {
-              id: user._id.toString(),
-              email: user.email,
-              password: user.password,
-            };
+          if (!passwordsMatch) return null;
+          if (!user.isVerified) return null;
+
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            password: user.password,
+          };
         }
 
-        console.log("Invalid credentials");
         return null;
       },
     }),

@@ -41,7 +41,7 @@ export default function Register() {
       } else {
         toast.error(`${result.message}`);
       }
-    } catch (err) {
+    } catch (error) {
       toast.error("Something went wrong! Please try again.");
     }
   };
@@ -56,7 +56,7 @@ export default function Register() {
           closeOnClick
           pauseOnFocusLoss
         />,
-        document.body,
+        document.getElementById("popups")!,
       )}
       <div className="flex w-full flex-col items-center px-5">
         <span className="mb-2 mt-5 text-center text-black/70">
