@@ -20,5 +20,5 @@ export default function Backdrop({
     </div>
   );
 
-  return createPortal(backdropContent, document.body);
+  return createPortal(backdropContent, document.getElementById("popups")!);
 }

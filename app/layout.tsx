@@ -29,7 +29,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
         <SessionProvider session={session}>
-          {/* <div id="popups" className="relative z-[9999]" /> */}
+          <div id="popups" className="relative z-[9999]" />
           <PopUp />
           <HeightProvider>
             <Header />

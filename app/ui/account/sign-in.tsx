@@ -10,6 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { createPortal } from "react-dom";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
+import { useEffect, useState } from "react";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
@@ -22,6 +23,11 @@ export default function SignIn() {
     resolver: zodResolver(signInSchema),
     mode: "onChange",
   });
+
+  const [isClient, setIsClient] = useState<boolean>(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const onSubmit = async (data: SignInFormData) => {
     try {
@@ -37,7 +43,7 @@ export default function SignIn() {
         toast.error(res.error);
       } else {
         toast.success("Login successful!");
-        // window.location.href = "/";
+        window.location.href = "/";
       }
     } catch (err) {
       toast.error("Something went wrong! Please try again.");
@@ -46,16 +52,17 @@ export default function SignIn() {
 
   return (
     <>
-      {createPortal(
-        <ToastContainer
-          closeButton={false}
-          icon={false}
-          hideProgressBar
-          closeOnClick
-          pauseOnFocusLoss
-        />,
-        document.body,
-      )}
+      {isClient &&
+        createPortal(
+          <ToastContainer
+            closeButton={false}
+            icon={false}
+            hideProgressBar
+            closeOnClick
+            pauseOnFocusLoss
+          />,
+          document.getElementById("popups")!,
+        )}
       <div className="flex w-full flex-col items-center px-5">
         <h3 className="mb-2 mt-5 text-left font-medium text-black/75">
           WELCOME BACK

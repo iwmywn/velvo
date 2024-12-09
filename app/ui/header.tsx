@@ -24,7 +24,7 @@ export default function Header() {
   const [isOpenAccount, setIsOpenAccount] = useState<boolean>(false);
   const deviceType = useDeviceType();
   const { data: session } = useSession();
-  console.log(session?.user?.id);
+  // console.log(session?.user?.id);
 
   useHideMenu(setIsOpenAccount);
   useOverflow(isOpenMenu);
