@@ -4,7 +4,7 @@ import nodemailer from "nodemailer";
 import { signOut } from "@/auth";
 
 export async function handleSignOut() {
-  await signOut();
+  await signOut({ redirectTo: "/user/signin" });
 }
 
 export async function sendVerificationEmail(email: string, token: string) {

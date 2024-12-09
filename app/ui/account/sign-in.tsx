@@ -1,6 +1,5 @@
 "use client";
 
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
@@ -9,11 +8,8 @@ import { signIn } from "@/auth";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createPortal } from "react-dom";
-
-const signInSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-});
+import { signInSchema } from "@/schemas";
+import { z } from "zod";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
@@ -30,21 +26,21 @@ export default function SignIn() {
   const onSubmit = async (data: SignInFormData) => {
     try {
       const res = await signIn("credentials", {
+        redirect: false,
         email: data.email,
         password: data.password,
-        redirect: false,
       });
 
-      console.log("Sign in response:", res);
+      console.log(res);
 
-      if (res && res.ok) {
-        window.location.href = "/";
+      if (res?.error) {
+        toast.error(res.error);
       } else {
-        toast.error(res?.error || "Authentication failed");
+        toast.success("Login successful!");
+        // window.location.href = "/";
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("An unexpected authentication error occurred");
+    } catch (err) {
+      toast.error("Something went wrong! Please try again.");
     }
   };
 

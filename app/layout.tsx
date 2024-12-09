@@ -7,7 +7,6 @@ import ScrollToTop from "@ui/to-top";
 import { HeightProvider } from "@ui/hooks/height";
 import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
-import Provider from "./provider";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 
@@ -25,11 +24,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
   return (
-    <SessionProvider session={session}>
-      <html lang="en">
-        <body className={`${montserrat.className} antialiased`}>
-          {/* <Provider> */}
+    <html lang="en">
+      <body className={`${montserrat.className} antialiased`}>
+        <SessionProvider session={session}>
           {/* <div id="popups" className="relative z-[9999]" /> */}
           <PopUp />
           <HeightProvider>
@@ -42,9 +41,8 @@ export default async function RootLayout({
             <Footer />
           </HeightProvider>
           <ScrollToTop />
-          {/* </Provider> */}
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   );
 }

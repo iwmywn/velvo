@@ -23,9 +23,10 @@ export default function Header() {
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const [isOpenAccount, setIsOpenAccount] = useState<boolean>(false);
   const deviceType = useDeviceType();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
+  console.log(session?.user?.id);
 
-  useHideMenu(isOpenAccount, setIsOpenAccount);
+  useHideMenu(setIsOpenAccount);
   useOverflow(isOpenMenu);
   useElementHeight(ref);
 
@@ -60,14 +61,15 @@ export default function Header() {
             <div
               className="relative flex items-center"
               onMouseEnter={() => {
-                if (session && deviceType === "desktop") setIsOpenAccount(true);
+                if (deviceType === "desktop" && session) setIsOpenAccount(true);
               }}
               onMouseLeave={() => {
-                if (session && deviceType === "desktop")
+                if (deviceType === "desktop" && session)
                   setIsOpenAccount(false);
               }}
-              onClick={() => {
-                if (session && deviceType !== "desktop") {
+              onClick={(e) => {
+                e.stopPropagation();
+                if (deviceType !== "desktop" && session) {
                   setIsOpenAccount((prev) => !prev);
                 }
               }}

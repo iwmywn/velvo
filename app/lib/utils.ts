@@ -28,24 +28,24 @@ function shuffleProduct(product: Product[]) {
   return shuffledProduct;
 }
 
-function generateSlugWithRandom(
-  category: string,
-  name: string,
-  description?: string,
-): string {
-  const randomString = Array.from(crypto.getRandomValues(new Uint8Array(12)))
-    .map((byte) => byte.toString(36).padStart(2, "0"))
-    .join("")
-    .substring(0, 16);
+// function generateSlugWithRandom(
+//   category: string,
+//   name: string,
+//   description?: string,
+// ): string {
+//   const randomString = Array.from(crypto.getRandomValues(new Uint8Array(12)))
+//     .map((byte) => byte.toString(36).padStart(2, "0"))
+//     .join("")
+//     .substring(0, 16);
 
-  const normalize = (str: string) =>
-    str
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-|-$/g, "");
+//   const normalize = (str: string) =>
+//     str
+//       .toLowerCase()
+//       .replace(/[^a-z0-9]+/g, "-")
+//       .replace(/^-|-$/g, "");
 
-  return `${normalize(category)}-${normalize(name)}-${normalize(description)}-${randomString}`;
-}
+//   return `${normalize(category)}-${normalize(name)}-${normalize(description)}-${randomString}`;
+// }
 
 function formatCurrency(priceCents: number): string {
   return (Math.round(priceCents) / 100).toFixed(2);
@@ -160,10 +160,10 @@ function getProductsByDetails(
 
 export {
   shuffleProduct,
-  generateSlugWithRandom,
+  // generateSlugWithRandom,
   formatCurrency,
   getPriceAfterDiscount,
   getTotalPriceCents,
-  getCartProductsByCustomerId,
-  getInvoiceProductsByCustomerId,
+  // getCartProductsByCustomerId,
+  // getInvoiceProductsByCustomerId,
 };

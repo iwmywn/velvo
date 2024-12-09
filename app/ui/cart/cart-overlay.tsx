@@ -7,11 +7,7 @@ import { useRouter } from "next/navigation";
 import useOverflow from "@ui/hooks/overflow";
 import { usePathname } from "next/navigation";
 import ImageTag from "@ui/image";
-import {
-  getPriceAfterDiscount,
-  getTotalPriceCents,
-  getCartProductsByCustomerId,
-} from "@lib/utils";
+import { getPriceAfterDiscount, getTotalPriceCents } from "@lib/utils";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
 
@@ -20,8 +16,8 @@ export default function CartOverlay() {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
-  const cartProducts = getCartProductsByCustomerId(1);
-  const totalPriceCents = getTotalPriceCents(cartProducts);
+  // const cartProducts = getCartProductsByCustomerId(1);
+  // const totalPriceCents = getTotalPriceCents(cartProducts);
   const handleClose = (shouldNavigate: boolean) => {
     setIsAnimating(true);
     setTimeout(() => {
