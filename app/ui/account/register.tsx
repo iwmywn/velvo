@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
 import Button from "@ui/button";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { createPortal } from "react-dom";
 import { registerSchema } from "@/schemas";
 

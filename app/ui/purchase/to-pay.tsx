@@ -1,6 +1,6 @@
 import { getTotalPriceCents, getCartProductsByCustomerId } from "@lib/utils";
-import ProductRow from "./product-row";
-import Checkout from "./checkout";
+import ProductRow from "@ui/purchase/product-row";
+import Checkout from "@ui/purchase/checkout";
 
 export default function ToPay() {
   const cartProducts = getCartProductsByCustomerId(1);

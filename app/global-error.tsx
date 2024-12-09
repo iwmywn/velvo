@@ -1,6 +1,6 @@
 "use client";
 
-import { montserrat } from "./ui/fonts";
+import { montserrat } from "@ui/fonts";
 import Button from "@ui/button";
 
 export default function GlobalError({

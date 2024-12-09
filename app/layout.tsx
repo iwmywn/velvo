@@ -9,6 +9,7 @@ import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: {

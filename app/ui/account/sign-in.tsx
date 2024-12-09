@@ -6,7 +6,6 @@ import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
 import Button from "@ui/button";
 import { signIn } from "@/auth";
 import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { createPortal } from "react-dom";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";

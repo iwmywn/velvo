@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowDown } from "react-icons/go";
-import Backdrop from "./overlays/backdrop";
+import Backdrop from "@ui/overlays/backdrop";
 
 const contact = [
   {

@@ -1,5 +1,5 @@
 import { connectToDatabase } from "@lib/mongodb";
-import { Category, Customer, Product } from "./definition";
+import { Category, Customer, Product } from "@lib/definition";
 
 export async function fetchCategories() {
   try {

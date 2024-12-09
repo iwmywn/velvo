@@ -1,4 +1,4 @@
-import ProductList from "./list";
+import ProductList from "@ui/product/list";
 import { Product } from "@lib/definition";
 
 export default function SimilarProducts({
