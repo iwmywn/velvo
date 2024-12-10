@@ -12,21 +12,12 @@ import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "@ui/nav/cart-aside";
 import AccountMenu from "@ui/nav/account-menu";
 import SearchSummary from "@ui/nav/search-aside";
-import useDeviceType from "@ui/hooks/device-type";
-import useHideMenu from "@ui/hooks/hide-menu";
-import { CiUser } from "react-icons/ci";
-import { useAuthContext } from "@ui/hooks/auth";
 
 export default function Header() {
   const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
-  const [isOpenAccount, setIsOpenAccount] = useState<boolean>(false);
-  const deviceType = useDeviceType();
-  const { isLoggedIn, userId } = useAuthContext();
-  console.log(userId, isLoggedIn);
 
-  useHideMenu(setIsOpenAccount);
   useOverflow(isOpenMenu);
   useElementHeight(ref);
 
@@ -58,32 +49,7 @@ export default function Header() {
 
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[28rem] lg:flex-1 lg:gap-10">
             <SearchSummary />
-            <div
-              className="relative flex items-center"
-              onMouseEnter={() => {
-                if (deviceType === "desktop" && isLoggedIn)
-                  setIsOpenAccount(true);
-              }}
-              onMouseLeave={() => {
-                if (deviceType === "desktop" && isLoggedIn)
-                  setIsOpenAccount(false);
-              }}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (deviceType !== "desktop" && isLoggedIn) {
-                  setIsOpenAccount((prev) => !prev);
-                }
-              }}
-            >
-              <Link
-                href={`/user/${isLoggedIn ? "account" : "signin"}`}
-                title="Account"
-              >
-                <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
-              </Link>
-              {isOpenAccount && isLoggedIn && <AccountMenu />}
-            </div>
-
+            <AccountMenu />
             <CartSummary />
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"

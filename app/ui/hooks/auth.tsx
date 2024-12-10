@@ -9,16 +9,16 @@ import React, {
 } from "react";
 
 interface AuthContextType {
-  isLoggedIn: boolean;
+  isSignedIn: boolean;
   userId?: string;
 }
 
 const AuthContext = createContext<AuthContextType>({
-  isLoggedIn: false,
+  isSignedIn: false,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -29,8 +29,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (res.ok) {
         const result = await res.json();
-        setIsLoggedIn(result.isLoggedIn);
-        if (result.isLoggedIn) {
+        setIsSignedIn(result.isSignedIn);
+        if (result.isSignedIn) {
           setUserId(result.userId);
         }
       }
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, userId }}>
+    <AuthContext.Provider value={{ isSignedIn, userId }}>
       {children}
     </AuthContext.Provider>
   );
