@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     );
   }
 
-  if (existingUser.emailResend >= 2) {
+  if (existingUser.resendVerification >= 2) {
     return new Response(
       JSON.stringify({
         message: "You have reached the maximum number of resend attempts!",
@@ -57,7 +57,7 @@ export async function POST(req: Request) {
     { email: email },
     {
       $set: { verificationToken: verificationToken },
-      $inc: { emailResend: 1 },
+      $inc: { resendVerification: 1 },
     },
   );
 

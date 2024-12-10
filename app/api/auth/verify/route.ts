@@ -24,15 +24,13 @@ export async function GET(req: Request) {
     );
   }
 
-  await db
-    .collection("customers")
-    .updateOne(
-      { verificationToken: token },
-      {
-        $set: { isVerified: true },
-        $unset: { verificationToken: "", emailResend: "" },
-      },
-    );
+  await db.collection("customers").updateOne(
+    { verificationToken: token },
+    {
+      $set: { isVerified: true },
+      $unset: { verificationToken: "", resendVerification: "" },
+    },
+  );
 
   return new Response(
     JSON.stringify({ message: "Email verified successfully" }),

@@ -11,7 +11,7 @@ export type Customer = {
       address: string;
     },
   ];
-  emailResend: number;
+  resendVerification: number;
 };
 
 export type Invoice = {

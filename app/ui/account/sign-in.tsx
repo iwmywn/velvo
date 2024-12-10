@@ -2,13 +2,20 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
+import {
+  boxClass,
+  inputClass,
+  labelClass,
+  errorClass,
+  linkClass,
+} from "@ui/form-class";
 import Button from "@ui/button";
 import { toast } from "react-toastify";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
 import { useEffect, useState } from "react";
 import Toast from "@ui/toast";
+import Link from "next/link";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
@@ -70,7 +77,7 @@ export default function SignIn() {
         </span>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex w-full flex-col gap-1 text-black/65"
+          className="mb-5 flex w-full flex-col gap-1 text-black/65"
         >
           <div className={boxClass}>
             <input
@@ -117,6 +124,9 @@ export default function SignIn() {
             )}
           </Button>
         </form>
+        <Link className={linkClass} href="/user/forgotten-password">
+          Forgot password?
+        </Link>
       </div>
     </>
   );

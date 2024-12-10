@@ -1,4 +1,4 @@
-import ForgottenPassword from "@/app/ui/account/forgotten-password";
+import EmailForm from "@/app/ui/account/email-form";
 import { Metadata } from "next";
 
 export function generateMetadata(): Metadata {
@@ -6,5 +6,11 @@ export function generateMetadata(): Metadata {
 }
 
 export default function ForgottenPasswordPage() {
-  return <ForgottenPassword />;
+  return (
+    <EmailForm
+      title="FORGOTTEN PASSWORD"
+      fetchUrl="/api/auth/forgotten-password"
+      buttonText="RESET YOUR PASSWORD"
+    />
+  );
 }

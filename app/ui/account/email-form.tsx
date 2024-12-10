@@ -20,7 +20,17 @@ import Link from "next/link";
 
 type EmailData = z.infer<typeof emailScheme>;
 
-export default function ResendEmail() {
+interface EmailFormProps {
+  title: string;
+  fetchUrl: string;
+  buttonText: string;
+}
+
+export default function EmailForm({
+  title,
+  fetchUrl,
+  buttonText,
+}: EmailFormProps) {
   const [isClient, setIsClient] = useState<boolean>(false);
   const {
     register,
@@ -41,7 +51,7 @@ export default function ResendEmail() {
 
   const onSubmit = async (data: EmailData) => {
     try {
-      const res = await fetch("/api/auth/resend-email", {
+      const res = await fetch(fetchUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +75,7 @@ export default function ResendEmail() {
   return (
     <>
       {isClient && <Toast />}
-      <Wrapper title="RESEND CONFIRMATION EMAIL">
+      <Wrapper title={title}>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mb-5 flex w-full flex-col gap-1 text-black/65"
@@ -94,7 +104,7 @@ export default function ResendEmail() {
             {isSubmitting ? (
               <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
             ) : (
-              "RESEND EMAIL"
+              buttonText
             )}
           </Button>
         </form>
@@ -102,7 +112,6 @@ export default function ResendEmail() {
           Back to Sign In
         </Link>
       </Wrapper>
-      ;
     </>
   );
 }
