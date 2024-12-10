@@ -50,7 +50,7 @@ export async function POST(req: Request) {
   const token = await new SignJWT({ id: existingUser._id })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setIssuer("https://hat-nnva.vercel.app/")
+    .setIssuer("https://hat-nnva.vercel.app")
     .setAudience("https://hat-nnva.vercel.app/api")
     .setExpirationTime("1h")
     .sign(secret);

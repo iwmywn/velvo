@@ -4,11 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
 import Button from "@ui/button";
-import { ToastContainer, toast } from "react-toastify";
-import { createPortal } from "react-dom";
+import { toast } from "react-toastify";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
 import { useEffect, useState } from "react";
+import Toast from "@ui/toast";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
@@ -60,17 +60,7 @@ export default function SignIn() {
 
   return (
     <>
-      {isClient &&
-        createPortal(
-          <ToastContainer
-            closeButton={false}
-            icon={false}
-            hideProgressBar
-            closeOnClick
-            pauseOnFocusLoss
-          />,
-          document.getElementById("popups")!,
-        )}
+      {isClient && <Toast />}
       <div className="flex w-full flex-col items-center px-5">
         <h3 className="mb-2 mt-5 text-left font-medium text-black/75">
           WELCOME BACK

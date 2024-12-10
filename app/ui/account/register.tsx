@@ -5,9 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
 import Button from "@ui/button";
-import { ToastContainer, toast } from "react-toastify";
-import { createPortal } from "react-dom";
+import { toast } from "react-toastify";
 import { registerSchema } from "@/schemas";
+import Toast from "@ui/toast";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -53,16 +53,7 @@ export default function Register() {
 
   return (
     <>
-      {createPortal(
-        <ToastContainer
-          closeButton={false}
-          icon={false}
-          hideProgressBar
-          closeOnClick
-          pauseOnFocusLoss
-        />,
-        document.getElementById("popups")!,
-      )}
+      <Toast />
       <div className="flex w-full flex-col items-center px-5">
         <span className="mb-2 mt-5 text-center text-black/70">
           Create an account and benefit from a more personal shopping

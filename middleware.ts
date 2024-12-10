@@ -19,12 +19,12 @@ export async function middleware(req: NextRequest) {
 
   const path = nextUrl.pathname;
 
-  if (path.startsWith(authRoutes) && isLoggedIn) {
+  if (authRoutes.some((route) => path.startsWith(route)) && isLoggedIn) {
     return NextResponse.redirect(new URL(DEFAULT_SIGNIN_REDIRECT, nextUrl));
   }
 
   if (protectedRoutes.some((route) => path.startsWith(route)) && !isLoggedIn) {
-    const redirectUrl = new URL(authRoutes, nextUrl);
+    const redirectUrl = new URL("/user/signin", nextUrl);
     redirectUrl.searchParams.set("callback", path);
     return NextResponse.redirect(redirectUrl);
   }
