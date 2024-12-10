@@ -1,4 +1,4 @@
-import AccountOverview from "@ui/account/overview";
+import AuthOverview from "@/app/ui/account/auth-overview";
 import { Metadata } from "next";
 
 export function generateMetadata(): Metadata {
@@ -6,5 +6,5 @@ export function generateMetadata(): Metadata {
 }
 
 export default function AccountPage() {
-  return <AccountOverview />;
+  return <AuthOverview />;
 }

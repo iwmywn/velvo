@@ -1,3 +1,5 @@
+"use server";
+
 import { connectToDatabase } from "@lib/mongodb";
 import { Category, Customer, Product } from "@lib/definition";
 

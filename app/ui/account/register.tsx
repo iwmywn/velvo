@@ -3,11 +3,18 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
+import {
+  boxClass,
+  inputClass,
+  labelClass,
+  errorClass,
+  linkClass,
+} from "@ui/form-class";
 import Button from "@ui/button";
 import { toast } from "react-toastify";
 import { registerSchema } from "@/schemas";
 import Toast from "@ui/toast";
+import Link from "next/link";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -62,7 +69,7 @@ export default function Register() {
         <span className="mb-8 text-black/70">All fields are mandatory.</span>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex w-full flex-col gap-1 text-black/65"
+          className="mb-5 flex w-full flex-col gap-1 text-black/65"
         >
           <div className={boxClass}>
             <input
@@ -128,6 +135,7 @@ export default function Register() {
               <p className={errorClass}>{errors.password.message}</p>
             )}
           </div>
+
           <Button
             disabled={!isValid || isSubmitting}
             className="h-10"
@@ -140,6 +148,9 @@ export default function Register() {
             )}
           </Button>
         </form>
+        <Link className={linkClass} href="/user/resend-email">
+          Resend confirmation email?
+        </Link>
       </div>
     </>
   );

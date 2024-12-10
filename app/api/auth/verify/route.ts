@@ -28,7 +28,10 @@ export async function GET(req: Request) {
     .collection("customers")
     .updateOne(
       { verificationToken: token },
-      { $set: { isVerified: true }, $unset: { verificationToken: "" } },
+      {
+        $set: { isVerified: true },
+        $unset: { verificationToken: "", emailResend: "" },
+      },
     );
 
   return new Response(
