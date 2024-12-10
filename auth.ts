@@ -6,10 +6,6 @@ import bcrypt from "bcrypt";
 import { authConfig } from "@/auth.config";
 import { getUserByEmail } from "@/app/lib/data";
 import { signInSchema } from "@/schemas";
-import {
-  InvalidCredentialsError,
-  UnverifiedAccountError,
-} from "@lib/auth-errors";
 
 export const { auth, signIn, signOut } = NextAuth({
   ...authConfig,

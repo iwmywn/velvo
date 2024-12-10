@@ -20,6 +20,12 @@ export default function Register() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     mode: "onChange",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+    },
   });
 
   const onSubmit = async (data: RegisterFormData) => {
@@ -74,6 +80,7 @@ export default function Register() {
               type="text"
               placeholder="First Name"
               {...register("firstName")}
+              disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="FirstName">
               First Name
@@ -89,6 +96,7 @@ export default function Register() {
               type="text"
               placeholder="Last Name"
               {...register("lastName")}
+              disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="LastName">
               Last Name
@@ -104,6 +112,7 @@ export default function Register() {
               type="email"
               placeholder="Email"
               {...register("email")}
+              disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="Email">
               Email
@@ -119,6 +128,7 @@ export default function Register() {
               type="password"
               placeholder="Password"
               {...register("password")}
+              disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="Password">
               Password

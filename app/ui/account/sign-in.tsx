@@ -26,6 +26,10 @@ export default function SignIn() {
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   const [isClient, setIsClient] = useState<boolean>(false);
@@ -35,23 +39,23 @@ export default function SignIn() {
 
   const onSubmit = async (data: SignInFormData) => {
     try {
-      await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        // redirectTo: callbackUrl || "/",
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       });
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case "CredentialsSignin":
-            return "Invalid email or password.";
-          // case "UnverifiedAccount":
-          //   return "Your account is not verified.";
-          default:
-            return "Something went wrong.";
-        }
+
+      const result = await res.json();
+
+      if (res.ok) {
+        toast.success(result.message);
+      } else {
+        toast.error(result.message);
       }
-      throw error;
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -86,6 +90,7 @@ export default function SignIn() {
               type="email"
               placeholder="Email"
               {...register("email")}
+              disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="Email">
               Email
@@ -102,6 +107,7 @@ export default function SignIn() {
               type="password"
               placeholder="Password"
               {...register("password")}
+              disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="Password">
               Password
