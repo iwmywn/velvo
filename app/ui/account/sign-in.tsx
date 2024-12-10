@@ -9,7 +9,6 @@ import { createPortal } from "react-dom";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 

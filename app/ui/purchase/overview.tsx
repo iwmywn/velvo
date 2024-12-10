@@ -37,7 +37,7 @@ export default function PurchaseOverview() {
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  useHideMenu(isOpen, setIsOpen);
+  useHideMenu(setIsOpen);
   useEffect(() => {
     if (
       window.location.pathname !== "/cart-overlay" &&

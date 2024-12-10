@@ -7,9 +7,8 @@ import ScrollToTop from "@ui/to-top";
 import { HeightProvider } from "@ui/hooks/height";
 import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
-import { SessionProvider } from "next-auth/react";
-import { auth } from "@/auth";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthProvider } from "@ui/hooks/auth";
 
 export const metadata: Metadata = {
   title: {
@@ -19,17 +18,15 @@ export const metadata: Metadata = {
   description: "fashion",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
-        <SessionProvider session={session}>
+        <AuthProvider>
           <div id="popups" className="relative z-[9999]" />
           <PopUp />
           <HeightProvider>
@@ -42,7 +39,7 @@ export default async function RootLayout({
             <Footer />
           </HeightProvider>
           <ScrollToTop />
-        </SessionProvider>
+        </AuthProvider>
       </body>
     </html>
   );

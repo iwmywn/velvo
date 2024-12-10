@@ -1,5 +1,3 @@
-"use client";
-
 import { emptyStates } from "@ui/data/empty-state";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";

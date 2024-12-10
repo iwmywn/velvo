@@ -12,10 +12,10 @@ import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "@ui/nav/cart-aside";
 import AccountMenu from "@ui/nav/account-menu";
 import SearchSummary from "@ui/nav/search-aside";
-import { useSession } from "next-auth/react";
 import useDeviceType from "@ui/hooks/device-type";
 import useHideMenu from "@ui/hooks/hide-menu";
 import { CiUser } from "react-icons/ci";
+import { useAuthContext } from "@ui/hooks/auth";
 
 export default function Header() {
   const pathname = usePathname();
@@ -23,7 +23,8 @@ export default function Header() {
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const [isOpenAccount, setIsOpenAccount] = useState<boolean>(false);
   const deviceType = useDeviceType();
-  const { data: session } = useSession();
+  const { isLoggedIn, userId } = useAuthContext();
+  console.log(userId, isLoggedIn);
 
   useHideMenu(setIsOpenAccount);
   useOverflow(isOpenMenu);
@@ -60,26 +61,27 @@ export default function Header() {
             <div
               className="relative flex items-center"
               onMouseEnter={() => {
-                if (deviceType === "desktop" && session) setIsOpenAccount(true);
+                if (deviceType === "desktop" && isLoggedIn)
+                  setIsOpenAccount(true);
               }}
               onMouseLeave={() => {
-                if (deviceType === "desktop" && session)
+                if (deviceType === "desktop" && isLoggedIn)
                   setIsOpenAccount(false);
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                if (deviceType !== "desktop" && session) {
+                if (deviceType !== "desktop" && isLoggedIn) {
                   setIsOpenAccount((prev) => !prev);
                 }
               }}
             >
               <Link
-                href={`/user/${session ? "account" : "signin"}`}
+                href={`/user/${isLoggedIn ? "account" : "signin"}`}
                 title="Account"
               >
                 <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
               </Link>
-              {isOpenAccount && session && <AccountMenu />}
+              {isOpenAccount && isLoggedIn && <AccountMenu />}
             </div>
 
             <CartSummary />
