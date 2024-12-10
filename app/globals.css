@@ -9,13 +9,13 @@
 }
 
 .Toastify__toast--success {
-  background-color: rgba(76, 175, 80, 0.8) !important;
-  backdrop-filter: blur(5px);
+  background-color: rgba(46, 128, 49) !important;
+  border: 2px solid rgb(66, 255, 66) !important;
 }
 
 .Toastify__toast--error {
-  background-color: rgba(244, 67, 54, 0.8) !important;
-  backdrop-filter: blur(5px);
+  background-color: rgb(133, 53, 47) !important;
+  border: 2px solid rgb(255, 66, 66) !important;
 }
 
 .Toastify__toast {
