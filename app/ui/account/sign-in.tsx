@@ -4,21 +4,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
 import Button from "@ui/button";
-import { signIn } from "@/auth";
 import { ToastContainer, toast } from "react-toastify";
 import { createPortal } from "react-dom";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
 import { useEffect, useState } from "react";
-import { AuthError } from "next-auth";
-// import { useSearchParams } from "next/navigation";
-// import { CustomAuthError } from "@/app/lib/auth-errors";
+import { useSearchParams } from "next/navigation";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
 export default function SignIn() {
-  // const searchParams = useSearchParams();
-  // const callbackUrl = searchParams.get("callbackUrl");
   const {
     register,
     handleSubmit,
@@ -50,7 +45,12 @@ export default function SignIn() {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success(result.message);
+        // toast.success(result.message);
+
+        const searchParams = new URLSearchParams(window.location.search);
+        const callbackUrl = searchParams.get("callback") || "/";
+
+        window.location.href = callbackUrl;
       } else {
         toast.error(result.message);
       }

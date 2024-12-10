@@ -11,9 +11,8 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
     "bcrypt": "^5.1.1",
-    "bcryptjs": "^2.4.3",
     "cookie": "^1.0.2",
-    "jsonwebtoken": "^9.0.2",
+    "jose": "^5.9.6",
     "mongodb": "^6.11.0",
     "nanoid": "^5.0.9",
     "next": "15.0.4",
@@ -29,7 +28,6 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
-    "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22",
     "@types/nodemailer": "^6.4.17",

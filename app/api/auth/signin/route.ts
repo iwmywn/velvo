@@ -1,10 +1,9 @@
 "use server";
 
-// import { connectToDatabase } from "@lib/mongodb";
-import bcrypt from "bcrypt";
+import { SignJWT } from "jose";
 import { getUserByEmail } from "@/app/lib/data";
+import bcrypt from "bcrypt";
 import { signInSchema } from "@/schemas";
-import jwt from "jsonwebtoken";
 import cookie from "cookie";
 
 export async function POST(req: Request) {
@@ -47,9 +46,14 @@ export async function POST(req: Request) {
     );
   }
 
-  const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET!, {
-    expiresIn: "1h",
-  });
+  const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
+  const token = await new SignJWT({ id: existingUser._id })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuedAt()
+    .setIssuer("https://hat-nnva.vercel.app/")
+    .setAudience("https://hat-nnva.vercel.app/api")
+    .setExpirationTime("1h")
+    .sign(secret);
 
   const cookieOptions = {
     httpOnly: true,
