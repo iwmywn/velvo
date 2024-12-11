@@ -1,6 +1,6 @@
 "use server";
 
-import verifyToken from "@lib/auth";
+import verifyToken from "@api/auth";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {

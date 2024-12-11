@@ -2,7 +2,11 @@
 
 import nodemailer from "nodemailer";
 
-export async function sendVerificationEmail(email: string, token: string) {
+export async function sendEmail(
+  email: string,
+  token: string,
+  type: "reset" | "verification",
+) {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
     port: parseInt(process.env.EMAIL_SERVER_PORT || "587"),
@@ -12,7 +16,7 @@ export async function sendVerificationEmail(email: string, token: string) {
     },
   });
 
-  const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/verify?token=${token}`;
+  const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/${type === "verification" ? `verify?token=${token}` : ""}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,

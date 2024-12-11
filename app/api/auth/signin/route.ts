@@ -1,50 +1,34 @@
 "use server";
 
 import { SignJWT } from "jose";
-import { getUserByEmail } from "@/app/lib/data";
+import { getUserByIdentifier } from "@lib/data";
 import bcrypt from "bcrypt";
 import { signInSchema } from "@/schemas";
 import cookie from "cookie";
+import { createResponse } from "@lib/utils";
 
 export async function POST(req: Request) {
   const data = await req.json();
   const parsedCredentials = signInSchema.safeParse(data);
 
-  if (!parsedCredentials.success) {
-    return new Response(JSON.stringify({ message: "Invalid field!" }), {
-      status: 400,
-    });
-  }
+  if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
+
   const { email, password } = parsedCredentials.data;
-  const existingUser = await getUserByEmail(email);
+  const existingUser = await getUserByIdentifier(email);
 
-  if (!existingUser) {
-    return new Response(
-      JSON.stringify({ message: "Email or password is incorrect!" }),
-      {
-        status: 400,
-      },
-    );
-  }
+  if (!existingUser)
+    return createResponse("Email or password is incorrect!", 400);
 
-  if (!existingUser.isVerified) {
-    return new Response(
-      JSON.stringify({
-        message: "Account not verified. Please check your email to verify!",
-      }),
-      { status: 400 },
+  if (!existingUser.isVerified)
+    return createResponse(
+      "Account not verified. Please check your email to verify!",
+      400,
     );
-  }
 
   const isPasswordValid = await bcrypt.compare(password, existingUser.password);
-  if (!isPasswordValid) {
-    return new Response(
-      JSON.stringify({ message: "Email or password is incorrect!" }),
-      {
-        status: 400,
-      },
-    );
-  }
+
+  if (!isPasswordValid)
+    return createResponse("Email or password is incorrect!", 400);
 
   const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
   const token = await new SignJWT({ id: existingUser._id })

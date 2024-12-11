@@ -1,30 +1,22 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
+import { createResponse } from "@lib/utils";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
 
-  if (!token) {
-    return new Response(JSON.stringify({ message: "Invalid token" }), {
-      status: 400,
-    });
-  }
+  if (!token) return createResponse("Invalid token!", 400);
 
   const db = await connectToDatabase();
   const user = await db
-    .collection("customers")
+    .collection("users")
     .findOne({ verificationToken: token });
 
-  if (!user) {
-    return new Response(
-      JSON.stringify({ message: "Token not found or expired" }),
-      { status: 404 },
-    );
-  }
+  if (!user) return createResponse("Token not found or expired!", 404);
 
-  await db.collection("customers").updateOne(
+  await db.collection("users").updateOne(
     { verificationToken: token },
     {
       $set: { isVerified: true },
@@ -32,10 +24,5 @@ export async function GET(req: Request) {
     },
   );
 
-  return new Response(
-    JSON.stringify({ message: "Email verified successfully" }),
-    {
-      status: 200,
-    },
-  );
+  return createResponse("Email verified successfully.", 200);
 }

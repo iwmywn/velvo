@@ -1,7 +1,8 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
-import { Category, Customer, Product } from "@lib/definition";
+import { Category, User, Product } from "@lib/definition";
+import { ObjectId } from "mongodb";
 
 export async function fetchCategories() {
   try {
@@ -40,11 +41,23 @@ export async function fetchProducts() {
   }
 }
 
-export async function getUserByEmail(email: string) {
+/**
+ *
+ * @param identifier - Email or ID of the user
+ * @returns The user document, if found
+ */
+export async function getUserByIdentifier(identifier: string) {
   try {
     const db = await connectToDatabase();
-    const user = await db.collection<Customer>("customers").findOne({ email });
+    let query;
 
+    if (ObjectId.isValid(identifier)) {
+      query = { _id: new ObjectId(identifier) };
+    } else {
+      query = { email: identifier };
+    }
+
+    const user = await db.collection<User>("users").findOne(query);
     return user;
   } catch (e) {
     console.error("Failed to fetch user:", e);

@@ -2,7 +2,7 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import { authRoutes, DEFAULT_SIGNIN_REDIRECT, protectedRoutes } from "@/routes";
-import verifyToken from "@lib/auth";
+import verifyToken from "@api/auth";
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("auth_token")?.value;
@@ -33,5 +33,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/user/account/:path*", "/user/purchase/:path*", "/user/signin"],
+  matcher: ["/user/:path*"],
 };

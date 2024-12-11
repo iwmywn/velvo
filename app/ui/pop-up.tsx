@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowDown } from "react-icons/go";
 import Backdrop from "@ui/overlays/backdrop";
+import { linkClass } from "@ui/form-class";
 
 const contact = [
   {
@@ -55,7 +56,7 @@ export default function PopUp() {
                   {name} - {mssv}{" "}
                 </span>
                 <Link
-                  className="relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-stone-300 after:transition-all after:duration-300 hover:after:bg-black"
+                  className={linkClass}
                   href={`mailto:${email}`}
                   rel="noopener"
                 >

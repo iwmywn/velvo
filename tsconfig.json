@@ -23,6 +23,7 @@
       "@app/*": ["./app/*"],
       "@ui/*": ["./app/ui/*"],
       "@lib/*": ["./app/lib/*"],
+      "@api/*": ["./app/api/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

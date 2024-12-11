@@ -1,169 +1,173 @@
-import {} from // customers,
-// carts,
-// invoices,
-// invoiceDetails,
-// products,
-// categories,
-// productSizes,
-"@lib/placeholder-data";
-import {
-  // Customer,
-  // Cart,
-  // Invoice,
-  // InvoiceDetails,
-  Product,
-  // Category,
-  // ProductSize,
-} from "./definition";
-
-function shuffleProduct(product: Product[]) {
-  const shuffledProduct = [...product];
-  for (let i = shuffledProduct.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledProduct[i], shuffledProduct[j]] = [
-      shuffledProduct[j],
-      shuffledProduct[i],
-    ];
-  }
-  return shuffledProduct;
+export function createResponse(message: string, status: number) {
+  return new Response(JSON.stringify({ message }), { status });
 }
 
-// function generateSlugWithRandom(
-//   category: string,
-//   name: string,
-//   description?: string,
-// ): string {
-//   const randomString = Array.from(crypto.getRandomValues(new Uint8Array(12)))
-//     .map((byte) => byte.toString(36).padStart(2, "0"))
-//     .join("")
-//     .substring(0, 16);
+// import {} from // customers,
+// // carts,
+// // invoices,
+// // invoiceDetails,
+// // products,
+// // categories,
+// // productSizes,
+// "@lib/placeholder-data";
+// import {
+//   // Customer,
+//   // Cart,
+//   // Invoice,
+//   // InvoiceDetails,
+//   Product,
+//   // Category,
+//   // ProductSize,
+// } from "./definition";
 
-//   const normalize = (str: string) =>
-//     str
-//       .toLowerCase()
-//       .replace(/[^a-z0-9]+/g, "-")
-//       .replace(/^-|-$/g, "");
-
-//   return `${normalize(category)}-${normalize(name)}-${normalize(description)}-${randomString}`;
+// function shuffleProduct(product: Product[]) {
+//   const shuffledProduct = [...product];
+//   for (let i = shuffledProduct.length - 1; i > 0; i--) {
+//     const j = Math.floor(Math.random() * (i + 1));
+//     [shuffledProduct[i], shuffledProduct[j]] = [
+//       shuffledProduct[j],
+//       shuffledProduct[i],
+//     ];
+//   }
+//   return shuffledProduct;
 // }
 
-function formatCurrency(priceCents: number): string {
-  return (Math.round(priceCents) / 100).toFixed(2);
-}
+// // function generateSlugWithRandom(
+// //   category: string,
+// //   name: string,
+// //   description?: string,
+// // ): string {
+// //   const randomString = Array.from(crypto.getRandomValues(new Uint8Array(12)))
+// //     .map((byte) => byte.toString(36).padStart(2, "0"))
+// //     .join("")
+// //     .substring(0, 16);
 
-function getPriceAfterDiscount(
-  priceCents: number,
-  saleOff: number,
-  quantity: number = 1,
-): string {
-  return formatCurrency((priceCents - (priceCents * saleOff) / 100) * quantity);
-}
+// //   const normalize = (str: string) =>
+// //     str
+// //       .toLowerCase()
+// //       .replace(/[^a-z0-9]+/g, "-")
+// //       .replace(/^-|-$/g, "");
 
-function getTotalPriceCents(
-  products: (Product & { quantity: number })[],
-): string {
-  return formatCurrency(
-    products.reduce(
-      (total, product) => total + product.priceCents * product.quantity,
-      0,
-    ),
-  );
-}
+// //   return `${normalize(category)}-${normalize(name)}-${normalize(description)}-${randomString}`;
+// // }
 
-function getCartIdByCustomerId(customerId: number): number | null {
-  const cartItem = carts.find((cart) => cart.customer_id === customerId);
-  return cartItem ? cartItem.id : null;
-}
+// function formatCurrency(priceCents: number): string {
+//   return (Math.round(priceCents) / 100).toFixed(2);
+// }
 
-function getProductDetailsByCartId(
-  cartId: number,
-): { product_id: number; quantity: number }[] {
-  const cartItem = carts.find((detail) => detail.id === cartId);
+// function getPriceAfterDiscount(
+//   priceCents: number,
+//   saleOff: number,
+//   quantity: number = 1,
+// ): string {
+//   return formatCurrency((priceCents - (priceCents * saleOff) / 100) * quantity);
+// }
 
-  if (!cartItem) {
-    return [];
-  }
+// function getTotalPriceCents(
+//   products: (Product & { quantity: number })[],
+// ): string {
+//   return formatCurrency(
+//     products.reduce(
+//       (total, product) => total + product.priceCents * product.quantity,
+//       0,
+//     ),
+//   );
+// }
 
-  return cartItem.products;
-}
+// function getCartIdByCustomerId(customerId: number): number | null {
+//   const cartItem = carts.find((cart) => cart.customer_id === customerId);
+//   return cartItem ? cartItem.id : null;
+// }
 
-function getCartProductsByCustomerId(
-  customerId: number,
-): (Product & { quantity: number })[] {
-  const cartId = getCartIdByCustomerId(customerId);
-  if (!cartId) return [];
+// function getProductDetailsByCartId(
+//   cartId: number,
+// ): { product_id: number; quantity: number }[] {
+//   const cartItem = carts.find((detail) => detail.id === cartId);
 
-  const productDetails = getProductDetailsByCartId(cartId);
-  return getProductsByDetails(productDetails);
-}
+//   if (!cartItem) {
+//     return [];
+//   }
 
-function getInvoiceIdsByCustomerId(
-  customerId: number,
-  status: string,
-): number[] {
-  const invoicesForCustomer = invoices.filter(
-    (invoice) =>
-      invoice.customer_id === customerId && invoice.status === status,
-  );
-  return invoicesForCustomer.map((invoice) => invoice.id);
-}
+//   return cartItem.products;
+// }
 
-function getProductDetailsByInvoiceId(
-  invoiceId: number,
-): { product_id: number; quantity: number }[] {
-  const invoice = invoiceDetails.find(
-    (detail) => detail.invoice_id === invoiceId,
-  );
+// function getCartProductsByCustomerId(
+//   customerId: number,
+// ): (Product & { quantity: number })[] {
+//   const cartId = getCartIdByCustomerId(customerId);
+//   if (!cartId) return [];
 
-  if (!invoice) {
-    return [];
-  }
+//   const productDetails = getProductDetailsByCartId(cartId);
+//   return getProductsByDetails(productDetails);
+// }
 
-  return invoice.products;
-}
+// function getInvoiceIdsByCustomerId(
+//   customerId: number,
+//   status: string,
+// ): number[] {
+//   const invoicesForCustomer = invoices.filter(
+//     (invoice) =>
+//       invoice.customer_id === customerId && invoice.status === status,
+//   );
+//   return invoicesForCustomer.map((invoice) => invoice.id);
+// }
 
-function getInvoiceProductsByCustomerId(
-  customerId: number,
-  status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED",
-): { invoiceId: number; products: (Product & { quantity: number })[] }[] {
-  const invoiceIds = getInvoiceIdsByCustomerId(customerId, status);
+// function getProductDetailsByInvoiceId(
+//   invoiceId: number,
+// ): { product_id: number; quantity: number }[] {
+//   const invoice = invoiceDetails.find(
+//     (detail) => detail.invoice_id === invoiceId,
+//   );
 
-  if (invoiceIds.length === 0) return [];
+//   if (!invoice) {
+//     return [];
+//   }
 
-  const invoicesWithProducts = invoiceIds.map((invoiceId) => {
-    const productDetails = getProductDetailsByInvoiceId(invoiceId);
-    const products = getProductsByDetails(productDetails);
+//   return invoice.products;
+// }
 
-    return {
-      invoiceId,
-      products,
-    };
-  });
+// function getInvoiceProductsByCustomerId(
+//   customerId: number,
+//   status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED",
+// ): { invoiceId: number; products: (Product & { quantity: number })[] }[] {
+//   const invoiceIds = getInvoiceIdsByCustomerId(customerId, status);
 
-  return invoicesWithProducts;
-}
+//   if (invoiceIds.length === 0) return [];
 
-function getProductsByDetails(
-  productDetails: { product_id: number; quantity: number }[],
-): (Product & { quantity: number })[] {
-  return productDetails
-    .map((detail) => {
-      const product = products.find(
-        (product) => product.id === detail.product_id,
-      );
-      return product ? { ...product, quantity: detail.quantity } : null;
-    })
-    .filter(
-      (result): result is Product & { quantity: number } => result !== null,
-    );
-}
+//   const invoicesWithProducts = invoiceIds.map((invoiceId) => {
+//     const productDetails = getProductDetailsByInvoiceId(invoiceId);
+//     const products = getProductsByDetails(productDetails);
 
-export {
-  shuffleProduct,
-  // generateSlugWithRandom,
-  formatCurrency,
-  getPriceAfterDiscount,
-  getTotalPriceCents,
-  // getCartProductsByCustomerId,
-  // getInvoiceProductsByCustomerId,
-};
+//     return {
+//       invoiceId,
+//       products,
+//     };
+//   });
+
+//   return invoicesWithProducts;
+// }
+
+// function getProductsByDetails(
+//   productDetails: { product_id: number; quantity: number }[],
+// ): (Product & { quantity: number })[] {
+//   return productDetails
+//     .map((detail) => {
+//       const product = products.find(
+//         (product) => product.id === detail.product_id,
+//       );
+//       return product ? { ...product, quantity: detail.quantity } : null;
+//     })
+//     .filter(
+//       (result): result is Product & { quantity: number } => result !== null,
+//     );
+// }
+
+// export {
+//   shuffleProduct,
+//   // generateSlugWithRandom,
+//   formatCurrency,
+//   getPriceAfterDiscount,
+//   getTotalPriceCents,
+//   // getCartProductsByCustomerId,
+//   // getInvoiceProductsByCustomerId,
+// };
