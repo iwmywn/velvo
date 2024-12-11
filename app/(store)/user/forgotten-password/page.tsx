@@ -9,7 +9,7 @@ export default function ForgottenPasswordPage() {
   return (
     <EmailForm
       title="FORGOTTEN PASSWORD"
-      fetchUrl="/api/auth/forgotten-password"
+      enpoint="/api/auth/forgotten-password"
       buttonText="RESET YOUR PASSWORD"
     />
   );

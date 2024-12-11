@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface WrapperProps {
-  title: string;
+  title: string | ReactNode;
   children: ReactNode;
 }
 

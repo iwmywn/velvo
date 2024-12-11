@@ -8,22 +8,20 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get("auth_token")?.value;
   const { nextUrl } = req;
 
-  let isLoggedIn = null;
+  let isSignedIn = null;
 
   if (token) {
     const result = await verifyToken(token);
-    if (result.isValid) {
-      isLoggedIn = result.payload;
-    }
+    isSignedIn = result.isValid;
   }
 
   const path = nextUrl.pathname;
 
-  if (authRoutes.some((route) => path.startsWith(route)) && isLoggedIn) {
+  if (authRoutes.some((route) => path.startsWith(route)) && isSignedIn) {
     return NextResponse.redirect(new URL(DEFAULT_SIGNIN_REDIRECT, nextUrl));
   }
 
-  if (protectedRoutes.some((route) => path.startsWith(route)) && !isLoggedIn) {
+  if (protectedRoutes.some((route) => path.startsWith(route)) && !isSignedIn) {
     const redirectUrl = new URL("/user/signin", nextUrl);
     redirectUrl.searchParams.set("callback", path);
     return NextResponse.redirect(redirectUrl);
@@ -33,5 +31,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/user/:path*"],
+  matcher: ["/user/:path*", "/email-handle/:path*"],
 };

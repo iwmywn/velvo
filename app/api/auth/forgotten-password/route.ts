@@ -2,56 +2,34 @@
 
 import { connectToDatabase } from "@lib/mongodb";
 import { sendEmail } from "@lib/actions";
-import { nanoid } from "nanoid";
 import { getUserByIdentifier } from "@lib/data";
 import { emailScheme } from "@/schemas";
+import { createResponse } from "@lib/utils";
+import { generateUniqueToken } from "@api/utils";
 
 export async function POST(req: Request) {
   const data = await req.json();
   const parsedCredentials = emailScheme.safeParse(data);
 
-  if (!parsedCredentials.success) {
-    return new Response(JSON.stringify({ message: "Invalid field!" }), {
-      status: 400,
-    });
-  }
+  if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
+
   const { email } = parsedCredentials.data;
   const existingUser = await getUserByIdentifier(email);
 
-  if (!existingUser) {
-    return new Response(
-      JSON.stringify({
-        message:
-          "If this email exists and has not been verified, we will send a new verification email.",
-      }),
-      {
-        status: 200,
-      },
+  if (!existingUser)
+    return createResponse(
+      "If this email is valid, we will send a new password reset email.",
+      200,
     );
-  }
 
-  if (existingUser.isVerified) {
-    return new Response(
-      JSON.stringify({ message: "Email already verified!" }),
-      {
-        status: 400,
-      },
+  if (existingUser.resendVerification >= 2)
+    return createResponse(
+      "You have reached the maximum number of resend attempts!",
+      429,
     );
-  }
 
-  if (existingUser.resendVerification >= 2) {
-    return new Response(
-      JSON.stringify({
-        message: "You have reached the maximum number of resend attempts!",
-      }),
-      {
-        status: 429,
-      },
-    );
-  }
-
-  const verificationToken = nanoid();
   const db = await connectToDatabase();
+  const verificationToken = await generateUniqueToken(db);
 
   await db.collection("users").updateOne(
     { email: email },
@@ -61,15 +39,10 @@ export async function POST(req: Request) {
     },
   );
 
-  await sendEmail(email, verificationToken, "reset");
+  await sendEmail(email, verificationToken, "resetPassword");
 
-  return new Response(
-    JSON.stringify({
-      message:
-        "If this email exists and has not been verified, we will send a new verification email.",
-    }),
-    {
-      status: 201,
-    },
+  return createResponse(
+    "If this email is valid, we will send a new password reset email.",
+    201,
   );
 }

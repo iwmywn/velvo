@@ -51,7 +51,7 @@ export default function Register() {
         toast.success(result.message);
         reset();
       } else {
-        toast.error(`${result.message}`);
+        toast.error(result.message);
       }
     } catch (error) {
       toast.error("Something went wrong! Please try again.");
@@ -149,7 +149,7 @@ export default function Register() {
           </Button>
         </form>
         <Link className={linkClass} href="/user/resend-verification-email">
-          Resend confirmation email?
+          Resend verification email?
         </Link>
       </div>
     </>

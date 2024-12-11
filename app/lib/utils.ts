@@ -1,5 +1,39 @@
+import { Dispatch, SetStateAction } from "react";
+
 export function createResponse(message: string, status: number) {
   return new Response(JSON.stringify({ message }), { status });
+}
+
+export async function handleTokenVerification(
+  endpoint: string,
+  setStatus: Dispatch<SetStateAction<"success" | "error" | null>>,
+  setMessage: Dispatch<SetStateAction<string>>,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+  token: string | undefined,
+) {
+  if (token) {
+    try {
+      const res = await fetch(`/api/auth/${endpoint}?token=${token}`);
+      const result = await res.json();
+
+      if (res.ok) {
+        setStatus("success");
+        setMessage(result.message);
+      } else {
+        setStatus("error");
+        setMessage(result.message);
+      }
+    } catch (error) {
+      setStatus("error");
+      setMessage("Something went wrong! Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  } else {
+    setStatus("error");
+    setMessage("Invalid token!");
+    setLoading(false);
+  }
 }
 
 // import {} from // customers,

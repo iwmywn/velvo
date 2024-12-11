@@ -61,7 +61,7 @@ export default function SignIn() {
         toast.error(result.message);
       }
     } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      toast.error("Something went wrong! Please try again.");
     }
   };
 

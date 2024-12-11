@@ -22,13 +22,13 @@ type EmailData = z.infer<typeof emailScheme>;
 
 interface EmailFormProps {
   title: string;
-  fetchUrl: string;
+  enpoint: string;
   buttonText: string;
 }
 
 export default function EmailForm({
   title,
-  fetchUrl,
+  enpoint,
   buttonText,
 }: EmailFormProps) {
   const [isClient, setIsClient] = useState<boolean>(false);
@@ -51,7 +51,7 @@ export default function EmailForm({
 
   const onSubmit = async (data: EmailData) => {
     try {
-      const res = await fetch(fetchUrl, {
+      const res = await fetch(enpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

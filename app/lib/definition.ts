@@ -11,6 +11,7 @@ export type User = {
       address: string;
     },
   ];
+  verificationToken: string;
   resendVerification: number;
 };
 

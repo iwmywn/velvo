@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     );
 
   if (existingUser.isVerified)
-    return createResponse("Account already verified!", 400);
+    return createResponse("Email already verified!", 400);
 
   if (existingUser.resendVerification >= 2)
     return createResponse(
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     },
   );
 
-  await sendEmail(email, verificationToken, "verification");
+  await sendEmail(email, verificationToken, "verifyEmail");
 
   return createResponse(
     "If this email is valid and has not been verified, we will send a new verification email.",

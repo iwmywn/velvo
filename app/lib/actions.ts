@@ -5,7 +5,7 @@ import nodemailer from "nodemailer";
 export async function sendEmail(
   email: string,
   token: string,
-  type: "reset" | "verification",
+  mode: "resetPassword" | "verifyEmail",
 ) {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
@@ -16,7 +16,9 @@ export async function sendEmail(
     },
   });
 
-  const verificationUrl = `${process.env.NEXTAUTH_URL}/api/auth/${type === "verification" ? `verify?token=${token}` : ""}`;
+  const emailHandlerUrl = `${process.env.NEXTAUTH_URL}/email-handler?mode=${
+    mode === "verifyEmail" ? "verifyEmail" : "resetPassword"
+  }&token=${token}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
@@ -32,11 +34,15 @@ export async function sendEmail(
           <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">StyleWave</p>
           <p style="font-size: 16px; margin: 10px 0 20px 0; line-height: 1.6;">
             Hey there, <br>
-            Thanks for joining StyleWave! We just need one more thing from you - a quick confirmation of your email
-            address. Click the button below to verify your email and get started.
+            ${
+              mode === "verifyEmail"
+                ? `Thanks for joining StyleWave! We just need one more thing you - a quick confirmation of your email
+            address. Click the button below to verify your email and get started.`
+                : `Nobody likes being locked out of their account. We're coming to your rescue - just click the button below to get started. If you didn't request a password reset, you can safely ignore this email.`
+            }
           </p>
-          <a href="${verificationUrl}"
-            style="display: inline-block; padding: 8px 20px; background-color: #3e71b8; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 16px;">Verify</a>
+          <a href="${emailHandlerUrl}"
+            style="display: inline-block; padding: 8px 20px; background-color: #3e71b8; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 16px;">${mode === "verifyEmail" ? "Verify" : "Reset your password"}</a>
           <p style="font-size: 14px; margin-top: 20px;">
             Cheers,
             <span style="margin-top: 8px; display: block"></span>
@@ -45,8 +51,8 @@ export async function sendEmail(
           <div style="height: 2px; background-color: #666; opacity: 0.2; margin: 30px 0"></div>
           <p style="color: #666; font-size: 12px">Alternatively, you can copy and paste the link below into your browser:
             <span style="margin: 6px 0; display: block"></span>
-            <a href="${verificationUrl}"
-              style="display: inline-block; transition: background-color 0.3s ease;">${verificationUrl}</a>
+            <a href="${emailHandlerUrl}"
+              style="display: inline-block; transition: background-color 0.3s ease;">${emailHandlerUrl}</a>
           </p>
         </td>
       </tr>

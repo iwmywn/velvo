@@ -5,7 +5,7 @@ import { Db } from "mongodb";
 
 export async function generateUniqueToken(db: Db) {
   let verificationToken: string;
-  let tokenExists = true;
+  let tokenExists: boolean = true;
 
   do {
     verificationToken = nanoid();

@@ -29,12 +29,10 @@ export async function POST(req: Request) {
     password: hashedPassword,
     isVerified: false,
     verificationToken,
+    resendVerification: 1,
   });
 
-  await sendEmail(email, verificationToken, "verification");
+  await sendEmail(email, verificationToken, "verifyEmail");
 
-  return createResponse(
-    "Registration successful! Check your email for verification.",
-    201,
-  );
+  return createResponse("Verification email sent.", 201);
 }
