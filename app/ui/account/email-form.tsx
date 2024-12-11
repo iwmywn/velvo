@@ -78,9 +78,9 @@ export default function EmailForm({
       <Wrapper title={title}>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="mb-5 flex w-full flex-col gap-1 text-black/65"
+          className="mb-5 mt-5 flex w-full flex-col gap-1 text-black/65"
         >
-          <div className={`${boxClass} mt-5`}>
+          <div className={boxClass}>
             <input
               className={inputClass}
               id="Email"

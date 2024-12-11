@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { FaCheck } from "react-icons/fa";
-import { FaXmark } from "react-icons/fa6";
+import { FaCheck, FaXmark } from "react-icons/fa6";
 import Loading from "@ui/loading";
 import Wrapper from "@ui/account/wrapper";
 import { handleTokenVerification } from "@lib/utils";

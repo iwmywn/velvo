@@ -34,13 +34,16 @@ export async function POST(req: Request) {
   const db = await connectToDatabase();
   const verificationToken = await generateUniqueToken(db);
 
-  await db.collection("users").updateOne(
+  const result = await db.collection("users").updateOne(
     { email: email },
     {
       $set: { verificationToken: verificationToken },
       $inc: { resendVerification: 1 },
     },
   );
+
+  if (result.modifiedCount === 0)
+    return createResponse("Request failed! Try again later.", 500);
 
   await sendEmail(email, verificationToken, "verifyEmail");
 

@@ -23,7 +23,7 @@ export async function POST(req: Request) {
   const db = await connectToDatabase();
   const verificationToken = await generateUniqueToken(db);
 
-  await db.collection("users").insertOne({
+  const result = await db.collection("users").insertOne({
     name: `${firstName} ${lastName}`,
     email,
     password: hashedPassword,
@@ -31,6 +31,9 @@ export async function POST(req: Request) {
     verificationToken,
     resendVerification: 1,
   });
+
+  if (!result.acknowledged)
+    return createResponse("Failed to create user!", 500);
 
   await sendEmail(email, verificationToken, "verifyEmail");
 

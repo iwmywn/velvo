@@ -23,7 +23,7 @@ export async function sendEmail(
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: email,
-    subject: "Verify your StyleWave account",
+    subject: `${mode === "verifyEmail" ? "Verify your StyleWave account" : "Reset your Stylewave password"} `,
     html: `
       <table
       style="width: 100%; background-color: #e7f1ff; padding: 20px 40px; border-radius: 12px; text-align: center; font-family: Arial, sans-serif;">

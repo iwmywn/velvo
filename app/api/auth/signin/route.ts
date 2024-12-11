@@ -19,16 +19,16 @@ export async function POST(req: Request) {
   if (!existingUser)
     return createResponse("Email or password is incorrect!", 400);
 
+  const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+
+  if (!isPasswordValid)
+    return createResponse("Email or password is incorrect!", 400);
+
   if (!existingUser.isVerified)
     return createResponse(
       "Account not verified. Please check your email to verify!",
       400,
     );
-
-  const isPasswordValid = await bcrypt.compare(password, existingUser.password);
-
-  if (!isPasswordValid)
-    return createResponse("Email or password is incorrect!", 400);
 
   const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
   const token = await new SignJWT({ id: existingUser._id })

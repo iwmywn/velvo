@@ -1,5 +1,5 @@
 const boxClass =
-  "relative mb-12 w-full after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-stone-200 after:transition-all after:duration-300 hover:after:bg-black";
+  "relative mb-10 w-full after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-stone-200 after:transition-all after:duration-300 hover:after:bg-black";
 const inputClass =
   "peer w-full border-gray-300 bg-transparent py-[6px] text-black placeholder-transparent outline-none";
 const labelClass =

@@ -16,15 +16,20 @@ export async function POST(req: Request) {
   const { password } = parsedCredentials.data;
 
   const db = await connectToDatabase();
-  const hashedPassword = bcrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  await db.collection("users").updateOne(
+  const result = await db.collection("users").updateOne(
     { verificationToken: token },
     {
       $set: { password: hashedPassword },
       $unset: { verificationToken: "", resendVerification: "" },
     },
   );
+
+  if (result.matchedCount === 0) return createResponse("Token expired!", 404);
+
+  if (result.modifiedCount === 0)
+    return createResponse("Password update failed!", 500);
 
   return createResponse("Your password has been changed.", 201);
 }

@@ -84,9 +84,9 @@ export default function ResetPassword({
           <Wrapper title="RESET YOUR PASSWORD">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mb-5 flex w-full flex-col gap-1 text-black/65"
+              className="mb-5 mt-5 flex w-full flex-col gap-1 text-black/65"
             >
-              <div className={`${boxClass} mt-5`}>
+              <div className={boxClass}>
                 <input
                   className={inputClass}
                   id="Password"
@@ -102,7 +102,7 @@ export default function ResetPassword({
                   <p className={errorClass}>{errors.password.message}</p>
                 )}
               </div>
-              <div className={`${boxClass} mt-5`}>
+              <div className={boxClass}>
                 <input
                   className={inputClass}
                   id="ConfirmPassword"
@@ -134,7 +134,7 @@ export default function ResetPassword({
         </>
       ) : status === "error" ? (
         <main className="mt-44">
-          <Wrapper title={<FaXmark />}>{message}</Wrapper>
+          <Wrapper title={<FaXmark size={30} />}>{message}</Wrapper>
         </main>
       ) : (
         <NotFound />
