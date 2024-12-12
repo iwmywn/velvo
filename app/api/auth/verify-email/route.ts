@@ -17,13 +17,16 @@ export async function GET(req: Request) {
   if (!user)
     return createResponse("Token expired or email already verified!", 404);
 
-  await db.collection("users").updateOne(
+  const result = await db.collection("users").updateOne(
     { verificationToken: token },
     {
       $set: { isVerified: true },
       $unset: { verificationToken: "", resendVerification: "" },
     },
   );
+
+  if (result.modifiedCount === 0)
+    return createResponse("Email verification failed! Try again later.", 500);
 
   return createResponse("Email verified successfully.", 200);
 }

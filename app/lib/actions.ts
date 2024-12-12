@@ -36,9 +36,8 @@ export async function sendEmail(
             Hey there, <br>
             ${
               mode === "verifyEmail"
-                ? `Thanks for joining StyleWave! We just need one more thing you - a quick confirmation of your email
-            address. Click the button below to verify your email and get started.`
-                : `Nobody likes being locked out of their account. We're coming to your rescue - just click the button below to get started. If you didn't request a password reset, you can safely ignore this email.`
+                ? "Thanks for joining StyleWave! We just need one more thing you - a quick confirmation of your email address. Click the button below to verify your email and get started."
+                : "Nobody likes being locked out of their account. We're coming to your rescue - just click the button below to get started. If you didn't request a password reset, you can safely ignore this email."
             }
           </p>
           <a href="${emailHandlerUrl}"

@@ -28,11 +28,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (res.ok) {
-        const result = await res.json();
+        const result: AuthContextType = await res.json();
         setIsSignedIn(result.isSignedIn);
-        if (result.isSignedIn) {
-          setUserId(result.userId);
-        }
+        setUserId(result.userId);
       }
     }
 

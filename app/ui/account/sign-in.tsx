@@ -20,6 +20,7 @@ import Link from "next/link";
 type SignInFormData = z.infer<typeof signInSchema>;
 
 export default function SignIn() {
+  const [isClient, setIsClient] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -33,7 +34,6 @@ export default function SignIn() {
     },
   });
 
-  const [isClient, setIsClient] = useState<boolean>(false);
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -51,10 +51,8 @@ export default function SignIn() {
       const result = await res.json();
 
       if (res.ok) {
-        // toast.success(result.message);
-
         const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("callback") || "/";
+        const callbackUrl = searchParams.get("next") || "/";
 
         window.location.href = callbackUrl;
       } else {

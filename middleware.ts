@@ -23,7 +23,7 @@ export async function middleware(req: NextRequest) {
 
   if (protectedRoutes.some((route) => path.startsWith(route)) && !isSignedIn) {
     const redirectUrl = new URL("/user/signin", nextUrl);
-    redirectUrl.searchParams.set("callback", path);
+    redirectUrl.searchParams.set("next", path);
     return NextResponse.redirect(redirectUrl);
   }
 

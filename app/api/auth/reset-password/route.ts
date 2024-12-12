@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   if (result.matchedCount === 0) return createResponse("Token expired!", 404);
 
   if (result.modifiedCount === 0)
-    return createResponse("Password update failed!", 500);
+    return createResponse("Password update failed! Try again later.", 500);
 
   return createResponse("Your password has been changed.", 201);
 }

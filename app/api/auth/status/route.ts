@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
   const token = req.cookies.get("auth_token")?.value;
 
   if (!token) {
-    return new Response(JSON.stringify({ isSignedIn: false }), { status: 200 });
+    return new Response(JSON.stringify({ isSignedIn: false }), { status: 401 });
   }
 
   const result = await verifyToken(token);
