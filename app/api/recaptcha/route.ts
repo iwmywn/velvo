@@ -6,14 +6,14 @@ export async function POST(req: Request) {
   const token = await req.json();
 
   try {
-    const response = await fetch(
+    const res = await fetch(
       `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET}&response=${token}`,
       { method: "POST" },
     );
 
-    const data = await response.json();
+    const result = await res.json();
 
-    if (!data.success) return createResponse("Invalid CAPTCHA token!", 400);
+    if (!result.success) return createResponse("Invalid CAPTCHA token!", 400);
 
     return createResponse("CAPTCHA verified successfully", 200);
   } catch (error) {

@@ -35,6 +35,7 @@ export default function RootLayout({
               hideProgressBar
               closeOnClick
               pauseOnFocusLoss
+              pauseOnHover
             />
           </div>
           <PopUp />

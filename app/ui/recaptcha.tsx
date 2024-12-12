@@ -3,6 +3,7 @@
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 import { createPortal } from "react-dom";
+import { useState } from "react";
 
 interface ReCaptchaPopupProps {
   onVerify: () => void;
@@ -13,6 +14,14 @@ export default function ReCaptchaPopup({
   onVerify,
   onClose,
 }: ReCaptchaPopupProps) {
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const animateAndClose = (callback: () => void) => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      callback();
+      setIsAnimating(false);
+    }, 250);
+  };
   const handleVerify = async (token: string | null) => {
     if (!token) {
       toast.error("CAPTCHA verification failed! Please try again.");
@@ -29,32 +38,35 @@ export default function ReCaptchaPopup({
       const result = await res.json();
 
       if (res.ok) {
-        onVerify();
+        animateAndClose(onVerify);
       } else {
         toast.error(result.message);
       }
     } catch (error) {
       toast.error("Failed to verify CAPTCHA! Please try again.");
     } finally {
-      onClose();
+      animateAndClose(onClose);
     }
+  };
+
+  const handleClose = () => {
+    animateAndClose(onClose);
+    toast.error("Please complete the CAPTCHA!");
   };
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex animate-fadeIn items-center justify-center bg-black/70"
-      onClick={() => {
-        onClose();
-        toast.error("Please complete the CAPTCHA!");
-      }}
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
+      onClick={handleClose}
     >
       <div
-        className="animate-zoomIn rounded bg-white p-4 shadow-lg"
+        className={`rounded bg-white p-4 shadow-lg ${isAnimating ? "animate-zoomOut" : "animate-zoomIn"}`}
         onClick={(e) => e.stopPropagation()}
       >
         <ReCAPTCHA
           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA!}
           onChange={handleVerify}
+          hl="en"
         />
       </div>
     </div>,

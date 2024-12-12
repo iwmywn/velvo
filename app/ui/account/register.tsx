@@ -16,7 +16,6 @@ import { registerSchema } from "@/schemas";
 import Link from "next/link";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useState } from "react";
-import useOverflow from "@ui/hooks/overflow";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -38,8 +37,6 @@ export default function Register() {
       password: "",
     },
   });
-
-  useOverflow(showCaptcha);
 
   const onSubmit = async (data: RegisterFormData) => {
     if (!showCaptcha && !captchaVerified) {

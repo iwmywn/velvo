@@ -18,6 +18,11 @@
   border: 2px solid rgb(255, 66, 66) !important;
 }
 
+.Toastify__toast--success:hover,
+.Toastify__toast--error:hover {
+  opacity: 0.9;
+}
+
 .Toastify__toast {
   border-radius: 8px;
   font-size: 14px;

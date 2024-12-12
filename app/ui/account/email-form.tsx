@@ -16,6 +16,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import ReCaptchaPopup from "@ui/recaptcha";
 
 type EmailData = z.infer<typeof emailScheme>;
 
@@ -30,6 +31,8 @@ export default function EmailForm({
   enpoint,
   buttonText,
 }: EmailFormProps) {
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -44,6 +47,11 @@ export default function EmailForm({
   });
 
   const onSubmit = async (data: EmailData) => {
+    if (!showCaptcha && !captchaVerified) {
+      setShowCaptcha(true);
+      return;
+    }
+
     try {
       const res = await fetch(enpoint, {
         method: "POST",
@@ -63,11 +71,20 @@ export default function EmailForm({
       }
     } catch (error) {
       toast.error("Something went wrong! Please try again.");
+    } finally {
+      setCaptchaVerified(false);
+      setShowCaptcha(false);
     }
   };
 
   return (
     <>
+      {showCaptcha && (
+        <ReCaptchaPopup
+          onVerify={() => setCaptchaVerified(true)}
+          onClose={() => setShowCaptcha(false)}
+        />
+      )}
       <Wrapper title={title}>
         <form
           onSubmit={handleSubmit(onSubmit)}
