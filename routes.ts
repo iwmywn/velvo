@@ -2,7 +2,7 @@ export const authRoutes = [
   "/user/signin",
   "/user/forgotten-password",
   "/user/resend-verification-email",
-  "/email-handle",
+  "/email-handler",
 ];
 export const DEFAULT_SIGNIN_REDIRECT = "/";
-export const protectedRoutes = ["/user/account", "/user/purchase"];
+export const protectedRoutes = ["/user/account-settings", "/user/purchase"];
