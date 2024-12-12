@@ -21,7 +21,7 @@ export default function NavMenu({
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
+      className={`fixed inset-0 z-[9999] bg-black/80 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
       onClick={handleCloseMenu}
     >
       <div
@@ -31,7 +31,7 @@ export default function NavMenu({
         {navLinks.map(({ label, href }, index) => (
           <Link
             key={index}
-            className="w-full py-[6px] text-center text-sm font-medium transition-all duration-300 hover:bg-stone-100"
+            className="w-full py-[6px] text-center text-sm font-medium transition-all duration-300 hover:bg-slate-100"
             href={href}
             onClick={handleCloseMenu}
           >

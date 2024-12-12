@@ -11,7 +11,7 @@ export default function Backdrop({
 }) {
   const backdropContent = (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 ${
+      className={`fixed inset-0 z-[9998] flex items-center justify-center bg-black/80 ${
         isAnimating ? "animate-fadeOut" : "animate-fadeIn"
       }`}
       onClick={onClick}

@@ -17,10 +17,7 @@ export default function ReCaptchaPopup({
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const animateAndClose = (callback: () => void) => {
     setIsAnimating(true);
-    setTimeout(() => {
-      callback();
-      setIsAnimating(false);
-    }, 250);
+    setTimeout(() => callback(), 250);
   };
   const handleVerify = async (token: string | null) => {
     if (!token) {
@@ -56,7 +53,7 @@ export default function ReCaptchaPopup({
 
   return createPortal(
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
+      className={`fixed inset-0 z-[9998] flex items-center justify-center bg-black/80 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
       onClick={handleClose}
     >
       <div
