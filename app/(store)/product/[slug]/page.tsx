@@ -4,9 +4,8 @@ import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
 import NotFound from "@app/not-found";
-import { REVALIDATE_TIME } from "@lib/config";
 
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 1800;
 
 export async function generateMetadata({
   params,

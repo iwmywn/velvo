@@ -45,7 +45,7 @@ export async function POST(req: Request) {
   if (result.modifiedCount === 0)
     return createResponse("Request failed! Try again later.", 500);
 
-  await sendEmail(email, verificationToken, "verifyEmail");
+  // await sendEmail(email, verificationToken, "verifyEmail");
 
   return createResponse(
     "If this email is valid and has not been verified, we will send a new verification email.",

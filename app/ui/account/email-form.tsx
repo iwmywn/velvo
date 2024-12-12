@@ -1,7 +1,6 @@
 "use client";
 
 import Wrapper from "@ui/account/wrapper";
-import Toast from "@ui/toast";
 import { toast } from "react-toastify";
 import Button from "@ui/button";
 import { useEffect, useState } from "react";
@@ -31,7 +30,6 @@ export default function EmailForm({
   enpoint,
   buttonText,
 }: EmailFormProps) {
-  const [isClient, setIsClient] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -44,10 +42,6 @@ export default function EmailForm({
       email: "",
     },
   });
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const onSubmit = async (data: EmailData) => {
     try {
@@ -74,7 +68,6 @@ export default function EmailForm({
 
   return (
     <>
-      {isClient && <Toast />}
       <Wrapper title={title}>
         <form
           onSubmit={handleSubmit(onSubmit)}

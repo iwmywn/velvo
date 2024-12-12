@@ -9,6 +9,7 @@ import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "@ui/hooks/auth";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: {
@@ -27,7 +28,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
         <AuthProvider>
-          <div id="popups" className="relative z-[9999]" />
+          <div id="popups" className="relative z-[9999]">
+            <ToastContainer
+              closeButton={false}
+              icon={false}
+              hideProgressBar
+              closeOnClick
+              pauseOnFocusLoss
+            />
+          </div>
           <PopUp />
           <HeightProvider>
             <Header />

@@ -3,9 +3,8 @@ import { fetchCategories, fetchProducts } from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { REVALIDATE_TIME } from "@lib/config";
 
-export const revalidate = REVALIDATE_TIME;
+export const revalidate = 1800;
 
 export async function generateMetadata({
   params,

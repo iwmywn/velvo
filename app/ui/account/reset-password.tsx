@@ -9,7 +9,6 @@ import Button from "@ui/button";
 import { toast } from "react-toastify";
 import { passwordScheme } from "@/schemas";
 import { z } from "zod";
-import Toast from "@ui/toast";
 import Loading from "@ui/loading";
 import { FaXmark } from "react-icons/fa6";
 import NotFound from "@app/not-found";
@@ -80,7 +79,6 @@ export default function ResetPassword({
     <>
       {status === "success" ? (
         <>
-          <Toast />
           <Wrapper title="RESET YOUR PASSWORD">
             <form
               onSubmit={handleSubmit(onSubmit)}

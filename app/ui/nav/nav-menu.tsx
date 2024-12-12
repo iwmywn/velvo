@@ -21,7 +21,7 @@ export default function NavMenu({
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] animate-fadeIn bg-black/70 ${isAnimating && "animate-fadeOut"}`}
+      className={`fixed inset-0 z-[9999] bg-black/70 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
       onClick={handleCloseMenu}
     >
       <div

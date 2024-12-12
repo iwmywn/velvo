@@ -13,14 +13,11 @@ import Button from "@ui/button";
 import { toast } from "react-toastify";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
-import { useEffect, useState } from "react";
-import Toast from "@ui/toast";
 import Link from "next/link";
 
 type SignInFormData = z.infer<typeof signInSchema>;
 
 export default function SignIn() {
-  const [isClient, setIsClient] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -33,10 +30,6 @@ export default function SignIn() {
       password: "",
     },
   });
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   const onSubmit = async (data: SignInFormData) => {
     try {
@@ -65,7 +58,6 @@ export default function SignIn() {
 
   return (
     <>
-      {isClient && <Toast />}
       <div className="flex w-full flex-col items-center px-5">
         <h3 className="mb-2 mt-5 text-left font-medium text-black/75">
           WELCOME BACK

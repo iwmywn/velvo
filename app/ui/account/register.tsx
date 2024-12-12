@@ -13,12 +13,16 @@ import {
 import Button from "@ui/button";
 import { toast } from "react-toastify";
 import { registerSchema } from "@/schemas";
-import Toast from "@ui/toast";
 import Link from "next/link";
+import ReCaptchaPopup from "@ui/recaptcha";
+import { useState } from "react";
+import useOverflow from "@ui/hooks/overflow";
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function Register() {
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -35,7 +39,14 @@ export default function Register() {
     },
   });
 
+  useOverflow(showCaptcha);
+
   const onSubmit = async (data: RegisterFormData) => {
+    if (!showCaptcha && !captchaVerified) {
+      setShowCaptcha(true);
+      return;
+    }
+
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
@@ -55,12 +66,20 @@ export default function Register() {
       }
     } catch (error) {
       toast.error("Something went wrong! Please try again.");
+    } finally {
+      setCaptchaVerified(false);
+      setShowCaptcha(false);
     }
   };
 
   return (
     <>
-      <Toast />
+      {showCaptcha && (
+        <ReCaptchaPopup
+          onVerify={() => setCaptchaVerified(true)}
+          onClose={() => setShowCaptcha(false)}
+        />
+      )}
       <div className="flex w-full flex-col items-center px-5">
         <span className="mb-2 mt-5 text-center text-black/70">
           Create an account and benefit from a more personal shopping

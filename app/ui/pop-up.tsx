@@ -45,7 +45,7 @@ export default function PopUp() {
     isOpen && (
       <Backdrop isAnimating={isAnimating} onClick={handleClose}>
         <div
-          className={`relative mx-6 w-full max-w-[30rem] animate-popUpIn rounded-2xl bg-white px-8 py-6 text-black ${isAnimating && "animate-popUpOut"}`}
+          className={`relative mx-6 w-full max-w-[30rem] rounded-2xl bg-white px-8 py-6 text-black ${isAnimating ? "animate-popUpOut" : "animate-popUpIn"}`}
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col items-center justify-center gap-2 text-center">
