@@ -17,3 +17,23 @@ export default function Button({ children, className, ...rest }: ButtonProps) {
     </button>
   );
 }
+
+export function FormButton({
+  isValid,
+  isSubmitting,
+  buttonText,
+}: {
+  isValid: boolean;
+  isSubmitting: boolean;
+  buttonText: string;
+}) {
+  return (
+    <Button disabled={!isValid || isSubmitting} className="h-10" type="submit">
+      {isSubmitting ? (
+        <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+      ) : (
+        buttonText
+      )}
+    </Button>
+  );
+}

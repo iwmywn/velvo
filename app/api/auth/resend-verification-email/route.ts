@@ -1,13 +1,12 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
-import { sendEmail } from "@lib/actions";
-import { getUserByIdentifier } from "@lib/data";
+import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { emailScheme } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
 
-export async function POST(req: Request) {
+export async function PATCH(req: Request) {
   const data = await req.json();
   const parsedCredentials = emailScheme.safeParse(data);
 

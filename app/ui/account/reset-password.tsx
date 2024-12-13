@@ -4,17 +4,23 @@ import { useState, useEffect } from "react";
 import Wrapper from "@ui/account/wrapper";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
-import Button from "@ui/button";
+import {
+  formClass,
+  boxClass,
+  inputClass,
+  labelClass,
+  errorClass,
+} from "@ui/form-class";
+import { FormButton } from "@ui/button";
 import { toast } from "react-toastify";
-import { passwordScheme } from "@/schemas";
+import { resetPasswordScheme } from "@/schemas";
 import { z } from "zod";
 import Loading from "@ui/loading";
 import { FaXmark } from "react-icons/fa6";
 import NotFound from "@app/not-found";
 import { handleTokenVerification } from "@lib/utils";
 
-type PasswordData = z.infer<typeof passwordScheme>;
+type PasswordFormData = z.infer<typeof resetPasswordScheme>;
 
 export default function ResetPassword({
   token,
@@ -29,8 +35,8 @@ export default function ResetPassword({
     handleSubmit,
     reset,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<PasswordData>({
-    resolver: zodResolver(passwordScheme),
+  } = useForm<PasswordFormData>({
+    resolver: zodResolver(resetPasswordScheme),
     mode: "onChange",
     defaultValues: {
       password: "",
@@ -48,10 +54,10 @@ export default function ResetPassword({
     );
   }, []);
 
-  const onSubmit = async (data: PasswordData) => {
+  const onSubmit = async (data: PasswordFormData) => {
     try {
       const res = await fetch(`/api/auth/reset-password?token=${token}`, {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -82,7 +88,7 @@ export default function ResetPassword({
           <Wrapper title="RESET YOUR PASSWORD">
             <form
               onSubmit={handleSubmit(onSubmit)}
-              className="mb-5 mt-5 flex w-full flex-col gap-1 text-black/65"
+              className={`${formClass} my-5`}
             >
               <div className={boxClass}>
                 <input
@@ -103,30 +109,24 @@ export default function ResetPassword({
               <div className={boxClass}>
                 <input
                   className={inputClass}
-                  id="ConfirmPassword"
+                  id="ConfirmNewPassword"
                   type="password"
-                  placeholder="New password"
+                  placeholder="Confirm new password"
                   {...register("confirmPassword")}
                   disabled={isSubmitting}
                 />
-                <label className={labelClass} htmlFor="ConfirmPassword">
+                <label className={labelClass} htmlFor="ConfirmNewPassword">
                   Confirm new password
                 </label>
                 {errors.confirmPassword && (
                   <p className={errorClass}>{errors.confirmPassword.message}</p>
                 )}
               </div>
-              <Button
-                disabled={!isValid || isSubmitting}
-                className="h-10"
-                type="submit"
-              >
-                {isSubmitting ? (
-                  <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-                ) : (
-                  "Change"
-                )}
-              </Button>
+              <FormButton
+                isValid={isValid}
+                isSubmitting={isSubmitting}
+                buttonText="Change"
+              />
             </form>
           </Wrapper>
         </>

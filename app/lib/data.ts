@@ -1,8 +1,7 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
-import { Category, User, Product } from "@lib/definition";
-import { ObjectId } from "mongodb";
+import { Category, Product } from "@lib/definition";
 
 export async function fetchCategories() {
   try {
@@ -38,29 +37,5 @@ export async function fetchProducts() {
   } catch (error) {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch products.");
-  }
-}
-
-/**
- *
- * @param identifier - Email or ID of the user
- * @returns The user document, if found
- */
-export async function getUserByIdentifier(identifier: string) {
-  try {
-    const db = await connectToDatabase();
-    let query;
-
-    if (ObjectId.isValid(identifier)) {
-      query = { _id: new ObjectId(identifier) };
-    } else {
-      query = { email: identifier };
-    }
-
-    const user = await db.collection<User>("users").findOne(query);
-    return user;
-  } catch (e) {
-    console.error("Failed to fetch user:", e);
-    throw new Error("Failed to fetch user.");
   }
 }

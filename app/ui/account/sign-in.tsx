@@ -3,13 +3,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
+  formClass,
   boxClass,
   inputClass,
   labelClass,
   errorClass,
   linkClass,
 } from "@ui/form-class";
-import Button from "@ui/button";
+import { FormButton } from "@ui/button";
 import { toast } from "react-toastify";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
@@ -65,10 +66,7 @@ export default function SignIn() {
         <span className="mb-8 text-center text-black/70">
           Sign in with your email and password.
         </span>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mb-5 flex w-full flex-col gap-1 text-black/65"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className={`${formClass} mb-5`}>
           <div className={boxClass}>
             <input
               className={inputClass}
@@ -102,17 +100,11 @@ export default function SignIn() {
               <p className={errorClass}>{errors.password.message}</p>
             )}
           </div>
-          <Button
-            disabled={!isValid || isSubmitting}
-            className="h-10"
-            type="submit"
-          >
-            {isSubmitting ? (
-              <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-            ) : (
-              "SIGN IN"
-            )}
-          </Button>
+          <FormButton
+            isValid={isValid}
+            isSubmitting={isSubmitting}
+            buttonText="SIGN IN"
+          />
         </form>
         <Link className={linkClass} href="/user/forgotten-password">
           Forgot password?

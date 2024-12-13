@@ -7,11 +7,12 @@ export default async function verifyToken(token: string) {
 
   try {
     const { payload } = await jwtVerify(token, secret, {
-      issuer: "https://hat-nnva.vercel.app",
-      audience: "https://hat-nnva.vercel.app/api",
+      issuer: process.env.JWT_ISSUER,
+      audience: process.env.JWT_AUDIENCE,
     });
     return { isValid: true, payload };
   } catch (error) {
+    console.error("JWT verification error:", error);
     return { isValid: false, error };
   }
 }

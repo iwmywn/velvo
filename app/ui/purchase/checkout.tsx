@@ -1,9 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import Button from "@ui/button";
+import Button, { FormButton } from "@ui/button";
 import Backdrop from "@ui/overlays/backdrop";
-import { boxClass, inputClass, labelClass, errorClass } from "@ui/form-class";
+import {
+  formClass,
+  boxClass,
+  inputClass,
+  labelClass,
+  errorClass,
+} from "@ui/form-class";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,7 +40,7 @@ export default function Checkout() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<PlaceOrderFormData>({
     resolver: zodResolver(placeOrderSchema),
     mode: "onChange",
@@ -57,20 +63,17 @@ export default function Checkout() {
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <form
-              onSubmit={handleSubmit(onSubmit)}
-              className="flex w-full flex-col gap-1 text-black/65"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className={formClass}>
               <div className={boxClass}>
                 <input
                   className={inputClass}
                   id="FullName"
                   type="text"
-                  placeholder="FullName"
+                  placeholder="Full name"
                   {...register("fullName")}
                 />
                 <label className={labelClass} htmlFor="FullName">
-                  Full Name
+                  Full name
                 </label>
                 {errors.fullName && (
                   <p className={errorClass}>{errors.fullName.message}</p>
@@ -107,9 +110,11 @@ export default function Checkout() {
                   <p className={errorClass}>{errors.address.message}</p>
                 )}
               </div>
-              <Button disabled={!isValid} type="submit">
-                Place Order
-              </Button>
+              <FormButton
+                isValid={isValid}
+                isSubmitting={isSubmitting}
+                buttonText="Place Order"
+              />
             </form>
           </div>
         </Backdrop>

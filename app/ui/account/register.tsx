@@ -4,13 +4,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
+  formClass,
   boxClass,
   inputClass,
   labelClass,
   errorClass,
   linkClass,
 } from "@ui/form-class";
-import Button from "@ui/button";
+import { FormButton } from "@ui/button";
 import { toast } from "react-toastify";
 import { registerSchema } from "@/schemas";
 import Link from "next/link";
@@ -35,6 +36,7 @@ export default function Register() {
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -83,21 +85,18 @@ export default function Register() {
           experience, and quicker online checkout.
         </span>
         <span className="mb-8 text-black/70">All fields are mandatory.</span>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mb-5 flex w-full flex-col gap-1 text-black/65"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className={`${formClass} mb-5`}>
           <div className={boxClass}>
             <input
               className={inputClass}
               id="FirstName"
               type="text"
-              placeholder="First Name"
+              placeholder="First name"
               {...register("firstName")}
               disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="FirstName">
-              First Name
+              First name
             </label>
             {errors.firstName && (
               <p className={errorClass}>{errors.firstName.message}</p>
@@ -108,12 +107,12 @@ export default function Register() {
               className={inputClass}
               id="LastName"
               type="text"
-              placeholder="Last Name"
+              placeholder="Last name"
               {...register("lastName")}
               disabled={isSubmitting}
             />
             <label className={labelClass} htmlFor="LastName">
-              Last Name
+              Last name
             </label>
             {errors.lastName && (
               <p className={errorClass}>{errors.lastName.message}</p>
@@ -143,6 +142,8 @@ export default function Register() {
               placeholder="Password"
               {...register("password")}
               disabled={isSubmitting}
+              maxLength={200}
+              autoComplete="off"
             />
             <label className={labelClass} htmlFor="Password">
               Password
@@ -151,18 +152,29 @@ export default function Register() {
               <p className={errorClass}>{errors.password.message}</p>
             )}
           </div>
-
-          <Button
-            disabled={!isValid || isSubmitting}
-            className="h-10"
-            type="submit"
-          >
-            {isSubmitting ? (
-              <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-            ) : (
-              "CONTINUE"
+          <div className={boxClass}>
+            <input
+              className={inputClass}
+              id="ConfirmPassword"
+              type="password"
+              placeholder="Confirm password"
+              {...register("confirmPassword")}
+              disabled={isSubmitting}
+              maxLength={200}
+              autoComplete="off"
+            />
+            <label className={labelClass} htmlFor="ConfirmPassword">
+              Confirm password
+            </label>
+            {errors.confirmPassword && (
+              <p className={errorClass}>{errors.confirmPassword.message}</p>
             )}
-          </Button>
+          </div>
+          <FormButton
+            isValid={isValid}
+            isSubmitting={isSubmitting}
+            buttonText="CONTINUE"
+          />
         </form>
         <Link className={linkClass} href="/user/resend-verification-email">
           Resend verification email?

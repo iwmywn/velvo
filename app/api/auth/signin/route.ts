@@ -1,7 +1,7 @@
 "use server";
 
 import { SignJWT } from "jose";
-import { getUserByIdentifier } from "@lib/data";
+import { getUserByIdentifier } from "@lib/actions";
 import bcrypt from "bcrypt";
 import { signInSchema } from "@/schemas";
 import cookie from "cookie";
@@ -34,8 +34,8 @@ export async function POST(req: Request) {
   const token = await new SignJWT({ id: existingUser._id })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
-    .setIssuer("https://hat-nnva.vercel.app")
-    .setAudience("https://hat-nnva.vercel.app/api")
+    .setIssuer(process.env.JWT_ISSUER!)
+    .setAudience(process.env.JWT_AUDIENCE!)
     .setExpirationTime("1h")
     .sign(secret);
 

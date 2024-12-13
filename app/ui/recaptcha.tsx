@@ -4,6 +4,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 import { createPortal } from "react-dom";
 import { useState } from "react";
+import useOverflow from "@ui/hooks/overflow";
 
 interface ReCaptchaPopupProps {
   onVerify: () => void;
@@ -50,6 +51,8 @@ export default function ReCaptchaPopup({
     animateAndClose(onClose);
     toast.error("Please complete the CAPTCHA!");
   };
+
+  useOverflow(!isAnimating);
 
   return createPortal(
     <div

@@ -28,4 +28,4 @@ export async function connectToDatabase() {
   return client.db(dbName);
 }
 
-// export default clientPromise;
+export default clientPromise;

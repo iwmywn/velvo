@@ -2,8 +2,7 @@
 
 import { connectToDatabase } from "@lib/mongodb";
 import bcrypt from "bcrypt";
-import { sendEmail } from "@lib/actions";
-import { getUserByIdentifier } from "@lib/data";
+import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";

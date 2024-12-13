@@ -26,6 +26,7 @@ export default function Header() {
       {isOpenMenu && <NavMenu setIsOpen={setIsOpenMenu} />}
       <header
         ref={ref}
+        id="header"
         className="fixed left-0 right-0 top-0 z-20 flex justify-center bg-white/80 backdrop-blur"
       >
         <nav className="mx-8 flex w-full items-center justify-between pb-1 pt-5 md:mx-20 md:pb-3 md:pt-8">

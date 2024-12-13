@@ -1,3 +1,4 @@
+const formClass = "flex w-full flex-col gap-1 text-black/65";
 const boxClass =
   "relative mb-10 w-full after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-stone-200 after:transition-all after:duration-300 hover:after:bg-black";
 const inputClass =
@@ -8,4 +9,4 @@ const errorClass = "absolute top-[105%] text-red-500 text-xs";
 const linkClass =
   "relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-stone-300 after:transition-all after:duration-300 hover:after:bg-black";
 
-export { boxClass, inputClass, labelClass, errorClass, linkClass };
+export { formClass, boxClass, inputClass, labelClass, errorClass, linkClass };

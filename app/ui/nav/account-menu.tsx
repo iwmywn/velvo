@@ -8,11 +8,12 @@ import { useAuthContext } from "@ui/hooks/auth";
 import { useState } from "react";
 
 export default function AccountMenu() {
-  const [isOpenAccount, setIsOpenAccount] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const deviceType = useDeviceType();
-  const { isSignedIn } = useAuthContext();
+  const { isSignedIn, userId } = useAuthContext();
+  console.log(isSignedIn, userId);
 
-  useHideMenu(setIsOpenAccount);
+  useHideMenu(setIsOpen);
 
   return (
     <>
@@ -20,22 +21,22 @@ export default function AccountMenu() {
         <div
           className="relative flex items-center"
           onMouseEnter={() => {
-            if (deviceType === "desktop") setIsOpenAccount(true);
+            if (deviceType === "desktop") setIsOpen(true);
           }}
           onMouseLeave={() => {
-            if (deviceType === "desktop") setIsOpenAccount(false);
+            if (deviceType === "desktop") setIsOpen(false);
           }}
           onClick={(e) => {
             e.stopPropagation();
             if (deviceType !== "desktop") {
-              setIsOpenAccount((prev) => !prev);
+              setIsOpen((prev) => !prev);
             }
           }}
         >
           <Link href="/user/account-settings" title="Account">
             <CiUser className="cursor-pointer text-[22px] md:text-2xl" />
           </Link>
-          {isOpenAccount && (
+          {isOpen && (
             <div className="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 text-sm">
               <div className="absolute -top-2 left-1/2 h-0 w-0 -translate-x-1/2 border-x-8 border-b-8 border-stone-100 border-x-transparent"></div>
               <div className="rounded-md border bg-white">

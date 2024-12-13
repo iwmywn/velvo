@@ -2,9 +2,10 @@
 
 import Wrapper from "@ui/account/wrapper";
 import { toast } from "react-toastify";
-import Button from "@ui/button";
+import { FormButton } from "@ui/button";
 import { useEffect, useState } from "react";
 import {
+  formClass,
   boxClass,
   inputClass,
   labelClass,
@@ -18,7 +19,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import ReCaptchaPopup from "@ui/recaptcha";
 
-type EmailData = z.infer<typeof emailScheme>;
+type EmailFormData = z.infer<typeof emailScheme>;
 
 interface EmailFormProps {
   title: string;
@@ -38,7 +39,7 @@ export default function EmailForm({
     handleSubmit,
     reset,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<EmailData>({
+  } = useForm<EmailFormData>({
     resolver: zodResolver(emailScheme),
     mode: "onChange",
     defaultValues: {
@@ -46,7 +47,7 @@ export default function EmailForm({
     },
   });
 
-  const onSubmit = async (data: EmailData) => {
+  const onSubmit = async (data: EmailFormData) => {
     if (!showCaptcha && !captchaVerified) {
       setShowCaptcha(true);
       return;
@@ -54,7 +55,7 @@ export default function EmailForm({
 
     try {
       const res = await fetch(enpoint, {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -86,10 +87,7 @@ export default function EmailForm({
         />
       )}
       <Wrapper title={title}>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="mb-5 mt-5 flex w-full flex-col gap-1 text-black/65"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className={`${formClass} my-5`}>
           <div className={boxClass}>
             <input
               className={inputClass}
@@ -106,17 +104,11 @@ export default function EmailForm({
               <p className={errorClass}>{errors.email.message}</p>
             )}
           </div>
-          <Button
-            disabled={!isValid || isSubmitting}
-            className="h-10"
-            type="submit"
-          >
-            {isSubmitting ? (
-              <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-            ) : (
-              buttonText
-            )}
-          </Button>
+          <FormButton
+            isValid={isValid}
+            isSubmitting={isSubmitting}
+            buttonText={buttonText}
+          />
         </form>
         <Link className={linkClass} href="/user/signin">
           Back to Sign In
