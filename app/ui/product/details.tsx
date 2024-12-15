@@ -8,7 +8,7 @@ import { Product } from "@lib/definition";
 import ImageTag from "@ui/image";
 
 export default function ProductDetails({ product }: { product: Product }) {
-  const { name, priceCents, images, description, saleOff } = product;
+  const { name, priceCents, images, description, saleOff, sizes } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
@@ -70,7 +70,7 @@ export default function ProductDetails({ product }: { product: Product }) {
         </div>
         <div className="space-y-2">
           <p className="text-sm font-medium text-gray-700">Size</p>
-          <div className="flex gap-4">
+          <div className="flex items-center gap-4">
             {["S", "M", "L", "XL"].map((size) => (
               <label
                 key={size}
@@ -87,10 +87,33 @@ export default function ProductDetails({ product }: { product: Product }) {
                 <span className="select-none">{size}</span>
               </label>
             ))}
+            {selectedSize !== null && (
+              <span
+                className={`text-sm font-medium ${
+                  sizes[selectedSize as keyof typeof sizes] > 0
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {sizes[selectedSize as keyof typeof sizes] > 0
+                  ? `In stock: ${sizes[selectedSize as keyof typeof sizes]}`
+                  : "Out of stock"}
+              </span>
+            )}
           </div>
         </div>
-        <Button className="h-10 w-full" type="submit">
-          ADD TO CART
+        <Button
+          className="h-10 w-full"
+          type="submit"
+          disabled={
+            selectedSize !== null &&
+            sizes[selectedSize as keyof typeof sizes] <= 0
+          }
+        >
+          {selectedSize !== null &&
+          sizes[selectedSize as keyof typeof sizes] > 0
+            ? "ADD TO CART"
+            : "SOLD OUT"}
         </Button>
       </div>
     </div>

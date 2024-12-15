@@ -10,7 +10,7 @@ export default function EmptyState({ emptyState }: EmptyStateProps) {
   const { title, description } = emptyStates[emptyState];
 
   return (
-    <div className="flex min-h-screen flex-col items-center">
+    <div className="flex flex-col items-center">
       <div className="flex flex-col items-center gap-4">
         <div>
           <GiShoppingCart fontSize={50} />

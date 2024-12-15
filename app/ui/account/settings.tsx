@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import Button, { FormButton } from "@ui/button";
 import Backdrop from "@ui/overlays/backdrop";
 import useOverflow from "@ui/hooks/overflow";
@@ -19,12 +19,8 @@ import {
   inputClass,
   labelClass,
   errorClass,
-  linkClass,
 } from "@ui/form-class";
 import { toast } from "react-toastify";
-import { registerSchema } from "@/schemas";
-import Link from "next/link";
-import ReCaptchaPopup from "@ui/recaptcha";
 import { useAuthContext } from "@ui/hooks/auth";
 import { useRouter } from "next/navigation";
 

@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export type User = {
   id: string;
   name: string;
@@ -17,7 +19,7 @@ export type User = {
 
 export type Invoice = {
   id: string;
-  customerId: string;
+  userId: string;
   recipient: string;
   phone: string;
   address: string;
@@ -33,7 +35,7 @@ export type Invoice = {
 
 export type Cart = {
   id: string;
-  customerId: string;
+  userId: string;
   products: [
     {
       productId: string;
@@ -58,10 +60,24 @@ export type Product = {
   categoryId: string;
   saleOff: number;
   slug: string;
-  size: {
+  sizes: {
     S: number;
     M: number;
     L: number;
     XL: number;
   };
 };
+
+export type Products = {
+  productId: ObjectId;
+  quantity: number;
+};
+
+interface InvoiceWithProducts {
+  invoiceId: string;
+  status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
+  products: (Product & { quantity: number })[];
+}
+
+export type CartProductsProps = (Product & { quantity: number })[] | null;
+export type InvoiceProductsProps = InvoiceWithProducts[] | null;

@@ -7,11 +7,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-
-interface AuthContextType {
-  isSignedIn: boolean;
-  userId?: string;
-}
+import { AuthContextType } from "@lib/data";
 
 const AuthContext = createContext<AuthContextType>({
   isSignedIn: false,

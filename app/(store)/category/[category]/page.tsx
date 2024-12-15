@@ -6,21 +6,19 @@ import BreadCrumbs from "@ui/breadcrumbs";
 
 export const revalidate = 1800;
 
+function capitalizeFirstLetter(text: string) {
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ category: string }>;
 }): Promise<Metadata> {
-  const [categories, { category: categoryName }] = await Promise.all([
-    fetchCategories(),
-    params,
-  ]);
-  const validCategories = new Set(categories.map((cat) => cat.name));
+  const { category: categoryName } = await params;
 
   return {
-    title: !validCategories.has(categoryName)
-      ? "NOT FOUND"
-      : `${categoryName} Category`,
+    title: `${capitalizeFirstLetter(categoryName)} Category`,
   };
 }
 
@@ -34,17 +32,20 @@ export default async function CategoryPage({
     fetchProducts(),
     params,
   ]);
-  const category = categories.find((cat) => cat.name === categoryName);
+  const category = categories.find(
+    (cat) => cat.name === capitalizeFirstLetter(categoryName),
+  );
 
   if (!category) return <NotFound />;
 
   const productsByCategory = products.filter(
     (p) => p.categoryId === category.id,
   );
+
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: categoryName },
+    { label: capitalizeFirstLetter(categoryName) },
   ];
 
   return (

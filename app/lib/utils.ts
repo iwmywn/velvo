@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+import { Product } from "@lib/definition";
 
 export function createResponse(message: string, status: number) {
   return new Response(JSON.stringify({ message }), { status });
@@ -36,35 +37,17 @@ export async function handleTokenVerification(
   }
 }
 
-// import {} from // customers,
-// // carts,
-// // invoices,
-// // invoiceDetails,
-// // products,
-// // categories,
-// // productSizes,
-// "@lib/placeholder-data";
-// import {
-//   // Customer,
-//   // Cart,
-//   // Invoice,
-//   // InvoiceDetails,
-//   Product,
-//   // Category,
-//   // ProductSize,
-// } from "./definition";
-
-// function shuffleProduct(product: Product[]) {
-//   const shuffledProduct = [...product];
-//   for (let i = shuffledProduct.length - 1; i > 0; i--) {
-//     const j = Math.floor(Math.random() * (i + 1));
-//     [shuffledProduct[i], shuffledProduct[j]] = [
-//       shuffledProduct[j],
-//       shuffledProduct[i],
-//     ];
-//   }
-//   return shuffledProduct;
-// }
+export function shuffleProduct(product: Product[]) {
+  const shuffledProduct = [...product];
+  for (let i = shuffledProduct.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledProduct[i], shuffledProduct[j]] = [
+      shuffledProduct[j],
+      shuffledProduct[i],
+    ];
+  }
+  return shuffledProduct;
+}
 
 // // function generateSlugWithRandom(
 // //   category: string,
@@ -85,28 +68,29 @@ export async function handleTokenVerification(
 // //   return `${normalize(category)}-${normalize(name)}-${normalize(description)}-${randomString}`;
 // // }
 
-// function formatCurrency(priceCents: number): string {
-//   return (Math.round(priceCents) / 100).toFixed(2);
-// }
+export function formatCurrency(priceCents: number): string {
+  return (Math.round(priceCents) / 100).toFixed(2);
+}
 
-// function getPriceAfterDiscount(
-//   priceCents: number,
-//   saleOff: number,
-//   quantity: number = 1,
-// ): string {
-//   return formatCurrency((priceCents - (priceCents * saleOff) / 100) * quantity);
-// }
+export function getPriceAfterDiscount(
+  priceCents: number,
+  saleOff: number,
+  quantity: number = 1,
+): string {
+  return formatCurrency((priceCents - (priceCents * saleOff) / 100) * quantity);
+}
 
-// function getTotalPriceCents(
-//   products: (Product & { quantity: number })[],
-// ): string {
-//   return formatCurrency(
-//     products.reduce(
-//       (total, product) => total + product.priceCents * product.quantity,
-//       0,
-//     ),
-//   );
-// }
+export function getTotalPriceCents(
+  products: (Product & { quantity: number })[] | null,
+): string {
+  if (!products) return "0";
+  return formatCurrency(
+    products.reduce(
+      (total, product) => total + product.priceCents * product.quantity,
+      0,
+    ),
+  );
+}
 
 // function getCartIdByCustomerId(customerId: number): number | null {
 //   const cartItem = carts.find((cart) => cart.customer_id === customerId);

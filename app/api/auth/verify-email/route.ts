@@ -17,6 +17,11 @@ export async function GET(req: Request) {
   if (!user)
     return createResponse("Token expired or email already verified!", 404);
 
+  await db.collection("carts").insertOne({
+    userId: user._id,
+    products: [],
+  });
+
   const result = await db.collection("users").updateOne(
     { verificationToken: token },
     {

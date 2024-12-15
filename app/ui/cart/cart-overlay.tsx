@@ -10,14 +10,18 @@ import ImageTag from "@ui/image";
 import { getPriceAfterDiscount, getTotalPriceCents } from "@lib/utils";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
+import { CartProductsProps } from "@lib/definition";
 
-export default function CartOverlay() {
+export default function CartOverlay({
+  cartProducts,
+}: {
+  cartProducts: CartProductsProps;
+}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
-  // const cartProducts = getCartProductsByCustomerId(1);
-  // const totalPriceCents = getTotalPriceCents(cartProducts);
+  const totalPriceCents = getTotalPriceCents(cartProducts);
   const handleClose = (shouldNavigate: boolean) => {
     setIsAnimating(true);
     setTimeout(() => {
@@ -44,31 +48,35 @@ export default function CartOverlay() {
         <div className="flex h-full flex-col px-6 pt-6 text-sm">
           <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
           <div className="mt-4">
-            {cartProducts.map(
-              ({
-                name,
-                priceCents,
-                images,
-                description,
-                saleOff,
-                slug,
-                quantity,
-              }) => (
-                <div className="mb-2 flex items-center gap-2" key={slug}>
-                  <ImageTag src={images[0]} alt={description} />
-                  <div className="flex-1">
-                    <span className="mb-1 line-clamp-1 font-medium">
-                      {name}
-                    </span>
-                    <span className="line-clamp-1 opacity-65">
-                      Quantity: {quantity}
+            {cartProducts === null ? (
+              <p>You have no products in your shopping cart.</p>
+            ) : (
+              cartProducts.map(
+                ({
+                  name,
+                  priceCents,
+                  images,
+                  description,
+                  saleOff,
+                  slug,
+                  quantity,
+                }) => (
+                  <div className="mb-2 flex items-center gap-2" key={slug}>
+                    <ImageTag src={images[0]} alt={description} />
+                    <div className="flex-1">
+                      <span className="mb-1 line-clamp-1 font-medium">
+                        {name}
+                      </span>
+                      <span className="line-clamp-1 opacity-65">
+                        Quantity: {quantity}
+                      </span>
+                    </div>
+                    <span className="opacity-65">
+                      ${getPriceAfterDiscount(priceCents, saleOff)}
                     </span>
                   </div>
-                  <span className="opacity-65">
-                    ${getPriceAfterDiscount(priceCents, saleOff)}
-                  </span>
-                </div>
-              ),
+                ),
+              )
             )}
           </div>
 

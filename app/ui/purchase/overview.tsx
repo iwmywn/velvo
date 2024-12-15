@@ -9,16 +9,16 @@ import Cancelled from "@ui/purchase/cancelled";
 import Loading from "@ui/loading";
 import useHideMenu from "@ui/hooks/hide-menu";
 import BreadCrumbs from "@ui/breadcrumbs";
+import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
 
 const tabs = [
-  { key: "to-pay", label: "TO PAY", component: ToPay },
+  { key: "to-pay", label: "TO PAY" },
   {
     key: "to-ship-and-receive",
     label: "TO SHIP & RECEIVE",
-    component: ToShipAndReceive,
   },
-  { key: "completed", label: "COMPLETED", component: Completed },
-  { key: "cancelled", label: "CANCELLED", component: Cancelled },
+  { key: "completed", label: "COMPLETED" },
+  { key: "cancelled", label: "CANCELLED" },
 ] as const;
 
 const breadcrumbs = [
@@ -31,7 +31,13 @@ const breadcrumbs = [
   },
 ];
 
-export default function PurchaseOverview() {
+export default function PurchaseOverview({
+  invoiceProducts,
+  cartProducts,
+}: {
+  invoiceProducts: InvoiceProductsProps;
+  cartProducts: CartProductsProps;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
@@ -54,7 +60,6 @@ export default function PurchaseOverview() {
   }
 
   const activeTab = tabs.find((tab) => tab.key === activeTabKey);
-  const ActiveComponent = activeTab?.component;
   const tabsHTML = tabs.map(({ key, label }) => (
     <div
       key={key}
@@ -95,9 +100,17 @@ export default function PurchaseOverview() {
           {tabsHTML}
         </div>
 
-        {ActiveComponent && (
+        {activeTab && (
           <div className="min-h-screen text-sm">
-            <ActiveComponent />
+            {activeTab.key === "to-pay" ? (
+              <ToPay cartProducts={cartProducts} />
+            ) : activeTab.key === "to-ship-and-receive" ? (
+              <ToShipAndReceive invoiceProducts={invoiceProducts} />
+            ) : activeTab.key === "completed" ? (
+              <Completed invoiceProducts={invoiceProducts} />
+            ) : (
+              <Cancelled invoiceProducts={invoiceProducts} />
+            )}
           </div>
         )}
       </div>
