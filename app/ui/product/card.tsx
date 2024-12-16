@@ -21,13 +21,18 @@ export default function ProductCard({
     let intervalId: NodeJS.Timeout | null = null;
 
     if (hovered && images.length > 1) {
-      intervalId = setInterval(() => {
-        setCurrentImageIndex((prevIndex) =>
-          prevIndex === images.length - 1 ? 0 : prevIndex + 1,
-        );
-      }, 800);
-    } else if (intervalId) {
-      clearInterval(intervalId);
+      if (!intervalId) {
+        intervalId = setInterval(() => {
+          setCurrentImageIndex((prevIndex) =>
+            prevIndex === images.length - 1 ? 0 : prevIndex + 1,
+          );
+        }, 900);
+      }
+    } else {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
     }
 
     return () => {
@@ -44,7 +49,6 @@ export default function ProductCard({
         setHovered(false);
         setCurrentImageIndex(0);
       }}
-      title={name}
     >
       {saleOff > 0 && (
         <div className="absolute left-0 top-0 z-10 rounded-tl-lg bg-red-600 px-3 py-1 text-xs font-bold text-white">
@@ -59,6 +63,7 @@ export default function ProductCard({
           height={240}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
           className="transition-transform duration-300 group-hover:scale-105"
+          priority
           style={{ objectFit: "contain" }}
         />
       </div>

@@ -16,12 +16,12 @@ export default function ProductDetails({ product }: { product: Product }) {
   const { id, name, priceCents, images, description, saleOff, sizes } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [isAdd, setIsAdd] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { userId } = useAuthContext();
   const { setQuantity } = useCartContext();
 
   const handleAddToCart = async () => {
-    setIsAdd(true);
+    setIsLoading(true);
     try {
       const message = await addToCart(id, userId, selectedSize!);
 
@@ -36,7 +36,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       console.error("Error adding product to cart:", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
-      setIsAdd(false);
+      setIsLoading(false);
     }
   };
 
@@ -76,12 +76,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       </div>
       <div className="col-span-5 space-y-6 lg:col-span-4">
         <h1 className="text-2xl font-extrabold text-gray-900">{name}</h1>
-        <p className="text-sm text-gray-600">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet aliquam
-          exercitationem repellat cupiditate, facere eius excepturi obcaecati
-          illo neque minima maiores nulla ipsam quia voluptatum dignissimos
-          veniam?
-        </p>
+        <p className="text-sm text-gray-600">{description}</p>
         <div className="text-lg font-bold text-gray-900">
           {saleOff > 0 ? (
             <>
@@ -131,7 +126,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           </div>
         </div>
         <Button
-          className="h-10 w-full"
+          className="relative flex h-10 w-full items-center justify-center"
           disabled={
             userId === undefined ||
             selectedSize === null ||
@@ -140,8 +135,8 @@ export default function ProductDetails({ product }: { product: Product }) {
           }
           onClick={handleAddToCart}
         >
-          {isAdd ? (
-            <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+          {isLoading ? (
+            <div className="absolute mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
           ) : userId === undefined ? (
             "PLEASE SIGN IN TO BUY"
           ) : selectedSize === null ? (

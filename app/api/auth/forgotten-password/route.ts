@@ -41,7 +41,7 @@ export async function PATCH(req: Request) {
   if (result.modifiedCount === 0)
     return createResponse("Request failed! Try again later.", 500);
 
-  // await sendEmail(email, verificationToken, "resetPassword");
+  await sendEmail(email, verificationToken, "resetPassword");
 
   return createResponse(
     "If this email is valid, we will send a new password reset email.",

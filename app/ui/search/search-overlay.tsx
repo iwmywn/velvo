@@ -45,7 +45,10 @@ export default function SearchOverlay({ products }: { products: Product[] }) {
       setFilteredProducts([]);
     } else {
       const results = products.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        product.name
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .includes(searchTerm.toLowerCase().replace(/\s+/g, "-")),
       );
       setFilteredProducts(results);
     }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ToPay from "@ui/purchase/to-pay";
 import ToShipAndReceive from "@ui/purchase/to-ship-receive";
@@ -103,13 +103,21 @@ export default function PurchaseOverview({
         {activeTab && (
           <div className="min-h-screen text-sm">
             {activeTab.key === "to-pay" ? (
-              <ToPay cartProducts={cartProducts} />
+              <Suspense fallback={<Loading />}>
+                <ToPay cartProducts={cartProducts} />
+              </Suspense>
             ) : activeTab.key === "to-ship-and-receive" ? (
-              <ToShipAndReceive invoiceProducts={invoiceProducts} />
+              <Suspense fallback={<Loading />}>
+                <ToShipAndReceive invoiceProducts={invoiceProducts} />
+              </Suspense>
             ) : activeTab.key === "completed" ? (
-              <Completed invoiceProducts={invoiceProducts} />
+              <Suspense fallback={<Loading />}>
+                <Completed invoiceProducts={invoiceProducts} />
+              </Suspense>
             ) : (
-              <Cancelled invoiceProducts={invoiceProducts} />
+              <Suspense fallback={<Loading />}>
+                <Cancelled invoiceProducts={invoiceProducts} />
+              </Suspense>
             )}
           </div>
         )}
