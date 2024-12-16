@@ -90,3 +90,13 @@ export const deleteAccountScheme = z.object({
 export const deleteAccountWithIdScheme = deleteAccountScheme.extend({
   userId: z.string().min(1, "User ID is required."),
 });
+
+export const placeOrderSchema = z.object({
+  fullName: z.string().min(1, "Full Name is required"),
+  phone: z
+    .string()
+    .min(10, "Phone must have at least 10 digits")
+    .max(11, "Phone must have at most 11 digits")
+    .regex(/^(0)[1-9][0-9]{8,9}$/, "Phone must be a valid number"),
+  address: z.string().min(1, "Address is required"),
+});

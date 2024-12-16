@@ -1,3 +1,5 @@
+"use client";
+
 import { Product } from "@lib/definition";
 import { getPriceAfterDiscount } from "@lib/utils";
 import Button from "@ui/button";
@@ -9,6 +11,7 @@ import { useAuthContext } from "@ui/hooks/auth";
 import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
 import { fetchCartProductQuantity } from "@lib/data";
 import { toast } from "react-toastify";
+import { useState } from "react";
 
 const ActionButton = ({
   handleDeleteFromCart,
@@ -39,40 +42,65 @@ export default function ProductRow({
   const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
   const { setQuantity } = useCartContext();
   const { userId } = useAuthContext();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleAddToCart = async () => {
-    const message = await addToCart(id, userId, size);
+    setIsLoading(true);
+    try {
+      const message = await addToCart(id, userId, size);
 
-    if (message === "Product added to cart.") {
-      const updatedQuantity = await fetchCartProductQuantity(userId);
-      setQuantity(updatedQuantity);
-    } else {
-      toast.error(message);
+      if (message === "Product added to cart.") {
+        const updatedQuantity = await fetchCartProductQuantity(userId);
+        setQuantity(updatedQuantity);
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      toast.error("Something went wrong! Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleRemoveFromCart = async () => {
-    const message = await removeFromCart(id, userId, size);
+    setIsLoading(true);
+    try {
+      const message = await removeFromCart(id, userId, size);
 
-    if (
-      message === "Product removed from cart." ||
-      message === "Product quantity decreased."
-    ) {
-      const updatedQuantity = await fetchCartProductQuantity(userId);
-      setQuantity(updatedQuantity);
-    } else {
-      toast.error(message);
+      if (
+        message === "Product removed from cart." ||
+        message === "Product quantity decreased."
+      ) {
+        const updatedQuantity = await fetchCartProductQuantity(userId);
+        setQuantity(updatedQuantity);
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      console.error("Error removing product to cart:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleDeleteFromCart = async () => {
-    const message = await deleteFromCart(id, userId, size);
+    setIsLoading(true);
+    try {
+      const message = await deleteFromCart(id, userId, size);
 
-    if (message === "Product removed from cart!") {
-      const updatedQuantity = await fetchCartProductQuantity(userId);
-      setQuantity(updatedQuantity);
-    } else {
-      toast.error(message);
+      if (message === "Product removed from cart!") {
+        const updatedQuantity = await fetchCartProductQuantity(userId);
+        setQuantity(updatedQuantity);
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      console.error("Error deleting product to cart:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -81,7 +109,9 @@ export default function ProductRow({
       <Link href={`/product/${slug}`}>
         <div className="flex items-center gap-2 border sm:flex-col sm:justify-center sm:gap-1 sm:border-0 sm:py-1 sm:text-center">
           <ImageTag src={images[0]} alt={description} />
-          <span className="line-clamp-2 font-medium">{name}</span>
+          <span className="line-clamp-2 font-medium">
+            {name} - {size}
+          </span>
         </div>
       </Link>
 
@@ -92,7 +122,7 @@ export default function ProductRow({
         </div>
         <div className="flex justify-between">
           <span>Total:</span>
-          <span className="opacity-65">{formattedTotal}</span>
+          <span className="opacity-65">{isAdd(isLoading, formattedTotal)}</span>
         </div>
       </div>
 
@@ -124,12 +154,20 @@ export default function ProductRow({
       </div>
 
       <div className="hidden items-center justify-center opacity-65 sm:flex">
-        {formattedTotal}
+        {isAdd(isLoading, formattedTotal)}
       </div>
 
       <div className="hidden items-center justify-end sm:flex sm:justify-center">
         <ActionButton handleDeleteFromCart={handleDeleteFromCart} />
       </div>
     </div>
+  );
+}
+
+function isAdd(isLoading: boolean, price: string) {
+  return isLoading ? (
+    <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+  ) : (
+    price
   );
 }

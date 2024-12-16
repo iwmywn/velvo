@@ -11,7 +11,6 @@ export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const deviceType = useDeviceType();
   const { isSignedIn, userId } = useAuthContext();
-  console.log(isSignedIn, userId);
 
   useHideMenu(setIsOpen);
 

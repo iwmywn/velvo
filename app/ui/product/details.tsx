@@ -16,18 +16,27 @@ export default function ProductDetails({ product }: { product: Product }) {
   const { id, name, priceCents, images, description, saleOff, sizes } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [isAdd, setIsAdd] = useState<boolean>(false);
   const { userId } = useAuthContext();
   const { setQuantity } = useCartContext();
 
   const handleAddToCart = async () => {
-    const message = await addToCart(id, userId, selectedSize!);
+    setIsAdd(true);
+    try {
+      const message = await addToCart(id, userId, selectedSize!);
 
-    if (message === "Product added to cart.") {
-      toast.success(message);
-      const updatedQuantity = await fetchCartProductQuantity(userId);
-      setQuantity(updatedQuantity);
-    } else {
-      toast.error(message);
+      if (message === "Product added to cart.") {
+        toast.success(message);
+        const updatedQuantity = await fetchCartProductQuantity(userId);
+        setQuantity(updatedQuantity);
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      console.error("Error adding product to cart:", error);
+      toast.error("Something went wrong! Please try again.");
+    } finally {
+      setIsAdd(false);
     }
   };
 
@@ -131,14 +140,18 @@ export default function ProductDetails({ product }: { product: Product }) {
           }
           onClick={handleAddToCart}
         >
-          {userId === undefined
-            ? "PLEASE SIGN IN TO BUY"
-            : selectedSize === null
-              ? "PLEASE SELECT SIZE"
-              : selectedSize !== null &&
-                  sizes[selectedSize as keyof typeof sizes] > 0
-                ? "ADD TO CART"
-                : "SOLD OUT"}
+          {isAdd ? (
+            <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+          ) : userId === undefined ? (
+            "PLEASE SIGN IN TO BUY"
+          ) : selectedSize === null ? (
+            "PLEASE SELECT SIZE"
+          ) : selectedSize !== null &&
+            sizes[selectedSize as keyof typeof sizes] > 0 ? (
+            "ADD TO CART"
+          ) : (
+            "SOLD OUT"
+          )}
         </Button>
       </div>
     </div>

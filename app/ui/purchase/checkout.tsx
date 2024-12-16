@@ -14,16 +14,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import useOverflow from "@ui/hooks/overflow";
-
-const placeOrderSchema = z.object({
-  fullName: z.string().min(1, "Full Name is required"),
-  phone: z
-    .string()
-    .min(10, "Phone must have at least 10 digits")
-    .max(11, "Phone must have at most 11 digits")
-    .regex(/^(0)[1-9][0-9]{8,9}$/, "Phone must be a valid number"),
-  address: z.string().min(1, "Address is required"),
-});
+import { placeOrderSchema } from "@/schemas";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
