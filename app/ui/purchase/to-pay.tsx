@@ -26,7 +26,7 @@ export default function ToPay({
           </div>
 
           {cartProducts.map((product) => (
-            <ProductRow key={product.slug} {...product} />
+            <ProductRow key={`${product.slug}${product.size}`} {...product} />
           ))}
 
           <div className="flex grid-cols-[2fr_1fr_1fr_1fr_1fr] items-center justify-between gap-2 border-t text-center sm:grid">

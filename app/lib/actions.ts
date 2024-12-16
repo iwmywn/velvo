@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import { connectToDatabase } from "@lib/mongodb";
 import { User } from "@lib/definition";
 import nodemailer from "nodemailer";
+import { revalidatePath } from "next/cache";
 
 /**
  *
@@ -85,4 +86,182 @@ export async function sendEmail(
     </table>  
     `,
   });
+}
+
+export async function addToCart(
+  productId: string,
+  userId: string | undefined,
+  size: string,
+  quantity: number = 1,
+): Promise<string> {
+  if (!userId || !productId) {
+    return "User ID or Product ID is missing!";
+  }
+
+  try {
+    const db = await connectToDatabase();
+    const cartCollection = db.collection("carts");
+    const productCollection = db.collection("products");
+    const product = await productCollection.findOne({
+      _id: new ObjectId(productId),
+    });
+    const remainingQuantity: number = product!.sizes[size];
+    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+    let currentQuantityInCart: number = 0;
+
+    if (cart) {
+      const existingProduct = cart.products.find(
+        (p: { productId: ObjectId; size: string }) =>
+          p.productId.toString() === productId && p.size === size,
+      );
+
+      if (existingProduct) {
+        currentQuantityInCart = existingProduct.quantity;
+      }
+    }
+
+    if (currentQuantityInCart + quantity > remainingQuantity) {
+      return `Cannot add more. You have added ${currentQuantityInCart} product(s). Only ${
+        remainingQuantity - currentQuantityInCart
+      } left in stock.`;
+    }
+
+    if (!cart) {
+      await cartCollection.insertOne({
+        userId: new ObjectId(userId),
+        products: [
+          {
+            productId: new ObjectId(productId),
+            quantity,
+            size,
+          },
+        ],
+      });
+    } else {
+      const existingProductIndex = cart.products.findIndex(
+        (p: { productId: ObjectId; size: string }) =>
+          p.productId.toString() === productId && p.size === size,
+      );
+
+      if (existingProductIndex !== -1) {
+        await cartCollection.updateOne(
+          {
+            userId: new ObjectId(userId),
+            products: {
+              $elemMatch: {
+                productId: new ObjectId(productId),
+                size: size,
+              },
+            },
+          },
+          { $inc: { "products.$.quantity": quantity } },
+        );
+      } else {
+        await cartCollection.updateOne(
+          { userId: new ObjectId(userId) },
+          {
+            $push: {
+              products: {
+                productId: new ObjectId(productId),
+                quantity,
+                size,
+              } as any,
+            },
+          },
+        );
+      }
+    }
+
+    revalidatePath("/user/purchase");
+    return "Product added to cart.";
+  } catch (error) {
+    console.error("Error adding product to cart:", error);
+    return "An error occurred while adding product to cart.";
+  }
+}
+
+export async function removeFromCart(
+  productId: string,
+  userId: string | undefined,
+  size: string,
+): Promise<string> {
+  if (!userId || !productId) {
+    return "User ID or Product ID is missing!";
+  }
+
+  try {
+    const db = await connectToDatabase();
+    const cartCollection = db.collection("carts");
+    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+
+    const existingProduct = cart!.products.find(
+      (p: { productId: ObjectId; size: string }) =>
+        p.productId.toString() === productId && p.size === size,
+    );
+
+    if (existingProduct.quantity === 1) {
+      await cartCollection.updateOne(
+        { userId: new ObjectId(userId) },
+        {
+          $pull: {
+            products: { productId: new ObjectId(productId), size },
+          } as any,
+        },
+      );
+      revalidatePath("/user/purchase");
+      return "Product removed from cart.";
+    } else {
+      await cartCollection.updateOne(
+        {
+          userId: new ObjectId(userId),
+          products: {
+            $elemMatch: {
+              productId: new ObjectId(productId),
+              size: size,
+            },
+          },
+        },
+        { $inc: { "products.$.quantity": -1 } },
+      );
+      revalidatePath("/user/purchase");
+      return "Product quantity decreased.";
+    }
+  } catch (error) {
+    console.error("Error removing product from cart:", error);
+    return "An error occurred while removing product from cart.";
+  }
+}
+
+export async function deleteFromCart(
+  productId: string,
+  userId: string | undefined,
+  size: string,
+): Promise<string> {
+  if (!userId || !productId) {
+    return "User ID or Product ID is missing!";
+  }
+
+  try {
+    const db = await connectToDatabase();
+    const cartCollection = db.collection("carts");
+
+    const result = await cartCollection.updateOne(
+      { userId: new ObjectId(userId) },
+      {
+        $pull: {
+          products: { productId: new ObjectId(productId), size },
+        } as any,
+      },
+    );
+
+    if (result.modifiedCount > 0) {
+      revalidatePath("/user/purchase");
+      return "Product removed from cart!";
+    } else {
+      return "Product not found in the cart!";
+    }
+  } catch (error) {
+    console.error("Error deleting product from cart:", error);
+    return "An error occurred while removing product from cart.";
+  }
 }

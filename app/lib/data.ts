@@ -55,7 +55,7 @@ export async function fetchProducts() {
 
 export async function fetchCartProducts(
   userId: string | undefined,
-): Promise<(Product & { quantity: number })[] | null> {
+): Promise<(Product & { quantity: number; size: string })[] | null> {
   if (!userId) return null;
 
   try {
@@ -69,15 +69,20 @@ export async function fetchCartProducts(
     const productIds = cart.products.map(
       (p: Products) => new ObjectId(p.productId),
     );
+
+    if (productIds.length === 0) return null;
+
     const products = await db
       .collection("products")
       .find({ _id: { $in: productIds } })
       .toArray();
 
-    const result = products.map((product) => {
-      const quantity: number = cart.products.find(
-        (p: Products) => p.productId.toString() === product._id.toString(),
-      ).quantity;
+    const result = cart.products.map((cartProduct: Products) => {
+      const product = products.find(
+        (p) => p._id.toString() === cartProduct.productId.toString(),
+      );
+
+      if (!product) return null;
 
       return {
         id: product._id.toString(),
@@ -89,11 +94,14 @@ export async function fetchCartProducts(
         saleOff: product.saleOff,
         slug: product.slug,
         sizes: product.sizes,
-        quantity,
+        quantity: cartProduct.quantity,
+        size: cartProduct.size,
       };
     });
 
-    return result;
+    return result.filter(
+      (item: CartProductsProps): item is NonNullable<typeof item> => !!item,
+    );
   } catch (error) {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch carts.");
@@ -104,7 +112,7 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
   | {
       invoiceId: string;
       status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
-      products: (Product & { quantity: number })[];
+      products: (Product & { quantity: number; size: string })[];
     }[]
   | null
 > {
@@ -131,24 +139,29 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
           .find({ _id: { $in: productIds } })
           .toArray();
 
-        const enrichedProducts = products.map((product) => {
-          const quantity: number = invoice.products.find(
-            (p: Products) => p.productId.toString() === product._id.toString(),
-          ).quantity;
+        const enrichedProducts = invoice.products.map(
+          (invoiceProducts: Products) => {
+            const product = products.find(
+              (p) => p._id.toString() === invoiceProducts.productId.toString(),
+            );
 
-          return {
-            id: product._id.toString(),
-            name: product.name,
-            priceCents: product.priceCents,
-            images: product.images,
-            description: product.description,
-            categoryId: product.categoryId.toString(),
-            saleOff: product.saleOff,
-            slug: product.slug,
-            sizes: product.sizes,
-            quantity: quantity,
-          };
-        });
+            if (!product) return null;
+
+            return {
+              id: product._id.toString(),
+              name: product.name,
+              priceCents: product.priceCents,
+              images: product.images,
+              description: product.description,
+              categoryId: product.categoryId.toString(),
+              saleOff: product.saleOff,
+              slug: product.slug,
+              sizes: product.sizes,
+              quantity: invoiceProducts.quantity,
+              size: invoiceProducts.size,
+            };
+          },
+        );
 
         return {
           invoiceId: invoice._id.toString(),
@@ -162,5 +175,32 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
   } catch (error) {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch invoices.");
+  }
+}
+
+export async function fetchCartProductQuantity(
+  userId: string | undefined,
+): Promise<number> {
+  if (!userId) return 0;
+
+  try {
+    const db = await connectToDatabase();
+    const cart = await db
+      .collection("carts")
+      .findOne({ userId: new ObjectId(userId) });
+
+    if (!cart || !cart.products || cart.products.length === 0) return 0;
+
+    const totalQuantity = cart.products.reduce(
+      (sum: number, product: { quantity: number }) => {
+        return sum + product.quantity;
+      },
+      0,
+    );
+
+    return totalQuantity;
+  } catch (error) {
+    console.error("Error fetching cart product count:", error);
+    return 0;
   }
 }

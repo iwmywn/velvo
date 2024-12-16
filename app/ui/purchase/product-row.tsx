@@ -4,23 +4,20 @@ import Button from "@ui/button";
 import ImageTag from "@ui/image";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
+import { useCartContext } from "@ui/hooks/cart";
+import { useAuthContext } from "@ui/hooks/auth";
+import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
+import { fetchCartProductQuantity } from "@lib/data";
+import { toast } from "react-toastify";
 
-const QuantityControl = ({ quantity }: { quantity: number }) => (
-  <div className="flex w-full max-w-[100px] items-center border">
-    <button className="flex-1 border-r py-1 transition-all duration-300 hover:bg-stone-100">
-      -
-    </button>
-    <span className="flex-1 select-none py-1 text-center">{quantity}</span>
-    <button className="flex-1 border-l py-1 transition-all duration-300 hover:bg-stone-100">
-      +
-    </button>
-  </div>
-);
-
-const ActionButton = () => (
+const ActionButton = ({
+  handleDeleteFromCart,
+}: {
+  handleDeleteFromCart: () => void;
+}) => (
   <Button
     className="flex items-center justify-center gap-2 px-4 sm:max-w-[100px] sm:flex-1 sm:px-0"
-    type="submit"
+    onClick={handleDeleteFromCart}
   >
     <MdDelete />
     <span className="hidden sm:inline">Delete</span>
@@ -28,6 +25,7 @@ const ActionButton = () => (
 );
 
 export default function ProductRow({
+  id,
   name,
   priceCents,
   images,
@@ -35,9 +33,48 @@ export default function ProductRow({
   saleOff,
   slug,
   quantity,
-}: Product & { quantity: number }) {
+  size,
+}: Product & { quantity: number; size: string }) {
   const formattedPrice = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
   const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
+  const { setQuantity } = useCartContext();
+  const { userId } = useAuthContext();
+
+  const handleAddToCart = async () => {
+    const message = await addToCart(id, userId, size);
+
+    if (message === "Product added to cart.") {
+      const updatedQuantity = await fetchCartProductQuantity(userId);
+      setQuantity(updatedQuantity);
+    } else {
+      toast.error(message);
+    }
+  };
+
+  const handleRemoveFromCart = async () => {
+    const message = await removeFromCart(id, userId, size);
+
+    if (
+      message === "Product removed from cart." ||
+      message === "Product quantity decreased."
+    ) {
+      const updatedQuantity = await fetchCartProductQuantity(userId);
+      setQuantity(updatedQuantity);
+    } else {
+      toast.error(message);
+    }
+  };
+
+  const handleDeleteFromCart = async () => {
+    const message = await deleteFromCart(id, userId, size);
+
+    if (message === "Product removed from cart!") {
+      const updatedQuantity = await fetchCartProductQuantity(userId);
+      setQuantity(updatedQuantity);
+    } else {
+      toast.error(message);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4 rounded-md border p-2 text-sm sm:grid sm:grid-cols-[2fr_1fr_1fr_1fr_1fr] sm:gap-2 sm:p-0">
@@ -64,9 +101,25 @@ export default function ProductRow({
       </div>
 
       <div className="flex items-center justify-between sm:justify-center">
-        <QuantityControl quantity={quantity} />
+        <div className="flex w-full max-w-[100px] items-center border">
+          <button
+            className="flex-1 border-r py-1 transition-all duration-300 hover:bg-stone-100"
+            onClick={handleRemoveFromCart}
+          >
+            -
+          </button>
+          <span className="flex-1 select-none py-1 text-center">
+            {quantity}
+          </span>
+          <button
+            className="flex-1 border-l py-1 transition-all duration-300 hover:bg-stone-100"
+            onClick={handleAddToCart}
+          >
+            +
+          </button>
+        </div>
         <div className="block sm:hidden">
-          <ActionButton />
+          <ActionButton handleDeleteFromCart={handleDeleteFromCart} />
         </div>
       </div>
 
@@ -75,7 +128,7 @@ export default function ProductRow({
       </div>
 
       <div className="hidden items-center justify-end sm:flex sm:justify-center">
-        <ActionButton />
+        <ActionButton handleDeleteFromCart={handleDeleteFromCart} />
       </div>
     </div>
   );

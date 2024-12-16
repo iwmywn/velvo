@@ -29,6 +29,7 @@ export type Invoice = {
     {
       productId: string;
       quantity: number;
+      size: string;
     },
   ];
 };
@@ -40,6 +41,7 @@ export type Cart = {
     {
       productId: string;
       quantity: number;
+      size: string;
     },
   ];
 };
@@ -71,13 +73,16 @@ export type Product = {
 export type Products = {
   productId: ObjectId;
   quantity: number;
+  size: string;
 };
 
 interface InvoiceWithProducts {
   invoiceId: string;
   status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
-  products: (Product & { quantity: number })[];
+  products: (Product & { quantity: number; size: string })[];
 }
 
-export type CartProductsProps = (Product & { quantity: number })[] | null;
+export type CartProductsProps =
+  | (Product & { quantity: number; size: string })[]
+  | null;
 export type InvoiceProductsProps = InvoiceWithProducts[] | null;

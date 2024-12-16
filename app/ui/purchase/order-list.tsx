@@ -16,7 +16,6 @@ export default function OrderList({
   orderStatus: ("WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED")[];
   emptyState: "toShipNReceive" | "cancelled" | "completed";
 }) {
-  console.log(orderStatus);
   if (!invoiceProducts) {
     return <EmptyState emptyState={emptyState} />;
   }
@@ -60,6 +59,7 @@ export default function OrderList({
                       saleOff,
                       slug,
                       quantity,
+                      size,
                     },
                     index,
                   ) => (
@@ -72,7 +72,7 @@ export default function OrderList({
                           <ImageTag src={images[0]} alt={description} />
                           <div>
                             <h4 className="mb-1 line-clamp-2 font-medium">
-                              {name}
+                              {name} - {size}
                             </h4>
                             <p className="flex flex-wrap gap-y-1 opacity-65">
                               <span>Quantity: {quantity}</span>
@@ -106,19 +106,19 @@ export default function OrderList({
                           </span>
                         </Button>
                       )}
-                      {status === "WAITING" && (
-                        <Button
-                          className="ml-auto flex items-center gap-2"
-                          type="submit"
-                        >
-                          <MdOutlineCancel />
-                          <span className="hidden sm:inline sm:truncate">
-                            Cancell
-                          </span>
-                        </Button>
-                      )}
                     </div>
                   ),
+                )}
+                {status === "WAITING" && (
+                  <Button
+                    className="ml-auto flex items-center gap-2"
+                    type="submit"
+                  >
+                    <MdOutlineCancel />
+                    <span className="hidden sm:inline sm:truncate">
+                      Cancell
+                    </span>
+                  </Button>
                 )}
               </div>
             </div>

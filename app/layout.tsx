@@ -5,6 +5,7 @@ import Header from "@ui/header";
 import Footer from "@ui/footer";
 import ScrollToTop from "@ui/to-top";
 import { HeightProvider } from "@ui/hooks/height";
+import { CartProvider } from "@ui/hooks/cart";
 import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,27 +29,29 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
         <AuthProvider>
-          <div id="popups" className="relative z-[9999]">
-            <ToastContainer
-              closeButton={false}
-              icon={false}
-              hideProgressBar
-              closeOnClick
-              pauseOnFocusLoss
-              pauseOnHover
-            />
-          </div>
-          <PopUp />
-          <HeightProvider>
-            <Header />
-            <Gap z={10} />
-          </HeightProvider>
-          {children}
-          <HeightProvider>
-            <Gap z={-9999} />
-            <Footer />
-          </HeightProvider>
-          <ScrollToTop />
+          <CartProvider>
+            <div id="popups" className="relative z-[9999]">
+              <ToastContainer
+                closeButton={false}
+                icon={false}
+                hideProgressBar
+                closeOnClick
+                pauseOnFocusLoss
+                pauseOnHover
+              />
+            </div>
+            <PopUp />
+            <HeightProvider>
+              <Header />
+              <Gap z={10} />
+            </HeightProvider>
+            {children}
+            <HeightProvider>
+              <Gap z={-9999} />
+              <Footer />
+            </HeightProvider>
+            <ScrollToTop />
+          </CartProvider>
         </AuthProvider>
       </body>
     </html>

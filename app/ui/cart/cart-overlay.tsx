@@ -60,15 +60,19 @@ export default function CartOverlay({
                   saleOff,
                   slug,
                   quantity,
+                  size,
                 }) => (
-                  <div className="mb-2 flex items-center gap-2" key={slug}>
+                  <div
+                    className="mb-2 flex items-center gap-2"
+                    key={`${slug}-${size}`}
+                  >
                     <ImageTag src={images[0]} alt={description} />
                     <div className="flex-1">
                       <span className="mb-1 line-clamp-1 font-medium">
                         {name}
                       </span>
                       <span className="line-clamp-1 opacity-65">
-                        Quantity: {quantity}
+                        Quantity: {quantity} | {size}
                       </span>
                     </div>
                     <span className="opacity-65">

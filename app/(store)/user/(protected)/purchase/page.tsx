@@ -15,8 +15,6 @@ export default async function PurchasePage() {
     fetchInvoiceProducts(userId),
     fetchCartProducts(userId),
   ]);
-  console.log("userId: ", userId);
-  console.log("invoiceProducts: ", invoiceProducts);
 
   return (
     <Suspense fallback={<Loading />}>
