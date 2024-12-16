@@ -97,7 +97,7 @@ export default function AccountSettings() {
         <Row>
           <div>
             <p>Deletes your account and all data connected to it.</p>
-            <p className="text-red-600">You can't undo this action!</p>
+            <p className="text-red-600">You can not undo this action!</p>
           </div>
           <Button
             className="flex-shrink-0 md:w-56"

@@ -165,6 +165,7 @@ export async function addToCart(
                 productId: new ObjectId(productId),
                 quantity,
                 size,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } as any,
             },
           },
@@ -205,6 +206,7 @@ export async function removeFromCart(
         {
           $pull: {
             products: { productId: new ObjectId(productId), size },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
           } as any,
         },
       );
@@ -250,6 +252,7 @@ export async function deleteFromCart(
       {
         $pull: {
           products: { productId: new ObjectId(productId), size },
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } as any,
       },
     );

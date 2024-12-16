@@ -19,7 +19,7 @@ export default function VerifyEmail({ token }: { token: string | undefined }) {
       setLoading,
       token,
     );
-  }, []);
+  }, [token]);
 
   if (loading) {
     return <Loading />;

@@ -4,7 +4,7 @@ import { SignJWT } from "jose";
 import { getUserByIdentifier } from "@lib/actions";
 import bcrypt from "bcrypt";
 import { signInSchema } from "@/schemas";
-import cookie from "cookie";
+import { serialize } from "cookie";
 import { createResponse } from "@lib/utils";
 
 export async function POST(req: Request) {
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     sameSite: "strict" as const,
   };
 
-  const cookieHeader = cookie.serialize("auth_token", token, cookieOptions);
+  const cookieHeader = serialize("auth_token", token, cookieOptions);
 
   return new Response(JSON.stringify({ message: "Signin successful." }), {
     status: 200,

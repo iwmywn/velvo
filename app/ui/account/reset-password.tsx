@@ -52,7 +52,7 @@ export default function ResetPassword({
       setLoading,
       token,
     );
-  }, []);
+  }, [token]);
 
   const onSubmit = async (data: PasswordFormData) => {
     try {

@@ -49,7 +49,7 @@ export default function SearchOverlay({ products }: { products: Product[] }) {
       );
       setFilteredProducts(results);
     }
-  }, [searchTerm]);
+  }, [searchTerm, products]);
 
   if (!isOpen) return null;
 

@@ -1,6 +1,6 @@
 "use server";
 
-import cookie from "cookie";
+import { serialize } from "cookie";
 
 export async function POST() {
   const cookieOptions = {
@@ -11,7 +11,7 @@ export async function POST() {
     sameSite: "strict" as const,
   };
 
-  const cookieHeader = cookie.serialize("auth_token", "", cookieOptions);
+  const cookieHeader = serialize("auth_token", "", cookieOptions);
 
   return new Response(null, {
     status: 303,
