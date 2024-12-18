@@ -15,12 +15,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import useOverflow from "@ui/hooks/overflow";
 import { placeOrderSchema } from "@/schemas";
+import addresses from "@ui/data/addresses";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
 export default function Checkout() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [selectedCity, setSelectedCity] = useState<string>("");
+  const [selectedDistrict, setSelectedDistrict] = useState<string>("");
+  const [districts, setDistricts] = useState<string[]>([]);
+  const [wards, setWards] = useState<string[]>([]);
+
   const handleClose = () => {
     setIsAnimating(true);
     setTimeout(() => {
@@ -28,14 +34,41 @@ export default function Checkout() {
       setIsOpen(false);
     }, 250);
   };
+
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid, isSubmitting },
   } = useForm<PlaceOrderFormData>({
     resolver: zodResolver(placeOrderSchema),
     mode: "onChange",
   });
+
+  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const city = event.target.value;
+    setSelectedCity(city);
+    setDistricts(city ? Object.keys(addresses[city]) : []);
+    setWards([]);
+    setSelectedDistrict("");
+    setValue("city", city);
+    setValue("district", "");
+    setValue("ward", "");
+  };
+
+  const handleDistrictChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const district = event.target.value;
+    setSelectedDistrict(district);
+    setWards(district ? addresses[selectedCity][district] : []);
+    setValue("district", district);
+    setValue("ward", "");
+  };
+
+  const handleWardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue("ward", event.target.value);
+  };
 
   const onSubmit = (data: PlaceOrderFormData) => {
     console.log(data);
@@ -80,27 +113,81 @@ export default function Checkout() {
                   maxLength={11}
                 />
                 <label className={labelClass} htmlFor="Phone">
-                  Phone
+                  Phone Number
                 </label>
                 {errors.phone && (
                   <p className={errorClass}>{errors.phone.message}</p>
                 )}
               </div>
               <div className={boxClass}>
-                <input
+                <select
                   className={inputClass}
-                  id="Address"
-                  type="text"
-                  placeholder="Address"
-                  {...register("address")}
-                />
-                <label className={labelClass} htmlFor="Address">
-                  Address
+                  id="City"
+                  {...register("city")}
+                  onChange={handleCityChange}
+                >
+                  <option value="">Select city</option>
+                  {Object.keys(addresses).map((city) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                </select>
+                <label className={labelClass} htmlFor="City">
+                  City
                 </label>
-                {errors.address && (
-                  <p className={errorClass}>{errors.address.message}</p>
+                {errors.city && (
+                  <p className={errorClass}>{errors.city.message}</p>
                 )}
               </div>
+
+              {selectedCity && (
+                <div className={boxClass}>
+                  <select
+                    className={inputClass}
+                    id="District"
+                    {...register("district")}
+                    onChange={handleDistrictChange}
+                  >
+                    <option value="">Select district</option>
+                    {districts.map((district) => (
+                      <option key={district} value={district}>
+                        {district}
+                      </option>
+                    ))}
+                  </select>
+                  <label className={labelClass} htmlFor="District">
+                    District
+                  </label>
+                  {errors.district && (
+                    <p className={errorClass}>{errors.district.message}</p>
+                  )}
+                </div>
+              )}
+
+              {selectedDistrict && (
+                <div className={boxClass}>
+                  <select
+                    className={inputClass}
+                    id="Ward"
+                    {...register("ward")}
+                    onChange={handleWardChange}
+                  >
+                    <option value="">Select ward</option>
+                    {wards.map((ward) => (
+                      <option key={ward} value={ward}>
+                        {ward}
+                      </option>
+                    ))}
+                  </select>
+                  <label className={labelClass} htmlFor="Ward">
+                    Ward
+                  </label>
+                  {errors.ward && (
+                    <p className={errorClass}>{errors.ward.message}</p>
+                  )}
+                </div>
+              )}
               <FormButton
                 isValid={isValid}
                 isSubmitting={isSubmitting}
