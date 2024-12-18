@@ -101,4 +101,16 @@ export const placeOrderSchema = z.object({
   city: z.string().nonempty("City is required"),
   district: z.string().nonempty("District is required"),
   ward: z.string().nonempty("Ward is required"),
+  address: z.string().min(1, "Please provide address"),
+});
+
+export const placeOrderWithIdSchema = placeOrderSchema.extend({
+  userId: z.string().min(1, "User ID is required."),
+  products: z
+    .object({
+      id: z.string().min(1, "Product ID is required"),
+      quantity: z.number().min(1, "Quantity must be at least 1"),
+      size: z.string().min(1, "Size is required"),
+    })
+    .array(),
 });

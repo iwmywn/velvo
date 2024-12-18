@@ -28,7 +28,11 @@ export function FormButton({
   buttonText: string;
 }) {
   return (
-    <Button disabled={!isValid || isSubmitting} className="h-10" type="submit">
+    <Button
+      disabled={!isValid || isSubmitting}
+      className={`${!isValid && "before:opacity-70"} h-10`}
+      type="submit"
+    >
       {isSubmitting ? (
         <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
       ) : (

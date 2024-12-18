@@ -16,16 +16,31 @@ import { useForm } from "react-hook-form";
 import useOverflow from "@ui/hooks/overflow";
 import { placeOrderSchema } from "@/schemas";
 import addresses from "@ui/data/addresses";
+import { useAuthContext } from "@ui/hooks/auth";
+import { toast } from "react-toastify";
+import ReCaptchaPopup from "@ui/recaptcha";
+import { useRouter } from "next/navigation";
+import { useCartContext } from "@ui/hooks/cart";
+import { fetchCartProductQuantity } from "@lib/data";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
-export default function Checkout() {
+export default function Checkout({
+  products,
+}: {
+  products: { id: string; quantity: number; size: string }[];
+}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [districts, setDistricts] = useState<string[]>([]);
   const [wards, setWards] = useState<string[]>([]);
+  const { userId } = useAuthContext();
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
+  const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
+  const router = useRouter();
+  const { setQuantity } = useCartContext();
 
   const handleClose = () => {
     setIsAnimating(true);
@@ -39,14 +54,16 @@ export default function Checkout() {
     register,
     handleSubmit,
     setValue,
+    reset,
     clearErrors,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<PlaceOrderFormData>({
     resolver: zodResolver(placeOrderSchema),
     mode: "onChange",
     defaultValues: {
       fullName: "",
       phone: "",
+      address: "",
     },
   });
 
@@ -84,8 +101,40 @@ export default function Checkout() {
     clearErrors("ward");
   };
 
-  const onSubmit = (data: PlaceOrderFormData) => {
-    console.log(data);
+  const onSubmit = async (data: PlaceOrderFormData) => {
+    if (!showCaptcha && !captchaVerified) {
+      setShowCaptcha(true);
+      return;
+    }
+
+    try {
+      const requestData = { ...data, userId, products };
+      const res = await fetch(`/api/store/place-order`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        toast.success(result.message);
+        reset();
+        handleClose();
+        const updatedQuantity = await fetchCartProductQuantity(userId);
+        setQuantity(updatedQuantity);
+        router.push("/user/purchase?tab=to-ship-and-receive");
+      } else {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong! Try again later.");
+    } finally {
+      setCaptchaVerified(false);
+      setShowCaptcha(false);
+    }
   };
 
   useOverflow(isOpen);
@@ -93,6 +142,13 @@ export default function Checkout() {
   return (
     <>
       <Button onClick={() => setIsOpen(true)}>Checkout</Button>
+      {showCaptcha && (
+        <ReCaptchaPopup
+          onVerify={() => setCaptchaVerified(true)}
+          onClose={() => setShowCaptcha(false)}
+          overflow={false}
+        />
+      )}
       {isOpen && (
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
@@ -187,6 +243,21 @@ export default function Checkout() {
                   )}
                 </div>
               )}
+
+              <div className={boxClass}>
+                <input
+                  className={inputClass}
+                  type="text"
+                  placeholder="Address"
+                  {...register("address")}
+                />
+                <label className={labelClass}>
+                  Street Name, Building, House No.
+                </label>
+                {errors.address && (
+                  <p className={errorClass}>{errors.address.message}</p>
+                )}
+              </div>
               <FormButton
                 isValid={true}
                 isSubmitting={isSubmitting}

@@ -35,7 +35,7 @@ export default function ToPay({
             <div className="p-2 font-medium">Total Price</div>
             <div className="p-2 opacity-65">${totalPriceCents}</div>
             <div className="p-2">
-              <Checkout />
+              <Checkout products={cartProducts} />
             </div>
           </div>
         </div>

@@ -9,11 +9,13 @@ import useOverflow from "@ui/hooks/overflow";
 interface ReCaptchaPopupProps {
   onVerify: () => void;
   onClose: () => void;
+  overflow?: boolean;
 }
 
 export default function ReCaptchaPopup({
   onVerify,
   onClose,
+  overflow = true,
 }: ReCaptchaPopupProps) {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const animateAndClose = (callback: () => void) => {
@@ -52,7 +54,7 @@ export default function ReCaptchaPopup({
     toast.error("Please complete the CAPTCHA!");
   };
 
-  useOverflow(!isAnimating);
+  if (overflow) useOverflow(!isAnimating);
 
   return createPortal(
     <div
