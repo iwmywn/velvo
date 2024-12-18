@@ -2,11 +2,11 @@ import { createPortal } from "react-dom";
 
 export default function Backdrop({
   isAnimating,
-  onClick,
+  onMouseDown,
   children,
 }: {
   isAnimating: boolean;
-  onClick: () => void;
+  onMouseDown: () => void;
   children: React.ReactNode;
 }) {
   const backdropContent = (
@@ -14,7 +14,7 @@ export default function Backdrop({
       className={`fixed inset-0 z-[9998] flex items-center justify-center bg-black/80 ${
         isAnimating ? "animate-fadeOut" : "animate-fadeIn"
       }`}
-      onClick={onClick}
+      onMouseDown={onMouseDown}
     >
       {children}
     </div>

@@ -22,7 +22,6 @@ import {
 } from "@ui/form-class";
 import { toast } from "react-toastify";
 import { useAuthContext } from "@ui/hooks/auth";
-import { useRouter } from "next/navigation";
 
 interface SettingsProps {
   userId: string | undefined;
@@ -48,12 +47,12 @@ export default function AccountSettings() {
   return (
     <>
       {!!isOpen && (
-        <Backdrop isAnimating={isAnimating} onClick={handleClose}>
+        <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
               isAnimating ? "animate-zoomOut" : "animate-zoomIn"
             }`}
-            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
           >
             {isOpen === "change-password" && (
               <ChangePassword userId={userId} handleClose={handleClose} />
@@ -323,7 +322,6 @@ function ChangeEmail({ userId, handleClose }: SettingsProps) {
 type DeleteAccountFormData = z.infer<typeof deleteAccountScheme>;
 
 function DeleteAccount({ userId, handleClose }: SettingsProps) {
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -338,6 +336,7 @@ function DeleteAccount({ userId, handleClose }: SettingsProps) {
 
   const onSubmit = async (data: DeleteAccountFormData) => {
     toast.success("Deleting your account...");
+    toast.success("Thank you for using our website <3");
     try {
       const requestData = { ...data, userId };
       const res = await fetch(`/api/user/delete-account`, {
@@ -351,11 +350,10 @@ function DeleteAccount({ userId, handleClose }: SettingsProps) {
       const result = await res.json();
 
       if (res.ok) {
-        handleClose();
-        toast.success("Thank you for using our website <3");
-        await fetch("/api/auth/signout", { method: "POST" });
-        router.push("/user/signin");
         toast.success(result.message);
+        handleClose();
+        await fetch("/api/auth/signout", { method: "POST" });
+        window.location.href = "/user/signin";
       } else {
         toast.error(result.message);
       }

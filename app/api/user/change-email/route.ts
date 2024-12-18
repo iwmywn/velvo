@@ -6,6 +6,7 @@ import { createResponse } from "@lib/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import { User } from "@lib/definition";
+import { getUserByIdentifier } from "@lib/actions";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
@@ -17,6 +18,11 @@ export async function PATCH(req: Request) {
 
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
+
+  const existingEmail = await getUserByIdentifier(confirmEmail);
+
+  if (existingEmail)
+    return createResponse("This email is already in use!", 400);
 
   const db = await connectToDatabase();
   const existingUser = await db

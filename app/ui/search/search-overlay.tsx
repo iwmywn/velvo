@@ -58,7 +58,7 @@ export default function SearchOverlay({ products }: { products: Product[] }) {
 
   return (
     <>
-      <Backdrop isAnimating={isAnimating} onClick={() => handleClose(true)}>
+      <Backdrop isAnimating={isAnimating} onMouseDown={() => handleClose(true)}>
         <SlidingContainer isAnimating={isAnimating}>
           <div className="relative p-4">
             <input

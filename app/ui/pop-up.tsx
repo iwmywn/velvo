@@ -43,10 +43,10 @@ export default function PopUp() {
 
   return (
     isOpen && (
-      <Backdrop isAnimating={isAnimating} onClick={handleClose}>
+      <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
         <div
           className={`relative mx-6 w-full max-w-[30rem] rounded-2xl bg-white px-8 py-6 text-black ${isAnimating ? "animate-popUpOut" : "animate-popUpIn"}`}
-          onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col items-center justify-center gap-2 text-center">
             <h3 className="font-semibold">ĐỒ ÁN 2024</h3>

@@ -39,10 +39,15 @@ export default function Checkout() {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { errors, isValid, isSubmitting },
   } = useForm<PlaceOrderFormData>({
     resolver: zodResolver(placeOrderSchema),
     mode: "onChange",
+    defaultValues: {
+      fullName: "",
+      phone: "",
+    },
   });
 
   const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -54,6 +59,10 @@ export default function Checkout() {
     setValue("city", city);
     setValue("district", "");
     setValue("ward", "");
+
+    clearErrors("city");
+    clearErrors("district");
+    clearErrors("ward");
   };
 
   const handleDistrictChange = (
@@ -64,10 +73,15 @@ export default function Checkout() {
     setWards(district ? addresses[selectedCity][district] : []);
     setValue("district", district);
     setValue("ward", "");
+
+    clearErrors("district");
+    clearErrors("ward");
   };
 
   const handleWardChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setValue("ward", event.target.value);
+
+    clearErrors("ward");
   };
 
   const onSubmit = (data: PlaceOrderFormData) => {
@@ -80,25 +94,22 @@ export default function Checkout() {
     <>
       <Button onClick={() => setIsOpen(true)}>Checkout</Button>
       {isOpen && (
-        <Backdrop isAnimating={isAnimating} onClick={handleClose}>
+        <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
               isAnimating ? "animate-zoomOut" : "animate-zoomIn"
             }`}
-            onClick={(e) => e.stopPropagation()}
+            onMouseDown={(e) => e.stopPropagation()}
           >
             <form onSubmit={handleSubmit(onSubmit)} className={formClass}>
               <div className={boxClass}>
                 <input
                   className={inputClass}
-                  id="FullName"
                   type="text"
                   placeholder="Full name"
                   {...register("fullName")}
                 />
-                <label className={labelClass} htmlFor="FullName">
-                  Full name
-                </label>
+                <label className={labelClass}>Full name</label>
                 {errors.fullName && (
                   <p className={errorClass}>{errors.fullName.message}</p>
                 )}
@@ -106,15 +117,12 @@ export default function Checkout() {
               <div className={boxClass}>
                 <input
                   className={inputClass}
-                  id="Phone"
                   type="text"
                   placeholder="Phone"
                   {...register("phone")}
                   maxLength={11}
                 />
-                <label className={labelClass} htmlFor="Phone">
-                  Phone Number
-                </label>
+                <label className={labelClass}>Phone Number</label>
                 {errors.phone && (
                   <p className={errorClass}>{errors.phone.message}</p>
                 )}
@@ -122,7 +130,6 @@ export default function Checkout() {
               <div className={boxClass}>
                 <select
                   className={inputClass}
-                  id="City"
                   {...register("city")}
                   onChange={handleCityChange}
                 >
@@ -133,9 +140,7 @@ export default function Checkout() {
                     </option>
                   ))}
                 </select>
-                <label className={labelClass} htmlFor="City">
-                  City
-                </label>
+                <label className={labelClass}>City</label>
                 {errors.city && (
                   <p className={errorClass}>{errors.city.message}</p>
                 )}
@@ -145,7 +150,6 @@ export default function Checkout() {
                 <div className={boxClass}>
                   <select
                     className={inputClass}
-                    id="District"
                     {...register("district")}
                     onChange={handleDistrictChange}
                   >
@@ -156,9 +160,7 @@ export default function Checkout() {
                       </option>
                     ))}
                   </select>
-                  <label className={labelClass} htmlFor="District">
-                    District
-                  </label>
+                  <label className={labelClass}>District</label>
                   {errors.district && (
                     <p className={errorClass}>{errors.district.message}</p>
                   )}
@@ -168,8 +170,7 @@ export default function Checkout() {
               {selectedDistrict && (
                 <div className={boxClass}>
                   <select
-                    className={inputClass}
-                    id="Ward"
+                    className={`${inputClass} max-h-48 overflow-y-auto`}
                     {...register("ward")}
                     onChange={handleWardChange}
                   >
@@ -180,16 +181,14 @@ export default function Checkout() {
                       </option>
                     ))}
                   </select>
-                  <label className={labelClass} htmlFor="Ward">
-                    Ward
-                  </label>
+                  <label className={labelClass}>Ward</label>
                   {errors.ward && (
                     <p className={errorClass}>{errors.ward.message}</p>
                   )}
                 </div>
               )}
               <FormButton
-                isValid={isValid}
+                isValid={true}
                 isSubmitting={isSubmitting}
                 buttonText="Place Order"
               />

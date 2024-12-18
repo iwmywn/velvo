@@ -43,7 +43,7 @@ export default function CartOverlay({
   if (!isOpen) return null;
 
   return (
-    <Backdrop isAnimating={isAnimating} onClick={() => handleClose(true)}>
+    <Backdrop isAnimating={isAnimating} onMouseDown={() => handleClose(true)}>
       <SlidingContainer isAnimating={isAnimating}>
         <div className="flex h-full flex-col px-6 pt-6 text-sm">
           <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>

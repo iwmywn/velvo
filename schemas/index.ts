@@ -98,5 +98,7 @@ export const placeOrderSchema = z.object({
     .min(10, "Phone must have at least 10 digits")
     .max(11, "Phone must have at most 11 digits")
     .regex(/^(0)[1-9][0-9]{8,9}$/, "Phone must be a valid number"),
-  address: z.string().min(1, "Address is required"),
+  city: z.string().nonempty("City is required"),
+  district: z.string().nonempty("District is required"),
+  ward: z.string().nonempty("Ward is required"),
 });

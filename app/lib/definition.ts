@@ -6,13 +6,11 @@ export type User = {
   email: string;
   password: string;
   isVerified: boolean;
-  address: [
-    {
-      recipient: string;
-      phone: string;
-      address: string;
-    },
-  ];
+  address: {
+    recipient: string;
+    phone: string;
+    address: string;
+  }[];
   verificationToken: string;
   resendVerification: number;
 };
@@ -25,25 +23,21 @@ export type Invoice = {
   address: string;
   date: Date;
   status: string;
-  products: [
-    {
-      productId: string;
-      quantity: number;
-      size: string;
-    },
-  ];
+  products: {
+    productId: string;
+    quantity: number;
+    size: string;
+  }[];
 };
 
 export type Cart = {
   id: string;
   userId: string;
-  products: [
-    {
-      productId: string;
-      quantity: number;
-      size: string;
-    },
-  ];
+  products: {
+    productId: string;
+    quantity: number;
+    size: string;
+  }[];
 };
 
 export type Category = {

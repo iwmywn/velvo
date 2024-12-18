@@ -12,7 +12,7 @@ export default function SlidingContainer({
           ? "animate-centerToBottom sm:animate-leftToRight"
           : "animate-bottomToCenter sm:animate-rightToLeft"
       }`}
-      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
     >
       {children}
     </div>
