@@ -52,6 +52,7 @@ export async function POST(req: Request) {
     }),
   ]);
 
+  revalidatePath("/product/[slug]", "page");
   revalidatePath("/user/purchase");
   return createResponse("Order created.", 201);
 }
