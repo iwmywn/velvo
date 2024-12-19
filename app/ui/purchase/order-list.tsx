@@ -25,15 +25,6 @@ export default function OrderList({
   orderStatus: ("WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED")[];
   emptyState: "toShipNReceive" | "cancelled" | "completed";
 }) {
-  if (!invoiceProducts) {
-    return <EmptyState emptyState={emptyState} />;
-  }
-  const invoiceProductsFilter = invoiceProducts.filter(({ status }) =>
-    orderStatus.includes(status),
-  );
-  if (invoiceProductsFilter.length === 0)
-    <EmptyState emptyState={emptyState} />;
-
   const { userId } = useAuthContext();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -45,6 +36,17 @@ export default function OrderList({
     status: "PROCESSING" | "WAITING";
   } | null>(null);
 
+  useOverflow(isOpen);
+
+  if (!invoiceProducts) {
+    return <EmptyState emptyState={emptyState} />;
+  }
+  const invoiceProductsFilter = invoiceProducts.filter(({ status }) =>
+    orderStatus.includes(status),
+  );
+  if (invoiceProductsFilter.length === 0)
+    <EmptyState emptyState={emptyState} />;
+
   const handleClose = () => {
     setIsAnimating(true);
     setTimeout(() => {
@@ -52,8 +54,6 @@ export default function OrderList({
       setIsOpen(false);
     }, 250);
   };
-
-  useOverflow(isOpen);
 
   const handleCancelReceive = async (
     invoiceId: string,

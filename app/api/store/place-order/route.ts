@@ -18,12 +18,12 @@ export async function POST(req: Request) {
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
 
-  const transformedProducts = products.map(({ productId, quantity, size }) => {
-    if (!ObjectId.isValid(productId)) {
+  const transformedProducts = products.map(({ id, quantity, size }) => {
+    if (!ObjectId.isValid(id)) {
       throw new Error("Invalid product ID in products array!");
     }
     return {
-      productId: new ObjectId(productId),
+      productId: new ObjectId(id),
       quantity,
       size,
     };
