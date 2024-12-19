@@ -89,6 +89,7 @@ export default function OrderList({
         toast.success(
           status === "PROCESSING" ? "Order Completed." : "Order Cancelled.",
         );
+        toast.success("Is redirecting...");
         router.push(
           `/user/purchase?tab=${status === "PROCESSING" ? "completed" : "cancelled"}`,
         );

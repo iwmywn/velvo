@@ -123,9 +123,9 @@ export default function Checkout({
         toast.success(result.message);
         reset();
         handleClose();
+        router.push("/user/purchase?tab=to-ship-and-receive");
         const updatedQuantity = await fetchCartProductQuantity(userId);
         setQuantity(updatedQuantity);
-        router.push("/user/purchase?tab=to-ship-and-receive");
       } else {
         toast.error(result.message);
       }

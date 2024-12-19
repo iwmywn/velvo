@@ -317,7 +317,7 @@ export async function cancelReceiveOrder(
         : []),
     ]);
 
-    revalidatePath("/product/[slug]", "page");
+    revalidatePath("/product");
     revalidatePath("/user/purchase");
     return "Done.";
   } catch (error) {
