@@ -13,7 +13,15 @@ import { useCartContext } from "@ui/hooks/cart";
 import { fetchCartProductQuantity } from "@lib/data";
 
 export default function ProductDetails({ product }: { product: Product }) {
-  const { id, name, priceCents, images, description, saleOff, sizes } = product;
+  const {
+    id: productId,
+    name,
+    priceCents,
+    images,
+    description,
+    saleOff,
+    sizes,
+  } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -23,7 +31,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      const message = await addToCart(id, userId, selectedSize!);
+      const message = await addToCart(productId, userId, selectedSize!);
 
       if (message === "Product added to cart.") {
         toast.success(message);

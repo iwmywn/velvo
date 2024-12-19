@@ -121,6 +121,7 @@ export default function Checkout({
 
       if (res.ok) {
         toast.success(result.message);
+        toast.success("Is redirecting...");
         reset();
         handleClose();
         router.push("/user/purchase?tab=to-ship-and-receive");

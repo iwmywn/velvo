@@ -10,11 +10,13 @@ import { InvoiceProductsProps, Product } from "@lib/definition";
 import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { cancelReceiveOrder } from "@lib/actions";
+import { addToCart, cancelReceiveOrder } from "@lib/actions";
 import { useAuthContext } from "@ui/hooks/auth";
 import { useRouter } from "next/navigation";
 import useOverflow from "@ui/hooks/overflow";
 import Backdrop from "@ui/overlays/backdrop";
+import { fetchCartProductQuantity } from "@/app/lib/data";
+import { useCartContext } from "../hooks/cart";
 
 export default function OrderList({
   invoiceProducts,
@@ -35,6 +37,7 @@ export default function OrderList({
     products: (Product & { quantity: number; size: string })[];
     status: "PROCESSING" | "WAITING";
   } | null>(null);
+  const { setQuantity } = useCartContext();
 
   useOverflow(isOpen);
 
@@ -104,6 +107,25 @@ export default function OrderList({
     }
   };
 
+  const handleAddToCart = async (productId: string, size: string) => {
+    setIsLoading(true);
+    try {
+      const message = await addToCart(productId, userId, size);
+
+      if (message === "Product added to cart.") {
+        toast.success(message);
+        const updatedQuantity = await fetchCartProductQuantity(userId);
+        setQuantity(updatedQuantity);
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong! Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       {isOpen && data && (
@@ -162,6 +184,7 @@ export default function OrderList({
                 {products.map(
                   (
                     {
+                      id,
                       name,
                       priceCents,
                       images,
@@ -206,11 +229,19 @@ export default function OrderList({
                       </Link>
 
                       {status !== "PROCESSING" && status !== "WAITING" && (
-                        <Button className="ml-auto flex items-center gap-2">
+                        <Button
+                          className="ml-auto flex items-center gap-2"
+                          onClick={() => handleAddToCart(id, size)}
+                          disabled={isLoading}
+                        >
                           <GiShoppingCart />
-                          <span className="hidden sm:inline sm:truncate">
-                            Buy again
-                          </span>
+                          {isLoading ? (
+                            <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+                          ) : (
+                            <span className="hidden sm:inline sm:truncate">
+                              Buy again
+                            </span>
+                          )}
                         </Button>
                       )}
                     </div>
@@ -222,6 +253,7 @@ export default function OrderList({
                     onClick={() =>
                       handleCancelReceive(invoiceId, products, status)
                     }
+                    disabled={isLoading}
                   >
                     {isLoading ? (
                       <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
