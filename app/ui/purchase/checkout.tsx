@@ -28,7 +28,7 @@ type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 export default function Checkout({
   products,
 }: {
-  products: { id: string; quantity: number; size: string }[];
+  products: { productId: string; quantity: number; size: string }[];
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);

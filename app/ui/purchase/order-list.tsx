@@ -1,11 +1,20 @@
+"use client";
+
 import { getPriceAfterDiscount, getTotalPriceCents } from "@lib/utils";
 import ImageTag from "@ui/image";
 import Button from "@ui/button";
 import { GiShoppingCart } from "react-icons/gi";
-import { MdOutlineCancel } from "react-icons/md";
+import { MdOutlineCancel, MdCheck } from "react-icons/md";
 import Link from "next/link";
-import { InvoiceProductsProps } from "@lib/definition";
+import { InvoiceProductsProps, Product } from "@lib/definition";
 import EmptyState from "@ui/cart/empty";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { cancelReceiveOrder } from "@lib/actions";
+import { useAuthContext } from "@ui/hooks/auth";
+import { useRouter } from "next/navigation";
+import useOverflow from "@ui/hooks/overflow";
+import Backdrop from "@ui/overlays/backdrop";
 
 export default function OrderList({
   invoiceProducts,
@@ -25,8 +34,108 @@ export default function OrderList({
   if (invoiceProductsFilter.length === 0)
     <EmptyState emptyState={emptyState} />;
 
+  const { userId } = useAuthContext();
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [data, setData] = useState<{
+    invoiceId: string;
+    products: (Product & { quantity: number; size: string })[];
+    status: "PROCESSING" | "WAITING";
+  } | null>(null);
+
+  const handleClose = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setIsAnimating(false);
+      setIsOpen(false);
+    }, 250);
+  };
+
+  useOverflow(isOpen);
+
+  const handleCancelReceive = async (
+    invoiceId: string,
+    products: (Product & {
+      quantity: number;
+      size: string;
+    })[],
+    status: "PROCESSING" | "WAITING",
+    isConfirm: boolean = false,
+  ) => {
+    if (!isConfirm) {
+      setData({ invoiceId, products, status });
+      setIsOpen(true);
+      return;
+    }
+
+    const convertedProducts = products.map((p) => ({
+      productId: p.id,
+      quantity: p.quantity,
+      size: p.size,
+    }));
+
+    setIsLoading(true);
+    try {
+      const message = await cancelReceiveOrder(
+        userId,
+        invoiceId,
+        convertedProducts,
+        status === "PROCESSING" ? "COMPLETED" : "CANCELLED",
+      );
+
+      if (message === "Done.") {
+        toast.success(
+          status === "PROCESSING" ? "Order Completed." : "Order Cancelled.",
+        );
+        router.push(
+          `/user/purchase?tab=${status === "PROCESSING" ? "completed" : "cancelled"}`,
+        );
+      } else {
+        toast.error(message);
+      }
+    } catch (error) {
+      toast.error("Something went wrong! Please try again.");
+    } finally {
+      setIsLoading(false);
+      setData(null);
+    }
+  };
+
   return (
     <>
+      {isOpen && data && (
+        <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
+          <div
+            className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
+              isAnimating ? "animate-zoomOut" : "animate-zoomIn"
+            }`}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <h2 className="mb-10 text-center text-base">
+              Please confirm the order{" "}
+              {data.status === "PROCESSING" ? "completion" : "cancellation"}.
+            </h2>
+            <div className="flex justify-between">
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button
+                onClick={() => {
+                  handleCancelReceive(
+                    data.invoiceId,
+                    data.products,
+                    data.status,
+                    true,
+                  );
+                  handleClose();
+                }}
+              >
+                Confirm
+              </Button>
+            </div>
+          </div>
+        </Backdrop>
+      )}
       <div className="flex flex-col gap-6 text-sm">
         {invoiceProductsFilter.map(({ invoiceId, products, status }) => (
           <div key={invoiceId} className="relative rounded-md border">
@@ -96,10 +205,7 @@ export default function OrderList({
                       </Link>
 
                       {status !== "PROCESSING" && status !== "WAITING" && (
-                        <Button
-                          className="ml-auto flex items-center gap-2"
-                          type="submit"
-                        >
+                        <Button className="ml-auto flex items-center gap-2">
                           <GiShoppingCart />
                           <span className="hidden sm:inline sm:truncate">
                             Buy again
@@ -109,15 +215,27 @@ export default function OrderList({
                     </div>
                   ),
                 )}
-                {status === "WAITING" && (
+                {(status === "PROCESSING" || status === "WAITING") && (
                   <Button
                     className="ml-auto flex items-center gap-2"
-                    type="submit"
+                    onClick={() =>
+                      handleCancelReceive(invoiceId, products, status)
+                    }
                   >
-                    <MdOutlineCancel />
-                    <span className="hidden sm:inline sm:truncate">
-                      Cancell
-                    </span>
+                    {isLoading ? (
+                      <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+                    ) : (
+                      <>
+                        {status === "PROCESSING" ? (
+                          <MdCheck />
+                        ) : (
+                          <MdOutlineCancel />
+                        )}
+                        <span className="hidden sm:inline sm:truncate">
+                          {status === "PROCESSING" ? "Received" : "Cancel"}
+                        </span>
+                      </>
+                    )}
                   </Button>
                 )}
               </div>

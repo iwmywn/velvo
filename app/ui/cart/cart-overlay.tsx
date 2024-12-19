@@ -72,7 +72,9 @@ export default function CartOverlay({
                         {name}
                       </span>
                       <span className="line-clamp-1 opacity-65">
-                        Quantity: {quantity} | {size}
+                        Quantity: {quantity}
+                        <span className="mx-2">|</span>
+                        {size}
                       </span>
                     </div>
                     <span className="opacity-65">
@@ -84,7 +86,7 @@ export default function CartOverlay({
             )}
           </div>
 
-          <div className="mt-auto pb-6">
+          <div className="sticky bottom-0 mt-auto bg-white pb-6">
             <div className="float-right mb-2">
               <span className="font-medium">Total: </span>
               <span className="opacity-65">${totalPriceCents}</span>

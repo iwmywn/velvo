@@ -18,12 +18,12 @@ export async function POST(req: Request) {
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
 
-  const transformedProducts = products.map(({ id, quantity, size }) => {
-    if (!ObjectId.isValid(id)) {
-      throw new Error("Invalid product ID in products array");
+  const transformedProducts = products.map(({ productId, quantity, size }) => {
+    if (!ObjectId.isValid(productId)) {
+      throw new Error("Invalid product ID in products array!");
     }
     return {
-      productId: new ObjectId(id),
+      productId: new ObjectId(productId),
       quantity,
       size,
     };
@@ -53,5 +53,5 @@ export async function POST(req: Request) {
   ]);
 
   revalidatePath("/user/purchase");
-  return createResponse("Order created successfully!", 201);
+  return createResponse("Order created.", 201);
 }

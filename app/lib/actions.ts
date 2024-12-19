@@ -5,6 +5,7 @@ import { connectToDatabase } from "@lib/mongodb";
 import { User } from "@lib/definition";
 import nodemailer from "nodemailer";
 import { revalidatePath } from "next/cache";
+import { createResponse } from "@lib/utils";
 
 /**
  *
@@ -266,5 +267,60 @@ export async function deleteFromCart(
   } catch (error) {
     console.error("Error deleting product from cart:", error);
     return "An error occurred while removing product from cart.";
+  }
+}
+
+export async function cancelReceiveOrder(
+  userId: string | undefined,
+  invoiceId: string,
+  products: { productId: string; quantity: number; size: string }[],
+  status: "COMPLETED" | "CANCELLED",
+): Promise<string> {
+  if (!userId || !invoiceId) {
+    return "User ID or Product ID is missing!";
+  }
+
+  try {
+    const db = await connectToDatabase();
+    const invoiceCollection = db.collection("invoices");
+
+    const transformedProducts = products.map(
+      ({ productId, quantity, size }) => {
+        if (!ObjectId.isValid(productId)) {
+          throw new Error("Invalid product ID in products array!");
+        }
+        return {
+          productId: new ObjectId(productId),
+          quantity,
+          size,
+        };
+      },
+    );
+
+    await Promise.all([
+      invoiceCollection.updateOne(
+        { _id: new ObjectId(invoiceId), userId: new ObjectId(userId) },
+        {
+          $set: { status: status },
+        },
+      ),
+      ...(status === "CANCELLED"
+        ? transformedProducts.map(({ productId, quantity, size }) => {
+            const sizeField = `sizes.${size}`;
+            return db
+              .collection("products")
+              .updateOne(
+                { _id: new ObjectId(productId) },
+                { $inc: { [sizeField]: quantity } },
+              );
+          })
+        : []),
+    ]);
+
+    revalidatePath("/user/purchase");
+    return "Done.";
+  } catch (error) {
+    console.error("Error:", error);
+    return "An error occurred.";
   }
 }

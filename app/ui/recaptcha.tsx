@@ -54,6 +54,7 @@ export default function ReCaptchaPopup({
     toast.error("Please complete the CAPTCHA!");
   };
 
+  //eslint-disable-next-line react-hooks/rules-of-hooks
   if (overflow) useOverflow(!isAnimating);
 
   return createPortal(

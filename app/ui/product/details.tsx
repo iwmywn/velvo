@@ -33,7 +33,6 @@ export default function ProductDetails({ product }: { product: Product }) {
         toast.error(message);
       }
     } catch (error) {
-      console.error("Error adding product to cart:", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setIsLoading(false);
