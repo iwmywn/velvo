@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import useOverflow from "@ui/hooks/overflow";
 import Backdrop from "@ui/overlays/backdrop";
 import { fetchCartProductQuantity } from "@/app/lib/data";
-import { useCartContext } from "../hooks/cart";
+import { useCartContext } from "@ui/hooks/cart";
 
 export default function OrderList({
   invoiceProducts,
@@ -29,7 +29,9 @@ export default function OrderList({
 }) {
   const { userId } = useAuthContext();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
+    {},
+  );
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [data, setData] = useState<{
@@ -38,6 +40,9 @@ export default function OrderList({
     status: "PROCESSING" | "WAITING";
   } | null>(null);
   const { setQuantity } = useCartContext();
+  const setButtonLoading = (key: string, isLoading: boolean) => {
+    setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
+  };
 
   useOverflow(isOpen);
 
@@ -79,7 +84,7 @@ export default function OrderList({
       size: p.size,
     }));
 
-    setIsLoading(true);
+    setButtonLoading(invoiceId, true);
     try {
       const message = await cancelReceiveOrder(
         userId,
@@ -102,13 +107,19 @@ export default function OrderList({
     } catch (error) {
       toast.error("Something went wrong! Please try again.");
     } finally {
-      setIsLoading(false);
+      setButtonLoading(invoiceId, false);
       setData(null);
     }
   };
 
-  const handleAddToCart = async (productId: string, size: string) => {
-    setIsLoading(true);
+  const handleAddToCart = async (
+    invoiceId: string,
+    productId: string,
+    size: string,
+  ) => {
+    const key = `${invoiceId}-${productId}-${size}`;
+    setButtonLoading(key, true);
+
     try {
       const message = await addToCart(productId, userId, size);
 
@@ -122,7 +133,7 @@ export default function OrderList({
     } catch (error) {
       toast.error("Something went wrong! Please try again.");
     } finally {
-      setIsLoading(false);
+      setButtonLoading(key, false);
     }
   };
 
@@ -231,16 +242,20 @@ export default function OrderList({
                       {status !== "PROCESSING" && status !== "WAITING" && (
                         <Button
                           className="ml-auto flex items-center gap-2"
-                          onClick={() => handleAddToCart(id, size)}
-                          disabled={isLoading}
+                          onClick={() => handleAddToCart(invoiceId, id, size)}
+                          disabled={
+                            loadingStates[`${invoiceId}-${id}-${size}`] || false
+                          }
                         >
-                          <GiShoppingCart />
-                          {isLoading ? (
+                          {loadingStates[`${invoiceId}-${id}-${size}`] ? (
                             <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
                           ) : (
-                            <span className="hidden sm:inline sm:truncate">
-                              Buy again
-                            </span>
+                            <>
+                              <GiShoppingCart />
+                              <span className="hidden sm:inline sm:truncate">
+                                Buy again
+                              </span>
+                            </>
                           )}
                         </Button>
                       )}
@@ -253,9 +268,9 @@ export default function OrderList({
                     onClick={() =>
                       handleCancelReceive(invoiceId, products, status)
                     }
-                    disabled={isLoading}
+                    disabled={loadingStates[invoiceId] || false}
                   >
-                    {isLoading ? (
+                    {loadingStates[invoiceId] ? (
                       <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
                     ) : (
                       <>
