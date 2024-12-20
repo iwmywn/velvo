@@ -46,14 +46,12 @@ export default function OrderList({
 
   useOverflow(isOpen);
 
-  if (!invoiceProducts) {
-    return <EmptyState emptyState={emptyState} />;
-  }
-  const invoiceProductsFilter = invoiceProducts.filter(({ status }) =>
+  const invoiceProductsFilter = invoiceProducts?.filter(({ status }) =>
     orderStatus.includes(status),
   );
-  if (invoiceProductsFilter.length === 0)
-    <EmptyState emptyState={emptyState} />;
+
+  if (invoiceProductsFilter === undefined || invoiceProductsFilter.length === 0)
+    return <EmptyState emptyState={emptyState} />;
 
   const handleClose = () => {
     setIsAnimating(true);
