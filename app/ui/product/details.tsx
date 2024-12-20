@@ -36,7 +36,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       const message = await addToCart(productId, userId, selectedSize!);
 
       if (message === "Done.") {
-        router.push("/cart-overlay");
+        router.push("/cart-overlay", { scroll: false });
         const updatedQuantity = await fetchCartProductQuantity(userId);
         setQuantity(updatedQuantity);
       } else {
