@@ -49,7 +49,7 @@ export default function ProductRow({
     try {
       const message = await addToCart(id, userId, size);
 
-      if (message === "Product added to cart.") {
+      if (message === "Done.") {
         const updatedQuantity = await fetchCartProductQuantity(userId);
         setQuantity(updatedQuantity);
       } else {

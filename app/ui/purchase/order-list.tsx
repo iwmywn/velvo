@@ -123,8 +123,8 @@ export default function OrderList({
     try {
       const message = await addToCart(productId, userId, size);
 
-      if (message === "Product added to cart.") {
-        toast.success(message);
+      if (message === "Done.") {
+        router.push("/cart-overlay");
         const updatedQuantity = await fetchCartProductQuantity(userId);
         setQuantity(updatedQuantity);
       } else {

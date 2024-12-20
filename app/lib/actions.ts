@@ -175,7 +175,7 @@ export async function addToCart(
     }
 
     revalidatePath("/user/purchase");
-    return "Product added to cart.";
+    return "Done.";
   } catch (error) {
     console.error("Error adding product to cart:", error);
     return "An error occurred while adding product to cart.";
