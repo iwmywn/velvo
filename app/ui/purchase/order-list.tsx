@@ -1,6 +1,5 @@
 "use client";
 
-import { getPriceAfterDiscount, getTotalPriceCents } from "@lib/utils";
 import ImageTag from "@ui/image";
 import Button from "@ui/button";
 import { GiShoppingCart } from "react-icons/gi";
@@ -237,6 +236,7 @@ export default function OrderList({
             phone,
             date,
             address,
+            totalPriceCents,
           }) => (
             <div key={invoiceId} className="relative rounded-md border">
               <div
@@ -251,9 +251,7 @@ export default function OrderList({
                 </div>
                 <div className="text-right">
                   <span className="font-medium">Total Price: </span>
-                  <span className="opacity-65">
-                    ${getTotalPriceCents(products)}
-                  </span>
+                  <span className="opacity-65">${totalPriceCents}</span>
                 </div>
               </div>
               <div className="p-2">
@@ -263,13 +261,12 @@ export default function OrderList({
                       {
                         id,
                         name,
-                        priceCents,
                         images,
                         description,
-                        saleOff,
                         slug,
                         quantity,
                         size,
+                        priceCentsAfterDiscount,
                       },
                       index,
                     ) => (
@@ -288,17 +285,11 @@ export default function OrderList({
                                 <span>Quantity: {quantity}</span>
                                 <span className="mx-2">|</span>
                                 <span>
-                                  Price: $
-                                  {getPriceAfterDiscount(priceCents, saleOff)}
+                                  Price: ${priceCentsAfterDiscount[0]}
                                 </span>
                                 <span className="mx-2">|</span>
                                 <span>
-                                  Total: $
-                                  {getPriceAfterDiscount(
-                                    priceCents,
-                                    saleOff,
-                                    quantity,
-                                  )}
+                                  Total: ${priceCentsAfterDiscount[1]}
                                 </span>
                               </p>
                             </div>
@@ -315,7 +306,7 @@ export default function OrderList({
                             }
                           >
                             {loadingStates[`${invoiceId}-${id}-${size}`] ? (
-                              <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+                              <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-green-300 border-t-green-600" />
                             ) : (
                               <>
                                 <GiShoppingCart />
@@ -356,7 +347,9 @@ export default function OrderList({
                         disabled={loadingStates[invoiceId] || false}
                       >
                         {loadingStates[invoiceId] ? (
-                          <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+                          <div
+                            className={`mx-auto h-4 w-4 animate-spin rounded-full border-4 ${status === "PROCESSING" ? "border-green-300 border-t-green-600" : "border-red-300 border-t-red-600"}`}
+                          />
                         ) : (
                           <>
                             {status === "PROCESSING" ? (

@@ -22,13 +22,22 @@ import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
 import { useCartContext } from "@ui/hooks/cart";
 import { fetchCartProductQuantity } from "@lib/data";
+import { transformProducts } from "@lib/utils";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
 export default function Checkout({
   products,
+  totalPriceCents,
 }: {
-  products: { id: string; quantity: number; size: string }[];
+  products: {
+    id: string;
+    quantity: number;
+    size: string;
+    priceCents: number;
+    saleOff: number;
+  }[];
+  totalPriceCents: string;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
@@ -41,6 +50,7 @@ export default function Checkout({
   const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
   const router = useRouter();
   const { setQuantity } = useCartContext();
+  const updatedProducts = transformProducts(products);
 
   const handleClose = () => {
     setIsAnimating(true);
@@ -108,7 +118,12 @@ export default function Checkout({
     }
 
     try {
-      const requestData = { ...data, userId, products };
+      const requestData = {
+        ...data,
+        userId,
+        products: updatedProducts,
+        totalPriceCents,
+      };
       const res = await fetch(`/api/store/place-order`, {
         method: "POST",
         headers: {

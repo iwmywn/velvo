@@ -12,22 +12,37 @@ export async function POST(req: Request) {
 
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
-  const { userId, fullName, phone, city, district, ward, address, products } =
-    parsedCredentials.data;
+  const {
+    userId,
+    fullName,
+    phone,
+    city,
+    district,
+    ward,
+    address,
+    products,
+    totalPriceCents,
+  } = parsedCredentials.data;
 
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
 
-  const transformedProducts = products.map(({ id, quantity, size }) => {
-    if (!ObjectId.isValid(id)) {
-      throw new Error("Invalid product ID in products array!");
-    }
-    return {
-      productId: new ObjectId(id),
-      quantity,
-      size,
-    };
-  });
+  const transformedProducts = products.map(
+    ({ id, quantity, size, priceCentsAfterDiscount }) => {
+      if (!ObjectId.isValid(id)) {
+        throw new Error("Invalid product ID in products array!");
+      }
+      return {
+        productId: new ObjectId(id),
+        quantity,
+        size,
+        priceCentsAfterDiscount: [
+          priceCentsAfterDiscount[0],
+          priceCentsAfterDiscount[1],
+        ],
+      };
+    },
+  );
 
   const db = await connectToDatabase();
 
@@ -40,6 +55,7 @@ export async function POST(req: Request) {
       status: "WAITING",
       products: transformedProducts,
       userId: new ObjectId(userId),
+      totalPriceCents,
     }),
     db
       .collection("carts")

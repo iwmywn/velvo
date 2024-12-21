@@ -28,6 +28,7 @@ export type Invoice = {
     quantity: number;
     size: string;
   }[];
+  totalPriceCents: string;
 };
 
 export type Cart = {
@@ -68,6 +69,7 @@ export type Products = {
   productId: ObjectId;
   quantity: number;
   size: string;
+  priceCentsAfterDiscount: string[];
 };
 
 interface InvoiceWithProducts {
@@ -77,7 +79,12 @@ interface InvoiceWithProducts {
   address: string;
   date: Date;
   status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
-  products: (Product & { quantity: number; size: string })[];
+  products: (Product & {
+    quantity: number;
+    size: string;
+    priceCentsAfterDiscount: string[];
+  })[];
+  totalPriceCents: string;
 }
 
 export type CartProductsProps =

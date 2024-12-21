@@ -117,7 +117,12 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
       address: string;
       date: Date;
       status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
-      products: (Product & { quantity: number; size: string })[];
+      products: (Product & {
+        quantity: number;
+        size: string;
+        priceCentsAfterDiscount: number;
+      })[];
+      totalPriceCents: string;
     }[]
   | null
 > {
@@ -155,7 +160,6 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
             return {
               id: product._id.toString(),
               name: product.name,
-              priceCents: product.priceCents,
               images: product.images,
               description: product.description,
               categoryId: product.categoryId.toString(),
@@ -164,6 +168,10 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
               sizes: product.sizes,
               quantity: invoiceProducts.quantity,
               size: invoiceProducts.size,
+              priceCentsAfterDiscount: [
+                invoiceProducts.priceCentsAfterDiscount[0],
+                invoiceProducts.priceCentsAfterDiscount[1],
+              ],
             };
           },
         );
@@ -176,6 +184,7 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
           date: invoice.date,
           status: invoice.status,
           products: enrichedProducts,
+          totalPriceCents: invoice.totalPriceCents,
         };
       }),
     );

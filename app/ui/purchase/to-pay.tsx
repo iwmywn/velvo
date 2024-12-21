@@ -18,11 +18,13 @@ export default function ToPay({
       ) : (
         <div className="flex flex-col gap-4">
           <div className="hidden select-none grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-2 border text-center font-medium sm:grid">
-            {["Product", "Price", "Quantity", "Total", "Action"].map((head) => (
-              <div className="p-2" key={head}>
-                {head}
-              </div>
-            ))}
+            {["Product", "Price", "Quantity", "Sub Total", "Action"].map(
+              (head) => (
+                <div className="p-2" key={head}>
+                  {head}
+                </div>
+              ),
+            )}
           </div>
 
           {cartProducts.map((product) => (
@@ -35,7 +37,10 @@ export default function ToPay({
             <div className="p-2 font-medium">Total Price</div>
             <div className="p-2 opacity-65">${totalPriceCents}</div>
             <div className="p-2">
-              <Checkout products={cartProducts} />
+              <Checkout
+                products={cartProducts}
+                totalPriceCents={totalPriceCents}
+              />
             </div>
           </div>
         </div>

@@ -76,6 +76,35 @@ export function getTotalPriceCents(
   );
 }
 
+export function transformProducts(
+  products: {
+    id: string;
+    quantity: number;
+    size: string;
+    priceCents: number;
+    saleOff: number;
+  }[],
+): {
+  id: string;
+  quantity: number;
+  size: string;
+  priceCentsAfterDiscount: string[];
+}[] {
+  return products.map((product) => ({
+    id: product.id,
+    quantity: product.quantity,
+    size: product.size,
+    priceCentsAfterDiscount: [
+      getPriceAfterDiscount(product.priceCents, product.saleOff),
+      getPriceAfterDiscount(
+        product.priceCents,
+        product.saleOff,
+        product.quantity,
+      ),
+    ],
+  }));
+}
+
 // function generateSlugWithRandom(
 //   category: string,
 //   name: string,
