@@ -6,30 +6,71 @@ import React, {
   useState,
   ReactNode,
   useEffect,
+  Dispatch,
+  SetStateAction,
 } from "react";
-import { fetchCartProductQuantity } from "@lib/data";
+import {
+  fetchCartProductQuantity,
+  fetchCartProducts,
+  fetchInvoiceProducts,
+} from "@lib/data";
 import { useAuthContext } from "./auth";
+import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
 
 interface CartContextProps {
   quantity: number;
-  setQuantity: React.Dispatch<React.SetStateAction<number>>;
+  setQuantity: Dispatch<SetStateAction<number>>;
+  cartProducts: CartProductsProps | null;
+  setCartProducts: Dispatch<SetStateAction<CartProductsProps | null>>;
+  invoiceProducts: InvoiceProductsProps | null;
+  setInvoiceProducts: Dispatch<SetStateAction<InvoiceProductsProps | null>>;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [quantity, setQuantity] = useState<number>(0);
+  const [cartProducts, setCartProducts] = useState<CartProductsProps | null>(
+    null,
+  );
+  const [invoiceProducts, setInvoiceProducts] =
+    useState<InvoiceProductsProps | null>(null);
   const { userId } = useAuthContext();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
-    async function initializeCart() {
-      const cartQuantity = await fetchCartProductQuantity(userId);
+    setIsLoading(true);
+    async function initialize() {
+      const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
+        await Promise.all([
+          fetchCartProductQuantity(userId),
+          fetchCartProducts(userId),
+          fetchInvoiceProducts(userId),
+        ]);
       setQuantity(cartQuantity);
+      setCartProducts(fetchedCartProducts);
+      setInvoiceProducts(fetchedInvoiceProducts);
+      setIsLoading(false);
     }
-    initializeCart();
+
+    if (userId) initialize();
   }, [userId]);
 
   return (
-    <CartContext.Provider value={{ quantity, setQuantity }}>
+    <CartContext.Provider
+      value={{
+        quantity,
+        setQuantity,
+        cartProducts,
+        setCartProducts,
+        invoiceProducts,
+        setInvoiceProducts,
+        isLoading,
+        setIsLoading,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

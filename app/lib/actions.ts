@@ -174,7 +174,6 @@ export async function addToCart(
       }
     }
 
-    revalidatePath("/user/purchase");
     return "Done.";
   } catch (error) {
     console.error("Error adding product to cart:", error);
@@ -211,7 +210,6 @@ export async function removeFromCart(
           } as any,
         },
       );
-      revalidatePath("/user/purchase");
       return "Product removed from cart.";
     } else {
       await cartCollection.updateOne(
@@ -226,7 +224,6 @@ export async function removeFromCart(
         },
         { $inc: { "products.$.quantity": -1 } },
       );
-      revalidatePath("/user/purchase");
       return "Product quantity decreased.";
     }
   } catch (error) {
@@ -259,7 +256,6 @@ export async function deleteFromCart(
     );
 
     if (result.modifiedCount > 0) {
-      revalidatePath("/user/purchase");
       return "Product removed from cart!";
     } else {
       return "Product not found in the cart!";
@@ -318,7 +314,6 @@ export async function cancelReceiveOrder(
     ]);
 
     revalidatePath("/product");
-    revalidatePath("/user/purchase");
     return "Done.";
   } catch (error) {
     console.error("Error:", error);

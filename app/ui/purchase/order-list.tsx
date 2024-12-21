@@ -14,9 +14,14 @@ import { useAuthContext } from "@ui/hooks/auth";
 import { useRouter } from "next/navigation";
 import useOverflow from "@ui/hooks/overflow";
 import Backdrop from "@ui/overlays/backdrop";
-import { fetchCartProductQuantity } from "@/app/lib/data";
+import {
+  fetchCartProductQuantity,
+  fetchCartProducts,
+  fetchInvoiceProducts,
+} from "@lib/data";
 import { useCartContext } from "@ui/hooks/cart";
 import { MdOutlinePlace } from "react-icons/md";
+import Loading from "@ui/loading";
 
 export default function OrderList({
   invoiceProducts,
@@ -50,6 +55,7 @@ export default function OrderList({
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };
+  const { isLoading, setCartProducts, setInvoiceProducts } = useCartContext();
 
   useOverflow(isOpenConfirm);
   useOverflow(isOpenDeliveryInfo);
@@ -57,6 +63,8 @@ export default function OrderList({
   const invoiceProductsFilter = invoiceProducts?.filter(({ status }) =>
     orderStatus.includes(status),
   );
+
+  if (isLoading) return <Loading />;
 
   if (invoiceProductsFilter === undefined || invoiceProductsFilter.length === 0)
     return <EmptyState emptyState={emptyState} />;
@@ -102,6 +110,8 @@ export default function OrderList({
       );
 
       if (message === "Done.") {
+        const updateInvoiceProducts = await fetchInvoiceProducts(userId);
+        setInvoiceProducts(updateInvoiceProducts);
         toast.success(
           status === "PROCESSING" ? "Order Completed." : "Order Cancelled.",
         );
@@ -132,6 +142,8 @@ export default function OrderList({
       if (message === "Done.") {
         router.push("/cart-overlay", { scroll: false });
         const updatedQuantity = await fetchCartProductQuantity(userId);
+        const updateCartProducts = await fetchCartProducts(userId);
+        setCartProducts(updateCartProducts);
         setQuantity(updatedQuantity);
       } else {
         toast.error(message);

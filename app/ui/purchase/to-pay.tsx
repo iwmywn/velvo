@@ -3,6 +3,8 @@ import ProductRow from "@ui/purchase/product-row";
 import Checkout from "@ui/purchase/checkout";
 import EmptyState from "@ui/cart/empty";
 import { CartProductsProps } from "@lib/definition";
+import { useCartContext } from "@ui/hooks/cart";
+import Loading from "@ui/loading";
 
 export default function ToPay({
   cartProducts,
@@ -10,10 +12,13 @@ export default function ToPay({
   cartProducts: CartProductsProps;
 }) {
   const totalPriceCents = getTotalPriceCents(cartProducts);
+  const { isLoading } = useCartContext();
 
   return (
     <>
-      {cartProducts === null ? (
+      {isLoading ? (
+        <Loading />
+      ) : cartProducts === null ? (
         <EmptyState emptyState="toPay" />
       ) : (
         <div className="flex flex-col gap-4">

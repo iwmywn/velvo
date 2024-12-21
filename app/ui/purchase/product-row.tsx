@@ -9,7 +9,7 @@ import { MdDelete } from "react-icons/md";
 import { useCartContext } from "@ui/hooks/cart";
 import { useAuthContext } from "@ui/hooks/auth";
 import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
-import { fetchCartProductQuantity } from "@lib/data";
+import { fetchCartProductQuantity, fetchCartProducts } from "@lib/data";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
@@ -43,65 +43,48 @@ export default function ProductRow({
   const { setQuantity } = useCartContext();
   const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { setCartProducts } = useCartContext();
 
-  const handleAddToCart = async () => {
+  const handleCartOperation = async (
+    operation: () => Promise<string>,
+    successMessages: string[],
+  ) => {
     setIsLoading(true);
     try {
-      const message = await addToCart(id, userId, size);
+      const message = await operation();
 
-      if (message === "Done.") {
+      if (successMessages.includes(message)) {
         const updatedQuantity = await fetchCartProductQuantity(userId);
+        const updateCartProducts = await fetchCartProducts(userId);
+        setCartProducts(updateCartProducts);
         setQuantity(updatedQuantity);
       } else {
         toast.error(message);
       }
     } catch (error) {
-      console.error("Error adding product to cart:", error);
+      console.error("Error handling cart operation:", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleRemoveFromCart = async () => {
-    setIsLoading(true);
-    try {
-      const message = await removeFromCart(id, userId, size);
-
-      if (
-        message === "Product removed from cart." ||
-        message === "Product quantity decreased."
-      ) {
-        const updatedQuantity = await fetchCartProductQuantity(userId);
-        setQuantity(updatedQuantity);
-      } else {
-        toast.error(message);
-      }
-    } catch (error) {
-      console.error("Error removing product to cart:", error);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+  const handleAddToCart = () => {
+    handleCartOperation(() => addToCart(id, userId, size), ["Done."]);
   };
 
-  const handleDeleteFromCart = async () => {
-    setIsLoading(true);
-    try {
-      const message = await deleteFromCart(id, userId, size);
+  const handleRemoveFromCart = () => {
+    handleCartOperation(
+      () => removeFromCart(id, userId, size),
+      ["Product removed from cart.", "Product quantity decreased."],
+    );
+  };
 
-      if (message === "Product removed from cart!") {
-        const updatedQuantity = await fetchCartProductQuantity(userId);
-        setQuantity(updatedQuantity);
-      } else {
-        toast.error(message);
-      }
-    } catch (error) {
-      console.error("Error deleting product to cart:", error);
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+  const handleDeleteFromCart = () => {
+    handleCartOperation(
+      () => deleteFromCart(id, userId, size),
+      ["Product removed from cart!"],
+    );
   };
 
   return (

@@ -10,7 +10,7 @@ export function generateMetadata(): Metadata {
 export default function PurchasePage() {
   return (
     <Suspense fallback={<Loading />}>
-      <PurchaseOverview />v
+      <PurchaseOverview />
     </Suspense>
   );
 }

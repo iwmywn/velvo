@@ -9,9 +9,7 @@ import Cancelled from "@ui/purchase/cancelled";
 import Loading from "@ui/loading";
 import useHideMenu from "@ui/hooks/hide-menu";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
-import { fetchCartProducts, fetchInvoiceProducts } from "@/app/lib/data";
-import { useAuthContext } from "@/app/ui/hooks/auth";
+import { useCartContext } from "@ui/hooks/cart";
 
 const tabs = [
   { key: "to-pay", label: "TO PAY" },
@@ -38,11 +36,7 @@ export default function PurchaseOverview() {
   const searchParams = useSearchParams();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { userId } = useAuthContext();
-  const [invoiceProducts, setInvoiceProducts] =
-    useState<InvoiceProductsProps>(null);
-  const [cartProducts, setCartProducts] = useState<CartProductsProps>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { cartProducts, invoiceProducts } = useCartContext();
 
   useHideMenu(setIsOpen);
   useEffect(() => {
@@ -55,22 +49,6 @@ export default function PurchaseOverview() {
       setActiveTabKey(validTab ? validTab.key : tabs[0].key);
     }
   }, [searchParams]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    async function fetchData() {
-      const [invoiceProducts, cartProducts] = await Promise.all([
-        fetchInvoiceProducts(userId),
-        fetchCartProducts(userId),
-      ]);
-
-      setInvoiceProducts(invoiceProducts);
-      setCartProducts(cartProducts);
-      setIsLoading(false);
-    }
-
-    fetchData();
-  }, [userId]);
 
   if (!activeTabKey) {
     return <Loading />;
@@ -119,9 +97,7 @@ export default function PurchaseOverview() {
 
         {activeTab && (
           <div className="min-h-screen text-sm">
-            {isLoading ? (
-              <Loading />
-            ) : activeTab.key === "to-pay" ? (
+            {activeTab.key === "to-pay" ? (
               <ToPay cartProducts={cartProducts} />
             ) : activeTab.key === "to-ship-and-receive" ? (
               <ToShipAndReceive invoiceProducts={invoiceProducts} />
