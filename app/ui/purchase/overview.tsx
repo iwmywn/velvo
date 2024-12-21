@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ToPay from "@ui/purchase/to-pay";
 import ToShipAndReceive from "@ui/purchase/to-ship-receive";
@@ -10,6 +10,8 @@ import Loading from "@ui/loading";
 import useHideMenu from "@ui/hooks/hide-menu";
 import BreadCrumbs from "@ui/breadcrumbs";
 import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
+import { fetchCartProducts, fetchInvoiceProducts } from "@/app/lib/data";
+import { useAuthContext } from "@/app/ui/hooks/auth";
 
 const tabs = [
   { key: "to-pay", label: "TO PAY" },
@@ -31,17 +33,16 @@ const breadcrumbs = [
   },
 ];
 
-export default function PurchaseOverview({
-  invoiceProducts,
-  cartProducts,
-}: {
-  invoiceProducts: InvoiceProductsProps;
-  cartProducts: CartProductsProps;
-}) {
+export default function PurchaseOverview() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { userId } = useAuthContext();
+  const [invoiceProducts, setInvoiceProducts] =
+    useState<InvoiceProductsProps>(null);
+  const [cartProducts, setCartProducts] = useState<CartProductsProps>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useHideMenu(setIsOpen);
   useEffect(() => {
@@ -54,6 +55,22 @@ export default function PurchaseOverview({
       setActiveTabKey(validTab ? validTab.key : tabs[0].key);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    setIsLoading(true);
+    async function fetchData() {
+      const [invoiceProducts, cartProducts] = await Promise.all([
+        fetchInvoiceProducts(userId),
+        fetchCartProducts(userId),
+      ]);
+
+      setInvoiceProducts(invoiceProducts);
+      setCartProducts(cartProducts);
+      setIsLoading(false);
+    }
+
+    fetchData();
+  }, [userId]);
 
   if (!activeTabKey) {
     return <Loading />;
@@ -102,7 +119,9 @@ export default function PurchaseOverview({
 
         {activeTab && (
           <div className="min-h-screen text-sm">
-            {activeTab.key === "to-pay" ? (
+            {isLoading ? (
+              <Loading />
+            ) : activeTab.key === "to-pay" ? (
               <ToPay cartProducts={cartProducts} />
             ) : activeTab.key === "to-ship-and-receive" ? (
               <ToShipAndReceive invoiceProducts={invoiceProducts} />
