@@ -11,17 +11,19 @@ import { getPriceAfterDiscount, getTotalPriceCents } from "@lib/utils";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
 import { CartProductsProps } from "@lib/definition";
+import { useAuthContext } from "@ui/hooks/auth";
+import { fetchCartProducts } from "@lib/data";
+import Loading from "@ui/loading";
 
-export default function CartOverlay({
-  cartProducts,
-}: {
-  cartProducts: CartProductsProps;
-}) {
+export default function CartOverlay() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const router = useRouter();
   const pathname = usePathname();
+  const [cartProducts, setCartProducts] = useState<CartProductsProps>(null);
   const totalPriceCents = getTotalPriceCents(cartProducts);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { userId } = useAuthContext();
   const handleClose = (shouldNavigate: boolean) => {
     setIsAnimating(true);
     setTimeout(() => {
@@ -40,6 +42,19 @@ export default function CartOverlay({
     if (pathname === "/cart-overlay") setIsOpen(true);
   }, [pathname]);
 
+  useEffect(() => {
+    setIsLoading(true);
+
+    async function fetchData() {
+      const cartProducts = await fetchCartProducts(userId);
+
+      setCartProducts(cartProducts);
+      setIsLoading(false);
+    }
+
+    fetchData();
+  }, [userId]);
+
   if (!isOpen) return null;
 
   return (
@@ -48,7 +63,9 @@ export default function CartOverlay({
         <div className="flex h-full flex-col px-6 pt-6 text-sm">
           <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
           <div className="mt-4">
-            {cartProducts === null ? (
+            {isLoading ? (
+              <Loading />
+            ) : cartProducts === null ? (
               <p>You have no products in your shopping cart.</p>
             ) : (
               cartProducts.map(
