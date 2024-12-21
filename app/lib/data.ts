@@ -120,7 +120,7 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
       products: (Product & {
         quantity: number;
         size: string;
-        priceCentsAfterDiscount: number;
+        priceCentsAfterDiscount: string[];
       })[];
       totalPriceCents: string;
     }[]
