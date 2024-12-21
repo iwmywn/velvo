@@ -103,21 +103,13 @@ export default function PurchaseOverview({
         {activeTab && (
           <div className="min-h-screen text-sm">
             {activeTab.key === "to-pay" ? (
-              <Suspense fallback={<Loading />}>
-                <ToPay cartProducts={cartProducts} />
-              </Suspense>
+              <ToPay cartProducts={cartProducts} />
             ) : activeTab.key === "to-ship-and-receive" ? (
-              <Suspense fallback={<Loading />}>
-                <ToShipAndReceive invoiceProducts={invoiceProducts} />
-              </Suspense>
+              <ToShipAndReceive invoiceProducts={invoiceProducts} />
             ) : activeTab.key === "completed" ? (
-              <Suspense fallback={<Loading />}>
-                <Completed invoiceProducts={invoiceProducts} />
-              </Suspense>
+              <Completed invoiceProducts={invoiceProducts} />
             ) : (
-              <Suspense fallback={<Loading />}>
-                <Cancelled invoiceProducts={invoiceProducts} />
-              </Suspense>
+              <Cancelled invoiceProducts={invoiceProducts} />
             )}
           </div>
         )}

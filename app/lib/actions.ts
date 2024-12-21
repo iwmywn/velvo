@@ -45,7 +45,7 @@ export async function sendEmail(
     },
   });
 
-  const emailHandlerUrl = `${process.env.NEXTAUTH_URL}/email-handler?mode=${
+  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${
     mode === "verifyEmail" ? "verifyEmail" : "resetPassword"
   }&token=${token}`;
 
@@ -84,7 +84,7 @@ export async function sendEmail(
           </p>
         </td>
       </tr>
-    </table>  
+    </table>
     `,
   });
 }

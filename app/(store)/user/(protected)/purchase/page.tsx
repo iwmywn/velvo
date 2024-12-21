@@ -1,6 +1,5 @@
 import { fetchCartProducts, fetchInvoiceProducts } from "@/app/lib/data";
 import { getUserId } from "@api/auth";
-import Loading from "@ui/loading";
 import PurchaseOverview from "@ui/purchase/overview";
 import { Metadata } from "next";
 import { Suspense } from "react";

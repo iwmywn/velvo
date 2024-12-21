@@ -17,6 +17,7 @@ import useOverflow from "@ui/hooks/overflow";
 import Backdrop from "@ui/overlays/backdrop";
 import { fetchCartProductQuantity } from "@/app/lib/data";
 import { useCartContext } from "@ui/hooks/cart";
+import { MdOutlinePlace } from "react-icons/md";
 
 export default function OrderList({
   invoiceProducts,
@@ -33,18 +34,26 @@ export default function OrderList({
     {},
   );
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [data, setData] = useState<{
+  const [isOpenConfirm, setIsOpenConfirm] = useState<boolean>(false);
+  const [isOpenDeliveryInfo, setIsOpenDeliveryInfo] = useState<boolean>(false);
+  const [invoiceData, setInvoiceData] = useState<{
     invoiceId: string;
     products: (Product & { quantity: number; size: string })[];
     status: "PROCESSING" | "WAITING";
+  } | null>(null);
+  const [deliveryInfoData, setDeliveryInfoData] = useState<{
+    recipient: string;
+    phone: string;
+    address: string;
+    date: Date;
   } | null>(null);
   const { setQuantity } = useCartContext();
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };
 
-  useOverflow(isOpen);
+  useOverflow(isOpenConfirm);
+  useOverflow(isOpenDeliveryInfo);
 
   const invoiceProductsFilter = invoiceProducts?.filter(({ status }) =>
     orderStatus.includes(status),
@@ -57,7 +66,8 @@ export default function OrderList({
     setIsAnimating(true);
     setTimeout(() => {
       setIsAnimating(false);
-      setIsOpen(false);
+      setIsOpenConfirm(false);
+      setIsOpenDeliveryInfo(false);
     }, 250);
   };
 
@@ -71,11 +81,12 @@ export default function OrderList({
     isConfirm: boolean = false,
   ) => {
     if (!isConfirm) {
-      setData({ invoiceId, products, status });
-      setIsOpen(true);
+      setInvoiceData({ invoiceId, products, status });
+      setIsOpenConfirm(true);
       return;
     }
 
+    const statusUrl = status === "PROCESSING" ? "completed" : "cancelled";
     const convertedProducts = products.map((p) => ({
       productId: p.id,
       quantity: p.quantity,
@@ -88,7 +99,7 @@ export default function OrderList({
         userId,
         invoiceId,
         convertedProducts,
-        status === "PROCESSING" ? "COMPLETED" : "CANCELLED",
+        statusUrl.toUpperCase() as "COMPLETED" | "CANCELLED",
       );
 
       if (message === "Done.") {
@@ -96,9 +107,7 @@ export default function OrderList({
           status === "PROCESSING" ? "Order Completed." : "Order Cancelled.",
         );
         toast.success("Is redirecting...");
-        router.push(
-          `/user/purchase?tab=${status === "PROCESSING" ? "completed" : "cancelled"}`,
-        );
+        router.push(`/user/purchase?tab=${statusUrl}`);
       } else {
         toast.error(message);
       }
@@ -106,7 +115,7 @@ export default function OrderList({
       toast.error("Something went wrong! Please try again.");
     } finally {
       setButtonLoading(invoiceId, false);
-      setData(null);
+      setInvoiceData(null);
     }
   };
 
@@ -137,7 +146,7 @@ export default function OrderList({
 
   return (
     <>
-      {isOpen && data && (
+      {isOpenConfirm && invoiceData && (
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
@@ -145,18 +154,27 @@ export default function OrderList({
             }`}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <h2 className="mb-10 text-center text-base">
+            <h2 className="mb-8 text-center text-base font-medium">
               Please confirm the order{" "}
-              {data.status === "PROCESSING" ? "completion" : "cancellation"}.
+              {invoiceData.status === "PROCESSING"
+                ? "completion"
+                : "cancellation"}
+              .
             </h2>
             <div className="flex justify-between">
-              <Button onClick={handleClose}>Cancel</Button>
               <Button
+                className="text-black before:border-black before:bg-white"
+                onClick={handleClose}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="text-red-500 before:border-red-500 before:bg-white"
                 onClick={() => {
                   handleCancelReceive(
-                    data.invoiceId,
-                    data.products,
-                    data.status,
+                    invoiceData.invoiceId,
+                    invoiceData.products,
+                    invoiceData.status,
                     true,
                   );
                   handleClose();
@@ -168,126 +186,199 @@ export default function OrderList({
           </div>
         </Backdrop>
       )}
-      <div className="flex flex-col gap-6 text-sm">
-        {invoiceProductsFilter.map(({ invoiceId, products, status }) => (
-          <div key={invoiceId} className="relative rounded-md border">
-            <div
-              className={`absolute left-0 top-0 z-[1] ml-auto rounded-tl-md px-2 text-center text-[10px] text-white ${status === "WAITING" ? "bg-blue-500" : status === "PROCESSING" ? "bg-yellow-500" : status === "COMPLETED" ? "bg-green-500" : "bg-red-500"}`}
-            >
-              {status}
-            </div>
-            <div className="flex justify-between border-b bg-slate-50 px-4 pb-4 pt-8">
-              <div>
-                <span className="font-medium">Order ID:</span>{" "}
-                <span className="opacity-65">{invoiceId}</span>
-              </div>
-              <div className="text-right">
-                <span className="font-medium">Total Price: </span>
-                <span className="opacity-65">
-                  ${getTotalPriceCents(products)}
-                </span>
-              </div>
-            </div>
-            <div className="p-2">
-              <div className="flex flex-col gap-4">
-                {products.map(
-                  (
-                    {
-                      id,
-                      name,
-                      priceCents,
-                      images,
-                      description,
-                      saleOff,
-                      slug,
-                      quantity,
-                      size,
-                    },
-                    index,
-                  ) => (
-                    <div
-                      key={index}
-                      className="flex flex-wrap items-center justify-between gap-4 border p-2 sm:flex-nowrap"
-                    >
-                      <Link href={`/product/${slug}`}>
-                        <div className="flex items-center gap-4 sm:gap-2">
-                          <ImageTag src={images[0]} alt={description} />
-                          <div>
-                            <h4 className="mb-1 line-clamp-2 font-medium">
-                              {name} - {size}
-                            </h4>
-                            <p className="flex flex-wrap gap-y-1 opacity-65">
-                              <span>Quantity: {quantity}</span>
-                              <span className="mx-2">|</span>
-                              <span>
-                                Price: $
-                                {getPriceAfterDiscount(priceCents, saleOff)}
-                              </span>
-                              <span className="mx-2">|</span>
-                              <span>
-                                Total: $
-                                {getPriceAfterDiscount(
-                                  priceCents,
-                                  saleOff,
-                                  quantity,
-                                )}
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-
-                      {status !== "PROCESSING" && status !== "WAITING" && (
-                        <Button
-                          className="ml-auto flex items-center gap-2"
-                          onClick={() => handleAddToCart(invoiceId, id, size)}
-                          disabled={
-                            loadingStates[`${invoiceId}-${id}-${size}`] || false
-                          }
-                        >
-                          {loadingStates[`${invoiceId}-${id}-${size}`] ? (
-                            <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-                          ) : (
-                            <>
-                              <GiShoppingCart />
-                              <span className="hidden sm:inline sm:truncate">
-                                Buy again
-                              </span>
-                            </>
-                          )}
-                        </Button>
-                      )}
-                    </div>
-                  ),
-                )}
-                {(status === "PROCESSING" || status === "WAITING") && (
-                  <Button
-                    className="ml-auto flex items-center gap-2"
-                    onClick={() =>
-                      handleCancelReceive(invoiceId, products, status)
-                    }
-                    disabled={loadingStates[invoiceId] || false}
-                  >
-                    {loadingStates[invoiceId] ? (
-                      <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-                    ) : (
-                      <>
-                        {status === "PROCESSING" ? (
-                          <MdCheck />
-                        ) : (
-                          <MdOutlineCancel />
-                        )}
-                        <span className="hidden sm:inline sm:truncate">
-                          {status === "PROCESSING" ? "Received" : "Cancel"}
-                        </span>
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
+      {isOpenDeliveryInfo && deliveryInfoData && (
+        <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
+          <div
+            className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
+              isAnimating ? "animate-zoomOut" : "animate-zoomIn"
+            }`}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <h2 className="mb-4 text-center text-base font-semibold">
+              Delivery Information
+            </h2>
+            <div className="space-y-2 text-gray-600">
+              <p>
+                <span className="font-medium text-gray-800">Recipient:</span>{" "}
+                {deliveryInfoData.recipient}
+              </p>
+              <p>
+                <span className="font-medium text-gray-800">Phone Number:</span>{" "}
+                {deliveryInfoData.phone}
+              </p>
+              <p>
+                <span className="font-medium text-gray-800">
+                  Shipping Address:
+                </span>{" "}
+                {deliveryInfoData.address}
+              </p>
+              <p>
+                <span className="font-medium text-gray-800">Order date:</span>{" "}
+                {deliveryInfoData.date.toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                })}
+              </p>
             </div>
           </div>
-        ))}
+        </Backdrop>
+      )}
+      <div className="flex flex-col gap-6 text-sm">
+        {invoiceProductsFilter.map(
+          ({
+            invoiceId,
+            products,
+            status,
+            recipient,
+            phone,
+            date,
+            address,
+          }) => (
+            <div key={invoiceId} className="relative rounded-md border">
+              <div
+                className={`absolute left-0 top-0 z-[1] ml-auto rounded-tl-md px-2 text-center text-[10px] text-white ${status === "WAITING" ? "bg-blue-500" : status === "PROCESSING" ? "bg-yellow-500" : status === "COMPLETED" ? "bg-green-500" : "bg-red-500"}`}
+              >
+                {status}
+              </div>
+              <div className="flex justify-between gap-5 border-b bg-slate-50 px-4 pb-4 pt-8">
+                <div>
+                  <span className="font-medium">Order ID:</span>{" "}
+                  <span className="opacity-65">{invoiceId}</span>
+                </div>
+                <div className="text-right">
+                  <span className="font-medium">Total Price: </span>
+                  <span className="opacity-65">
+                    ${getTotalPriceCents(products)}
+                  </span>
+                </div>
+              </div>
+              <div className="p-2">
+                <div className="flex flex-col gap-2">
+                  {products.map(
+                    (
+                      {
+                        id,
+                        name,
+                        priceCents,
+                        images,
+                        description,
+                        saleOff,
+                        slug,
+                        quantity,
+                        size,
+                      },
+                      index,
+                    ) => (
+                      <div
+                        key={index}
+                        className="flex flex-wrap items-center justify-between gap-4 border p-2 sm:flex-nowrap"
+                      >
+                        <Link href={`/product/${slug}`}>
+                          <div className="flex items-center gap-4 sm:gap-2">
+                            <ImageTag src={images[0]} alt={description} />
+                            <div>
+                              <h4 className="mb-1 line-clamp-2 font-medium">
+                                {name} - {size}
+                              </h4>
+                              <p className="flex flex-wrap gap-y-1 opacity-65">
+                                <span>Quantity: {quantity}</span>
+                                <span className="mx-2">|</span>
+                                <span>
+                                  Price: $
+                                  {getPriceAfterDiscount(priceCents, saleOff)}
+                                </span>
+                                <span className="mx-2">|</span>
+                                <span>
+                                  Total: $
+                                  {getPriceAfterDiscount(
+                                    priceCents,
+                                    saleOff,
+                                    quantity,
+                                  )}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+
+                        {status !== "PROCESSING" && status !== "WAITING" && (
+                          <Button
+                            className="ml-auto flex items-center gap-2 text-green-600 before:border-green-600 before:bg-white"
+                            onClick={() => handleAddToCart(invoiceId, id, size)}
+                            disabled={
+                              loadingStates[`${invoiceId}-${id}-${size}`] ||
+                              false
+                            }
+                          >
+                            {loadingStates[`${invoiceId}-${id}-${size}`] ? (
+                              <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+                            ) : (
+                              <>
+                                <GiShoppingCart />
+                                <span className="hidden sm:inline sm:truncate">
+                                  Buy again
+                                </span>
+                              </>
+                            )}
+                          </Button>
+                        )}
+                      </div>
+                    ),
+                  )}
+                  <div className="flex justify-between">
+                    <Button
+                      className="flex items-center gap-2 text-black before:bg-white"
+                      onClick={() => {
+                        setDeliveryInfoData({
+                          recipient,
+                          phone,
+                          address,
+                          date,
+                        });
+                        setIsOpenDeliveryInfo(true);
+                      }}
+                    >
+                      <MdOutlinePlace />
+                      <span className="hidden sm:inline sm:truncate">
+                        Delivery Information
+                      </span>
+                    </Button>
+                    {(status === "PROCESSING" || status === "WAITING") && (
+                      <Button
+                        className={`${status === "PROCESSING" ? "text-green-500 before:border-green-500" : "text-red-500 before:border-red-500"} flex items-center gap-2 before:bg-white`}
+                        onClick={() =>
+                          handleCancelReceive(invoiceId, products, status)
+                        }
+                        disabled={loadingStates[invoiceId] || false}
+                      >
+                        {loadingStates[invoiceId] ? (
+                          <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+                        ) : (
+                          <>
+                            {status === "PROCESSING" ? (
+                              <MdCheck />
+                            ) : (
+                              <MdOutlineCancel />
+                            )}
+                            <span className="hidden sm:inline sm:truncate">
+                              {status === "PROCESSING"
+                                ? "Received"
+                                : "Cancel order"}
+                            </span>
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ),
+        )}
       </div>
     </>
   );

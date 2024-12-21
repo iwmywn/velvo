@@ -8,6 +8,7 @@ import {
   Products,
   CartProductsProps,
   InvoiceProductsProps,
+  Invoice,
 } from "@lib/definition";
 import { ObjectId } from "mongodb";
 
@@ -111,6 +112,10 @@ export async function fetchCartProducts(
 export async function fetchInvoiceProducts(userId: string | undefined): Promise<
   | {
       invoiceId: string;
+      recipient: string;
+      phone: string;
+      address: string;
+      date: Date;
       status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
       products: (Product & { quantity: number; size: string })[];
     }[]
@@ -165,6 +170,10 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
 
         return {
           invoiceId: invoice._id.toString(),
+          recipient: invoice.recipient,
+          phone: invoice.phone,
+          address: invoice.address,
+          date: invoice.date,
           status: invoice.status,
           products: enrichedProducts,
         };

@@ -72,6 +72,10 @@ export type Products = {
 
 interface InvoiceWithProducts {
   invoiceId: string;
+  recipient: string;
+  phone: string;
+  address: string;
+  date: Date;
   status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
   products: (Product & { quantity: number; size: string })[];
 }

@@ -38,7 +38,7 @@ export default function Header() {
               <Link
                 key={label}
                 href={href}
-                className={`rounded border px-4 py-1 text-sm ${pathname === href ? "bg-slate-100" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-slate-100"}`}
+                className={`rounded border px-4 py-1 text-sm ${pathname === href ? "bg-slate-50" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-slate-50"}`}
                 title={`${label} Category`}
               >
                 <span className="hidden font-semibold md:block">{label}</span>

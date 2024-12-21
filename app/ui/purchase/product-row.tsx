@@ -19,7 +19,7 @@ const ActionButton = ({
   handleDeleteFromCart: () => void;
 }) => (
   <Button
-    className="flex items-center justify-center gap-2 px-4 sm:max-w-[100px] sm:flex-1 sm:px-0"
+    className="flex items-center justify-center gap-2 px-4 text-red-500 before:border-red-500 before:bg-white sm:max-w-[100px] sm:flex-1 sm:px-0"
     onClick={handleDeleteFromCart}
   >
     <MdDelete />
