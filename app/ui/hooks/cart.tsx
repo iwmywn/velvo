@@ -33,10 +33,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
   const [invoiceProducts, setInvoiceProducts] =
     useState<InvoiceProductsProps | null>(null);
-  const { userId } = useAuthContext();
+  const { userId, isLoading: isAuthLoading } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshCart = useCallback(async () => {
+    if (!userId) return;
+    setIsLoading(true);
     try {
       const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
         await Promise.all([
@@ -55,13 +57,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [userId]);
 
   useEffect(() => {
-    async function initialize() {
-      const cartQuantity = await fetchCartProductQuantity(userId);
-      setQuantity(cartQuantity);
-    }
-
-    initialize();
-  }, [userId]);
+    if (isAuthLoading || !userId) return;
+    refreshCart();
+  }, [isAuthLoading, userId, refreshCart]);
 
   return (
     <CartContext.Provider
