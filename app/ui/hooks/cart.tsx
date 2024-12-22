@@ -33,7 +33,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
   const [invoiceProducts, setInvoiceProducts] =
     useState<InvoiceProductsProps | null>(null);
-  const { userId, isLoading: isAuthLoading } = useAuthContext();
+  const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshCart = useCallback(async () => {
@@ -62,9 +62,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [userId]);
 
   useEffect(() => {
-    if (isAuthLoading || !userId) return;
-    refreshCart();
-  }, [isAuthLoading, userId, refreshCart]);
+    async function initialize() {
+      const cartQuantity = await fetchCartProductQuantity(userId);
+      setQuantity(cartQuantity);
+    }
+
+    initialize();
+  }, [userId]);
 
   return (
     <CartContext.Provider
