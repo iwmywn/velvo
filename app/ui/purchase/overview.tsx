@@ -53,7 +53,7 @@ export default function PurchaseOverview() {
 
   useEffect(() => {
     async function triggerRefetch() {
-      if (!isLoading) await refreshCart();
+      if (isLoading) await refreshCart();
     }
     triggerRefetch();
   }, [isLoading, refreshCart]);

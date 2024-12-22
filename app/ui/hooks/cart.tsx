@@ -55,10 +55,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [userId]);
 
   useEffect(() => {
-    if (userId) {
-      refreshCart();
+    async function initialize() {
+      const cartQuantity = await fetchCartProductQuantity(userId);
+      setQuantity(cartQuantity);
     }
-  }, [userId, refreshCart]);
+
+    initialize();
+  }, [userId]);
 
   return (
     <CartContext.Provider

@@ -5,8 +5,6 @@ import { fetchCategories } from "@lib/data";
 
 export default async function HomePage() {
   const categories = await fetchCategories();
-  // const products = await fetchProducts();
-  // console.log(categories, products);
 
   return (
     <div className="flex flex-col items-center gap-7">

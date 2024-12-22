@@ -14,11 +14,11 @@ export default function ToPay({
   const totalPriceCents = getTotalPriceCents(cartProducts);
   const { isLoading } = useCartContext();
 
+  if (isLoading) return <Loading />;
+
   return (
     <>
-      {isLoading ? (
-        <Loading />
-      ) : cartProducts === null ? (
+      {cartProducts === null ? (
         <EmptyState emptyState="toPay" />
       ) : (
         <div className="flex flex-col gap-4">
