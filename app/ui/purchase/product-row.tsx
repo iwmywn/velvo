@@ -117,7 +117,7 @@ export default function ProductRow({
             -
           </button>
           <span className="flex-1 select-none py-1 text-center">
-            {quantity}
+            {isAdd(isLoading, quantity)}
           </span>
           <button
             className="flex-1 border-l py-1 transition-all duration-300 hover:bg-stone-100"
@@ -142,10 +142,10 @@ export default function ProductRow({
   );
 }
 
-function isAdd(isLoading: boolean, price: string) {
+function isAdd(isLoading: boolean, which: any) {
   return isLoading ? (
-    <div className="mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
+    <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
   ) : (
-    price
+    which
   );
 }
