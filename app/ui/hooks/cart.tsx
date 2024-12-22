@@ -38,7 +38,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const refreshCart = useCallback(async () => {
     if (!userId) return;
-    setIsLoading(true);
+    // setIsLoading(true);
     try {
       const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
         await Promise.all([
