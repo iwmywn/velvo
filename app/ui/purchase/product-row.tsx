@@ -14,15 +14,24 @@ import { useState } from "react";
 
 const ActionButton = ({
   handleDeleteFromCart,
+  isDeleting,
 }: {
   handleDeleteFromCart: () => void;
+  isDeleting: boolean;
 }) => (
   <Button
     className="flex items-center justify-center gap-2 px-4 text-red-500 before:border-red-500 before:bg-white sm:max-w-[100px] sm:flex-1 sm:px-0"
     onClick={handleDeleteFromCart}
+    disabled={isDeleting}
   >
-    <MdDelete />
-    <span className="hidden sm:inline">Delete</span>
+    {isDeleting ? (
+      <div className="h-4 w-4 animate-spin rounded-full border-4 border-red-300 border-t-red-600" />
+    ) : (
+      <>
+        <MdDelete />
+        <span className="hidden sm:inline">Delete</span>
+      </>
+    )}
   </Button>
 );
 
@@ -41,13 +50,15 @@ export default function ProductRow({
   const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
   const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const { refreshCart } = useCartContext();
 
   const handleCartOperation = async (
     operation: () => Promise<string>,
     successMessages: string[],
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   ) => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       const message = await operation();
 
@@ -60,18 +71,23 @@ export default function ProductRow({
       console.error("Error handling cart operation:", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
   const handleAddToCart = () => {
-    handleCartOperation(() => addToCart(id, userId, size), ["Done."]);
+    handleCartOperation(
+      () => addToCart(id, userId, size),
+      ["Done."],
+      setIsLoading,
+    );
   };
 
   const handleRemoveFromCart = () => {
     handleCartOperation(
       () => removeFromCart(id, userId, size),
       ["Product removed from cart.", "Product quantity decreased."],
+      setIsLoading,
     );
   };
 
@@ -79,6 +95,7 @@ export default function ProductRow({
     handleCartOperation(
       () => deleteFromCart(id, userId, size),
       ["Product removed from cart!"],
+      setIsDeleting,
     );
   };
 
@@ -127,7 +144,10 @@ export default function ProductRow({
           </button>
         </div>
         <div className="block sm:hidden">
-          <ActionButton handleDeleteFromCart={handleDeleteFromCart} />
+          <ActionButton
+            handleDeleteFromCart={handleDeleteFromCart}
+            isDeleting={isDeleting}
+          />
         </div>
       </div>
 
@@ -136,12 +156,16 @@ export default function ProductRow({
       </div>
 
       <div className="hidden items-center justify-end sm:flex sm:justify-center">
-        <ActionButton handleDeleteFromCart={handleDeleteFromCart} />
+        <ActionButton
+          handleDeleteFromCart={handleDeleteFromCart}
+          isDeleting={isDeleting}
+        />
       </div>
     </div>
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isAdd(isLoading: boolean, which: any) {
   return isLoading ? (
     <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
