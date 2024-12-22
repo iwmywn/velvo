@@ -6,6 +6,7 @@ import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
+import avatars from "@ui/data/avatars";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -21,12 +22,14 @@ export async function POST(req: Request) {
   const hashedPassword = await bcrypt.hash(password, 10);
   const db = await connectToDatabase();
   const verificationToken = await generateUniqueToken(db);
+  const avatar = avatars[Math.floor(Math.random() * 20)];
 
   const result = await db.collection("users").insertOne({
     name: `${firstName} ${lastName}`,
     email,
     password: hashedPassword,
     isVerified: false,
+    image: `https://res.cloudinary.com/dku9repmn/image/upload/${avatar}`,
     verificationToken,
     resendVerification: 1,
   });

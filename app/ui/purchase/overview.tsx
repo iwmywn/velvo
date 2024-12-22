@@ -36,7 +36,7 @@ export default function PurchaseOverview() {
   const searchParams = useSearchParams();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { isLoading, triggerRefetchCart, cartProducts, invoiceProducts } =
+  const { isLoading, refreshCart, cartProducts, invoiceProducts } =
     useCartContext();
 
   useHideMenu(setIsOpen);
@@ -50,6 +50,13 @@ export default function PurchaseOverview() {
       setActiveTabKey(validTab ? validTab.key : tabs[0].key);
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    async function triggerRefetch() {
+      if (!isLoading) await refreshCart();
+    }
+    triggerRefetch();
+  }, [isLoading, refreshCart]);
 
   if (!activeTabKey) {
     return <Loading />;
@@ -71,8 +78,6 @@ export default function PurchaseOverview() {
       {label}
     </div>
   ));
-
-  if (!isLoading && !cartProducts && !invoiceProducts) triggerRefetchCart();
 
   return (
     <>

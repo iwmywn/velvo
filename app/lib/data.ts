@@ -9,11 +9,6 @@ import {
 } from "@lib/definition";
 import { ObjectId } from "mongodb";
 
-export interface AuthContextType {
-  isSignedIn: boolean;
-  userId?: string;
-}
-
 export async function fetchCategories() {
   try {
     const db = await connectToDatabase();

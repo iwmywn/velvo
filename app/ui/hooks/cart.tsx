@@ -21,8 +21,7 @@ interface CartContextProps {
   cartProducts: CartProductsProps | null;
   invoiceProducts: InvoiceProductsProps | null;
   isLoading: boolean;
-  refreshCart: (forceLoading?: boolean) => Promise<void>;
-  triggerRefetchCart: () => void;
+  refreshCart: () => Promise<void>;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -36,40 +35,30 @@ export function CartProvider({ children }: { children: ReactNode }) {
     useState<InvoiceProductsProps | null>(null);
   const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [triggerRefetch, setTriggerRefetch] = useState<boolean>(false);
 
-  const refreshCart = useCallback(
-    async (forceLoading: boolean = false) => {
-      if (forceLoading) {
-        setIsLoading(true);
-      }
-      try {
-        const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
-          await Promise.all([
-            fetchCartProductQuantity(userId),
-            fetchCartProducts(userId),
-            fetchInvoiceProducts(userId),
-          ]);
-        setQuantity(cartQuantity);
-        setCartProducts(fetchedCartProducts);
-        setInvoiceProducts(fetchedInvoiceProducts);
-      } catch (error) {
-        console.error("Failed to refresh cart:", error);
-      } finally {
-        setTriggerRefetch(false);
-        if (forceLoading) {
-          setIsLoading(false);
-        }
-      }
-    },
-    [userId],
-  );
+  const refreshCart = useCallback(async () => {
+    try {
+      const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
+        await Promise.all([
+          fetchCartProductQuantity(userId),
+          fetchCartProducts(userId),
+          fetchInvoiceProducts(userId),
+        ]);
+      setQuantity(cartQuantity);
+      setCartProducts(fetchedCartProducts);
+      setInvoiceProducts(fetchedInvoiceProducts);
+    } catch (error) {
+      console.error("Failed to refresh cart:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [userId]);
 
   useEffect(() => {
     if (userId) {
-      refreshCart(true);
+      refreshCart();
     }
-  }, [userId, triggerRefetch, refreshCart]);
+  }, [userId, refreshCart]);
 
   return (
     <CartContext.Provider
@@ -79,7 +68,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
         invoiceProducts,
         isLoading,
         refreshCart,
-        triggerRefetchCart: () => setTriggerRefetch(true),
       }}
     >
       {children}

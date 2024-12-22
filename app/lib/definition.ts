@@ -6,6 +6,7 @@ export type User = {
   email: string;
   password: string;
   isVerified: boolean;
+  image: string;
   address: {
     recipient: string;
     phone: string;

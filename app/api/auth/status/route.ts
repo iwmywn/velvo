@@ -14,7 +14,11 @@ export async function GET(req: NextRequest) {
 
   if (result.isValid && result.payload?.id) {
     return new Response(
-      JSON.stringify({ isSignedIn: true, userId: result.payload.id }),
+      JSON.stringify({
+        isSignedIn: true,
+        userId: result.payload.id,
+        image: result.payload.image,
+      }),
       { status: 200 },
     );
   }
