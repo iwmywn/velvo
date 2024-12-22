@@ -155,6 +155,7 @@ function ChangePassword({ userId, handleClose }: SettingsProps) {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Change password Error: ", error);
       toast.error("Something went wrong! Try again later.");
     }
   };
@@ -257,6 +258,7 @@ function ChangeEmail({ userId, handleClose }: SettingsProps) {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Change email Error: ", error);
       toast.error("Something went wrong! Try again later.");
     }
   };
@@ -358,6 +360,7 @@ function DeleteAccount({ userId, handleClose }: SettingsProps) {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Delete account Error: ", error);
       toast.error("Something went wrong! Try again later.");
     }
   };

@@ -36,7 +36,8 @@ export default function PurchaseOverview() {
   const searchParams = useSearchParams();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { cartProducts, invoiceProducts } = useCartContext();
+  const { isLoading, triggerRefetchCart, cartProducts, invoiceProducts } =
+    useCartContext();
 
   useHideMenu(setIsOpen);
   useEffect(() => {
@@ -70,6 +71,8 @@ export default function PurchaseOverview() {
       {label}
     </div>
   ));
+
+  if (!isLoading && !cartProducts && !invoiceProducts) triggerRefetchCart();
 
   return (
     <>

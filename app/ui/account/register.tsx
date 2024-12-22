@@ -64,6 +64,7 @@ export default function Register() {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Register Error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setCaptchaVerified(false);

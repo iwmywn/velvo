@@ -25,6 +25,7 @@ export async function handleTokenVerification(
         setMessage(result.message);
       }
     } catch (error) {
+      console.error("Verification Token Error: ", error);
       setStatus("error");
       setMessage("Something went wrong! Please try again.");
     } finally {

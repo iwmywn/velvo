@@ -21,7 +21,6 @@ import { toast } from "react-toastify";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
 import { useCartContext } from "@ui/hooks/cart";
-import { fetchCartProductQuantity } from "@lib/data";
 import { transformProducts } from "@lib/utils";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
@@ -49,7 +48,7 @@ export default function Checkout({
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
   const router = useRouter();
-  const { setQuantity } = useCartContext();
+  const { refreshCart } = useCartContext();
   const updatedProducts = transformProducts(products);
 
   const handleClose = () => {
@@ -135,17 +134,16 @@ export default function Checkout({
       const result = await res.json();
 
       if (res.ok) {
+        await refreshCart();
         toast.success(result.message);
-        toast.success("Is redirecting...");
         reset();
         handleClose();
         router.push("/user/purchase?tab=to-ship-and-receive");
-        const updatedQuantity = await fetchCartProductQuantity(userId);
-        setQuantity(updatedQuantity);
       } else {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Place order Error: ", error);
       toast.error("Something went wrong! Try again later.");
     } finally {
       setCaptchaVerified(false);

@@ -3,7 +3,7 @@
 import Wrapper from "@ui/account/wrapper";
 import { toast } from "react-toastify";
 import { FormButton } from "@ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   formClass,
   boxClass,
@@ -71,6 +71,7 @@ export default function EmailForm({
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Email Form Error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setCaptchaVerified(false);

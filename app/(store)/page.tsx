@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import Button from "@ui/button";
-import { fetchCategories, fetchProducts } from "@lib/data";
+import { fetchCategories } from "@lib/data";
 
 export default async function HomePage() {
   const categories = await fetchCategories();

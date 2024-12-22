@@ -53,6 +53,7 @@ export default function SignIn() {
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Sign in Error: ", error);
       toast.error("Something went wrong! Please try again.");
     }
   };

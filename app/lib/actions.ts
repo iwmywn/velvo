@@ -5,7 +5,6 @@ import { connectToDatabase } from "@lib/mongodb";
 import { User } from "@lib/definition";
 import nodemailer from "nodemailer";
 import { revalidatePath } from "next/cache";
-import { createResponse } from "@lib/utils";
 
 /**
  *

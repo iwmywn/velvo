@@ -9,7 +9,6 @@ import { MdDelete } from "react-icons/md";
 import { useCartContext } from "@ui/hooks/cart";
 import { useAuthContext } from "@ui/hooks/auth";
 import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
-import { fetchCartProductQuantity, fetchCartProducts } from "@lib/data";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
@@ -40,10 +39,9 @@ export default function ProductRow({
 }: Product & { quantity: number; size: string }) {
   const formattedPrice = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
   const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
-  const { setQuantity } = useCartContext();
   const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { setCartProducts } = useCartContext();
+  const { refreshCart } = useCartContext();
 
   const handleCartOperation = async (
     operation: () => Promise<string>,
@@ -54,10 +52,7 @@ export default function ProductRow({
       const message = await operation();
 
       if (successMessages.includes(message)) {
-        const updatedQuantity = await fetchCartProductQuantity(userId);
-        const updateCartProducts = await fetchCartProducts(userId);
-        setCartProducts(updateCartProducts);
-        setQuantity(updatedQuantity);
+        await refreshCart();
       } else {
         toast.error(message);
       }

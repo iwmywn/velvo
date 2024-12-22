@@ -14,11 +14,6 @@ import { useAuthContext } from "@ui/hooks/auth";
 import { useRouter } from "next/navigation";
 import useOverflow from "@ui/hooks/overflow";
 import Backdrop from "@ui/overlays/backdrop";
-import {
-  fetchCartProductQuantity,
-  fetchCartProducts,
-  fetchInvoiceProducts,
-} from "@lib/data";
 import { useCartContext } from "@ui/hooks/cart";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
@@ -37,6 +32,7 @@ export default function OrderList({
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {},
   );
+  const [isLoadingGlobal, setIsLoadingGlobal] = useState<boolean>(false);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState<boolean>(false);
   const [isOpenDeliveryInfo, setIsOpenDeliveryInfo] = useState<boolean>(false);
@@ -51,11 +47,10 @@ export default function OrderList({
     address: string;
     date: Date;
   } | null>(null);
-  const { setQuantity } = useCartContext();
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };
-  const { isLoading, setCartProducts, setInvoiceProducts } = useCartContext();
+  const { isLoading, refreshCart } = useCartContext();
 
   useOverflow(isOpenConfirm);
   useOverflow(isOpenDeliveryInfo);
@@ -101,6 +96,7 @@ export default function OrderList({
     }));
 
     setButtonLoading(invoiceId, true);
+    setIsLoadingGlobal(true);
     try {
       const message = await cancelReceiveOrder(
         userId,
@@ -110,20 +106,20 @@ export default function OrderList({
       );
 
       if (message === "Done.") {
-        const updateInvoiceProducts = await fetchInvoiceProducts(userId);
-        setInvoiceProducts(updateInvoiceProducts);
+        await refreshCart();
         toast.success(
           status === "PROCESSING" ? "Order Completed." : "Order Cancelled.",
         );
-        toast.success("Is redirecting...");
         router.push(`/user/purchase?tab=${statusUrl}`);
       } else {
         toast.error(message);
       }
     } catch (error) {
+      console.error("Cancel Receive Error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setButtonLoading(invoiceId, false);
+      setIsLoadingGlobal(false);
       setInvoiceData(null);
     }
   };
@@ -135,23 +131,23 @@ export default function OrderList({
   ) => {
     const key = `${invoiceId}-${productId}-${size}`;
     setButtonLoading(key, true);
+    setIsLoadingGlobal(true);
 
     try {
       const message = await addToCart(productId, userId, size);
 
       if (message === "Done.") {
+        await refreshCart();
         router.push("/cart-overlay", { scroll: false });
-        const updatedQuantity = await fetchCartProductQuantity(userId);
-        const updateCartProducts = await fetchCartProducts(userId);
-        setCartProducts(updateCartProducts);
-        setQuantity(updatedQuantity);
       } else {
         toast.error(message);
       }
     } catch (error) {
+      console.error("Add to cart Error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setButtonLoading(key, false);
+      setIsLoadingGlobal(false);
     }
   };
 
@@ -314,7 +310,7 @@ export default function OrderList({
                             onClick={() => handleAddToCart(invoiceId, id, size)}
                             disabled={
                               loadingStates[`${invoiceId}-${id}-${size}`] ||
-                              false
+                              isLoadingGlobal
                             }
                           >
                             {loadingStates[`${invoiceId}-${id}-${size}`] ? (
@@ -356,7 +352,7 @@ export default function OrderList({
                         onClick={() =>
                           handleCancelReceive(invoiceId, products, status)
                         }
-                        disabled={loadingStates[invoiceId] || false}
+                        disabled={loadingStates[invoiceId] || isLoadingGlobal}
                       >
                         {loadingStates[invoiceId] ? (
                           <div

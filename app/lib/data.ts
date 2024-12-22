@@ -4,11 +4,8 @@ import { connectToDatabase } from "@lib/mongodb";
 import {
   Category,
   Product,
-  Cart,
   Products,
   CartProductsProps,
-  InvoiceProductsProps,
-  Invoice,
 } from "@lib/definition";
 import { ObjectId } from "mongodb";
 

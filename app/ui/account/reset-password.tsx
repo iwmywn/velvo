@@ -73,6 +73,7 @@ export default function ResetPassword({
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("Reset password Error: ", error);
       toast.error("Something went wrong! Please try again.");
     }
   };

@@ -43,6 +43,7 @@ export default function ReCaptchaPopup({
         toast.error(result.message);
       }
     } catch (error) {
+      console.error("RECAPTCHA Error: ", error);
       toast.error("Failed to verify CAPTCHA! Please try again.");
     } finally {
       animateAndClose(onClose);

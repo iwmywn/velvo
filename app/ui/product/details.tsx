@@ -10,7 +10,6 @@ import { useAuthContext } from "@ui/hooks/auth";
 import { addToCart } from "@lib/actions";
 import { toast } from "react-toastify";
 import { useCartContext } from "@ui/hooks/cart";
-import { fetchCartProductQuantity } from "@lib/data";
 import { useRouter } from "next/navigation";
 
 export default function ProductDetails({ product }: { product: Product }) {
@@ -27,7 +26,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { userId } = useAuthContext();
-  const { setQuantity } = useCartContext();
+  const { refreshCart } = useCartContext();
   const router = useRouter();
 
   const handleAddToCart = async () => {
@@ -36,13 +35,13 @@ export default function ProductDetails({ product }: { product: Product }) {
       const message = await addToCart(productId, userId, selectedSize!);
 
       if (message === "Done.") {
+        await refreshCart();
         router.push("/cart-overlay", { scroll: false });
-        const updatedQuantity = await fetchCartProductQuantity(userId);
-        setQuantity(updatedQuantity);
       } else {
         toast.error(message);
       }
     } catch (error) {
+      console.error("Add to cart Error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
       setIsLoading(false);

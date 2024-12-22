@@ -6,8 +6,7 @@ import React, {
   useState,
   ReactNode,
   useEffect,
-  Dispatch,
-  SetStateAction,
+  useCallback,
 } from "react";
 import {
   fetchCartProductQuantity,
@@ -19,13 +18,11 @@ import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
 
 interface CartContextProps {
   quantity: number;
-  setQuantity: Dispatch<SetStateAction<number>>;
   cartProducts: CartProductsProps | null;
-  setCartProducts: Dispatch<SetStateAction<CartProductsProps | null>>;
   invoiceProducts: InvoiceProductsProps | null;
-  setInvoiceProducts: Dispatch<SetStateAction<InvoiceProductsProps | null>>;
   isLoading: boolean;
-  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  refreshCart: (forceLoading?: boolean) => Promise<void>;
+  triggerRefetchCart: () => void;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -39,36 +36,50 @@ export function CartProvider({ children }: { children: ReactNode }) {
     useState<InvoiceProductsProps | null>(null);
   const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [triggerRefetch, setTriggerRefetch] = useState<boolean>(false);
+
+  const refreshCart = useCallback(
+    async (forceLoading: boolean = false) => {
+      if (forceLoading) {
+        setIsLoading(true);
+      }
+      try {
+        const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
+          await Promise.all([
+            fetchCartProductQuantity(userId),
+            fetchCartProducts(userId),
+            fetchInvoiceProducts(userId),
+          ]);
+        setQuantity(cartQuantity);
+        setCartProducts(fetchedCartProducts);
+        setInvoiceProducts(fetchedInvoiceProducts);
+      } catch (error) {
+        console.error("Failed to refresh cart:", error);
+      } finally {
+        setTriggerRefetch(false);
+        if (forceLoading) {
+          setIsLoading(false);
+        }
+      }
+    },
+    [userId],
+  );
 
   useEffect(() => {
-    setIsLoading(true);
-    async function initialize() {
-      const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
-        await Promise.all([
-          fetchCartProductQuantity(userId),
-          fetchCartProducts(userId),
-          fetchInvoiceProducts(userId),
-        ]);
-      setQuantity(cartQuantity);
-      setCartProducts(fetchedCartProducts);
-      setInvoiceProducts(fetchedInvoiceProducts);
-      setIsLoading(false);
+    if (userId) {
+      refreshCart(true);
     }
-
-    if (userId) initialize();
-  }, [userId]);
+  }, [userId, triggerRefetch, refreshCart]);
 
   return (
     <CartContext.Provider
       value={{
         quantity,
-        setQuantity,
         cartProducts,
-        setCartProducts,
         invoiceProducts,
-        setInvoiceProducts,
         isLoading,
-        setIsLoading,
+        refreshCart,
+        triggerRefetchCart: () => setTriggerRefetch(true),
       }}
     >
       {children}

@@ -17,6 +17,7 @@ export async function POST(req: Request) {
 
     return createResponse("CAPTCHA verified successfully", 200);
   } catch (error) {
+    console.error("Verify RECAPTCHA Error: ", error);
     return createResponse("Something went wrong!", 500);
   }
 }

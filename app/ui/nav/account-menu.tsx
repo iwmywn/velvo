@@ -10,7 +10,7 @@ import { useState } from "react";
 export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const deviceType = useDeviceType();
-  const { isSignedIn, userId } = useAuthContext();
+  const { isSignedIn } = useAuthContext();
 
   useHideMenu(setIsOpen);
 
