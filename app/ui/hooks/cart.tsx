@@ -50,13 +50,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setCartProducts(fetchedCartProducts);
       setInvoiceProducts(fetchedInvoiceProducts);
 
-      sessionStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+      sessionStorage.setItem(
+        "cartProducts",
+        JSON.stringify(fetchedCartProducts),
+      );
     } catch (error) {
       console.error("Failed to refresh cart:", error);
     } finally {
       setIsLoading(false);
     }
-  }, [userId, cartProducts]);
+  }, [userId]);
 
   useEffect(() => {
     if (isAuthLoading || !userId) return;
