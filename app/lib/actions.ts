@@ -121,7 +121,9 @@ export async function addToCart(
     }
 
     if (currentQuantityInCart + quantity > remainingQuantity) {
-      return `Cannot add more. Only ${remainingQuantity - currentQuantityInCart} left in stock.`;
+      return `Cannot add more. You have added ${currentQuantityInCart} product(s). Only ${
+        remainingQuantity - currentQuantityInCart
+      } left in stock.`;
     }
 
     if (!cart) {

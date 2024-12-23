@@ -35,11 +35,18 @@ export default function ProductDetails({ product }: { product: Product }) {
   const router = useRouter();
   const descriptionRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperCore | null>(null);
+  const [quantity, setQuantity] = useState<number>(1);
+  const remainingQuantity = sizes[selectedSize as keyof typeof sizes];
 
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      const message = await addToCart(productId, userId, selectedSize!);
+      const message = await addToCart(
+        productId,
+        userId,
+        selectedSize!,
+        quantity,
+      );
 
       if (message === "Done.") {
         await refreshCart();
@@ -146,15 +153,34 @@ export default function ProductDetails({ product }: { product: Product }) {
             ))}
             {selectedSize !== null && (
               <span
-                className={`text-sm font-medium ${sizes[selectedSize as keyof typeof sizes] > 0 ? "text-green-600" : "text-red-600"}`}
+                className={`text-sm font-medium ${remainingQuantity > 0 ? "text-green-600" : "text-red-600"}`}
               >
-                {sizes[selectedSize as keyof typeof sizes] > 0
-                  ? `In stock: ${sizes[selectedSize as keyof typeof sizes]}`
+                {remainingQuantity > 0
+                  ? `In stock: ${remainingQuantity}`
                   : "Out of stock"}
               </span>
             )}
           </div>
         </div>
+        {selectedSize && (
+          <div className="flex max-w-max items-center border text-sm">
+            <button
+              className={`flex items-center justify-center border-r px-3 py-2 transition-all duration-300 ${quantity > 1 ? "hover:bg-slate-100" : "opacity-50"}`}
+              onClick={() => setQuantity((prev) => prev - 1)}
+              disabled={quantity === 1}
+            >
+              <HiMinusSmall />
+            </button>
+            <span className="select-none px-5 text-center">{quantity}</span>
+            <button
+              className={`flex items-center justify-center border-l px-3 py-2 transition-all duration-300 ${quantity < remainingQuantity ? "hover:bg-slate-100" : "opacity-50"}`}
+              onClick={() => setQuantity((prev) => prev + 1)}
+              disabled={quantity === remainingQuantity}
+            >
+              <HiPlusSmall />
+            </button>
+          </div>
+        )}
         <Button
           className="relative flex h-10 w-full items-center justify-center"
           disabled={

@@ -11,6 +11,7 @@ import { useAuthContext } from "@ui/hooks/auth";
 import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 
 const ActionButton = ({
   handleDeleteFromCart,
@@ -128,19 +129,19 @@ export default function ProductRow({
       <div className="flex items-center justify-between sm:justify-center">
         <div className="flex w-full max-w-[100px] items-center border">
           <button
-            className="flex-1 border-r py-1 transition-all duration-300 hover:bg-stone-100"
+            className="flex flex-1 items-center justify-center border-r py-2 transition-all duration-300 hover:bg-slate-100"
             onClick={handleRemoveFromCart}
           >
-            -
+            <HiMinusSmall />
           </button>
-          <span className="flex-1 select-none py-1 text-center">
+          <span className="flex-1 select-none text-center">
             {isAdd(isLoading, quantity)}
           </span>
           <button
-            className="flex-1 border-l py-1 transition-all duration-300 hover:bg-stone-100"
+            className="flex flex-1 items-center justify-center border-l py-2 transition-all duration-300 hover:bg-slate-100"
             onClick={handleAddToCart}
           >
-            +
+            <HiPlusSmall />
           </button>
         </div>
         <div className="block sm:hidden">
