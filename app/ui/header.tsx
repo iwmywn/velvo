@@ -27,11 +27,15 @@ export default function Header() {
       <header
         ref={ref}
         id="header"
-        className="fixed left-0 right-0 top-0 z-20 flex justify-center bg-white/80 backdrop-blur"
+        className="fixed left-0 right-0 top-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
       >
         <nav className="mx-8 flex w-full items-center justify-between pb-1 pt-5 md:mx-20 md:pb-3 md:pt-8">
           <div className="hidden max-w-[28rem] flex-1 lg:flex lg:items-center lg:justify-between">
-            <Link className="text-2xl font-bold" href="/" title="StyleWave">
+            <Link
+              className="select-none text-2xl font-bold"
+              href="/"
+              title="StyleWave"
+            >
               StyleWave
             </Link>
             {navLinks.map(({ label, href }) => (
@@ -41,7 +45,9 @@ export default function Header() {
                 className={`rounded border px-4 py-1 text-sm ${pathname === href ? "bg-slate-50" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-slate-50"}`}
                 title={`${label} Category`}
               >
-                <span className="hidden font-semibold md:block">{label}</span>
+                <span className="hidden text-nowrap font-semibold md:block">
+                  {label}
+                </span>
               </Link>
             ))}
           </div>

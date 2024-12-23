@@ -29,7 +29,7 @@ export default function ScrollToTop() {
       {showButton && (
         <div
           onClick={scrollToTop}
-          className="fixed bottom-20 right-0 z-50 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-black text-white transition-all duration-300 hover:scale-95"
+          className="fixed bottom-20 right-0 z-50 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border bg-black text-white transition-all duration-300 hover:scale-95"
         >
           <FaArrowUp fontSize={12} />
         </div>

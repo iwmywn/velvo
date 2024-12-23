@@ -121,9 +121,7 @@ export async function addToCart(
     }
 
     if (currentQuantityInCart + quantity > remainingQuantity) {
-      return `Cannot add more. You have added ${currentQuantityInCart} product(s). Only ${
-        remainingQuantity - currentQuantityInCart
-      } left in stock.`;
+      return `Cannot add more. Only ${remainingQuantity - currentQuantityInCart} left in stock.`;
     }
 
     if (!cart) {
@@ -162,9 +160,14 @@ export async function addToCart(
           {
             $push: {
               products: {
-                productId: new ObjectId(productId),
-                quantity,
-                size,
+                $each: [
+                  {
+                    productId: new ObjectId(productId),
+                    quantity,
+                    size,
+                  },
+                ],
+                $position: 0,
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
               } as any,
             },

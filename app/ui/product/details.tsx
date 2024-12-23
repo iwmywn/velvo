@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { formatCurrency } from "@lib/utils";
 import Button from "@ui/button";
@@ -11,6 +11,7 @@ import { addToCart } from "@lib/actions";
 import { toast } from "react-toastify";
 import { useCartContext } from "@ui/hooks/cart";
 import { useRouter } from "next/navigation";
+import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
@@ -25,9 +26,11 @@ export default function ProductDetails({ product }: { product: Product }) {
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const { userId } = useAuthContext();
   const { refreshCart } = useCartContext();
   const router = useRouter();
+  const descriptionRef = useRef<HTMLDivElement>(null);
 
   const handleAddToCart = async () => {
     setIsLoading(true);
@@ -65,13 +68,14 @@ export default function ProductDetails({ product }: { product: Product }) {
           </div>
         ))}
       </div>
+
       <div className="relative col-span-5 sm:col-span-4 lg:col-span-6 min-[1400px]:col-span-7">
         {saleOff > 0 && (
           <div className="absolute left-0 top-0 z-[1] rounded-tl-lg bg-red-600 px-5 py-2 text-sm font-bold text-white">
             {saleOff}% OFF
           </div>
         )}
-        <div className="flex h-[18.75rem] items-center justify-center rounded-lg bg-slate-50/50 p-5">
+        <div className="flex h-[18.75rem] items-center justify-center rounded-lg p-5">
           <Image
             src={selectedImage}
             alt={name}
@@ -82,9 +86,9 @@ export default function ProductDetails({ product }: { product: Product }) {
           />
         </div>
       </div>
+
       <div className="col-span-5 space-y-6 lg:col-span-4">
         <h1 className="text-2xl font-extrabold text-gray-900">{name}</h1>
-        <p className="text-sm text-gray-600">{description}</p>
         <div className="text-lg font-bold text-gray-900">
           {saleOff > 0 ? (
             <>
@@ -120,11 +124,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             ))}
             {selectedSize !== null && (
               <span
-                className={`text-sm font-medium ${
-                  sizes[selectedSize as keyof typeof sizes] > 0
-                    ? "text-green-600"
-                    : "text-red-600"
-                }`}
+                className={`text-sm font-medium ${sizes[selectedSize as keyof typeof sizes] > 0 ? "text-green-600" : "text-red-600"}`}
               >
                 {sizes[selectedSize as keyof typeof sizes] > 0
                   ? `In stock: ${sizes[selectedSize as keyof typeof sizes]}`
@@ -156,6 +156,26 @@ export default function ProductDetails({ product }: { product: Product }) {
             "SOLD OUT"
           )}
         </Button>
+        <div className="space-y-2 text-xs">
+          <div
+            onClick={() => setIsExpanded((prev) => !prev)}
+            className="flex h-full cursor-pointer items-center justify-between border-y py-3 font-medium"
+          >
+            <span>DESCRIPTION</span>
+            {isExpanded ? <HiMinusSmall /> : <HiPlusSmall />}
+          </div>
+          <div
+            ref={descriptionRef}
+            className={`transition-max-height overflow-hidden duration-500 ease-in-out ${isExpanded ? "max-h-max" : "max-h-0"}`}
+            style={{
+              maxHeight: isExpanded
+                ? descriptionRef.current?.scrollHeight + "px"
+                : "0px",
+            }}
+          >
+            <p>{description}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
