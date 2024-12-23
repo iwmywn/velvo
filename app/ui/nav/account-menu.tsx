@@ -12,6 +12,14 @@ export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const deviceType = useDeviceType();
   const { isSignedIn, image, isLoading } = useAuthContext();
+  const avatar = (
+    <Image
+      src={image!}
+      fill
+      sizes="(min-width: 768px) 24px, 22px"
+      alt="The avatar style Adventurer is a remix of: Adventurer by Lisa Wischofsky, licensed under CC BY 4.0 ."
+    />
+  );
 
   useHideMenu(setIsOpen);
 
@@ -39,18 +47,12 @@ export default function AccountMenu() {
               href="/user/account-settings"
               title="Account"
             >
-              <Image
-                src={image!}
-                fill
-                alt="The avatar style Adventurer is a remix of: Adventurer by Lisa Wischofsky, licensed under CC BY 4.0 ."
-              />
+              {avatar}
             </Link>
           ) : (
-            <Image
-              src={image!}
-              fill
-              alt="The avatar style Adventurer is a remix of: Adventurer by Lisa Wischofsky, licensed under CC BY 4.0 ."
-            />
+            <span className="relative h-[22px] w-[22px] md:h-6 md:w-6">
+              {avatar}
+            </span>
           )}
           {isOpen && (
             <div className="absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 text-sm">

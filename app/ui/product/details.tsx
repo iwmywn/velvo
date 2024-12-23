@@ -12,6 +12,9 @@ import { toast } from "react-toastify";
 import { useCartContext } from "@ui/hooks/cart";
 import { useRouter } from "next/navigation";
 import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore from "swiper";
+import "swiper/css";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
@@ -31,6 +34,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const { refreshCart } = useCartContext();
   const router = useRouter();
   const descriptionRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperCore | null>(null);
 
   const handleAddToCart = async () => {
     setIsLoading(true);
@@ -51,13 +55,18 @@ export default function ProductDetails({ product }: { product: Product }) {
     }
   };
 
+  const handleThumbnailClick = (img: string, index: number) => {
+    setSelectedImage(img);
+    swiperRef.current?.slideTo(index);
+  };
+
   return (
     <div className="mt-10 grid grid-cols-5 gap-x-5 gap-y-5 pb-5 lg:grid-cols-12 lg:gap-6">
       <div className="col-span-5 grid grid-cols-[1fr_1fr_1fr] gap-4 sm:col-span-1 sm:flex sm:flex-col lg:col-span-2 min-[1400px]:col-span-1">
         {images.map((img, index) => (
           <div
             key={index}
-            onClick={() => setSelectedImage(img)}
+            onClick={() => handleThumbnailClick(img, index)}
             className={`flex cursor-pointer items-center justify-center rounded-lg border hover:bg-slate-100 ${
               selectedImage === img
                 ? "border-black bg-slate-50"
@@ -75,16 +84,29 @@ export default function ProductDetails({ product }: { product: Product }) {
             {saleOff}% OFF
           </div>
         )}
-        <div className="flex h-[18.75rem] items-center justify-center rounded-lg p-5">
-          <Image
-            src={selectedImage}
-            alt={name}
-            width={300}
-            height={300}
-            sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 300px"
-            style={{ objectFit: "contain" }}
-          />
-        </div>
+        <Swiper
+          slidesPerView={1}
+          onSlideChange={(swiper) =>
+            setSelectedImage(images[swiper.activeIndex])
+          }
+          onSwiper={(swiper) => (swiperRef.current = swiper)}
+          initialSlide={images.indexOf(selectedImage)}
+        >
+          {images.map((img, index) => (
+            <SwiperSlide key={index}>
+              <div className="flex h-[18.75rem] items-center justify-center rounded-lg p-5">
+                <Image
+                  src={img}
+                  alt={name}
+                  width={300}
+                  height={300}
+                  sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 300px"
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
 
       <div className="col-span-5 space-y-6 lg:col-span-4">
