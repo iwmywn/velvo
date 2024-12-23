@@ -5,10 +5,19 @@ import { connectToDatabase } from "@lib/mongodb";
 import { placeOrderWithIdSchema } from "@/schemas";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
+import verifyRecaptchaToken from "@lib/captcha";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  const parsedCredentials = placeOrderWithIdSchema.safeParse(data);
+  const { recaptchaToken, ...userData } = data;
+
+  if (!recaptchaToken) return createResponse("Invalid field!", 400);
+
+  const verify = await verifyRecaptchaToken(recaptchaToken);
+
+  if (!verify) return createResponse("Captcha challenge failed!", 422);
+
+  const parsedCredentials = placeOrderWithIdSchema.safeParse(userData);
 
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 

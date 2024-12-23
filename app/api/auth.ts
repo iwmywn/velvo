@@ -3,7 +3,7 @@
 import { jwtVerify } from "jose";
 import { cookies } from "next/headers";
 
-export default async function verifyToken(token: string) {
+export default async function verifyJWTToken(token: string) {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
 
   try {
@@ -23,7 +23,7 @@ export async function getUserId(): Promise<string | undefined> {
   const token = cookieStore.get("auth_token")?.value;
 
   if (token) {
-    const result = await verifyToken(token);
+    const result = await verifyJWTToken(token);
     if (result.isValid && typeof result.payload?.id === "string") {
       return result.payload.id;
     }

@@ -22,7 +22,7 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function Register() {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
-  const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -41,7 +41,7 @@ export default function Register() {
   });
 
   const onSubmit = async (data: RegisterFormData) => {
-    if (!showCaptcha && !captchaVerified) {
+    if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
     }
@@ -52,7 +52,7 @@ export default function Register() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, recaptchaToken }),
       });
 
       const result = await res.json();
@@ -67,7 +67,7 @@ export default function Register() {
       console.error("Register Error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
-      setCaptchaVerified(false);
+      setRecaptchaToken(null);
       setShowCaptcha(false);
     }
   };
@@ -76,8 +76,8 @@ export default function Register() {
     <>
       {showCaptcha && (
         <ReCaptchaPopup
-          onVerify={() => setCaptchaVerified(true)}
           onClose={() => setShowCaptcha(false)}
+          setRecaptchaToken={(token) => setRecaptchaToken(token)}
         />
       )}
       <div className="flex w-full flex-col items-center px-5">

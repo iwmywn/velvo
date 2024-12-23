@@ -46,7 +46,7 @@ export default function Checkout({
   const [wards, setWards] = useState<string[]>([]);
   const { userId } = useAuthContext();
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
-  const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const router = useRouter();
   const { refreshCart } = useCartContext();
   const updatedProducts = transformProducts(products);
@@ -111,7 +111,7 @@ export default function Checkout({
   };
 
   const onSubmit = async (data: PlaceOrderFormData) => {
-    if (!showCaptcha && !captchaVerified) {
+    if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
     }
@@ -122,6 +122,7 @@ export default function Checkout({
         userId,
         products: updatedProducts,
         totalPriceCents,
+        recaptchaToken,
       };
       const res = await fetch(`/api/store/place-order`, {
         method: "POST",
@@ -146,7 +147,7 @@ export default function Checkout({
       console.error("Place order Error: ", error);
       toast.error("Something went wrong! Try again later.");
     } finally {
-      setCaptchaVerified(false);
+      setRecaptchaToken(null);
       setShowCaptcha(false);
     }
   };
@@ -158,8 +159,8 @@ export default function Checkout({
       <Button onClick={() => setIsOpen(true)}>Checkout</Button>
       {showCaptcha && (
         <ReCaptchaPopup
-          onVerify={() => setCaptchaVerified(true)}
           onClose={() => setShowCaptcha(false)}
+          setRecaptchaToken={(token) => setRecaptchaToken(token)}
           overflow={false}
         />
       )}

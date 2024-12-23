@@ -7,51 +7,35 @@ import { useState } from "react";
 import useOverflow from "@ui/hooks/overflow";
 
 interface ReCaptchaPopupProps {
-  onVerify: () => void;
   onClose: () => void;
+  setRecaptchaToken: (token: string | null) => void;
   overflow?: boolean;
 }
 
 export default function ReCaptchaPopup({
-  onVerify,
   onClose,
+  setRecaptchaToken,
   overflow = true,
 }: ReCaptchaPopupProps) {
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const animateAndClose = (callback: () => void) => {
+  const animteAndClose = () => {
     setIsAnimating(true);
-    setTimeout(() => callback(), 250);
+    setTimeout(() => onClose(), 250);
   };
-  const handleVerify = async (token: string | null) => {
+  const handleRecaptchaChange = async (token: string | null) => {
     if (!token) {
       toast.error("CAPTCHA verification failed! Please try again.");
       return;
     }
 
-    try {
-      const res = await fetch("/api/recaptcha", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(token),
-      });
-
-      const result = await res.json();
-
-      if (res.ok) {
-        animateAndClose(onVerify);
-      } else {
-        toast.error(result.message);
-      }
-    } catch (error) {
-      console.error("RECAPTCHA Error: ", error);
-      toast.error("Failed to verify CAPTCHA! Please try again.");
-    } finally {
-      animateAndClose(onClose);
-    }
+    setRecaptchaToken(token);
+    setTimeout(() => {
+      animteAndClose();
+    }, 500);
   };
 
   const handleClose = () => {
-    animateAndClose(onClose);
+    animteAndClose();
     toast.error("Please complete the CAPTCHA!");
   };
 
@@ -69,7 +53,7 @@ export default function ReCaptchaPopup({
       >
         <ReCAPTCHA
           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA!}
-          onChange={handleVerify}
+          onChange={handleRecaptchaChange}
           hl="en"
         />
       </div>

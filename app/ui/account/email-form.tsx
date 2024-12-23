@@ -33,7 +33,7 @@ export default function EmailForm({
   buttonText,
 }: EmailFormProps) {
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
-  const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
@@ -48,7 +48,7 @@ export default function EmailForm({
   });
 
   const onSubmit = async (data: EmailFormData) => {
-    if (!showCaptcha && !captchaVerified) {
+    if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
     }
@@ -59,7 +59,7 @@ export default function EmailForm({
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ ...data, recaptchaToken }),
       });
 
       const result = await res.json();
@@ -74,7 +74,7 @@ export default function EmailForm({
       console.error("Email Form Error: ", error);
       toast.error("Something went wrong! Please try again.");
     } finally {
-      setCaptchaVerified(false);
+      setRecaptchaToken(null);
       setShowCaptcha(false);
     }
   };
@@ -83,8 +83,8 @@ export default function EmailForm({
     <>
       {showCaptcha && (
         <ReCaptchaPopup
-          onVerify={() => setCaptchaVerified(true)}
           onClose={() => setShowCaptcha(false)}
+          setRecaptchaToken={(token) => setRecaptchaToken(token)}
         />
       )}
       <Wrapper title={title}>

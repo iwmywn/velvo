@@ -2,7 +2,7 @@
 
 import { NextResponse, NextRequest } from "next/server";
 import { authRoutes, DEFAULT_SIGNIN_REDIRECT, protectedRoutes } from "@/routes";
-import verifyToken from "@api/auth";
+import verifyJWTToken from "@api/auth";
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("auth_token")?.value;
@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
   let isSignedIn = null;
 
   if (token) {
-    const result = await verifyToken(token);
+    const result = await verifyJWTToken(token);
     isSignedIn = result.isValid;
   }
 

@@ -7,10 +7,19 @@ import { registerSchema } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
 import avatars from "@ui/data/avatars";
+import verifyRecaptchaToken from "@lib/captcha";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  const parsedCredentials = registerSchema.safeParse(data);
+  const { recaptchaToken, ...userData } = data;
+
+  if (!recaptchaToken) return createResponse("Invalid field!", 400);
+
+  const verify = await verifyRecaptchaToken(recaptchaToken);
+
+  if (!verify) return createResponse("Captcha challenge failed!", 422);
+
+  const parsedCredentials = registerSchema.safeParse(userData);
 
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
