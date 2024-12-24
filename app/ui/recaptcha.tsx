@@ -3,8 +3,8 @@
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 import { createPortal } from "react-dom";
-import { useState } from "react";
 import useOverflow from "@ui/hooks/overflow";
+import useAnimation from "@ui/hooks/animation";
 
 interface ReCaptchaPopupProps {
   onClose: () => void;
@@ -17,11 +17,8 @@ export default function ReCaptchaPopup({
   setRecaptchaToken,
   overflow = true,
 }: ReCaptchaPopupProps) {
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const animteAndClose = () => {
-    setIsAnimating(true);
-    setTimeout(() => onClose(), 250);
-  };
+  const { isAnimating, triggerAnimation } = useAnimation();
+  const animteAndClose = () => triggerAnimation(() => onClose());
   const handleRecaptchaChange = async (token: string | null) => {
     if (!token) {
       toast.error("CAPTCHA verification failed! Please try again.");

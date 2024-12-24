@@ -17,6 +17,7 @@ import Backdrop from "@ui/overlays/backdrop";
 import { useCartContext } from "@ui/hooks/cart";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
+import useAnimation from "@ui/hooks/animation";
 
 export default function OrderList({
   invoiceProducts,
@@ -33,7 +34,7 @@ export default function OrderList({
     {},
   );
   const [isLoadingGlobal, setIsLoadingGlobal] = useState<boolean>(false);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const { isAnimating, triggerAnimation } = useAnimation();
   const [isOpenConfirm, setIsOpenConfirm] = useState<boolean>(false);
   const [isOpenDeliveryInfo, setIsOpenDeliveryInfo] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState<{
@@ -64,14 +65,11 @@ export default function OrderList({
   if (invoiceProductsFilter === undefined || invoiceProductsFilter.length === 0)
     return <EmptyState emptyState={emptyState} />;
 
-  const handleClose = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
+  const handleClose = () =>
+    triggerAnimation(() => {
       setIsOpenConfirm(false);
       setIsOpenDeliveryInfo(false);
-    }, 250);
-  };
+    });
 
   const handleCancelReceive = async (
     invoiceId: string,
@@ -246,9 +244,9 @@ export default function OrderList({
             address,
             totalPriceCents,
           }) => (
-            <div key={invoiceId} className="relative rounded-md border">
+            <div key={invoiceId} className="relative border">
               <div
-                className={`absolute left-0 top-0 z-[1] ml-auto rounded-tl-md px-2 text-center text-[10px] text-white ${status === "WAITING" ? "bg-blue-500" : status === "PROCESSING" ? "bg-yellow-500" : status === "COMPLETED" ? "bg-green-500" : "bg-red-500"}`}
+                className={`absolute left-0 top-0 z-[1] ml-auto px-2 text-center text-[10px] text-white ${status === "WAITING" ? "bg-blue-500" : status === "PROCESSING" ? "bg-yellow-500" : status === "COMPLETED" ? "bg-green-500" : "bg-red-500"}`}
               >
                 {status}
               </div>

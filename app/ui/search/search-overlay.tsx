@@ -8,10 +8,11 @@ import ProductCard from "@ui/product/card";
 import { Product } from "@lib/definition";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
+import useAnimation from "@ui/hooks/animation";
 
 export default function SearchOverlay({ products }: { products: Product[] }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const { isAnimating, triggerAnimation } = useAnimation();
   const [wasInProductPage, setWasInProductPage] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -19,15 +20,13 @@ export default function SearchOverlay({ products }: { products: Product[] }) {
   const pathname = usePathname();
   const handleClose = useCallback(
     (shouldNavigate: boolean) => {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setIsAnimating(false);
+      triggerAnimation(() => {
         setIsOpen(false);
         if (shouldNavigate && !pathname?.includes("/product/")) router.back();
-      }, 250);
+      });
       setWasInProductPage(false);
     },
-    [pathname, router],
+    [pathname, router, triggerAnimation],
   );
 
   useOverflow(isOpen);
@@ -54,19 +53,18 @@ export default function SearchOverlay({ products }: { products: Product[] }) {
     }
   }, [searchTerm, products]);
 
-  if (!isOpen) return null;
-
   return (
-    <>
+    isOpen && (
       <Backdrop isAnimating={isAnimating} onMouseDown={() => handleClose(true)}>
         <SlidingContainer isAnimating={isAnimating}>
           <div className="relative p-4">
             <input
               type="text"
               placeholder="Search..."
-              className="w-full rounded border border-slate-300 bg-slate-50 px-4 py-2 text-sm text-black/80 outline-none focus:border-black"
+              className="w-full rounded border border-slate-300 px-4 py-2 text-sm text-black/80 outline-none focus:border-black"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              autoFocus
             />
           </div>
           {searchTerm.trim() === "" ? (
@@ -84,6 +82,6 @@ export default function SearchOverlay({ products }: { products: Product[] }) {
           )}
         </SlidingContainer>
       </Backdrop>
-    </>
+    )
   );
 }

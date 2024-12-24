@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useElementHeight } from "@ui/hooks/height";
 import Link from "next/link";
 import { socialLinks, footerSections } from "@ui/data/constants";
@@ -8,8 +8,15 @@ import Button from "@ui/button";
 
 export default function Footer() {
   const ref = useRef<HTMLElement>(null);
+  const [email, setEmail] = useState<string>("");
 
   useElementHeight(ref);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // temporarily
+    setEmail("");
+  };
 
   return (
     <footer
@@ -37,11 +44,13 @@ export default function Footer() {
         ))}
         <div>
           <span className="font-medium">Sign up for our newsletter</span>
-          <form onSubmit={(e) => e.preventDefault()}>
+          <form onSubmit={handleSubmit}>
             <input
               className="my-2 mr-4 h-9 w-60 rounded border border-black/20 px-4 py-2 text-sm text-black/80 outline-none focus:border-black"
               type="email"
               placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <Button type="submit">Sign up</Button>
           </form>

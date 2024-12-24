@@ -14,24 +14,22 @@ import { CartProductsProps } from "@lib/definition";
 import { useAuthContext } from "@ui/hooks/auth";
 import { fetchCartProducts } from "@lib/data";
 import Loading from "@ui/loading";
+import useAnimation from "@ui/hooks/animation";
 
 export default function CartOverlay() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const { isAnimating, triggerAnimation } = useAnimation();
   const router = useRouter();
   const pathname = usePathname();
   const [cartProducts, setCartProducts] = useState<CartProductsProps>(null);
   const totalPriceCents = getTotalPriceCents(cartProducts);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { userId } = useAuthContext();
-  const handleClose = (shouldNavigate: boolean) => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
+  const handleClose = (shouldNavigate: boolean) =>
+    triggerAnimation(() => {
       setIsOpen(false);
       if (shouldNavigate) router.back();
-    }, 250);
-  };
+    });
 
   useOverflow(isOpen);
 

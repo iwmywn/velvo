@@ -7,9 +7,7 @@ export default function ScrollToTop() {
   const [showButton, setShowButton] = useState<boolean>(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setShowButton(window.scrollY > 700);
-    };
+    const handleScroll = () => setShowButton(window.scrollY > 700);
 
     handleScroll();
 

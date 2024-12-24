@@ -22,6 +22,7 @@ import {
 } from "@ui/form-class";
 import { toast } from "react-toastify";
 import { useAuthContext } from "@ui/hooks/auth";
+import useAnimation from "@ui/hooks/animation";
 
 interface SettingsProps {
   userId: string | undefined;
@@ -29,17 +30,11 @@ interface SettingsProps {
 }
 
 export default function AccountSettings() {
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const { isAnimating, triggerAnimation } = useAnimation();
   const [isOpen, setIsOpen] = useState<
     "change-password" | "change-email" | "delete-account" | null
   >(null);
-  const handleClose = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
-      setIsOpen(null);
-    }, 250);
-  };
+  const handleClose = () => triggerAnimation(() => setIsOpen(null));
   const { userId } = useAuthContext();
 
   useOverflow(!!isOpen);

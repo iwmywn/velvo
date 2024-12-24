@@ -22,6 +22,7 @@ import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
 import { useCartContext } from "@ui/hooks/cart";
 import { transformProducts } from "@lib/utils";
+import useAnimation from "@ui/hooks/animation";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
@@ -39,7 +40,7 @@ export default function Checkout({
   totalPriceCents: string;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const { isAnimating, triggerAnimation } = useAnimation();
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [districts, setDistricts] = useState<string[]>([]);
@@ -50,14 +51,7 @@ export default function Checkout({
   const router = useRouter();
   const { refreshCart } = useCartContext();
   const updatedProducts = transformProducts(products);
-
-  const handleClose = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
-      setIsOpen(false);
-    }, 250);
-  };
+  const handleClose = () => triggerAnimation(() => setIsOpen(false));
 
   const {
     register,

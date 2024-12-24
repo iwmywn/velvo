@@ -12,6 +12,7 @@ import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "@ui/nav/cart-aside";
 import AccountMenu from "@ui/nav/account-menu";
 import SearchSummary from "@ui/nav/search-aside";
+import Image from "next/image";
 
 export default function Header() {
   const pathname = usePathname();
@@ -29,14 +30,20 @@ export default function Header() {
         id="header"
         className="fixed left-0 right-0 top-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
       >
-        <nav className="mx-8 flex w-full items-center justify-between pb-2 pt-5 md:mx-20 md:pb-3 md:pt-8">
+        <nav className="mx-8 flex w-full items-center justify-between pb-3 pt-4 md:mx-20 md:pb-4 md:pt-7">
           <div className="hidden max-w-[28rem] flex-1 lg:flex lg:items-center lg:justify-between">
             <Link
               className="select-none text-2xl font-bold"
               href="/"
               title="StyleWave"
             >
-              StyleWave
+              <Image
+                src="/logo-text.svg"
+                alt="StyleWave"
+                width={132}
+                height={23}
+                priority
+              />
             </Link>
             {navLinks.map(({ label, href }) => (
               <Link

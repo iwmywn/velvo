@@ -55,6 +55,20 @@ export async function POST(req: Request) {
 
   const db = await connectToDatabase();
 
+  for (const { productId, quantity, size } of transformedProducts) {
+    const sizeField = `sizes.${size}`;
+    const product = await db
+      .collection("products")
+      .findOne({ _id: productId }, { projection: { name: 1, [sizeField]: 1 } });
+
+    if (!product || (product.sizes?.[size] ?? 0) < quantity) {
+      return createResponse(
+        `Not enough stock for product "${product?.name}" (size: ${size})!`,
+        400,
+      );
+    }
+  }
+
   await Promise.all([
     db.collection("invoices").insertOne({
       recipient: fullName,

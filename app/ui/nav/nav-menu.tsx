@@ -2,22 +2,16 @@
 
 import { navLinks } from "@ui/data/constants";
 import Link from "next/link";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
+import useAnimation from "@ui/hooks/animation";
 
 export default function NavMenu({
   setIsOpen,
 }: {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-
-  const handleCloseMenu = () => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
-      setIsOpen(false);
-    }, 250);
-  };
+  const { isAnimating, triggerAnimation } = useAnimation();
+  const handleCloseMenu = () => triggerAnimation(() => setIsOpen(false));
 
   return (
     <div

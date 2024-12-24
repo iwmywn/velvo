@@ -19,18 +19,18 @@ export default function ProductCard({
   return (
     <Link
       href={`/product/${slug}`}
-      className="group relative flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white transition-transform duration-300 hover:scale-105"
+      className="group relative flex flex-col overflow-hidden rounded border border-slate-200 bg-white transition-transform duration-300 hover:scale-105"
       onMouseEnter={() => {
         if (images.length > 1) setCurrentImageIndex(1);
       }}
       onMouseLeave={() => setCurrentImageIndex(0)}
     >
       {saleOff > 0 && (
-        <div className="absolute left-0 top-0 z-10 rounded-tl-lg bg-red-600 px-3 py-1 text-xs font-bold text-white">
+        <div className="absolute -left-2 top-5 z-[1] h-7 whitespace-nowrap bg-red-600 px-[15px] py-[6px] text-xs font-semibold text-white before:absolute before:-bottom-2 before:left-0 before:right-auto before:border-x-4 before:border-y-4 before:border-red-700 before:border-b-transparent before:border-l-transparent after:absolute after:-right-2 after:left-auto after:top-0 after:h-7 after:border-x-8 after:border-y-[14px] after:border-red-600 after:border-r-transparent">
           {saleOff}% OFF
         </div>
       )}
-      <div className="flex h-64 items-center justify-center">
+      <div className="flex h-[22.5rem] items-center justify-center">
         <Image
           src={images[currentImageIndex]}
           alt={name}

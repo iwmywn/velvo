@@ -7,6 +7,7 @@ import { FaGithub } from "react-icons/fa";
 import { GoArrowDown } from "react-icons/go";
 import Backdrop from "@ui/overlays/backdrop";
 import { linkClass } from "@ui/form-class";
+import useAnimation from "@ui/hooks/animation";
 
 const contact = [
   {
@@ -23,7 +24,7 @@ const contact = [
 
 export default function PopUp() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const { isAnimating, triggerAnimation } = useAnimation();
 
   useOverflow(isOpen);
   useEffect(() => {
@@ -34,11 +35,7 @@ export default function PopUp() {
 
   const handleClose = () => {
     sessionStorage.setItem("popup", "true");
-    setIsAnimating(true);
-    setTimeout(() => {
-      setIsAnimating(false);
-      setIsOpen(false);
-    }, 250);
+    triggerAnimation(() => setIsOpen(false));
   };
 
   return (
