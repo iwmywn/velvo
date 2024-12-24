@@ -11,13 +11,18 @@ import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "@ui/hooks/auth";
 import { ToastContainer } from "react-toastify";
+import { siteConfig } from "@lib/config";
 
 export const metadata: Metadata = {
   title: {
     template: "%s - StyleWave",
-    default: "StyleWave",
+    default: siteConfig.maintenanceMode
+      ? "Maintenance - StyleWave"
+      : "StyleWave",
   },
-  description: "fashion",
+  description: siteConfig.maintenanceMode
+    ? "Website is under maintenance"
+    : "fashion",
 };
 
 export default function RootLayout({
@@ -25,6 +30,20 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  if (siteConfig.maintenanceMode) {
+    return (
+      <html lang="en">
+        <body className={`${montserrat.className} antialiased`}>
+          <div id="popups" className="relative z-[9999]" />
+          <PopUp />
+          <div className="flex min-h-screen items-center justify-center">
+            <h1 className="text-3xl font-bold">Be right back!</h1>
+          </div>
+        </body>
+      </html>
+    );
+  }
+
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
@@ -44,8 +63,8 @@ export default function RootLayout({
             <HeightProvider>
               <Header />
               <Gap z={10} />
+              {children}
             </HeightProvider>
-            {children}
             <HeightProvider>
               <Gap z={-9999} />
               <Footer />

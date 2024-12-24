@@ -3,19 +3,21 @@
 import { NextResponse, NextRequest } from "next/server";
 import { authRoutes, DEFAULT_SIGNIN_REDIRECT, protectedRoutes } from "@/routes";
 import verifyJWTToken from "@api/auth";
+import { siteConfig } from "@lib/config";
 
 export async function middleware(req: NextRequest) {
   const token = req.cookies.get("auth_token")?.value;
   const { nextUrl } = req;
-
+  const path = nextUrl.pathname;
   let isSignedIn = null;
+
+  if (siteConfig.maintenanceMode && path !== "/")
+    return NextResponse.redirect(new URL("/", nextUrl));
 
   if (token) {
     const result = await verifyJWTToken(token);
     isSignedIn = result.isValid;
   }
-
-  const path = nextUrl.pathname;
 
   if (authRoutes.some((route) => path.startsWith(route)) && isSignedIn) {
     return NextResponse.redirect(new URL(DEFAULT_SIGNIN_REDIRECT, nextUrl));
