@@ -296,7 +296,7 @@ function ProductFloat({
 }) {
   return (
     <div
-      className={`fixed left-0 right-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur ${
+      className={`space-right fixed left-0 right-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur ${
         isAnimating ? "animate-centerToTop" : "animate-topToCenter"
       }`}
       style={{ top: heights }}
@@ -316,12 +316,11 @@ function ProductFloat({
           </span>
           <div className="min-w-0 flex-1 space-y-1 text-sm">
             <h3 className="line-clamp-1 font-semibold">{name}</h3>
-            <div className="space-x-3">
-              <span>{priceAfterDiscount}</span>
-            </div>
+            <p>{priceAfterDiscount}</p>
           </div>
         </div>
         <Button
+          className="h-8 text-xs"
           onClick={() =>
             window.scrollTo({
               top: 0,
