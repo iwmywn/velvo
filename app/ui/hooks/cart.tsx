@@ -21,7 +21,11 @@ interface CartContextProps {
   cartProducts: CartProductsProps | null;
   invoiceProducts: InvoiceProductsProps | null;
   isLoading: boolean;
-  refreshCart: () => Promise<void>;
+  refreshCart: (
+    cartQuantity?: boolean,
+    cartProducts?: boolean,
+    invoiceProducts?: boolean,
+  ) => Promise<void>;
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
@@ -36,35 +40,49 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const refreshCart = useCallback(async () => {
-    if (!userId) return;
-    // setIsLoading(true);
-    try {
-      const [cartQuantity, fetchedCartProducts, fetchedInvoiceProducts] =
-        await Promise.all([
-          fetchCartProductQuantity(userId),
-          fetchCartProducts(userId),
-          fetchInvoiceProducts(userId),
+  const refreshCart = useCallback(
+    async (
+      cartQuantity = true,
+      cartProducts = true,
+      invoiceProducts = true,
+    ) => {
+      if (!userId) return;
+      // setIsLoading(true);
+      try {
+        const [
+          fetchedCartQuantity,
+          fetchedCartProducts,
+          fetchedInvoiceProducts,
+        ] = await Promise.all([
+          cartQuantity ? fetchCartProductQuantity(userId) : null,
+          cartProducts ? fetchCartProducts(userId) : null,
+          invoiceProducts ? fetchInvoiceProducts(userId) : null,
         ]);
-      setQuantity(cartQuantity);
-      setCartProducts(fetchedCartProducts);
-      setInvoiceProducts(fetchedInvoiceProducts);
 
-      sessionStorage.setItem(
-        "cartProducts",
-        JSON.stringify(fetchedCartProducts),
-      );
-    } catch (error) {
-      console.error("Failed to refresh cart:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [userId]);
+        if (fetchedCartQuantity !== null) setQuantity(fetchedCartQuantity);
+        if (fetchedCartProducts !== null) {
+          setCartProducts(fetchedCartProducts);
+          sessionStorage.setItem(
+            "cartProducts",
+            JSON.stringify(fetchedCartProducts),
+          );
+        }
+        if (fetchedInvoiceProducts !== null)
+          setInvoiceProducts(fetchedInvoiceProducts);
+      } catch (error) {
+        console.error("Failed to refresh cart:", error);
+      } finally {
+        if (cartQuantity && cartProducts && invoiceProducts)
+          setIsLoading(false);
+      }
+    },
+    [userId],
+  );
 
   useEffect(() => {
     async function initialize() {
-      const cartQuantity = await fetchCartProductQuantity(userId);
-      setQuantity(cartQuantity);
+      const fetchedCartQuantity = await fetchCartProductQuantity(userId);
+      setQuantity(fetchedCartQuantity);
     }
 
     initialize();

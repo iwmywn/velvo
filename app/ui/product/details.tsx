@@ -32,20 +32,20 @@ export default function ProductDetails({ product }: { product: Product }) {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isProductFloatVisible, setIsProductFloatVisible] =
+    useState<boolean>(false);
   const { userId } = useAuthContext();
   const { refreshCart } = useCartContext();
+  const { heights } = useHeightContext();
   const router = useRouter();
-  const descriptionRef = useRef<HTMLDivElement>(null);
-  const swiperRef = useRef<SwiperCore | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
   const remainingQuantity = sizes[selectedSize as keyof typeof sizes];
   const formattedPrice = `$${formatCurrency(priceCents)}`;
   const priceAfterDiscount = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
-  const [isProductFloatVisible, setIsProductFloatVisible] =
-    useState<boolean>(false);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const { heights } = useHeightContext();
   const { isAnimating, triggerAnimation } = useAnimation();
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  const swiperRef = useRef<SwiperCore | null>(null);
   const isProductFloatVisibleRef = useRef<boolean>(isProductFloatVisible);
 
   useEffect(() => {
@@ -81,7 +81,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       );
 
       if (message === "Done.") {
-        await refreshCart();
+        await refreshCart(true, true, false);
         router.push("/cart-overlay", { scroll: false });
       } else {
         toast.error(message);

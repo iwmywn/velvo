@@ -104,11 +104,11 @@ export default function OrderList({
       );
 
       if (message === "Done.") {
-        await refreshCart();
+        await refreshCart(false, false, true);
+        router.push(`/user/purchase?tab=${statusUrl}`);
         toast.success(
           status === "PROCESSING" ? "Order Completed." : "Order Cancelled.",
         );
-        router.push(`/user/purchase?tab=${statusUrl}`);
       } else {
         toast.error(message);
       }
@@ -135,7 +135,7 @@ export default function OrderList({
       const message = await addToCart(productId, userId, size);
 
       if (message === "Done.") {
-        await refreshCart();
+        await refreshCart(true, true, false);
         router.push("/cart-overlay", { scroll: false });
       } else {
         toast.error(message);

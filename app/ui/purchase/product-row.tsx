@@ -64,7 +64,7 @@ export default function ProductRow({
       const message = await operation();
 
       if (successMessages.includes(message)) {
-        await refreshCart();
+        await refreshCart(true, true, false);
       } else {
         toast.error(message);
       }
