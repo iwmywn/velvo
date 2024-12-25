@@ -13,6 +13,7 @@ export const ShiftingDropDown = () => {
 const Tabs = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [dir, setDir] = useState<null | "l" | "r">(null);
+  const [buttonWidths, setButtonWidths] = useState<number[]>([]);
 
   const handleSetSelected = (val: number | null) => {
     if (typeof selected === "number" && typeof val === "number") {
@@ -23,6 +24,14 @@ const Tabs = () => {
 
     setSelected(val);
   };
+
+  useEffect(() => {
+    const widths = TABS.map((_, idx) => {
+      const tabElement = document.getElementById(`shift-tab-${idx + 1}`);
+      return tabElement ? tabElement.getBoundingClientRect().width : 0;
+    });
+    setButtonWidths(widths);
+  }, []);
 
   return (
     <div
@@ -43,7 +52,9 @@ const Tabs = () => {
       })}
 
       <AnimatePresence>
-        {selected && <Content dir={dir} selected={selected} />}
+        {selected && (
+          <Content dir={dir} selected={selected} buttonWidths={buttonWidths} />
+        )}
       </AnimatePresence>
     </div>
   );
@@ -71,9 +82,7 @@ const Tab = ({
     >
       <span>{children}</span>
       <FiChevronDown
-        className={`transition-transform ${
-          selected === tab ? "rotate-180" : ""
-        }`}
+        className={`transition-transform ${selected === tab ? "rotate-180" : ""}`}
       />
     </button>
   );
@@ -82,10 +91,22 @@ const Tab = ({
 const Content = ({
   selected,
   dir,
+  buttonWidths,
 }: {
   selected: number | null;
   dir: null | "l" | "r";
+  buttonWidths: number[];
 }) => {
+  const calculateLeft = (): number => {
+    if (selected === null) return 0;
+    let left = 0;
+
+    if (selected === 2) left = buttonWidths[0] + 8;
+    if (selected === 3) left = buttonWidths[0] + buttonWidths[1] + 16;
+
+    return left;
+  };
+
   return (
     <motion.div
       id="overlay-content"
@@ -96,15 +117,19 @@ const Content = ({
       animate={{
         opacity: 1,
         y: 0,
+        left: `${calculateLeft()}px`,
       }}
       exit={{
         opacity: 0,
         y: 8,
       }}
-      className="absolute left-0 top-[calc(100%_+_20px)] max-w-max rounded-lg border border-black/50 bg-gradient-to-b from-slate-50 via-slate-50 to-white p-4"
+      style={{
+        left: `${calculateLeft()}px`,
+      }}
+      className="absolute top-[calc(100%_+_20px)] max-w-max rounded-lg border border-black/50 bg-gradient-to-b from-slate-50 via-slate-50 to-white p-4"
     >
       <Bridge />
-      <Nub selected={selected} />
+      <Nub />
 
       {TABS.map((t) => {
         return (
@@ -130,37 +155,15 @@ const Content = ({
 
 const Bridge = () => <div className="absolute -top-5 left-0 right-0 h-5" />;
 
-const Nub = ({ selected }: { selected: number | null }) => {
-  const [left, setLeft] = useState<number>(0);
-
-  useEffect(() => {
-    moveNub();
-  }, [selected]);
-
-  const moveNub = () => {
-    if (selected) {
-      const hoveredTab = document.getElementById(`shift-tab-${selected}`);
-      const overlayContent = document.getElementById("overlay-content");
-
-      if (!hoveredTab || !overlayContent) return;
-
-      const tabRect = hoveredTab.getBoundingClientRect();
-      const { left: contentLeft } = overlayContent.getBoundingClientRect();
-
-      const tabCenter = tabRect.left + tabRect.width / 2 - contentLeft;
-
-      setLeft(tabCenter);
-    }
-  };
-
+const Nub = () => {
   return (
     <motion.span
       style={{
         clipPath: "polygon(0 0, 100% 0, 50% 50%, 0% 100%)",
       }}
-      animate={{ left }}
+      animate={{ left: "50%" }}
       transition={{ duration: 0.25, ease: "easeInOut" }}
-      className="absolute left-1/2 top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-tl border border-black/50 bg-white"
+      className="absolute top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-tl border border-black/50 bg-white"
     />
   );
 };
