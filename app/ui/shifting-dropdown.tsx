@@ -5,12 +5,13 @@ import { FiChevronDown } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { linkClass } from "@ui/form-class";
+import { menItems, womenItems, kidsItems } from "@ui/data/sub-categories";
 
-export const ShiftingDropDown = () => {
-  return <Tabs />;
+export const CategoryDropDown = () => {
+  return <CategoryTabs />;
 };
 
-const Tabs = () => {
+const CategoryTabs = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [dir, setDir] = useState<null | "l" | "r">(null);
   const [buttonWidths, setButtonWidths] = useState<number[]>([]);
@@ -26,8 +27,8 @@ const Tabs = () => {
   };
 
   useEffect(() => {
-    const widths = TABS.map((_, idx) => {
-      const tabElement = document.getElementById(`shift-tab-${idx + 1}`);
+    const widths = CATEGORY_TABS.map(({ id }) => {
+      const tabElement = document.getElementById(`shift-tab-${id}`);
       return tabElement ? tabElement.getBoundingClientRect().width : 0;
     });
     setButtonWidths(widths);
@@ -38,29 +39,33 @@ const Tabs = () => {
       onMouseLeave={() => handleSetSelected(null)}
       className="relative flex h-fit gap-2"
     >
-      {TABS.map((t) => {
+      {CATEGORY_TABS.map(({ id, title }) => {
         return (
-          <Tab
-            key={t.id}
+          <CategoryTab
+            key={id}
             selected={selected}
             handleSetSelected={handleSetSelected}
-            tab={t.id}
+            tab={id}
           >
-            {t.title}
-          </Tab>
+            {title}
+          </CategoryTab>
         );
       })}
 
       <AnimatePresence>
         {selected && (
-          <Content dir={dir} selected={selected} buttonWidths={buttonWidths} />
+          <CategoryContent
+            dir={dir}
+            selected={selected}
+            buttonWidths={buttonWidths}
+          />
         )}
       </AnimatePresence>
     </div>
   );
 };
 
-const Tab = ({
+const CategoryTab = ({
   children,
   tab,
   handleSetSelected,
@@ -80,7 +85,7 @@ const Tab = ({
         selected === tab && "opacity-70"
       }`}
     >
-      <span>{children}</span>
+      <span className="font-semibold">{children}</span>
       <FiChevronDown
         className={`transition-transform ${selected === tab ? "rotate-180" : ""}`}
       />
@@ -88,7 +93,7 @@ const Tab = ({
   );
 };
 
-const Content = ({
+const CategoryContent = ({
   selected,
   dir,
   buttonWidths,
@@ -99,10 +104,14 @@ const Content = ({
 }) => {
   const calculateLeft = (): number => {
     if (selected === null) return 0;
-    let left = 0;
+    const halfFirstButtonWidths: number = buttonWidths[0] / 2;
+    const halfSecondButtonWidths: number = buttonWidths[1] / 2;
+    const halfThirdButtonWidths: number = buttonWidths[2] / 2;
+    let left = halfFirstButtonWidths;
 
-    if (selected === 2) left = buttonWidths[0] + 8;
-    if (selected === 3) left = buttonWidths[0] + buttonWidths[1] + 16;
+    if (selected === 2) left = buttonWidths[0] + 8 + halfSecondButtonWidths;
+    if (selected === 3)
+      left = buttonWidths[0] + buttonWidths[1] + 16 + halfThirdButtonWidths;
 
     return left;
   };
@@ -118,6 +127,7 @@ const Content = ({
         opacity: 1,
         y: 0,
         left: `${calculateLeft()}px`,
+        transform: "translateX(-50%)",
       }}
       exit={{
         opacity: 0,
@@ -126,12 +136,12 @@ const Content = ({
       style={{
         left: `${calculateLeft()}px`,
       }}
-      className="absolute top-[calc(100%_+_20px)] max-w-max rounded-lg border border-black/50 bg-gradient-to-b from-slate-50 via-slate-50 to-white p-4"
+      className="absolute top-[calc(100%_+_20px)] max-w-max rounded-lg border border-black/50 bg-white px-6 py-4"
     >
       <Bridge />
       <Nub />
 
-      {TABS.map((t) => {
+      {CATEGORY_TABS.map((t) => {
         return (
           <div className="overflow-hidden" key={t.id}>
             {selected === t.id && (
@@ -168,48 +178,40 @@ const Nub = () => {
   );
 };
 
-const Men = () => {
+interface CategoryLinksProps {
+  items: ReadonlyArray<{ label: string; href: string }>;
+  sub: string;
+}
+
+const CategoryLinks: React.FC<CategoryLinksProps> = ({ items, sub }) => {
   return (
-    <div className="flex flex-col gap-2 text-sm">
-      <Link href="#" className={`${linkClass}`}>
-        Men
-      </Link>
-      <Link href="#" className={`${linkClass}`}>
-        Men
-      </Link>
+    <div className="flex flex-col items-center gap-3 text-sm">
+      {items.map(({ label, href }) => (
+        <Link
+          key={href}
+          href={`/category/${sub}/${href}`}
+          className={`${linkClass} text-nowrap`}
+        >
+          {label}
+        </Link>
+      ))}
     </div>
   );
+};
+
+const Men = () => {
+  return <CategoryLinks items={menItems} sub="men" />;
 };
 
 const Women = () => {
-  return (
-    <div className="flex flex-col gap-2 text-sm">
-      <Link href="#" className={`${linkClass}`}>
-        Women
-      </Link>
-      <Link href="#" className={`${linkClass}`}>
-        Women
-      </Link>
-    </div>
-  );
+  return <CategoryLinks items={womenItems} sub="women" />;
 };
 
 const Kids = () => {
-  return (
-    <div>
-      <div className="flex flex-col gap-2 text-sm">
-        <Link href="#" className={`${linkClass}`}>
-          Kids
-        </Link>
-        <Link href="#" className={`${linkClass}`}>
-          Kids
-        </Link>
-      </div>
-    </div>
-  );
+  return <CategoryLinks items={kidsItems} sub="kids" />;
 };
 
-const TABS = [
+const CATEGORY_TABS = [
   {
     title: "MEN",
     Component: Men,

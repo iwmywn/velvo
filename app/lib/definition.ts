@@ -64,6 +64,7 @@ export type Product = {
     L: number;
     XL: number;
   };
+  subCategory: string;
 };
 
 export type Products = {

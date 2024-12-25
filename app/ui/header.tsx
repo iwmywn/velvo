@@ -1,10 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { IoIosMenu } from "react-icons/io";
 import Logo from "@ui/logo";
-import { navLinks } from "@ui/data/constants";
 import { useRef, useState } from "react";
 import NavMenu from "@ui/nav/nav-menu";
 import useOverflow from "@ui/hooks/overflow";
@@ -13,10 +11,9 @@ import CartSummary from "@ui/nav/cart-aside";
 import AccountMenu from "@ui/nav/account-menu";
 import SearchSummary from "@ui/nav/search-aside";
 import Image from "next/image";
-import { ShiftingDropDown } from "@ui/shifting-dropdown";
+import { CategoryDropDown } from "@ui/shifting-dropdown";
 
 export default function Header() {
-  const pathname = usePathname();
   const ref = useRef<HTMLElement>(null);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
 
@@ -46,7 +43,7 @@ export default function Header() {
                 priority
               />
             </Link>
-            <ShiftingDropDown />
+            <CategoryDropDown />
           </div>
 
           <Logo />

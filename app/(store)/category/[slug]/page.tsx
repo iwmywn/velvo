@@ -3,31 +3,31 @@ import { fetchCategories, fetchProducts } from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
+import { capitalizeFirstLetter } from "@ui/utils";
+import { categories } from "@ui/data/sub-categories";
 
 export const revalidate = 1800;
 
-function capitalizeFirstLetter(text: string) {
-  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
-}
+const validCategories = new Set(categories);
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ category: string }>;
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { category: categoryName } = await params;
+  const { slug: categoryName } = await params;
 
   return {
-    title: `${capitalizeFirstLetter(categoryName)} Category`,
+    title: `${!validCategories.has(categoryName) ? "NOT FOUND" : capitalizeFirstLetter(categoryName)}`,
   };
 }
 
 export default async function CategoryPage({
   params,
 }: {
-  params: Promise<{ category: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const [categories, products, { category: categoryName }] = await Promise.all([
+  const [categories, products, { slug: categoryName }] = await Promise.all([
     fetchCategories(),
     fetchProducts(),
     params,
@@ -57,8 +57,7 @@ export default async function CategoryPage({
 }
 
 export async function generateStaticParams() {
-  const categories = await fetchCategories();
-  return categories.map((category) => ({
-    category: category.name.toLowerCase(),
+  return categories.map((cat) => ({
+    slug: cat,
   }));
 }

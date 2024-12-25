@@ -4,6 +4,7 @@ import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
 import NotFound from "@app/not-found";
+import { capitalizeFirstLetter } from "@ui/utils";
 
 export const revalidate = 1800;
 
@@ -50,6 +51,10 @@ export default async function ProductPage({
     {
       label: category.name,
       href: `/category/${category.name.toLowerCase()}`,
+    },
+    {
+      label: capitalizeFirstLetter(product.subCategory),
+      href: `/category/${category.name.toLowerCase()}/${product.subCategory}`,
     },
     { label: product.name },
   ];

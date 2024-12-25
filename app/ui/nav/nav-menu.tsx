@@ -29,7 +29,7 @@ export default function NavMenu({
             href={href}
             onClick={handleCloseMenu}
           >
-            {label}
+            {label.toUpperCase()}
           </Link>
         ))}
       </div>
