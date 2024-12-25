@@ -9,20 +9,24 @@ import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
 import CartSummary from "@ui/nav/cart-aside";
 import AccountMenu from "@ui/nav/account-menu";
-import SearchSummary from "@ui/nav/search-aside";
 import Image from "next/image";
 import { CategoryDropDown } from "@ui/shifting-dropdown";
+import SearchOverlay from "@ui/search/search-overlay";
+import { CiSearch } from "react-icons/ci";
 
 export default function Header() {
   const ref = useRef<HTMLElement>(null);
-  const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
 
-  useOverflow(isOpenMenu);
+  useOverflow(isMenuOpen);
+  useOverflow(isSearchOpen);
   useElementHeight(ref);
 
   return (
     <>
-      {isOpenMenu && <NavMenu setIsOpen={setIsOpenMenu} />}
+      {isMenuOpen && <NavMenu setIsOpen={setIsMenuOpen} />}
+      {isSearchOpen && <SearchOverlay setIsOpen={setIsSearchOpen} />}
       <header
         ref={ref}
         id="header"
@@ -49,12 +53,15 @@ export default function Header() {
           <Logo />
 
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[26rem] lg:flex-1 lg:gap-10">
-            <SearchSummary />
+            <CiSearch
+              className="cursor-pointer text-[22px] md:text-2xl"
+              onClick={() => setIsSearchOpen(true)}
+            />
             <AccountMenu />
             <CartSummary />
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
-              onClick={() => setIsOpenMenu(true)}
+              onClick={() => setIsMenuOpen(true)}
             />
           </div>
         </nav>
