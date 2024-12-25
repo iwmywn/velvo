@@ -13,6 +13,7 @@ import CartSummary from "@ui/nav/cart-aside";
 import AccountMenu from "@ui/nav/account-menu";
 import SearchSummary from "@ui/nav/search-aside";
 import Image from "next/image";
+import { ShiftingDropDown } from "@ui/shifting-dropdown";
 
 export default function Header() {
   const pathname = usePathname();
@@ -31,7 +32,7 @@ export default function Header() {
         className="space-right fixed left-0 right-0 top-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
       >
         <nav className="mx-8 flex w-full items-center justify-between pb-3 pt-4 md:mx-20 md:pb-4 md:pt-7">
-          <div className="hidden max-w-[28rem] flex-1 lg:flex lg:items-center lg:justify-between">
+          <div className="hidden max-w-[26rem] flex-1 lg:flex lg:items-center lg:justify-between">
             <Link
               className="select-none text-2xl font-bold"
               href="/"
@@ -45,23 +46,12 @@ export default function Header() {
                 priority
               />
             </Link>
-            {navLinks.map(({ label, href }) => (
-              <Link
-                key={label}
-                href={href}
-                className={`rounded border px-4 py-1 text-sm ${pathname === href ? "bg-slate-50" : "border-transparent transition-all duration-300 hover:border-inherit hover:bg-slate-50"}`}
-                title={`${label} Category`}
-              >
-                <span className="hidden text-nowrap font-semibold md:block">
-                  {label}
-                </span>
-              </Link>
-            ))}
+            <ShiftingDropDown />
           </div>
 
           <Logo />
 
-          <div className="flex items-center justify-end gap-5 text-base lg:max-w-[28rem] lg:flex-1 lg:gap-10">
+          <div className="flex items-center justify-end gap-5 text-base lg:max-w-[26rem] lg:flex-1 lg:gap-10">
             <SearchSummary />
             <AccountMenu />
             <CartSummary />
