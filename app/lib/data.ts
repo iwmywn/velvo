@@ -1,12 +1,7 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
-import {
-  Category,
-  Product,
-  Products,
-  CartProductsProps,
-} from "@lib/definition";
+import { Category, Product, Products } from "@lib/definition";
 import { ObjectId } from "mongodb";
 
 export async function fetchCategories() {
@@ -46,9 +41,14 @@ export async function fetchProducts() {
   }
 }
 
-export async function fetchCartProducts(
-  userId: string | undefined,
-): Promise<(Product & { quantity: number; size: string })[] | null> {
+export async function fetchCart(userId: string | undefined): Promise<
+  | {
+      productId: string;
+      quantity: number;
+      size: string;
+    }[]
+  | null
+> {
   if (!userId) return null;
 
   try {
@@ -57,43 +57,13 @@ export async function fetchCartProducts(
       .collection("carts")
       .findOne({ userId: new ObjectId(userId) });
 
-    if (!cart) return null;
+    if (!cart || cart.products.length === 0) return null;
 
-    const productIds = cart.products.map(
-      (p: Products) => new ObjectId(p.productId),
-    );
-
-    if (productIds.length === 0) return null;
-
-    const products = await db
-      .collection("products")
-      .find({ _id: { $in: productIds } })
-      .toArray();
-
-    const result = cart.products.map((cartProduct: Products) => {
-      const product = products.find(
-        (p) => p._id.toString() === cartProduct.productId.toString(),
-      );
-
-      if (!product) return null;
-
-      return {
-        id: product._id.toString(),
-        name: product.name,
-        priceCents: product.priceCents,
-        images: product.images,
-        description: product.description,
-        categoryId: product.categoryId.toString(),
-        saleOff: product.saleOff,
-        slug: product.slug,
-        sizes: product.sizes,
-        quantity: cartProduct.quantity,
-        size: cartProduct.size,
-      };
-    });
-
-    return result.filter(
-      (item: CartProductsProps): item is NonNullable<typeof item> => !!item,
+    return cart.products.map(
+      ({ productId, ...rest }: { productId: ObjectId }) => ({
+        ...rest,
+        productId: productId.toString(),
+      }),
     );
   } catch (error) {
     console.error("MongoDB fetch error:", error);
@@ -101,7 +71,7 @@ export async function fetchCartProducts(
   }
 }
 
-export async function fetchInvoiceProducts(userId: string | undefined): Promise<
+export async function fetchInvoices(userId: string | undefined): Promise<
   | {
       invoiceId: string;
       recipient: string;
@@ -188,7 +158,7 @@ export async function fetchInvoiceProducts(userId: string | undefined): Promise<
   }
 }
 
-export async function fetchCartProductQuantity(
+export async function fetchCartQuantity(
   userId: string | undefined,
 ): Promise<number> {
   if (!userId) return 0;
@@ -199,7 +169,7 @@ export async function fetchCartProductQuantity(
       .collection("carts")
       .findOne({ userId: new ObjectId(userId) });
 
-    if (!cart || !cart.products || cart.products.length === 0) return 0;
+    if (!cart || cart.products.length === 0) return 0;
 
     const totalQuantity = cart.products.reduce(
       (sum: number, product: { quantity: number }) => {

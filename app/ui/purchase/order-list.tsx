@@ -10,14 +10,14 @@ import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { addToCart, cancelReceiveOrder } from "@lib/actions";
-import { useAuthContext } from "@ui/hooks/auth";
+import { useAuthContext } from "@ui/context/auth";
 import { useRouter } from "next/navigation";
-import useOverflow from "@ui/hooks/overflow";
 import Backdrop from "@ui/overlays/backdrop";
-import { useCartContext } from "@ui/hooks/cart";
+import { useCartContext } from "@ui/context/cart";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
 import useAnimation from "@ui/hooks/animation";
+import { useUIState } from "@ui/context/state";
 
 export default function OrderList({
   invoiceProducts,
@@ -34,9 +34,6 @@ export default function OrderList({
     {},
   );
   const [isLoadingGlobal, setIsLoadingGlobal] = useState<boolean>(false);
-  const { isAnimating, triggerAnimation } = useAnimation();
-  const [isOpenConfirm, setIsOpenConfirm] = useState<boolean>(false);
-  const [isOpenDeliveryInfo, setIsOpenDeliveryInfo] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState<{
     invoiceId: string;
     products: (Product & { quantity: number; size: string })[];
@@ -48,13 +45,12 @@ export default function OrderList({
     address: string;
     date: Date;
   } | null>(null);
+  const { isAnimating, triggerAnimation } = useAnimation();
+  const { isLoading, refreshCart } = useCartContext();
+  const { state, setState } = useUIState();
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };
-  const { isLoading, refreshCart } = useCartContext();
-
-  useOverflow(isOpenConfirm);
-  useOverflow(isOpenDeliveryInfo);
 
   const invoiceProductsFilter = invoiceProducts?.filter(({ status }) =>
     orderStatus.includes(status),
@@ -67,8 +63,8 @@ export default function OrderList({
 
   const handleClose = () =>
     triggerAnimation(() => {
-      setIsOpenConfirm(false);
-      setIsOpenDeliveryInfo(false);
+      setState("isConfirmOrderOpen", false);
+      setState("isDeliveryInfoOpen", false);
     });
 
   const handleCancelReceive = async (
@@ -82,7 +78,7 @@ export default function OrderList({
   ) => {
     if (!isConfirm) {
       setInvoiceData({ invoiceId, products, status });
-      setIsOpenConfirm(true);
+      setState("isConfirmOrderOpen", true);
       return;
     }
 
@@ -122,7 +118,7 @@ export default function OrderList({
     }
   };
 
-  const handleAddToCart = async (
+  const handleBuyAgain = async (
     invoiceId: string,
     productId: string,
     size: string,
@@ -136,7 +132,7 @@ export default function OrderList({
 
       if (message === "Done.") {
         await refreshCart(true, true, false);
-        router.push("/cart-overlay", { scroll: false });
+        setState("isCartOpen", true);
       } else {
         toast.error(message);
       }
@@ -151,7 +147,7 @@ export default function OrderList({
 
   return (
     <>
-      {isOpenConfirm && invoiceData && (
+      {state.isConfirmOrderOpen && invoiceData && (
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
@@ -191,7 +187,7 @@ export default function OrderList({
           </div>
         </Backdrop>
       )}
-      {isOpenDeliveryInfo && deliveryInfoData && (
+      {state.isDeliveryInfoOpen && deliveryInfoData && (
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
@@ -305,7 +301,7 @@ export default function OrderList({
                         {status !== "PROCESSING" && status !== "WAITING" && (
                           <Button
                             className="ml-auto flex items-center gap-2 text-green-600 before:border-green-600 before:bg-white"
-                            onClick={() => handleAddToCart(invoiceId, id, size)}
+                            onClick={() => handleBuyAgain(invoiceId, id, size)}
                             disabled={
                               loadingStates[`${invoiceId}-${id}-${size}`] ||
                               isLoadingGlobal
@@ -336,7 +332,7 @@ export default function OrderList({
                           address,
                           date,
                         });
-                        setIsOpenDeliveryInfo(true);
+                        setState("isDeliveryInfoOpen", true);
                       }}
                     >
                       <MdOutlinePlace />

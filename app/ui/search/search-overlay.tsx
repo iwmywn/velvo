@@ -1,49 +1,22 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "@ui/product/card";
 import { Product } from "@lib/definition";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
 import useAnimation from "@ui/hooks/animation";
-import { fetchProducts } from "@lib/data";
-import Loading from "@ui/loading";
+import { useProduct } from "@ui/context/products";
+import { useUIState } from "@ui/context/state";
 
-export default function SearchOverlay({
-  setIsOpen,
-}: {
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+export default function SearchOverlay() {
   const { isAnimating, triggerAnimation } = useAnimation();
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const handleClose = () => triggerAnimation(() => setIsOpen(false));
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    async function initialize() {
-      try {
-        const productsStored: Product[] = sessionStorage.getItem("products")
-          ? JSON.parse(sessionStorage.getItem("products") as string)
-          : null;
-
-        if (productsStored) setProducts(productsStored);
-        else {
-          setIsLoading(true);
-          const products = await fetchProducts();
-          setProducts(products);
-          sessionStorage.setItem("products", JSON.stringify(products));
-        }
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    initialize();
-  }, []);
+  const { setState } = useUIState();
+  const handleClose = () =>
+    triggerAnimation(() => setState("isSearchOpen", false));
+  const { products } = useProduct();
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
@@ -70,10 +43,8 @@ export default function SearchOverlay({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             autoFocus
-            disabled={isLoading}
           />
         </div>
-        {isLoading && <Loading />}
         {searchTerm.trim() === "" ? (
           <div className="mx-4 text-center text-sm">
             Search for the latest fashion trends that match your style.

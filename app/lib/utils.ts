@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Product } from "@lib/definition";
+import { Product, CartProductsProps } from "@lib/definition";
 
 export function createResponse(message: string, status: number) {
   return new Response(JSON.stringify({ message }), { status });
@@ -106,21 +106,28 @@ export function transformProducts(
   }));
 }
 
-// function generateSlugWithRandom(
-//   category: string,
-//   name: string,
-//   description?: string,
-// ): string {
-//   const randomString = Array.from(crypto.getRandomValues(new Uint8Array(12)))
-//     .map((byte) => byte.toString(36).padStart(2, "0"))
-//     .join("")
-//     .substring(0, 16);
+export function transformCartProducts(
+  cartProducts: CartProductsProps,
+  products: Product[],
+): (Product & { quantity: number; size: string })[] | null {
+  if (!cartProducts || !products) return null;
 
-//   const normalize = (str: string) =>
-//     str
-//       .toLowerCase()
-//       .replace(/[^a-z0-9]+/g, "-")
-//       .replace(/^-|-$/g, "");
+  return cartProducts
+    .map((cartItem) => {
+      const product = products.find((p) => p.id === cartItem.productId);
+      if (!product) return null;
 
-//   return `${normalize(category)}-${normalize(name)}-${normalize(description)}-${randomString}`;
-// }
+      return {
+        id: product.id,
+        name: product.name,
+        priceCents: product.priceCents,
+        images: product.images,
+        description: product.description,
+        saleOff: product.saleOff,
+        slug: product.slug,
+        quantity: cartItem.quantity,
+        size: cartItem.size,
+      };
+    })
+    .filter(Boolean) as (Product & { quantity: number; size: string })[];
+}

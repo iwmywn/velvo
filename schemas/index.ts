@@ -113,7 +113,7 @@ export const placeOrderWithIdSchema = placeOrderSchema.extend({
       size: z.string().min(1, "Size is required"),
       priceCentsAfterDiscount: z
         .array(z.string())
-        .min(1, "PriceCents must contain at least one value"),
+        .min(1, "PriceCents must be at least 1"),
     })
     .array(),
   totalPriceCents: z.string().min(1, "Total price is required"),

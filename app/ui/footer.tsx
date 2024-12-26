@@ -7,7 +7,7 @@ import { socialLinks, footerSections } from "@ui/data/constants";
 import Button from "@ui/button";
 
 export default function Footer() {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLElement | null>(null);
   const [email, setEmail] = useState<string>("");
 
   useElementHeight(ref);

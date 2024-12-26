@@ -90,6 +90,10 @@ interface InvoiceWithProducts {
 }
 
 export type CartProductsProps =
-  | (Product & { quantity: number; size: string })[]
+  | {
+      productId: string;
+      quantity: number;
+      size: string;
+    }[]
   | null;
 export type InvoiceProductsProps = InvoiceWithProducts[] | null;

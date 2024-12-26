@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import ResetPassword from "@ui/account/reset-password";
 import VerifyEmail from "@ui/account/verify-email";
-import NotFound from "@app/not-found";
+import NotFound from "@/app/not-found";
 
 export async function generateMetadata({
   searchParams,
@@ -21,7 +21,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function EmailHandlePage({
+export default async function EmailHandlerPage({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;

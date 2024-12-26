@@ -3,30 +3,31 @@
 import Link from "next/link";
 import { IoIosMenu } from "react-icons/io";
 import Logo from "@ui/logo";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import NavMenu from "@ui/nav/nav-menu";
-import useOverflow from "@ui/hooks/overflow";
 import { useElementHeight } from "@ui/hooks/height";
-import CartSummary from "@ui/nav/cart-aside";
 import AccountMenu from "@ui/nav/account-menu";
 import Image from "next/image";
 import { CategoryDropDown } from "@ui/shifting-dropdown";
 import SearchOverlay from "@ui/search/search-overlay";
+import CartOverlay from "@ui/cart/cart-overlay";
 import { CiSearch } from "react-icons/ci";
+import { GiShoppingCart } from "react-icons/gi";
+import { useCartContext } from "@ui/context/cart";
+import { useUIState } from "@ui/context/state";
 
 export default function Header() {
-  const ref = useRef<HTMLElement>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const ref = useRef<HTMLElement | null>(null);
+  const { quantity } = useCartContext();
+  const { state, setState } = useUIState();
 
-  useOverflow(isMenuOpen);
-  useOverflow(isSearchOpen);
   useElementHeight(ref);
 
   return (
     <>
-      {isMenuOpen && <NavMenu setIsOpen={setIsMenuOpen} />}
-      {isSearchOpen && <SearchOverlay setIsOpen={setIsSearchOpen} />}
+      {state.isMenuOpen && <NavMenu />}
+      {state.isSearchOpen && <SearchOverlay />}
+      {state.isCartOpen && <CartOverlay />}
       <header
         ref={ref}
         id="header"
@@ -55,13 +56,23 @@ export default function Header() {
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[26rem] lg:flex-1 lg:gap-10">
             <CiSearch
               className="cursor-pointer text-[22px] md:text-2xl"
-              onClick={() => setIsSearchOpen(true)}
+              onClick={() => setState("isSearchOpen", true)}
             />
             <AccountMenu />
-            <CartSummary />
+            <span className="relative">
+              <GiShoppingCart
+                className="cursor-pointer text-[22px] md:text-2xl"
+                onClick={() => setState("isCartOpen", true)}
+              />
+              {quantity > 0 && (
+                <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
+                  {quantity}
+                </span>
+              )}
+            </span>
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
-              onClick={() => setIsMenuOpen(true)}
+              onClick={() => setState("isMenuOpen", true)}
             />
           </div>
         </nav>

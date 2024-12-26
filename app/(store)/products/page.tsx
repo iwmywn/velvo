@@ -4,8 +4,6 @@ import BreadCrumbs from "@ui/breadcrumbs";
 import { fetchProducts } from "@lib/data";
 import { Metadata } from "next";
 
-export const revalidate = 1800;
-
 export function generateMetadata(): Metadata {
   return { title: "All Products" };
 }

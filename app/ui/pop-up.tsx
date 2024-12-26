@@ -1,13 +1,13 @@
 "use client";
 
-import useOverflow from "@ui/hooks/overflow";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { GoArrowDown } from "react-icons/go";
 import Backdrop from "@ui/overlays/backdrop";
 import { linkClass } from "@ui/form-class";
 import useAnimation from "@ui/hooks/animation";
+import { useUIState } from "@ui/context/state";
 
 const contact = [
   {
@@ -23,23 +23,23 @@ const contact = [
 ];
 
 export default function PopUp() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { state, setState } = useUIState();
   const { isAnimating, triggerAnimation } = useAnimation();
 
-  useOverflow(isOpen);
   useEffect(() => {
     if (!(sessionStorage.getItem("popup") === "true")) {
-      setIsOpen(true);
+      setState("isPopupOpen", true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleClose = () => {
     sessionStorage.setItem("popup", "true");
-    triggerAnimation(() => setIsOpen(false));
+    triggerAnimation(() => setState("isPopupOpen", false));
   };
 
   return (
-    isOpen && (
+    state.isPopupOpen && (
       <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
         <div
           className={`relative mx-6 w-full max-w-[30rem] rounded-2xl bg-white px-8 py-6 text-black ${isAnimating ? "animate-popUpOut" : "animate-popUpIn"}`}

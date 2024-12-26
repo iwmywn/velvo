@@ -2,14 +2,14 @@ import { getTotalPriceCents } from "@lib/utils";
 import ProductRow from "@ui/purchase/product-row";
 import Checkout from "@ui/purchase/checkout";
 import EmptyState from "@ui/cart/empty";
-import { CartProductsProps } from "@lib/definition";
-import { useCartContext } from "@ui/hooks/cart";
+import { Product } from "@lib/definition";
+import { useCartContext } from "@/app/ui/context/cart";
 import Loading from "@ui/loading";
 
 export default function ToPay({
   cartProducts,
 }: {
-  cartProducts: CartProductsProps;
+  cartProducts: (Product & { quantity: number; size: string })[] | null;
 }) {
   const totalPriceCents = getTotalPriceCents(cartProducts);
   const { isLoading } = useCartContext();

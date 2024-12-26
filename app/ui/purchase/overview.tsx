@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ToPay from "@ui/purchase/to-pay";
 import ToShipAndReceive from "@ui/purchase/to-ship-receive";
@@ -9,7 +9,9 @@ import Cancelled from "@ui/purchase/cancelled";
 import Loading from "@ui/loading";
 import useHideMenu from "@ui/hooks/hide-menu";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { useCartContext } from "@ui/hooks/cart";
+import { useCartContext } from "@ui/context/cart";
+import { useProduct } from "@ui/context/products";
+import { transformCartProducts } from "@lib/utils";
 
 const tabs = [
   { key: "to-pay", label: "TO PAY" },
@@ -38,17 +40,16 @@ export default function PurchaseOverview() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { isLoading, refreshCart, cartProducts, invoiceProducts } =
     useCartContext();
+  const { products } = useProduct();
+  const combinedCartProducts = useMemo(() => {
+    return transformCartProducts(cartProducts, products);
+  }, [cartProducts, products]);
 
   useHideMenu(setIsOpen);
   useEffect(() => {
-    if (
-      window.location.pathname !== "/cart-overlay" &&
-      window.location.pathname !== "/search-overlay"
-    ) {
-      const tabKey = searchParams?.get("tab");
-      const validTab = tabs.find(({ key }) => key === tabKey);
-      setActiveTabKey(validTab ? validTab.key : tabs[0].key);
-    }
+    const tabKey = searchParams?.get("tab");
+    const validTab = tabs.find(({ key }) => key === tabKey);
+    setActiveTabKey(validTab ? validTab.key : tabs[0].key);
   }, [searchParams]);
 
   useEffect(() => {
@@ -106,7 +107,7 @@ export default function PurchaseOverview() {
         {activeTab && (
           <div className="min-h-screen text-sm">
             {activeTab.key === "to-pay" ? (
-              <ToPay cartProducts={cartProducts} />
+              <ToPay cartProducts={combinedCartProducts} />
             ) : activeTab.key === "to-ship-and-receive" ? (
               <ToShipAndReceive invoiceProducts={invoiceProducts} />
             ) : activeTab.key === "completed" ? (

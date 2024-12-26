@@ -8,12 +8,8 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import {
-  fetchCartProductQuantity,
-  fetchCartProducts,
-  fetchInvoiceProducts,
-} from "@lib/data";
-import { useAuthContext } from "./auth";
+import { fetchCartQuantity, fetchCart, fetchInvoices } from "@lib/data";
+import { useAuthContext } from "@ui/context/auth";
 import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
 
 interface CartContextProps {
@@ -54,20 +50,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
           fetchedCartProducts,
           fetchedInvoiceProducts,
         ] = await Promise.all([
-          cartQuantity ? fetchCartProductQuantity(userId) : null,
-          cartProducts ? fetchCartProducts(userId) : null,
-          invoiceProducts ? fetchInvoiceProducts(userId) : null,
+          cartQuantity ? fetchCartQuantity(userId) : undefined,
+          cartProducts ? fetchCart(userId) : undefined,
+          invoiceProducts ? fetchInvoices(userId) : undefined,
         ]);
 
-        if (fetchedCartQuantity !== null) setQuantity(fetchedCartQuantity);
-        if (fetchedCartProducts !== null) {
+        if (fetchedCartQuantity !== undefined) setQuantity(fetchedCartQuantity);
+        if (fetchedCartProducts !== undefined) {
           setCartProducts(fetchedCartProducts);
           sessionStorage.setItem(
             "cartProducts",
             JSON.stringify(fetchedCartProducts),
           );
         }
-        if (fetchedInvoiceProducts !== null)
+        if (fetchedInvoiceProducts !== undefined)
           setInvoiceProducts(fetchedInvoiceProducts);
       } catch (error) {
         console.error("Failed to refresh cart:", error);
@@ -81,7 +77,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     async function initialize() {
-      const fetchedCartQuantity = await fetchCartProductQuantity(userId);
+      const fetchedCartQuantity = await fetchCartQuantity(userId);
       setQuantity(fetchedCartQuantity);
     }
 
@@ -104,9 +100,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 }
 
 export function useCartContext() {
-  const context = useContext(CartContext);
-  if (!context) {
+  const cxt = useContext(CartContext);
+  if (!cxt) {
     throw new Error("useCartContext must be used within a CartProvider");
   }
-  return context;
+  return cxt;
 }

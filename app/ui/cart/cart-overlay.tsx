@@ -1,136 +1,98 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import Button from "@ui/button";
-import { useRouter } from "next/navigation";
-import useOverflow from "@ui/hooks/overflow";
-import { usePathname } from "next/navigation";
 import ImageTag from "@ui/image";
-import { getPriceAfterDiscount, getTotalPriceCents } from "@lib/utils";
+import {
+  getPriceAfterDiscount,
+  getTotalPriceCents,
+  transformCartProducts,
+} from "@lib/utils";
 import Backdrop from "@ui/overlays/backdrop";
 import SlidingContainer from "@ui/overlays/sliding-container";
-import { CartProductsProps } from "@lib/definition";
-import { useAuthContext } from "@ui/hooks/auth";
-import { fetchCartProducts } from "@lib/data";
+import { useAuthContext } from "@ui/context/auth";
 import Loading from "@ui/loading";
 import useAnimation from "@ui/hooks/animation";
+import { useCartStore } from "@lib/store/cart-store";
+import { useProduct } from "@ui/context/products";
+import { useUIState } from "@ui/context/state";
 
 export default function CartOverlay() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const { isAnimating, triggerAnimation } = useAnimation();
-  const router = useRouter();
-  const pathname = usePathname();
-  const [cartProducts, setCartProducts] = useState<CartProductsProps>(null);
-  const totalPriceCents = getTotalPriceCents(cartProducts);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isLoading, cartProducts, fetchCartProducts } = useCartStore();
   const { userId } = useAuthContext();
-  const handleClose = (shouldNavigate: boolean) =>
-    triggerAnimation(() => {
-      setIsOpen(false);
-      if (shouldNavigate) router.back();
-    });
+  const { products } = useProduct();
+  const { setState } = useUIState();
+  const handleClose = () =>
+    triggerAnimation(() => setState("isCartOpen", false));
+  const combinedCartProducts = transformCartProducts(cartProducts, products);
+  const totalPriceCents = useMemo(
+    () => getTotalPriceCents(combinedCartProducts),
+    [combinedCartProducts],
+  );
 
-  useOverflow(isOpen);
-
-  // idk whats going on here, when i click on cart, go to checkout
-  // and then click on cart again, isOpen is false, idk why
-  // use useEffect temporarily
   useEffect(() => {
-    if (pathname === "/cart-overlay") {
-      setIsOpen(true);
-
-      const fetchCartData = async () => {
-        if (!userId) return;
-
-        try {
-          const storedCartProducts: CartProductsProps = sessionStorage.getItem(
-            "cartProducts",
-          )
-            ? JSON.parse(sessionStorage.getItem("cartProducts") as string)
-            : null;
-
-          if (storedCartProducts) {
-            setCartProducts(storedCartProducts);
-          } else {
-            setIsLoading(true);
-            const fetchedCartProducts = await fetchCartProducts(userId);
-            setCartProducts(fetchedCartProducts);
-            sessionStorage.setItem(
-              "cartProducts",
-              JSON.stringify(fetchedCartProducts),
-            );
-          }
-        } catch (error) {
-          console.error("Failed to fetch cart products:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchCartData();
-    }
-  }, [pathname, userId]);
+    fetchCartProducts(userId);
+  }, [fetchCartProducts, userId]);
 
   return (
-    isOpen && (
-      <Backdrop isAnimating={isAnimating} onMouseDown={() => handleClose(true)}>
-        <SlidingContainer isAnimating={isAnimating}>
-          <div className="flex h-full flex-col px-6 pt-6 text-sm">
-            <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
-            <div className="mt-4">
-              {isLoading ? (
-                <Loading />
-              ) : cartProducts === null ? (
-                <p>You have no products in your shopping cart.</p>
-              ) : (
-                cartProducts.map(
-                  ({
-                    name,
-                    priceCents,
-                    images,
-                    description,
-                    saleOff,
-                    slug,
-                    quantity,
-                    size,
-                  }) => (
-                    <div
-                      className="mb-2 flex items-center gap-2"
-                      key={`${slug}-${size}`}
-                    >
-                      <ImageTag src={images[0]} alt={description} />
-                      <div className="flex-1">
-                        <span className="mb-1 line-clamp-1 font-medium">
-                          {name}
-                        </span>
-                        <span className="line-clamp-1 opacity-65">
-                          Quantity: {quantity}
-                          <span className="mx-2">|</span>
-                          {size}
-                        </span>
-                      </div>
-                      <span className="opacity-65">
-                        ${getPriceAfterDiscount(priceCents, saleOff)}
+    <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
+      <SlidingContainer isAnimating={isAnimating}>
+        <div className="flex h-full flex-col px-6 pt-6 text-sm">
+          <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
+          <div className="mt-4">
+            {isLoading ? (
+              <Loading />
+            ) : cartProducts === null || combinedCartProducts === null ? (
+              <p>You have no products in your shopping cart.</p>
+            ) : (
+              combinedCartProducts.map(
+                ({
+                  name,
+                  priceCents,
+                  images,
+                  description,
+                  saleOff,
+                  slug,
+                  quantity,
+                  size,
+                }) => (
+                  <div
+                    className="mb-2 flex items-center gap-2"
+                    key={`${slug}-${size}`}
+                  >
+                    <ImageTag src={images[0]} alt={description} />
+                    <div className="flex-1">
+                      <span className="mb-1 line-clamp-1 font-medium">
+                        {name}
+                      </span>
+                      <span className="line-clamp-1 opacity-65">
+                        Quantity: {quantity}
+                        <span className="mx-2">|</span>
+                        {size}
                       </span>
                     </div>
-                  ),
-                )
-              )}
-            </div>
-
-            <div className="sticky bottom-0 mt-auto bg-white pb-6">
-              <div className="float-right mb-2">
-                <span className="font-medium">Total: </span>
-                <span className="opacity-65">${totalPriceCents}</span>
-              </div>
-              <Link href="/user/purchase" onClick={() => handleClose(false)}>
-                <Button className="w-full">Go to Payment</Button>
-              </Link>
-            </div>
+                    <span className="opacity-65">
+                      ${getPriceAfterDiscount(priceCents, saleOff)}
+                    </span>
+                  </div>
+                ),
+              )
+            )}
           </div>
-        </SlidingContainer>
-      </Backdrop>
-    )
+
+          <div className="sticky bottom-0 mt-auto bg-white pb-6">
+            <div className="float-right mb-2">
+              <span className="font-medium">Total: </span>
+              <span className="opacity-65">${totalPriceCents}</span>
+            </div>
+            <Link href="/user/purchase" onClick={handleClose}>
+              <Button className="w-full">Go to Payment</Button>
+            </Link>
+          </div>
+        </div>
+      </SlidingContainer>
+    </Backdrop>
   );
 }

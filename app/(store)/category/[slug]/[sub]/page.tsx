@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { fetchCategories, fetchProducts } from "@lib/data";
 import ProductList from "@ui/product/list";
-import NotFound from "@app/not-found";
+import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
 import { capitalizeFirstLetter } from "@ui/utils";
 import {
@@ -11,8 +11,6 @@ import {
   womenItems,
   kidsItems,
 } from "@ui/data/sub-categories";
-
-export const revalidate = 1800;
 
 const validSubCategories = new Set(subCategories);
 const validCategories = new Set(categories);

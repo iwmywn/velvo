@@ -6,17 +6,17 @@ import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
 import Button from "@ui/button";
 import { Product } from "@lib/definition";
 import ImageTag from "@ui/image";
-import { useAuthContext } from "@ui/hooks/auth";
+import { useAuthContext } from "@ui/context/auth";
 import { addToCart } from "@lib/actions";
 import { toast } from "react-toastify";
-import { useCartContext } from "@ui/hooks/cart";
-import { useRouter } from "next/navigation";
+import { useCartContext } from "@ui/context/cart";
 import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import "swiper/css";
 import { useHeightContext } from "@ui/hooks/height";
 import useAnimation from "@ui/hooks/animation";
+import { useUIState } from "@ui/context/state";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
@@ -38,15 +38,15 @@ export default function ProductDetails({ product }: { product: Product }) {
   const { userId } = useAuthContext();
   const { refreshCart } = useCartContext();
   const { heights } = useHeightContext();
-  const router = useRouter();
+  const { isAnimating, triggerAnimation } = useAnimation();
   const remainingQuantity = sizes[selectedSize as keyof typeof sizes];
   const formattedPrice = `$${formatCurrency(priceCents)}`;
   const priceAfterDiscount = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
-  const { isAnimating, triggerAnimation } = useAnimation();
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const descriptionRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement | null>(null);
   const swiperRef = useRef<SwiperCore | null>(null);
   const isProductFloatVisibleRef = useRef<boolean>(isProductFloatVisible);
+  const { setState } = useUIState();
 
   useEffect(() => {
     isProductFloatVisibleRef.current = isProductFloatVisible;
@@ -82,7 +82,7 @@ export default function ProductDetails({ product }: { product: Product }) {
 
       if (message === "Done.") {
         await refreshCart(true, true, false);
-        router.push("/cart-overlay", { scroll: false });
+        setState("isCartOpen", true);
       } else {
         toast.error(message);
       }

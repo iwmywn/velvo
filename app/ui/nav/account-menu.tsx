@@ -4,7 +4,7 @@ import Link from "next/link";
 import useDeviceType from "@ui/hooks/device-type";
 import useHideMenu from "@ui/hooks/hide-menu";
 import { CiUser } from "react-icons/ci";
-import { useAuthContext } from "@ui/hooks/auth";
+import { useAuthContext } from "@ui/context/auth";
 import { useState } from "react";
 import Image from "next/image";
 

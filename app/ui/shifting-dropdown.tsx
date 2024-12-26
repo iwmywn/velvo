@@ -26,12 +26,20 @@ const CategoryTabs = () => {
     setSelected(val);
   };
 
-  useEffect(() => {
+  const calculateButtonWidths = () => {
     const widths = CATEGORY_TABS.map(({ id }) => {
       const tabElement = document.getElementById(`shift-tab-${id}`);
       return tabElement ? tabElement.getBoundingClientRect().width : 0;
     });
     setButtonWidths(widths);
+  };
+
+  useEffect(() => {
+    calculateButtonWidths();
+
+    const handleResize = () => calculateButtonWidths();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (

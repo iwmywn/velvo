@@ -3,10 +3,8 @@ import { fetchCategories, fetchProducts } from "@lib/data";
 import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
-import NotFound from "@app/not-found";
+import NotFound from "@/app/not-found";
 import { capitalizeFirstLetter } from "@ui/utils";
-
-export const revalidate = 1800;
 
 export async function generateMetadata({
   params,

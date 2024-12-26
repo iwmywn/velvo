@@ -21,7 +21,7 @@ import {
   errorClass,
 } from "@ui/form-class";
 import { toast } from "react-toastify";
-import { useAuthContext } from "@ui/hooks/auth";
+import { useAuthContext } from "@ui/context/auth";
 import useAnimation from "@ui/hooks/animation";
 
 interface SettingsProps {

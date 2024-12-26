@@ -13,16 +13,16 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import useOverflow from "@ui/hooks/overflow";
 import { placeOrderSchema } from "@/schemas";
 import addresses from "@ui/data/addresses";
-import { useAuthContext } from "@ui/hooks/auth";
+import { useAuthContext } from "@ui/context/auth";
 import { toast } from "react-toastify";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
-import { useCartContext } from "@ui/hooks/cart";
+import { useCartContext } from "@ui/context/cart";
 import { transformProducts } from "@lib/utils";
 import useAnimation from "@ui/hooks/animation";
+import { useUIState } from "@ui/context/state";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
@@ -39,7 +39,7 @@ export default function Checkout({
   }[];
   totalPriceCents: string;
 }) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { state, setState } = useUIState();
   const { isAnimating, triggerAnimation } = useAnimation();
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
@@ -51,7 +51,8 @@ export default function Checkout({
   const router = useRouter();
   const { refreshCart } = useCartContext();
   const updatedProducts = transformProducts(products);
-  const handleClose = () => triggerAnimation(() => setIsOpen(false));
+  const handleClose = () =>
+    triggerAnimation(() => setState("isCheckoutOpen", false));
 
   const {
     register,
@@ -146,11 +147,9 @@ export default function Checkout({
     }
   };
 
-  useOverflow(isOpen);
-
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Checkout</Button>
+      <Button onClick={() => setState("isCheckoutOpen", true)}>Checkout</Button>
       {showCaptcha && (
         <ReCaptchaPopup
           onClose={() => setShowCaptcha(false)}
@@ -158,7 +157,7 @@ export default function Checkout({
           overflow={false}
         />
       )}
-      {isOpen && (
+      {state.isCheckoutOpen && (
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
