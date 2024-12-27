@@ -17,6 +17,7 @@ import "swiper/css";
 import { useHeightContext } from "@ui/hooks/height";
 import useAnimation from "@ui/hooks/animation";
 import { useUIState } from "@ui/context/state";
+import ExpandableSections from "@ui/expandable";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
@@ -27,11 +28,11 @@ export default function ProductDetails({ product }: { product: Product }) {
     description,
     saleOff,
     sizes,
+    keyFeatures,
   } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [quantity, setQuantity] = useState<number>(1);
   const [isProductFloatVisible, setIsProductFloatVisible] =
     useState<boolean>(false);
@@ -43,7 +44,6 @@ export default function ProductDetails({ product }: { product: Product }) {
   const formattedPrice = `$${formatCurrency(priceCents)}`;
   const priceAfterDiscount = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
   const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const descriptionRef = useRef<HTMLDivElement | null>(null);
   const swiperRef = useRef<SwiperCore | null>(null);
   const isProductFloatVisibleRef = useRef<boolean>(isProductFloatVisible);
   const { setState } = useUIState();
@@ -173,17 +173,17 @@ export default function ProductDetails({ product }: { product: Product }) {
           </div>
           <div className="space-y-2">
             <p className="text-sm font-medium text-gray-700">Size</p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {["S", "M", "L", "XL"].map((size) => {
                 const quantity = sizes[size as keyof typeof sizes];
                 return (
                   <label
                     key={size}
-                    className={`relative flex items-center justify-center gap-x-2 overflow-hidden rounded border px-4 py-2 text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
+                    className={`relative flex h-9 w-12 items-center justify-center gap-x-2 overflow-hidden rounded border text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
                   >
                     {quantity === 0 && (
                       <span
-                        className={`absolute inset-0 before:absolute before:h-[1px] before:w-[150%] before:origin-top-left before:rotate-[38deg] ${selectedSize === size ? "before:bg-[linear-gradient(90deg,_black,_gray,_black)]" : "before:bg-gray-200"}`}
+                        className={`absolute inset-0 before:absolute before:h-[1px] before:w-[150%] before:origin-top-left before:rotate-[36deg] ${selectedSize === size ? "before:bg-[linear-gradient(90deg,_black,_gray,_black)]" : "before:bg-gray-200"}`}
                       />
                     )}
                     <input
@@ -253,26 +253,15 @@ export default function ProductDetails({ product }: { product: Product }) {
               "SOLD OUT"
             )}
           </Button>
-          <div className="space-y-2 text-xs">
-            <div
-              onClick={() => setIsExpanded((prev) => !prev)}
-              className="flex h-full cursor-pointer items-center justify-between border-y py-3 font-medium"
-            >
-              <span>DESCRIPTION</span>
-              {isExpanded ? <HiMinusSmall /> : <HiPlusSmall />}
-            </div>
-            <div
-              ref={descriptionRef}
-              className={`transition-max-height overflow-hidden duration-500 ease-in-out ${isExpanded ? "max-h-max" : "max-h-0"}`}
-              style={{
-                maxHeight: isExpanded
-                  ? descriptionRef.current?.scrollHeight + "px"
-                  : "0px",
-              }}
-            >
-              <p>{description}</p>
-            </div>
-          </div>
+          <ExpandableSections
+            sections={[
+              { label: "DESCRIPTION", body: description },
+              {
+                label: "KEY FEATURES",
+                body: keyFeatures,
+              },
+            ]}
+          />
         </div>
       </div>
     </>

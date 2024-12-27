@@ -12,12 +12,14 @@ type UIStateKeys =
   | "isConfirmOrderOpen"
   | "isCheckoutOpen";
 
-interface UIStateContextType {
+interface UIStateContextProps {
   state: Record<UIStateKeys, boolean>;
   setState: (key: UIStateKeys, value: boolean) => void;
 }
 
-const UIStateContext = createContext<UIStateContextType | undefined>(undefined);
+const UIStateContext = createContext<UIStateContextProps | undefined>(
+  undefined,
+);
 
 export const UIStateProvider = ({
   children,
@@ -48,9 +50,9 @@ export const UIStateProvider = ({
 };
 
 export const useUIState = () => {
-  const context = useContext(UIStateContext);
-  if (!context) {
+  const cxt = useContext(UIStateContext);
+  if (!cxt) {
     throw new Error("useUIState must be used within a UIStateProvider");
   }
-  return context;
+  return cxt;
 };

@@ -5,6 +5,7 @@ import { useElementHeight } from "@ui/hooks/height";
 import Link from "next/link";
 import { socialLinks, footerSections } from "@ui/data/constants";
 import Button from "@ui/button";
+import { linkClass } from "@ui/form-class";
 
 export default function Footer() {
   const ref = useRef<HTMLElement | null>(null);
@@ -32,11 +33,7 @@ export default function Footer() {
           >
             <span className="font-medium">{title}</span>
             {links.map(({ label, href }) => (
-              <Link
-                className="text-black/80 hover:underline"
-                href={href}
-                key={href}
-              >
+              <Link className={linkClass} href={href} key={href}>
                 {label}
               </Link>
             ))}

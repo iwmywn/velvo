@@ -1,6 +1,6 @@
 "use client";
 
-import React, {
+import {
   createContext,
   ReactNode,
   useContext,
@@ -8,14 +8,14 @@ import React, {
   useState,
 } from "react";
 
-interface AuthContextType {
+interface AuthContextProps {
   isSignedIn: boolean;
   userId?: string;
   image?: string;
   isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType>({
+const AuthContext = createContext<AuthContextProps>({
   isSignedIn: false,
   isLoading: true,
 });
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (res.ok) {
-        const result: AuthContextType = await res.json();
+        const result: AuthContextProps = await res.json();
         setIsSignedIn(result.isSignedIn);
         setUserId(result.userId);
         setImage(result.image);

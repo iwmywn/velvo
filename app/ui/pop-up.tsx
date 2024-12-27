@@ -62,7 +62,7 @@ export default function PopUp() {
               </div>
             ))}
             <div className="mt-1 flex h-8 w-8 animate-bounce items-center justify-center rounded-full">
-              <GoArrowDown fontSize={24} className="fill-blue-400" />
+              <GoArrowDown fontSize={24} className="fill-black" />
             </div>
             <a
               href="https://github.com/iwmywn/doan"

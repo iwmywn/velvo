@@ -3,11 +3,13 @@
 import { createContext, useContext, ReactNode } from "react";
 import { Product } from "@lib/definition";
 
-type ProductContextType = {
+interface ProductContextProps {
   products: Product[];
-};
+}
 
-const ProductContext = createContext<ProductContextType | undefined>(undefined);
+const ProductContext = createContext<ProductContextProps | undefined>(
+  undefined,
+);
 
 export const ProductProvider = ({
   children,

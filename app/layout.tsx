@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
   description: siteConfig.maintenanceMode
     ? "Website is under maintenance"
-    : "fashion",
+    : "StyleWave is your ultimate online fashion destination, offering a wide range of high-quality clothing that caters to every style. From trendy streetwear to elegant pieces, we bring you the latest fashion trends to keep your wardrobe fresh and stylish.",
 };
 
 export default async function RootLayout({

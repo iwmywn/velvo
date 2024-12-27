@@ -34,7 +34,7 @@ export default function Header() {
         className="space-right fixed left-0 right-0 top-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
       >
         <nav className="mx-8 flex w-full items-center justify-between pb-3 pt-4 md:mx-20 md:pb-4 md:pt-7">
-          <div className="hidden max-w-[26rem] flex-1 lg:flex lg:items-center lg:justify-between">
+          <div className="hidden max-w-[27rem] flex-1 lg:flex lg:items-center lg:justify-between">
             <Link
               className="select-none text-2xl font-bold"
               href="/"
@@ -53,7 +53,7 @@ export default function Header() {
 
           <Logo />
 
-          <div className="flex items-center justify-end gap-5 text-base lg:max-w-[26rem] lg:flex-1 lg:gap-10">
+          <div className="flex items-center justify-end gap-5 text-base lg:max-w-[27rem] lg:flex-1 lg:gap-10">
             <CiSearch
               className="cursor-pointer text-[22px] md:text-2xl"
               onClick={() => setState("isSearchOpen", true)}

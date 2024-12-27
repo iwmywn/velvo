@@ -65,6 +65,7 @@ export type Product = {
     XL: number;
   };
   subCategory: string;
+  keyFeatures: string[];
 };
 
 export type Products = {

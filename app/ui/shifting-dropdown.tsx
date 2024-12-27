@@ -129,22 +129,22 @@ const CategoryContent = ({
       id="overlay-content"
       initial={{
         opacity: 0,
-        y: 8,
+        y: -20,
+        x: "-50%",
       }}
       animate={{
         opacity: 1,
         y: 0,
         left: `${calculateLeft()}px`,
-        transform: "translateX(-50%)",
       }}
       exit={{
         opacity: 0,
-        y: 8,
+        y: 20,
       }}
       style={{
         left: `${calculateLeft()}px`,
       }}
-      className="absolute top-[calc(100%_+_20px)] max-w-max rounded-lg border border-black/50 bg-white px-6 py-4"
+      className="absolute top-[calc(100%_+_16px)] max-w-max rounded-lg border bg-white px-6 py-4"
     >
       <Bridge />
       <Nub />
@@ -171,17 +171,19 @@ const CategoryContent = ({
   );
 };
 
-const Bridge = () => <div className="absolute -top-5 left-0 right-0 h-5" />;
+const Bridge = () => <div className="absolute -top-4 left-0 right-0 h-4" />;
 
 const Nub = () => {
   return (
     <motion.span
       style={{
         clipPath: "polygon(0 0, 100% 0, 50% 50%, 0% 100%)",
+        left: "50%",
       }}
+      initial={{ x: "-50%", y: "-50%", rotate: 45 }}
       animate={{ left: "50%" }}
       transition={{ duration: 0.25, ease: "easeInOut" }}
-      className="absolute top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-tl border border-black/50 bg-white"
+      className="absolute top-0 h-4 w-4 rounded-tl border bg-white"
     />
   );
 };
