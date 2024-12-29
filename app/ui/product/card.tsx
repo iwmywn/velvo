@@ -38,8 +38,7 @@ export default function ProductCard({
           height={240}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
           className="transition-transform duration-300 group-hover/product-card:scale-105"
-          priority
-          style={{ objectFit: "contain" }}
+          style={{ objectFit: "cover", objectPosition: "center" }}
         />
       </div>
       <div className="flex flex-col gap-2 p-4">

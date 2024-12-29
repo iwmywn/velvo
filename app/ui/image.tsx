@@ -8,15 +8,17 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 export default function ImageTag({ src, alt, className }: ImageProps) {
   return (
-    <span className={twMerge("flex h-[85px] justify-center", className)}>
+    <span className={twMerge("flex items-center justify-center", className)}>
       <Image
         src={src}
         alt={alt}
         width={85}
         height={85}
-        priority
         sizes="(max-width: 640px) 33vw, 85px"
-        style={{ objectFit: "cover", objectPosition: "center" }}
+        style={{
+          objectFit: "cover",
+          objectPosition: "center",
+        }}
       />
     </span>
   );

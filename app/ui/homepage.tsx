@@ -37,7 +37,8 @@ export default function Home() {
                     alt={label}
                     fill
                     sizes="100vw"
-                    style={{ objectFit: "cover" }}
+                    loading="eager"
+                    style={{ objectFit: "cover", objectPosition: "center" }}
                   />
                 </div>
               </Link>
@@ -108,7 +109,7 @@ export default function Home() {
                 src={image}
                 alt={label}
                 fill
-                sizes="100vw"
+                sizes="(max-width: 640px) 100vw, 50vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>

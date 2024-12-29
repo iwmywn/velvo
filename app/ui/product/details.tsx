@@ -146,7 +146,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                     width={300}
                     height={300}
                     sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 300px"
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: "cover", objectPosition: "center" }}
                   />
                 </div>
               </SwiperSlide>
