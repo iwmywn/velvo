@@ -3,7 +3,7 @@ import { baseImgUrl } from "@ui/data/constants";
 const bannerItems = [
   {
     label: "Sanrio Characters",
-    href: "GIRLS-Sanrio-Characters-Cropped-Short-Sleeve-UT",
+    href: "Sanrio-Characters-Cropped-Short-Sleeve-UT",
     image: `${baseImgUrl}v1735448080/Sanrio-Characters_aednyw.jpg`,
   },
   {

@@ -123,7 +123,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                   : "border-slate-200"
               }`}
             >
-              <ImageTag src={img} alt={description} />
+              <ImageTag src={img} alt={description} loading="eager" />
             </div>
           ))}
         </div>
@@ -145,6 +145,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                     alt={name}
                     width={300}
                     height={300}
+                    loading="eager"
                     sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 300px"
                     style={{ objectFit: "cover", objectPosition: "center" }}
                   />
@@ -237,7 +238,8 @@ export default function ProductDetails({ product }: { product: Product }) {
             disabled={
               userId === undefined ||
               selectedSize === null ||
-              (selectedSize !== null && remainingQuantity <= 0)
+              (selectedSize !== null && remainingQuantity <= 0) ||
+              isLoading
             }
             onClick={handleAddToCart}
           >

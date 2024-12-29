@@ -6,10 +6,11 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   alt: string;
 }
 
-export default function ImageTag({ src, alt, className }: ImageProps) {
+export default function ImageTag({ src, alt, className, ...rest }: ImageProps) {
   return (
     <span className={twMerge("flex items-center justify-center", className)}>
       <Image
+        {...rest}
         src={src}
         alt={alt}
         width={85}
