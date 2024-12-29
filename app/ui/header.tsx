@@ -57,12 +57,14 @@ export default function Header() {
             <CiSearch
               className="cursor-pointer text-[22px] md:text-2xl"
               onClick={() => setState("isSearchOpen", true)}
+              title="Search"
             />
             <AccountMenu />
             <span className="relative">
               <GiShoppingCart
                 className="cursor-pointer text-[22px] md:text-2xl"
                 onClick={() => setState("isCartOpen", true)}
+                title="Cart"
               />
               {quantity > 0 && (
                 <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">

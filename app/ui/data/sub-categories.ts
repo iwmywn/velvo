@@ -11,11 +11,13 @@ const subCategories: string[] = [
   "dresses",
   "hats",
   "shorts",
+  "hoodies",
 ] as const;
 
 const menItems = [
   { label: "Shirts", href: "shirts" },
   { label: "Jackets", href: "jackets" },
+  { label: "Hoodies", href: "hoodies" },
   { label: "Pants", href: "pants" },
   { label: "Bags", href: "bags" },
 ] as const;
@@ -27,12 +29,14 @@ const womenItems = [
   { label: "Pants", href: "pants" },
   { label: "Skirts", href: "skirts" },
   { label: "Dresses", href: "dresses" },
+  { label: "Bags", href: "bags" },
 ] as const;
 
 const kidsItems = [
   { label: "Shirts", href: "shirts" },
   { label: "T-Shirts", href: "t-shirts" },
   { label: "Jackets", href: "jackets" },
+  { label: "Hoodies", href: "hoodies" },
   { label: "Shorts", href: "shorts" },
   { label: "Pants", href: "pants" },
   { label: "Hats", href: "hats" },

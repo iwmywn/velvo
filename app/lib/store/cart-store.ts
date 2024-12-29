@@ -12,17 +12,14 @@ export const useCartStore = create<CartState>((set) => ({
   cartProducts: [],
   isLoading: true,
   fetchCartProducts: async (userId) => {
-    const cachedCartProducts = sessionStorage.getItem("cartProducts");
+    const cachedCartProducts = sessionStorage.getItem("cart");
     if (cachedCartProducts) {
       set({ cartProducts: JSON.parse(cachedCartProducts), isLoading: false });
     } else {
       try {
         const fetchedCartProducts = await fetchCart(userId);
         set({ cartProducts: fetchedCartProducts });
-        sessionStorage.setItem(
-          "cartProducts",
-          JSON.stringify(fetchedCartProducts),
-        );
+        sessionStorage.setItem("cart", JSON.stringify(fetchedCartProducts));
       } catch (error) {
         console.error("Failed to fetch cart products:", error);
       } finally {

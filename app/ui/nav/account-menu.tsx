@@ -28,7 +28,9 @@ export default function AccountMenu() {
         ) : isLoading ? (
           <div className="h-[18px] w-[18px] animate-spin rounded-full border-4 border-gray-300 border-t-black md:h-5 md:w-5" />
         ) : (
-          <CiUser className="text-[22px] md:text-2xl" />
+          <Link href="/user/signin" title="Sign in">
+            <CiUser className="text-[22px] md:text-2xl" />
+          </Link>
         )}
       </div>
 

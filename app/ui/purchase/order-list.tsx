@@ -276,7 +276,7 @@ export default function OrderList({
                         key={index}
                         className="flex flex-wrap items-center justify-between gap-4 border p-2 sm:flex-nowrap"
                       >
-                        <Link href={`/product/${slug}`}>
+                        <Link href={`/products/${slug}`}>
                           <div className="flex items-center gap-4 sm:gap-2">
                             <ImageTag src={images[0]} alt={description} />
                             <div>

@@ -37,11 +37,13 @@ export default async function RootLayout({
     return (
       <html lang="en">
         <body className={`${montserrat.className} antialiased`}>
-          <div id="popups" className="relative z-[9999]" />
-          <PopUp />
-          <div className="flex min-h-screen items-center justify-center">
-            <h1 className="text-3xl font-bold">Be right back!</h1>
-          </div>
+          <UIStateProvider>
+            <div id="popups" className="relative z-[9999]" />
+            <PopUp />
+            <div className="flex min-h-screen items-center justify-center text-3xl font-bold">
+              Be right back!
+            </div>
+          </UIStateProvider>
         </body>
       </html>
     );

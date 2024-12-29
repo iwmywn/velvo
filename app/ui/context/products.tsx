@@ -11,24 +11,24 @@ const ProductContext = createContext<ProductContextProps | undefined>(
   undefined,
 );
 
-export const ProductProvider = ({
+export function ProductProvider({
   children,
   products,
 }: {
   children: ReactNode;
   products: Product[];
-}) => {
+}) {
   return (
     <ProductContext.Provider value={{ products }}>
       {children}
     </ProductContext.Provider>
   );
-};
+}
 
-export const useProduct = () => {
+export function useProduct() {
   const cxt = useContext(ProductContext);
   if (!cxt) {
     throw new Error("useProduct must be used within a ProductProvider");
   }
   return cxt;
-};
+}

@@ -1,12 +1,14 @@
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
+const baseImgUrl = "https://res.cloudinary.com/dku9repmn/image/upload/";
+
 const navLinks = [
   {
     label: "Men",
-    href: "/category/men",
+    href: "/categories/men",
   },
-  { label: "Women", href: "/category/women" },
-  { label: "Kids", href: "/category/kids" },
+  { label: "Women", href: "/categories/women" },
+  { label: "Kids", href: "/categories/kids" },
 ] as const;
 
 const footerSections = [
@@ -61,4 +63,4 @@ const socialLinks = [
   },
 ] as const;
 
-export { navLinks, footerSections, socialLinks };
+export { baseImgUrl, navLinks, footerSections, socialLinks };

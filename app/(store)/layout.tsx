@@ -5,7 +5,7 @@ export default function StoreLayout({
 }>) {
   return (
     <>
-      <main className="relative z-10 bg-white px-8 pt-8 md:px-20">
+      <main className="relative z-10 bg-white px-8 pb-5 pt-8 md:px-20">
         {children}
       </main>
     </>

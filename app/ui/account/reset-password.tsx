@@ -17,7 +17,7 @@ import { resetPasswordScheme } from "@/schemas";
 import { z } from "zod";
 import Loading from "@ui/loading";
 import { FaXmark } from "react-icons/fa6";
-import NotFound from "@app/not-found";
+import NotFound from "@/app/not-found";
 import { handleTokenVerification } from "@lib/utils";
 
 type PasswordFormData = z.infer<typeof resetPasswordScheme>;

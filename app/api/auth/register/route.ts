@@ -8,6 +8,7 @@ import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
 import avatars from "@ui/data/avatars";
 import verifyRecaptchaToken from "@lib/captcha";
+import { baseImgUrl } from "@ui/data/constants";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -38,7 +39,7 @@ export async function POST(req: Request) {
     email,
     password: hashedPassword,
     isVerified: false,
-    image: `https://res.cloudinary.com/dku9repmn/image/upload/${avatar}`,
+    image: `${baseImgUrl}${avatar}`,
     verificationToken,
     resendVerification: 1,
   });

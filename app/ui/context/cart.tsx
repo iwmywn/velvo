@@ -58,10 +58,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         if (fetchedCartQuantity !== undefined) setQuantity(fetchedCartQuantity);
         if (fetchedCartProducts !== undefined) {
           setCartProducts(fetchedCartProducts);
-          sessionStorage.setItem(
-            "cartProducts",
-            JSON.stringify(fetchedCartProducts),
-          );
+          sessionStorage.setItem("cart", JSON.stringify(fetchedCartProducts));
         }
         if (fetchedInvoiceProducts !== undefined)
           setInvoiceProducts(fetchedInvoiceProducts);

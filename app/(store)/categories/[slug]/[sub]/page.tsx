@@ -23,7 +23,7 @@ export async function generateMetadata({
   const { slug: categoryName, sub: subCategoryName } = await params;
 
   return {
-    title: `${!validSubCategories.has(subCategoryName) || !validCategories.has(categoryName) ? "NOT FOUND" : capitalizeFirstLetter(subCategoryName)}`,
+    title: `${!validSubCategories.has(subCategoryName) || !validCategories.has(categoryName) ? "NOT FOUND" : `${capitalizeFirstLetter(categoryName)} / ${capitalizeFirstLetter(subCategoryName)}`}`,
   };
 }
 
@@ -52,7 +52,7 @@ export default async function CategoryPage({
     { label: "All Products", href: "/products" },
     {
       label: capitalizeFirstLetter(categoryName),
-      href: `/category/${categoryName}`,
+      href: `/categories/${categoryName}`,
     },
     { label: capitalizeFirstLetter(subCategoryName) },
   ];
@@ -60,7 +60,10 @@ export default async function CategoryPage({
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <ProductList products={productsBySubCategory} title={subCategoryName} />
+      <ProductList
+        products={productsBySubCategory}
+        title={`${categoryName} / ${subCategoryName}`}
+      />
     </>
   );
 }

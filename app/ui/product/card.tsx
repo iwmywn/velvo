@@ -18,8 +18,8 @@ export default function ProductCard({
 
   return (
     <Link
-      href={`/product/${slug}`}
-      className="group relative flex flex-col rounded border border-slate-200 bg-white transition-transform duration-300 hover:scale-105"
+      href={`/products/${slug}`}
+      className="group/product-card relative flex flex-col rounded border border-slate-200 bg-white transition-transform duration-300 hover:scale-105"
       onMouseEnter={() => {
         if (images.length > 1) setCurrentImageIndex(1);
       }}
@@ -37,7 +37,7 @@ export default function ProductCard({
           width={240}
           height={240}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 240px"
-          className="transition-transform duration-300 group-hover:scale-105"
+          className="transition-transform duration-300 group-hover/product-card:scale-105"
           priority
           style={{ objectFit: "contain" }}
         />
