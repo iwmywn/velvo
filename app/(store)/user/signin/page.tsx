@@ -1,4 +1,4 @@
-import AuthOverview from "@/app/ui/account/auth-overview";
+import AuthOverview from "@ui/account/auth-overview";
 import { Metadata } from "next";
 
 export function generateMetadata(): Metadata {

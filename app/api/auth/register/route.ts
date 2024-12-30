@@ -7,7 +7,7 @@ import { registerSchema } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
 import avatars from "@ui/data/avatars";
-import verifyRecaptchaToken from "@/app/lib/recaptcha";
+import verifyRecaptchaToken from "@lib/recaptcha";
 import { baseImgUrl } from "@ui/data/constants";
 
 export async function POST(req: Request) {

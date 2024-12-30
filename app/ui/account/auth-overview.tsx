@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import SignIn from "@ui/account/sign-in";
-import Register from "@/app/ui/account/register";
+import Register from "@ui/account/register";
 import Wrapper from "@ui/account/wrapper";
 
 const tabs = [

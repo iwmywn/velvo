@@ -1,4 +1,4 @@
-import EmailForm from "@/app/ui/account/email-form";
+import EmailForm from "@ui/account/email-form";
 import { Metadata } from "next";
 
 export function generateMetadata(): Metadata {

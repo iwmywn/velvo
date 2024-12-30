@@ -9,8 +9,8 @@ import {
   getTotalPriceCents,
   transformCartProducts,
 } from "@lib/utils";
-import Backdrop from "@/app/ui/overlay/backdrop";
-import SlidingContainer from "@/app/ui/overlay/sliding-container";
+import Backdrop from "@ui/overlay/backdrop";
+import SlidingContainer from "@ui/overlay/sliding-container";
 import { useAuthContext } from "@ui/context/auth";
 import Loading from "@ui/loading";
 import useAnimation from "@ui/hooks/animation";

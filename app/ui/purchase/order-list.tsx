@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { addToCart, cancelReceiveOrder } from "@lib/actions";
 import { useAuthContext } from "@ui/context/auth";
 import { useRouter } from "next/navigation";
-import Backdrop from "@/app/ui/overlay/backdrop";
+import Backdrop from "@ui/overlay/backdrop";
 import { useCartContext } from "@ui/context/cart";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
