@@ -58,7 +58,7 @@ export async function sendEmail(
       <tr>
         <td>
           <img style="width: 35px; height: 35px; margin-bottom: 10px;"
-            src="https://github.com/iwmywn/doan/blob/master/public/logo-mail.png?raw=true" alt="logo">
+            src="https://github.com/iwmywn/doan/blob/master/app/icon.png?raw=true" alt="logo">
           <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">StyleWave</p>
           <p style="font-size: 16px; margin: 10px 0 20px 0; line-height: 1.6;">
             Hey there, <br>

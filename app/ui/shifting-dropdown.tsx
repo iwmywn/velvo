@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
@@ -15,6 +15,7 @@ const CategoryTabs = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [dir, setDir] = useState<null | "l" | "r">(null);
   const [buttonWidths, setButtonWidths] = useState<number[]>([]);
+  const observerRef = useRef<ResizeObserver | null>(null);
 
   const handleSetSelected = (val: number | null) => {
     if (typeof selected === "number" && typeof val === "number") {
@@ -22,7 +23,6 @@ const CategoryTabs = () => {
     } else if (val === null) {
       setDir(null);
     }
-
     setSelected(val);
   };
 
@@ -35,11 +35,19 @@ const CategoryTabs = () => {
   };
 
   useEffect(() => {
+    const tabsElements = CATEGORY_TABS.map(({ id }) =>
+      document.getElementById(`shift-tab-${id}`),
+    ).filter(Boolean) as HTMLElement[];
+
+    observerRef.current = new ResizeObserver(() => calculateButtonWidths());
+    tabsElements.forEach((el) => observerRef.current?.observe(el));
+
     calculateButtonWidths();
 
-    const handleResize = () => calculateButtonWidths();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      tabsElements.forEach((el) => observerRef.current?.unobserve(el));
+      observerRef.current?.disconnect();
+    };
   }, []);
 
   return (
@@ -47,18 +55,16 @@ const CategoryTabs = () => {
       onMouseLeave={() => handleSetSelected(null)}
       className="relative flex h-fit gap-2"
     >
-      {CATEGORY_TABS.map(({ id, title }) => {
-        return (
-          <CategoryTab
-            key={id}
-            selected={selected}
-            handleSetSelected={handleSetSelected}
-            tab={id}
-          >
-            {title}
-          </CategoryTab>
-        );
-      })}
+      {CATEGORY_TABS.map(({ id, title }) => (
+        <CategoryTab
+          key={id}
+          selected={selected}
+          handleSetSelected={handleSetSelected}
+          tab={id}
+        >
+          {title}
+        </CategoryTab>
+      ))}
 
       <AnimatePresence>
         {selected && (
@@ -89,7 +95,7 @@ const CategoryTab = ({
       id={`shift-tab-${tab}`}
       onMouseEnter={() => handleSetSelected(tab)}
       onClick={() => handleSetSelected(tab)}
-      className={`flex items-center gap-1 px-3 py-1.5 text-sm transition-colors ${
+      className={`flex items-center gap-1 text-nowrap px-3 py-1.5 text-sm transition-colors ${
         selected === tab && "opacity-70"
       }`}
     >
@@ -144,7 +150,7 @@ const CategoryContent = ({
       style={{
         left: `${calculateLeft()}px`,
       }}
-      className="absolute top-[calc(100%_+_16px)] max-w-max rounded-lg border bg-white px-6 py-4"
+      className="absolute top-[calc(100%_+_16px)] z-10 max-w-max rounded-lg border bg-white px-6 py-4"
     >
       <Bridge />
       <Nub />

@@ -157,7 +157,7 @@ export default function ProductDetails({ product }: { product: Product }) {
 
         <div className="col-span-5 space-y-6 lg:col-span-4">
           <h1 className="text-2xl font-extrabold text-gray-900">{name}</h1>
-          <div className="flex items-center gap-3 text-lg font-bold text-gray-900">
+          <div className="flex flex-wrap items-center gap-3 text-lg font-bold text-gray-900">
             {saleOff > 0 ? (
               <>
                 <span className="text-red-500">{priceAfterDiscount}</span>
@@ -179,6 +179,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                 const quantity = sizes[size as keyof typeof sizes];
                 return (
                   <label
+                    translate="no"
                     key={size}
                     className={`relative flex h-9 w-12 items-center justify-center gap-x-2 overflow-hidden rounded border text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
                   >
