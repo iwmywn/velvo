@@ -5,7 +5,7 @@ import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { emailScheme } from "@/schemas";
 import { createResponse } from "@lib/utils";
 import { generateUniqueToken } from "@api/utils";
-import verifyRecaptchaToken from "@lib/captcha";
+import verifyRecaptchaToken from "@/app/lib/recaptcha";
 
 export async function PATCH(req: Request) {
   const data = await req.json();

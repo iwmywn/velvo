@@ -10,7 +10,7 @@ import Loading from "@ui/loading";
 import useHideMenu from "@ui/hooks/hide-menu";
 import BreadCrumbs from "@ui/breadcrumbs";
 import { useCartContext } from "@ui/context/cart";
-import { useProduct } from "@ui/context/products";
+import { useProduct } from "@ui/context/product";
 import { transformCartProducts } from "@lib/utils";
 
 const tabs = [

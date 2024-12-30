@@ -5,7 +5,7 @@ import { connectToDatabase } from "@lib/mongodb";
 import { placeOrderWithIdSchema } from "@/schemas";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
-import verifyRecaptchaToken from "@lib/captcha";
+import verifyRecaptchaToken from "@/app/lib/recaptcha";
 
 export async function POST(req: Request) {
   const data = await req.json();

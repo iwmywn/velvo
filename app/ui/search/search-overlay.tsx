@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import ProductCard from "@ui/product/card";
 import { Product } from "@lib/definition";
-import Backdrop from "@ui/overlays/backdrop";
-import SlidingContainer from "@ui/overlays/sliding-container";
+import Backdrop from "@/app/ui/overlay/backdrop";
+import SlidingContainer from "@/app/ui/overlay/sliding-container";
 import useAnimation from "@ui/hooks/animation";
-import { useProduct } from "@ui/context/products";
+import { useProduct } from "@ui/context/product";
 import { useUIState } from "@ui/context/state";
 
 export default function SearchOverlay() {

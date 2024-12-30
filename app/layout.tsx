@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "@ui/context/auth";
 import { ToastContainer } from "react-toastify";
 import { siteConfig } from "@lib/config";
-import { ProductProvider } from "@ui/context/products";
+import { ProductProvider } from "@ui/context/product";
 import { fetchProducts } from "@lib/data";
 import { UIStateProvider } from "@ui/context/state";
 
