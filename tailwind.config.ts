@@ -62,7 +62,7 @@ export default {
             transform: "translateY(-150%)",
           },
           "100%": {
-            transform: "translateX(0)",
+            transform: "translateY(0)",
           },
         },
         popUpOut: {
@@ -89,14 +89,6 @@ export default {
           "0%": { transform: "scale(1)" },
           "100%": { transform: "scale(0)" },
         },
-        slideDown: {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(0)" },
-        },
-        slideUp: {
-          "0%": { transform: "translateY(0)" },
-          "100%": { transform: "translateY(-100%)" },
-        },
       },
       animation: {
         topToCenter: "topToCenter 0.3s ease-in-out",
@@ -111,8 +103,6 @@ export default {
         popUpOut: "popUpOut 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)",
         zoomIn: "zoomIn 0.3s ease-in-out",
         zoomOut: "zoomOut 0.3s ease-in-out",
-        slideDown: "slideDown 0.3s ease-out forwards",
-        slideUp: "slideUp 0.3s ease-in forwards",
       },
     },
   },
