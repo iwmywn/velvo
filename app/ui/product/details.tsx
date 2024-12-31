@@ -6,17 +6,17 @@ import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
 import Button from "@ui/button";
 import { Product } from "@lib/definition";
 import ImageTag from "@ui/image";
-import { useAuthContext } from "@ui/context/auth";
+import { useAuthContext } from "@ui/contexts/auth";
 import { addToCart } from "@lib/actions";
 import { toast } from "react-toastify";
-import { useCartContext } from "@ui/context/cart";
+import { useCartContext } from "@ui/contexts/cart";
 import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import "swiper/css";
-import { useHeightContext } from "@ui/context/height";
+import { useHeightContext } from "@ui/contexts/height";
 import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/context/state";
+import { useUIState } from "@ui/contexts/state";
 import ExpandableSections from "@ui/expandable";
 
 export default function ProductDetails({ product }: { product: Product }) {

@@ -15,14 +15,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { placeOrderSchema } from "@/schemas";
 import addresses from "@ui/data/addresses";
-import { useAuthContext } from "@ui/context/auth";
+import { useAuthContext } from "@ui/contexts/auth";
 import { toast } from "react-toastify";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
-import { useCartContext } from "@ui/context/cart";
+import { useCartContext } from "@ui/contexts/cart";
 import { transformProducts } from "@lib/utils";
 import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/context/state";
+import { useUIState } from "@ui/contexts/state";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 

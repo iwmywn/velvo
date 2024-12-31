@@ -1,6 +1,6 @@
 "use client";
 
-import { useHeightContext } from "@ui/context/height";
+import { useHeightContext } from "@ui/contexts/height";
 import { useEffect, RefObject } from "react";
 
 export function useElementHeight(ref: RefObject<HTMLElement | null>) {

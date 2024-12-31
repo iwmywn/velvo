@@ -3,7 +3,7 @@ import ProductRow from "@ui/purchase/product-row";
 import Checkout from "@ui/purchase/checkout";
 import EmptyState from "@ui/cart/empty";
 import { Product } from "@lib/definition";
-import { useCartContext } from "@ui/context/cart";
+import { useCartContext } from "@ui/contexts/cart";
 import Loading from "@ui/loading";
 
 export default function ToPay({

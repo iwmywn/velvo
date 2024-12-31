@@ -12,8 +12,8 @@ import SearchOverlay from "@ui/search/search-overlay";
 import CartOverlay from "@ui/cart/cart-overlay";
 import { CiSearch } from "react-icons/ci";
 import { GiShoppingCart } from "react-icons/gi";
-import { useCartContext } from "@ui/context/cart";
-import { useUIState } from "@ui/context/state";
+import { useCartContext } from "@ui/contexts/cart";
+import { useUIState } from "@ui/contexts/state";
 
 export default function Header() {
   const ref = useRef<HTMLElement | null>(null);

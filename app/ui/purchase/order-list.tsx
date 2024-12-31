@@ -10,14 +10,14 @@ import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { addToCart, cancelReceiveOrder } from "@lib/actions";
-import { useAuthContext } from "@ui/context/auth";
+import { useAuthContext } from "@ui/contexts/auth";
 import { useRouter } from "next/navigation";
 import Backdrop from "@ui/overlay/backdrop";
-import { useCartContext } from "@ui/context/cart";
+import { useCartContext } from "@ui/contexts/cart";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
 import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/context/state";
+import { useUIState } from "@ui/contexts/state";
 
 export default function OrderList({
   invoiceProducts,

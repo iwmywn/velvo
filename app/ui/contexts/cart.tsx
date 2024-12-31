@@ -9,7 +9,7 @@ import React, {
   useCallback,
 } from "react";
 import { fetchCartQuantity, fetchCart, fetchInvoices } from "@lib/data";
-import { useAuthContext } from "@ui/context/auth";
+import { useAuthContext } from "@ui/contexts/auth";
 import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
 
 interface CartContextProps {

@@ -4,7 +4,7 @@ import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import Image from "next/image";
-import { useProduct } from "@ui/context/product";
+import { useProduct } from "@ui/contexts/product";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import ProductCard from "@ui/product/card";
 import Link from "next/link";

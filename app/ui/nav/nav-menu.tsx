@@ -3,7 +3,7 @@
 import { navLinks } from "@ui/data/constants";
 import Link from "next/link";
 import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/context/state";
+import { useUIState } from "@ui/contexts/state";
 
 export default function NavMenu() {
   const { isAnimating, triggerAnimation } = useAnimation();

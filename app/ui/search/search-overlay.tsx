@@ -6,8 +6,8 @@ import { Product } from "@lib/definition";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
 import useAnimation from "@ui/hooks/animation";
-import { useProduct } from "@ui/context/product";
-import { useUIState } from "@ui/context/state";
+import { useProduct } from "@ui/contexts/product";
+import { useUIState } from "@ui/contexts/state";
 
 export default function SearchOverlay() {
   const { isAnimating, triggerAnimation } = useAnimation();

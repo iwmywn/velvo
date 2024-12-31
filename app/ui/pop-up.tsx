@@ -7,7 +7,7 @@ import { GoArrowDown } from "react-icons/go";
 import Backdrop from "@ui/overlay/backdrop";
 import { linkClass } from "@ui/form-class";
 import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/context/state";
+import { useUIState } from "@ui/contexts/state";
 
 const contact = [
   {
