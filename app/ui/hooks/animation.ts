@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 
 export default function useAnimation(duration: number = 250) {

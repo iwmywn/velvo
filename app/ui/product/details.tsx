@@ -14,7 +14,7 @@ import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import "swiper/css";
-import { useHeightContext } from "@ui/hooks/height";
+import { useHeightContext } from "@ui/context/height";
 import useAnimation from "@ui/hooks/animation";
 import { useUIState } from "@ui/context/state";
 import ExpandableSections from "@ui/expandable";

@@ -4,7 +4,7 @@ import { montserrat } from "@ui/fonts";
 import Header from "@ui/header";
 import Footer from "@ui/footer";
 import ScrollToTop from "@ui/to-top";
-import { HeightProvider } from "@ui/hooks/height";
+import { HeightProvider } from "@ui/context/height";
 import { CartProvider } from "@ui/context/cart";
 import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
