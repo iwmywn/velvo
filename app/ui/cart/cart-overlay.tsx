@@ -14,7 +14,7 @@ import SlidingContainer from "@ui/overlay/sliding-container";
 import { useAuthContext } from "@ui/contexts/auth";
 import Loading from "@ui/loading";
 import useAnimation from "@ui/hooks/animation";
-import { useCartStore } from "@lib/store/cart-store";
+import { useCartStore } from "@lib/stored";
 import { useProduct } from "@ui/contexts/product";
 import { useUIState } from "@ui/contexts/state";
 
