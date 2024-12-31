@@ -9,20 +9,20 @@ interface CartState {
 }
 
 export const useCartStore = create<CartState>((set) => ({
-  cartProducts: [],
+  cartProducts: null,
   isLoading: true,
   fetchCartProducts: async (userId) => {
     const cachedCartProducts = sessionStorage.getItem("cart");
     if (cachedCartProducts) {
       set({ cartProducts: JSON.parse(cachedCartProducts), isLoading: false });
+    } else if (!userId) {
+      set({ cartProducts: null, isLoading: false });
+      sessionStorage.setItem("cart", JSON.stringify(null));
     } else {
       try {
-        if (!userId) sessionStorage.setItem("cart", JSON.stringify(null));
-        else {
-          const fetchedCartProducts = await fetchCart(userId);
-          set({ cartProducts: fetchedCartProducts });
-          sessionStorage.setItem("cart", JSON.stringify(fetchedCartProducts));
-        }
+        const fetchedCartProducts = await fetchCart(userId);
+        set({ cartProducts: fetchedCartProducts });
+        sessionStorage.setItem("cart", JSON.stringify(fetchedCartProducts));
       } catch (error) {
         console.error("Failed to fetch cart products:", error);
       } finally {
