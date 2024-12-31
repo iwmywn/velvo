@@ -17,9 +17,12 @@ export const useCartStore = create<CartState>((set) => ({
       set({ cartProducts: JSON.parse(cachedCartProducts), isLoading: false });
     } else {
       try {
-        const fetchedCartProducts = await fetchCart(userId);
-        set({ cartProducts: fetchedCartProducts });
-        sessionStorage.setItem("cart", JSON.stringify(fetchedCartProducts));
+        if (!userId) sessionStorage.setItem("cart", JSON.stringify(null));
+        else {
+          const fetchedCartProducts = await fetchCart(userId);
+          set({ cartProducts: fetchedCartProducts });
+          sessionStorage.setItem("cart", JSON.stringify(fetchedCartProducts));
+        }
       } catch (error) {
         console.error("Failed to fetch cart products:", error);
       } finally {
