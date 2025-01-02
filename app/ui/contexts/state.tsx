@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState } from "react";
-import useOverflow from "@ui/hooks/overflow";
+import { useOverflow } from "@ui/hooks";
 
 type UIStateKeys =
   | "isMenuOpen"
@@ -49,7 +49,7 @@ export const UIStateProvider = ({
   );
 };
 
-export const useUIState = () => {
+export const useUIStateContext = () => {
   const cxt = useContext(UIStateContext);
   if (!cxt) {
     throw new Error("useUIState must be used within a UIStateProvider");

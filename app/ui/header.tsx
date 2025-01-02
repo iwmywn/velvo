@@ -4,7 +4,7 @@ import Link from "next/link";
 import { IoIosMenu } from "react-icons/io";
 import { useRef } from "react";
 import NavMenu from "@ui/nav/nav-menu";
-import { useElementHeight } from "@ui/hooks/height";
+import { useElementHeight } from "@ui/hooks";
 import AccountMenu from "@ui/nav/account-menu";
 import Image from "next/image";
 import { CategoryDropDown } from "@ui/shifting-dropdown";
@@ -12,13 +12,12 @@ import SearchOverlay from "@ui/search/search-overlay";
 import CartOverlay from "@ui/cart/cart-overlay";
 import { CiSearch } from "react-icons/ci";
 import { GiShoppingCart } from "react-icons/gi";
-import { useCartContext } from "@ui/contexts/cart";
-import { useUIState } from "@ui/contexts/state";
+import { useCartContext, useUIStateContext } from "@ui/contexts";
 
 export default function Header() {
   const ref = useRef<HTMLElement | null>(null);
   const { quantity } = useCartContext();
-  const { state, setState } = useUIState();
+  const { state, setState } = useUIStateContext();
 
   useElementHeight(ref);
 

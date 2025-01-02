@@ -1,6 +1,6 @@
 import { baseImgUrl } from "@ui/data/constants";
 
-const bannerItems = [
+export const bannerItems = [
   {
     label: "Sanrio Characters",
     href: "Sanrio-Characters-Cropped-Short-Sleeve-UT",
@@ -22,5 +22,3 @@ const bannerItems = [
     image: `${baseImgUrl}v1735448310/NY-Pop-Art_ysnvup.jpg`,
   },
 ];
-
-export { bannerItems };

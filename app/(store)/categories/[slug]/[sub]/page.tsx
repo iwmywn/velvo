@@ -10,7 +10,7 @@ import {
   menItems,
   womenItems,
   kidsItems,
-} from "@ui/data/sub-categories";
+} from "@ui/data";
 
 const validSubCategories = new Set(subCategories);
 const validCategories = new Set(categories);

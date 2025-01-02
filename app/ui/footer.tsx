@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useElementHeight } from "@ui/hooks/height";
+import { useElementHeight } from "@ui/hooks";
 import Link from "next/link";
-import { socialLinks, footerSections } from "@ui/data/constants";
+import { socialLinks, footerSections } from "@ui/data";
 import Button from "@ui/button";
 import { linkClass } from "@ui/form-class";
 

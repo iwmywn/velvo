@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { CiUser } from "react-icons/ci";
-import { useAuthContext } from "@ui/contexts/auth";
+import { useAuthContext } from "@ui/contexts";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Image from "next/image";

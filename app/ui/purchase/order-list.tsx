@@ -10,14 +10,16 @@ import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { addToCart, cancelReceiveOrder } from "@lib/actions";
-import { useAuthContext } from "@ui/contexts/auth";
+import {
+  useAuthContext,
+  useCartContext,
+  useUIStateContext,
+} from "@ui/contexts";
 import { useRouter } from "next/navigation";
 import Backdrop from "@ui/overlay/backdrop";
-import { useCartContext } from "@ui/contexts/cart";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
-import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/contexts/state";
+import { useAnimation } from "@ui/hooks";
 
 export default function OrderList({
   invoiceProducts,
@@ -47,7 +49,7 @@ export default function OrderList({
   } | null>(null);
   const { isAnimating, triggerAnimation } = useAnimation();
   const { isLoading, refreshCart } = useCartContext();
-  const { state, setState } = useUIState();
+  const { state, setState } = useUIStateContext();
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };

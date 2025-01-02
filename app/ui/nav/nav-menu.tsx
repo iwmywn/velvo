@@ -1,13 +1,13 @@
 "use client";
 
-import { navLinks } from "@ui/data/constants";
+import { navLinks } from "@ui/data";
 import Link from "next/link";
-import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/contexts/state";
+import { useAnimation } from "@ui/hooks";
+import { useUIStateContext } from "@ui/contexts";
 
 export default function NavMenu() {
   const { isAnimating, triggerAnimation } = useAnimation();
-  const { setState } = useUIState();
+  const { setState } = useUIStateContext();
   const handleCloseMenu = () =>
     triggerAnimation(() => setState("isMenuOpen", false));
 

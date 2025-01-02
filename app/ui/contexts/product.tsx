@@ -25,7 +25,7 @@ export function ProductProvider({
   );
 }
 
-export function useProduct() {
+export function useProductContext() {
   const cxt = useContext(ProductContext);
   if (!cxt) {
     throw new Error("useProduct must be used within a ProductProvider");

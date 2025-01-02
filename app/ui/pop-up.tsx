@@ -6,8 +6,8 @@ import { FaGithub } from "react-icons/fa";
 import { GoArrowDown } from "react-icons/go";
 import Backdrop from "@ui/overlay/backdrop";
 import { linkClass } from "@ui/form-class";
-import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/contexts/state";
+import { useAnimation } from "@ui/hooks";
+import { useUIStateContext } from "@ui/contexts";
 
 const contact = [
   {
@@ -23,7 +23,7 @@ const contact = [
 ];
 
 export default function PopUp() {
-  const { state, setState } = useUIState();
+  const { state, setState } = useUIStateContext();
   const { isAnimating, triggerAnimation } = useAnimation();
 
   useEffect(() => {

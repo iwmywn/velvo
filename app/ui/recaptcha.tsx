@@ -3,8 +3,7 @@
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 import { createPortal } from "react-dom";
-import useOverflow from "@ui/hooks/overflow";
-import useAnimation from "@ui/hooks/animation";
+import { useAnimation, useOverflow } from "@ui/hooks";
 
 interface ReCaptchaPopupProps {
   onClose: () => void;

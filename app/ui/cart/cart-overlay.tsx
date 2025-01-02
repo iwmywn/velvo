@@ -11,19 +11,21 @@ import {
 } from "@lib/utils";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
-import { useAuthContext } from "@ui/contexts/auth";
+import {
+  useAuthContext,
+  useProductContext,
+  useUIStateContext,
+} from "@ui/contexts";
 import Loading from "@ui/loading";
-import useAnimation from "@ui/hooks/animation";
+import { useAnimation } from "@ui/hooks";
 import { useCartStore } from "@lib/stored";
-import { useProduct } from "@ui/contexts/product";
-import { useUIState } from "@ui/contexts/state";
 
 export default function CartOverlay() {
   const { isAnimating, triggerAnimation } = useAnimation();
   const { isLoading, cartProducts, fetchCartProducts } = useCartStore();
   const { userId } = useAuthContext();
-  const { products } = useProduct();
-  const { setState } = useUIState();
+  const { products } = useProductContext();
+  const { setState } = useUIStateContext();
   const handleClose = () =>
     triggerAnimation(() => setState("isCartOpen", false));
   const combinedCartProducts = transformCartProducts(cartProducts, products);

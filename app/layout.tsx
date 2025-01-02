@@ -4,17 +4,19 @@ import { montserrat } from "@ui/fonts";
 import Header from "@ui/header";
 import Footer from "@ui/footer";
 import ScrollToTop from "@ui/to-top";
-import { HeightProvider } from "@ui/contexts/height";
-import { CartProvider } from "@ui/contexts/cart";
 import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
-import { AuthProvider } from "@ui/contexts/auth";
 import { ToastContainer } from "react-toastify";
 import { siteConfig } from "@lib/config";
-import { ProductProvider } from "@ui/contexts/product";
 import { fetchProducts } from "@lib/data";
-import { UIStateProvider } from "@ui/contexts/state";
+import {
+  AuthProvider,
+  CartProvider,
+  HeightProvider,
+  ProductProvider,
+  UIStateProvider,
+} from "@ui/contexts";
 
 export const metadata: Metadata = {
   title: {

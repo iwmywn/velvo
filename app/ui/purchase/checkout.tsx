@@ -14,15 +14,17 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { placeOrderSchema } from "@/schemas";
-import addresses from "@ui/data/addresses";
-import { useAuthContext } from "@ui/contexts/auth";
+import { addresses } from "@ui/data";
+import {
+  useAuthContext,
+  useCartContext,
+  useUIStateContext,
+} from "@ui/contexts";
 import { toast } from "react-toastify";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
-import { useCartContext } from "@ui/contexts/cart";
 import { transformProducts } from "@lib/utils";
-import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/contexts/state";
+import { useAnimation } from "@ui/hooks";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
@@ -39,7 +41,7 @@ export default function Checkout({
   }[];
   totalPriceCents: string;
 }) {
-  const { state, setState } = useUIState();
+  const { state, setState } = useUIStateContext();
   const { isAnimating, triggerAnimation } = useAnimation();
   const [selectedCity, setSelectedCity] = useState<string>("");
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");

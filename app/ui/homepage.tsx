@@ -4,15 +4,14 @@ import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import Image from "next/image";
-import { useProduct } from "@ui/contexts/product";
+import { useProductContext } from "@ui/contexts";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import ProductCard from "@ui/product/card";
 import Link from "next/link";
-import { collectionItems } from "@ui/data/collections";
-import { bannerItems } from "@ui/data/banner";
+import { collectionItems, bannerItems } from "@ui/data";
 
 export default function Home() {
-  const { products } = useProduct();
+  const { products } = useProductContext();
   const lastTenProducts = products.slice(-10);
 
   return (

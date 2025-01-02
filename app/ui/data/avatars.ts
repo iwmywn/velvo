@@ -1,4 +1,4 @@
-export default [
+export const avatars = [
   "v1734836912/liam_bvdb2h.png",
   "v1734836912/oliver_klxokm.png",
   "v1734836912/george_hdzvve.png",

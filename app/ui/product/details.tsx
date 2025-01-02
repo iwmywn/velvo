@@ -6,17 +6,19 @@ import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
 import Button from "@ui/button";
 import { Product } from "@lib/definition";
 import ImageTag from "@ui/image";
-import { useAuthContext } from "@ui/contexts/auth";
+import {
+  useAuthContext,
+  useCartContext,
+  useHeightContext,
+  useUIStateContext,
+} from "@ui/contexts";
 import { addToCart } from "@lib/actions";
 import { toast } from "react-toastify";
-import { useCartContext } from "@ui/contexts/cart";
 import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
 import "swiper/css";
-import { useHeightContext } from "@ui/contexts/height";
-import useAnimation from "@ui/hooks/animation";
-import { useUIState } from "@ui/contexts/state";
+import { useAnimation } from "@ui/hooks";
 import ExpandableSections from "@ui/expandable";
 
 export default function ProductDetails({ product }: { product: Product }) {
@@ -46,7 +48,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const swiperRef = useRef<SwiperCore | null>(null);
   const isProductFloatVisibleRef = useRef<boolean>(isProductFloatVisible);
-  const { setState } = useUIState();
+  const { setState } = useUIStateContext();
 
   useEffect(() => {
     isProductFloatVisibleRef.current = isProductFloatVisible;

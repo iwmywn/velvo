@@ -7,10 +7,9 @@ import ToShipAndReceive from "@ui/purchase/to-ship-receive";
 import Completed from "@ui/purchase/completed";
 import Cancelled from "@ui/purchase/cancelled";
 import Loading from "@ui/loading";
-import useHideMenu from "@ui/hooks/hide-menu";
+import { useHideMenu } from "@ui/hooks";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { useCartContext } from "@ui/contexts/cart";
-import { useProduct } from "@ui/contexts/product";
+import { useCartContext, useProductContext } from "@ui/contexts";
 import { transformCartProducts } from "@lib/utils";
 
 const tabs = [
@@ -40,7 +39,7 @@ export default function PurchaseOverview() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { isLoading, refreshCart, cartProducts, invoiceProducts } =
     useCartContext();
-  const { products } = useProduct();
+  const { products } = useProductContext();
   const combinedCartProducts = useMemo(() => {
     return transformCartProducts(cartProducts, products);
   }, [cartProducts, products]);

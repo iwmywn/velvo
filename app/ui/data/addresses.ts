@@ -1,4 +1,4 @@
-const addresses: Record<string, Record<string, string[]>> = {
+export const addresses: Record<string, Record<string, string[]>> = {
   "Thành phố Hà Nội": {
     "Quận Ba Đình": [
       "Phường Phúc Xá",
@@ -11976,5 +11976,3 @@ const addresses: Record<string, Record<string, string[]>> = {
     ],
   },
 };
-
-export default addresses;

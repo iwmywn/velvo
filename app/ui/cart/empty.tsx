@@ -1,4 +1,4 @@
-import { emptyStates } from "@ui/data/empty-state";
+import { emptyStates } from "@ui/data";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
 

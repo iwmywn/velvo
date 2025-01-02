@@ -6,9 +6,8 @@ import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
-import avatars from "@ui/data/avatars";
+import { avatars, baseImgUrl } from "@ui/data";
 import verifyRecaptchaToken from "@lib/recaptcha";
-import { baseImgUrl } from "@ui/data/constants";
 
 export async function POST(req: Request) {
   const data = await req.json();

@@ -4,7 +4,7 @@ import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
 import { capitalizeFirstLetter } from "@ui/utils";
-import { categories } from "@ui/data/sub-categories";
+import { categories } from "@ui/data";
 
 const validCategories = new Set(categories);
 

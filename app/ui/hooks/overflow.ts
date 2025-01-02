@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-export default function useOverflow(isOpen: boolean) {
+export function useOverflow(isOpen: boolean) {
   useEffect(() => {
     const html = document.documentElement;
     const elements = document.querySelectorAll(".space-right");

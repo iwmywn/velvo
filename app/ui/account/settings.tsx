@@ -3,7 +3,6 @@
 import { useState, ReactNode } from "react";
 import Button, { FormButton } from "@ui/button";
 import Backdrop from "@ui/overlay/backdrop";
-import useOverflow from "@ui/hooks/overflow";
 import {
   changePasswordScheme,
   changeEmailScheme,
@@ -21,8 +20,8 @@ import {
   errorClass,
 } from "@ui/form-class";
 import { toast } from "react-toastify";
-import { useAuthContext } from "@ui/contexts/auth";
-import useAnimation from "@ui/hooks/animation";
+import { useAuthContext } from "@ui/contexts";
+import { useAnimation, useOverflow } from "@ui/hooks";
 
 interface SettingsProps {
   userId: string | undefined;

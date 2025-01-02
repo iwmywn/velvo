@@ -1,6 +1,6 @@
 "use client";
 
-import { useHeightContext } from "@ui/contexts/height";
+import { useHeightContext } from "@ui/contexts";
 
 export default function Gap({ z }: { z: number }) {
   const { heights } = useHeightContext();

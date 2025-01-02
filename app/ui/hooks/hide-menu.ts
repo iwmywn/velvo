@@ -2,9 +2,7 @@
 
 import { useEffect, Dispatch, SetStateAction } from "react";
 
-export default function useHideMenu(
-  setIsOpen: Dispatch<SetStateAction<boolean>>,
-) {
+export function useHideMenu(setIsOpen: Dispatch<SetStateAction<boolean>>) {
   useEffect(() => {
     const handleClick = () => setIsOpen(false);
     window.addEventListener("click", handleClick);

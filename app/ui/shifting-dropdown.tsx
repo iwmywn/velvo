@@ -5,7 +5,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { linkClass } from "@ui/form-class";
-import { menItems, womenItems, kidsItems } from "@ui/data/sub-categories";
+import { menItems, womenItems, kidsItems } from "@ui/data";
 
 export const CategoryDropDown = () => {
   return <CategoryTabs />;

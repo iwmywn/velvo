@@ -5,18 +5,17 @@ import ProductCard from "@ui/product/card";
 import { Product } from "@lib/definition";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
-import useAnimation from "@ui/hooks/animation";
-import { useProduct } from "@ui/contexts/product";
-import { useUIState } from "@ui/contexts/state";
+import { useAnimation } from "@ui/hooks";
+import { useProductContext, useUIStateContext } from "@ui/contexts";
 
 export default function SearchOverlay() {
   const { isAnimating, triggerAnimation } = useAnimation();
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const { setState } = useUIState();
+  const { setState } = useUIStateContext();
   const handleClose = () =>
     triggerAnimation(() => setState("isSearchOpen", false));
-  const { products } = useProduct();
+  const { products } = useProductContext();
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
