@@ -55,7 +55,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
           invoiceProducts ? fetchInvoices(userId) : undefined,
         ]);
 
-        if (fetchedCartQuantity !== undefined) setQuantity(fetchedCartQuantity);
+        if (fetchedCartQuantity !== undefined) {
+          setQuantity(fetchedCartQuantity);
+          sessionStorage.setItem(
+            "cartQuantity",
+            JSON.stringify(fetchedCartQuantity),
+          );
+        }
         if (fetchedCartProducts !== undefined) {
           setCartProducts(fetchedCartProducts);
           sessionStorage.setItem("cart", JSON.stringify(fetchedCartProducts));
@@ -74,8 +80,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     async function initialize() {
-      const fetchedCartQuantity = await fetchCartQuantity(userId);
-      setQuantity(fetchedCartQuantity);
+      const cachedQuantity = sessionStorage.getItem("cartQuantity");
+      if (cachedQuantity) setQuantity(JSON.parse(cachedQuantity));
+      else {
+        const fetchedCartQuantity = await fetchCartQuantity(userId);
+        setQuantity(fetchedCartQuantity);
+        sessionStorage.setItem(
+          "cartQuantity",
+          JSON.stringify(fetchedCartQuantity),
+        );
+      }
     }
 
     initialize();
