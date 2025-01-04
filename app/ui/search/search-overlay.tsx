@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ProductCard from "@ui/product/card";
 import { Product } from "@lib/definition";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
 import { useAnimation } from "@ui/hooks";
 import { useProductContext, useUIStateContext } from "@ui/contexts";
+import Fuse from "fuse.js";
 
 export default function SearchOverlay() {
   const { isAnimating, triggerAnimation } = useAnimation();
@@ -16,20 +17,21 @@ export default function SearchOverlay() {
   const handleClose = () =>
     triggerAnimation(() => setState("isSearchOpen", false));
   const { products } = useProductContext();
+  const fuse = useMemo(() => {
+    return new Fuse(products, {
+      keys: ["name"],
+      threshold: 0.4,
+    });
+  }, [products]);
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
       setFilteredProducts([]);
     } else {
-      const results = products.filter((product) =>
-        product.name
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .includes(searchTerm.toLowerCase().replace(/\s+/g, "-")),
-      );
+      const results = fuse.search(searchTerm).map((result) => result.item);
       setFilteredProducts(results);
     }
-  }, [searchTerm, products]);
+  }, [searchTerm, fuse]);
 
   return (
     <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
