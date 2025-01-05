@@ -12,12 +12,13 @@ export const useCartStore = create<CartState>((set) => ({
   cartProducts: null,
   isLoading: true,
   fetchCartProducts: async (userId) => {
+    if (!userId) {
+      set({ isLoading: false });
+      return;
+    }
     const cachedCartProducts = sessionStorage.getItem("cart");
     if (cachedCartProducts) {
       set({ cartProducts: JSON.parse(cachedCartProducts), isLoading: false });
-    } else if (!userId) {
-      set({ cartProducts: null, isLoading: false });
-      sessionStorage.setItem("cart", JSON.stringify(null));
     } else {
       try {
         const fetchedCartProducts = await fetchCart(userId);

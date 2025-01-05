@@ -80,15 +80,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     async function initialize() {
-      const cachedQuantity = sessionStorage.getItem("cartQuantity");
-      if (cachedQuantity) setQuantity(JSON.parse(cachedQuantity));
-      else {
-        const fetchedCartQuantity = await fetchCartQuantity(userId);
-        setQuantity(fetchedCartQuantity);
-        sessionStorage.setItem(
-          "cartQuantity",
-          JSON.stringify(fetchedCartQuantity),
-        );
+      if (userId) {
+        const cachedQuantity = sessionStorage.getItem("cartQuantity");
+        if (cachedQuantity) setQuantity(JSON.parse(cachedQuantity));
+        else {
+          const fetchedCartQuantity = await fetchCartQuantity(userId);
+          setQuantity(fetchedCartQuantity);
+          sessionStorage.setItem(
+            "cartQuantity",
+            JSON.stringify(fetchedCartQuantity),
+          );
+        }
       }
     }
 
