@@ -5,10 +5,10 @@ const baseImgUrl = "https://res.cloudinary.com/dku9repmn/image/upload/";
 const navLinks = [
   {
     label: "Men",
-    href: "/categories/men",
+    href: "/men",
   },
-  { label: "Women", href: "/categories/women" },
-  { label: "Kids", href: "/categories/kids" },
+  { label: "Women", href: "/women" },
+  { label: "Kids", href: "/kids" },
 ] as const;
 
 const footerSections = [

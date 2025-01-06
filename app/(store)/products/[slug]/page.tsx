@@ -48,11 +48,11 @@ export default async function ProductPage({
     { label: "All Products", href: "/products" },
     {
       label: category.name,
-      href: `/categories/${category.name.toLowerCase()}`,
+      href: `/${category.name.toLowerCase()}`,
     },
     {
       label: capitalizeFirstLetter(product.subCategory),
-      href: `/categories/${category.name.toLowerCase()}/${product.subCategory}`,
+      href: `/${category.name.toLowerCase()}/${product.subCategory}`,
     },
     { label: product.name },
   ];

@@ -205,7 +205,7 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ items, sub }) => {
       {items.map(({ label, href }) => (
         <Link
           key={href}
-          href={`/categories/${sub}/${href}`}
+          href={`/${sub}/${href}`}
           className={`${linkClass} text-nowrap`}
         >
           {label}

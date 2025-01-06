@@ -52,7 +52,7 @@ export default async function CategoryPage({
     { label: "All Products", href: "/products" },
     {
       label: capitalizeFirstLetter(categoryName),
-      href: `/categories/${categoryName}`,
+      href: `/${categoryName}`,
     },
     { label: capitalizeFirstLetter(subCategoryName) },
   ];
