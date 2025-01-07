@@ -39,7 +39,7 @@ export async function PATCH(req: Request) {
     .collection("users")
     .updateOne(
       { _id: new ObjectId(userId) },
-      { $set: { email: confirmEmail } },
+      { $set: { email: confirmEmail, updatedAt: new Date() } },
     );
 
   if (result.modifiedCount === 0)

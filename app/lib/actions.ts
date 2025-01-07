@@ -126,56 +126,43 @@ export async function addToCart(
       } left in stock.`;
     }
 
-    if (!cart) {
-      await cartCollection.insertOne({
-        userId: new ObjectId(userId),
-        products: [
-          {
-            productId: new ObjectId(productId),
-            quantity,
-            size,
-          },
-        ],
-      });
-    } else {
-      const existingProductIndex = cart.products.findIndex(
-        (p: { productId: ObjectId; size: string }) =>
-          p.productId.toString() === productId && p.size === size,
-      );
+    const existingProductIndex = cart!.products.findIndex(
+      (p: { productId: ObjectId; size: string }) =>
+        p.productId.toString() === productId && p.size === size,
+    );
 
-      if (existingProductIndex !== -1) {
-        await cartCollection.updateOne(
-          {
-            userId: new ObjectId(userId),
+    if (existingProductIndex !== -1) {
+      await cartCollection.updateOne(
+        {
+          userId: new ObjectId(userId),
+          products: {
+            $elemMatch: {
+              productId: new ObjectId(productId),
+              size: size,
+            },
+          },
+        },
+        { $inc: { "products.$.quantity": quantity } },
+      );
+    } else {
+      await cartCollection.updateOne(
+        { userId: new ObjectId(userId) },
+        {
+          $push: {
             products: {
-              $elemMatch: {
-                productId: new ObjectId(productId),
-                size: size,
-              },
-            },
+              $each: [
+                {
+                  productId: new ObjectId(productId),
+                  quantity,
+                  size,
+                },
+              ],
+              $position: 0,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } as any,
           },
-          { $inc: { "products.$.quantity": quantity } },
-        );
-      } else {
-        await cartCollection.updateOne(
-          { userId: new ObjectId(userId) },
-          {
-            $push: {
-              products: {
-                $each: [
-                  {
-                    productId: new ObjectId(productId),
-                    quantity,
-                    size,
-                  },
-                ],
-                $position: 0,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              } as any,
-            },
-          },
-        );
-      }
+        },
+      );
     }
 
     return "Done.";
@@ -274,7 +261,7 @@ export async function cancelReceiveOrder(
   userId: string | undefined,
   invoiceId: string,
   products: { productId: string; quantity: number; size: string }[],
-  status: "COMPLETED" | "CANCELLED",
+  status: "completed" | "cancelled",
 ): Promise<string> {
   if (!userId || !invoiceId) {
     return "User ID or Product ID is missing!";
@@ -282,7 +269,7 @@ export async function cancelReceiveOrder(
 
   try {
     const db = await connectToDatabase();
-    const invoiceCollection = db.collection("invoices");
+    const invoiceCollection = db.collection("invoiceLists");
 
     const transformedProducts = products.map(
       ({ productId, quantity, size }) => {
@@ -297,14 +284,41 @@ export async function cancelReceiveOrder(
       },
     );
 
+    const user = await invoiceCollection.findOne(
+      { userId: new ObjectId(userId) },
+      {
+        projection: {
+          invoices: { $elemMatch: { invoiceId: new ObjectId(invoiceId) } },
+        },
+      },
+    );
+
+    if (!user || !user.invoices || user.invoices.length === 0) {
+      throw new Error("Invoice not found!");
+    }
+
+    const fullInvoice = user.invoices[0];
+    fullInvoice.status = status;
+
     await Promise.all([
-      invoiceCollection.updateOne(
-        { _id: new ObjectId(invoiceId), userId: new ObjectId(userId) },
+      await invoiceCollection.updateOne(
+        { userId: new ObjectId(userId) },
         {
-          $set: { status: status },
+          $pull: { invoices: { invoiceId: new ObjectId(invoiceId) } } as any,
         },
       ),
-      ...(status === "CANCELLED"
+      await invoiceCollection.updateOne(
+        { userId: new ObjectId(userId) },
+        {
+          $push: {
+            invoices: {
+              $each: [fullInvoice],
+              $position: 0,
+            } as any,
+          },
+        },
+      ),
+      ...(status === "cancelled"
         ? transformedProducts.map(({ productId, quantity, size }) => {
             const sizeField = `sizes.${size}`;
             return db

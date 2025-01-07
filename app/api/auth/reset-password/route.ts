@@ -15,8 +15,10 @@ export async function PATCH(req: Request) {
 
   const { password } = parsedCredentials.data;
 
-  const db = await connectToDatabase();
-  const hashedPassword = await bcrypt.hash(password, 10);
+  const [db, hashedPassword] = await Promise.all([
+    connectToDatabase(),
+    bcrypt.hash(password, 10),
+  ]);
 
   const result = await db.collection("users").updateOne(
     { verificationToken: token },

@@ -17,21 +17,31 @@ export async function GET(req: Request) {
   if (!user)
     return createResponse("Token expired or email already verified!", 404);
 
-  await db.collection("carts").insertOne({
-    userId: user._id,
-    products: [],
-  });
+  try {
+    const [, , userUpdateResult] = await Promise.all([
+      db.collection("carts").insertOne({
+        userId: user._id,
+        products: [],
+      }),
+      db.collection("invoiceLists").insertOne({
+        userId: user._id,
+        invoices: [],
+      }),
+      db.collection("users").updateOne(
+        { verificationToken: token },
+        {
+          $set: { isVerified: true, updatedAt: new Date() },
+          $unset: { verificationToken: "", resendVerification: "" },
+        },
+      ),
+    ]);
 
-  const result = await db.collection("users").updateOne(
-    { verificationToken: token },
-    {
-      $set: { isVerified: true },
-      $unset: { verificationToken: "", resendVerification: "" },
-    },
-  );
+    if (userUpdateResult.modifiedCount === 0)
+      return createResponse("Email verification failed! Try again later.", 500);
 
-  if (result.modifiedCount === 0)
-    return createResponse("Email verification failed! Try again later.", 500);
-
-  return createResponse("Email verified successfully.", 200);
+    return createResponse("Email verified successfully.", 200);
+  } catch (error) {
+    console.error("Error during email verification:", error);
+    return createResponse("An error occurred. Please try again later.", 500);
+  }
 }

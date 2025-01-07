@@ -5,7 +5,7 @@ import Button from "@ui/button";
 import { GiShoppingCart } from "react-icons/gi";
 import { MdOutlineCancel, MdCheck } from "react-icons/md";
 import Link from "next/link";
-import { InvoiceProductsProps, Product } from "@lib/definition";
+import { InvoiceList } from "@lib/definition";
 import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -13,6 +13,7 @@ import { addToCart, cancelReceiveOrder } from "@lib/actions";
 import {
   useAuthContext,
   useCartContext,
+  useProductContext,
   useUIStateContext,
 } from "@ui/contexts";
 import { useRouter } from "next/navigation";
@@ -20,14 +21,15 @@ import Backdrop from "@ui/overlay/backdrop";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
 import { useAnimation } from "@ui/hooks";
+import { transformInvoiceProducts } from "@lib/utils";
 
 export default function OrderList({
   invoiceProducts,
   orderStatus,
   emptyState,
 }: {
-  invoiceProducts: InvoiceProductsProps;
-  orderStatus: ("WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED")[];
+  invoiceProducts: InvoiceList["invoices"] | null;
+  orderStatus: ("waiting" | "processing" | "completed" | "cancelled")[];
   emptyState: "toShipNReceive" | "cancelled" | "completed";
 }) {
   const { userId } = useAuthContext();
@@ -38,14 +40,19 @@ export default function OrderList({
   const [isLoadingGlobal, setIsLoadingGlobal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState<{
     invoiceId: string;
-    products: (Product & { quantity: number; size: string })[];
-    status: "PROCESSING" | "WAITING";
+    products: {
+      productId: string;
+      quantity: number;
+      size: string;
+      discountedPriceDetails: [string, string];
+    }[];
+    status: "processing" | "waiting";
   } | null>(null);
   const [deliveryInfoData, setDeliveryInfoData] = useState<{
     recipient: string;
     phone: string;
     address: string;
-    date: Date;
+    orderDate: Date;
   } | null>(null);
   const { isAnimating, triggerAnimation } = useAnimation();
   const { isLoading, refreshCart } = useCartContext();
@@ -53,14 +60,15 @@ export default function OrderList({
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };
+  const { products } = useProductContext();
 
-  const invoiceProductsFilter = invoiceProducts?.filter(({ status }) =>
+  const invoicesFilter = invoiceProducts?.filter(({ status }) =>
     orderStatus.includes(status),
   );
 
   if (isLoading) return <Loading />;
 
-  if (invoiceProductsFilter === undefined || invoiceProductsFilter.length === 0)
+  if (invoicesFilter === undefined || invoicesFilter.length === 0)
     return <EmptyState emptyState={emptyState} />;
 
   const handleClose = () =>
@@ -71,11 +79,13 @@ export default function OrderList({
 
   const handleCancelReceive = async (
     invoiceId: string,
-    products: (Product & {
+    products: {
+      productId: string;
       quantity: number;
       size: string;
-    })[],
-    status: "PROCESSING" | "WAITING",
+      discountedPriceDetails: [string, string];
+    }[],
+    status: "processing" | "waiting",
     isConfirm: boolean = false,
   ) => {
     if (!isConfirm) {
@@ -84,9 +94,9 @@ export default function OrderList({
       return;
     }
 
-    const statusUrl = status === "PROCESSING" ? "completed" : "cancelled";
+    const statusUrl = status === "processing" ? "completed" : "cancelled";
     const convertedProducts = products.map((p) => ({
-      productId: p.id,
+      productId: p.productId,
       quantity: p.quantity,
       size: p.size,
     }));
@@ -98,14 +108,14 @@ export default function OrderList({
         userId,
         invoiceId,
         convertedProducts,
-        statusUrl.toUpperCase() as "COMPLETED" | "CANCELLED",
+        statusUrl,
       );
 
       if (message === "Done.") {
         await refreshCart(false, false, true);
         router.push(`/user/purchase?tab=${statusUrl}`);
         toast.success(
-          status === "PROCESSING" ? "Order Completed." : "Order Cancelled.",
+          status === "processing" ? "Order Completed." : "Order Cancelled.",
         );
       } else {
         toast.error(message);
@@ -159,7 +169,7 @@ export default function OrderList({
           >
             <h2 className="mb-8 text-center text-base font-medium">
               Please confirm the order{" "}
-              {invoiceData.status === "PROCESSING"
+              {invoiceData.status === "processing"
                 ? "completion"
                 : "cancellation"}
               .
@@ -217,7 +227,7 @@ export default function OrderList({
               </p>
               <p>
                 <span className="font-medium text-gray-800">Order date:</span>{" "}
-                {deliveryInfoData.date.toLocaleString("en-US", {
+                {deliveryInfoData.orderDate.toLocaleString("en-US", {
                   year: "numeric",
                   month: "long",
                   day: "numeric",
@@ -231,150 +241,166 @@ export default function OrderList({
         </Backdrop>
       )}
       <div className="flex flex-col gap-6 text-sm">
-        {invoiceProductsFilter.map(
+        {invoicesFilter.map(
           ({
             invoiceId,
-            products,
+            products: invoiceProducts,
             status,
             recipient,
             phone,
-            date,
             address,
             totalPriceCents,
-          }) => (
-            <div key={invoiceId} className="relative border">
-              <div
-                className={`absolute left-0 top-0 z-[1] ml-auto px-2 text-center text-[10px] text-white ${status === "WAITING" ? "bg-blue-500" : status === "PROCESSING" ? "bg-yellow-500" : status === "COMPLETED" ? "bg-green-500" : "bg-red-500"}`}
-              >
-                {status}
-              </div>
-              <div className="flex justify-between gap-5 border-b bg-slate-50 px-4 pb-4 pt-8">
-                <div>
-                  <span className="font-medium">Order ID:</span>{" "}
-                  <span className="opacity-65">{invoiceId}</span>
-                </div>
-                <div className="text-right">
-                  <span className="font-medium">Total Price: </span>
-                  <span className="opacity-65">${totalPriceCents}</span>
-                </div>
-              </div>
-              <div className="p-2">
-                <div className="flex flex-col gap-2">
-                  {products.map(
-                    (
-                      {
-                        id,
-                        name,
-                        images,
-                        description,
-                        slug,
-                        quantity,
-                        size,
-                        priceCentsAfterDiscount,
-                      },
-                      index,
-                    ) => (
-                      <div
-                        key={index}
-                        className="flex flex-wrap items-center justify-between gap-4 border p-2 sm:flex-nowrap"
-                      >
-                        <Link href={`/products/${slug}`}>
-                          <div className="flex items-center gap-4 sm:gap-2">
-                            <ImageTag src={images[0]} alt={description} />
-                            <div>
-                              <h4 className="mb-1 line-clamp-2 font-medium">
-                                {name} - {size}
-                              </h4>
-                              <p className="flex flex-wrap gap-y-1 opacity-65">
-                                <span>Quantity: {quantity}</span>
-                                <span className="mx-2">|</span>
-                                <span>
-                                  Price: ${priceCentsAfterDiscount[0]}
-                                </span>
-                                <span className="mx-2">|</span>
-                                <span>
-                                  Total: ${priceCentsAfterDiscount[1]}
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-                        </Link>
+            orderDate,
+          }) => {
+            const combinedinvoiceProducts = transformInvoiceProducts(
+              invoiceProducts,
+              products,
+            );
 
-                        {status !== "PROCESSING" && status !== "WAITING" && (
-                          <Button
-                            className="ml-auto flex items-center gap-2 text-green-600 before:border-green-600 before:bg-white"
-                            onClick={() => handleBuyAgain(invoiceId, id, size)}
-                            disabled={
-                              loadingStates[`${invoiceId}-${id}-${size}`] ||
-                              isLoadingGlobal
-                            }
-                          >
-                            {loadingStates[`${invoiceId}-${id}-${size}`] ? (
-                              <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-green-300 border-t-green-600" />
-                            ) : (
-                              <>
-                                <GiShoppingCart />
-                                <span className="hidden sm:inline sm:truncate">
-                                  Buy again
-                                </span>
-                              </>
-                            )}
-                          </Button>
-                        )}
-                      </div>
-                    ),
-                  )}
-                  <div className="flex justify-between">
-                    <Button
-                      className="flex items-center gap-2 text-black before:bg-white"
-                      onClick={() => {
-                        setDeliveryInfoData({
-                          recipient,
-                          phone,
-                          address,
-                          date,
-                        });
-                        setState("isDeliveryInfoOpen", true);
-                      }}
-                    >
-                      <MdOutlinePlace />
-                      <span className="hidden sm:inline sm:truncate">
-                        Delivery Information
-                      </span>
-                    </Button>
-                    {(status === "PROCESSING" || status === "WAITING") && (
-                      <Button
-                        className={`${status === "PROCESSING" ? "text-green-500 before:border-green-500" : "text-red-500 before:border-red-500"} flex items-center gap-2 before:bg-white`}
-                        onClick={() =>
-                          handleCancelReceive(invoiceId, products, status)
-                        }
-                        disabled={loadingStates[invoiceId] || isLoadingGlobal}
-                      >
-                        {loadingStates[invoiceId] ? (
-                          <div
-                            className={`mx-auto h-4 w-4 animate-spin rounded-full border-4 ${status === "PROCESSING" ? "border-green-300 border-t-green-600" : "border-red-300 border-t-red-600"}`}
-                          />
-                        ) : (
-                          <>
-                            {status === "PROCESSING" ? (
-                              <MdCheck />
-                            ) : (
-                              <MdOutlineCancel />
-                            )}
-                            <span className="hidden sm:inline sm:truncate">
-                              {status === "PROCESSING"
-                                ? "Received"
-                                : "Cancel order"}
-                            </span>
-                          </>
-                        )}
-                      </Button>
+            return (
+              <div key={invoiceId} className="relative border">
+                <div
+                  className={`absolute left-0 top-0 z-[1] ml-auto px-2 text-center text-[10px] uppercase text-white ${status === "waiting" ? "bg-blue-500" : status === "processing" ? "bg-yellow-500" : status === "completed" ? "bg-green-500" : "bg-red-500"}`}
+                >
+                  {status}
+                </div>
+                <div className="flex justify-between gap-5 border-b bg-slate-50 px-4 pb-4 pt-8">
+                  <div>
+                    <span className="font-medium">Order ID:</span>{" "}
+                    <span className="opacity-65">{invoiceId}</span>
+                  </div>
+                  <div className="text-right">
+                    <span className="font-medium">Total Price: </span>
+                    <span className="opacity-65">${totalPriceCents}</span>
+                  </div>
+                </div>
+                <div className="p-2">
+                  <div className="flex flex-col gap-2">
+                    {combinedinvoiceProducts!.map(
+                      (
+                        {
+                          productId,
+                          name,
+                          images,
+                          description,
+                          slug,
+                          quantity,
+                          size,
+                          discountedPriceDetails,
+                        },
+                        index,
+                      ) => (
+                        <div
+                          key={index}
+                          className="flex flex-wrap items-center justify-between gap-4 border p-2 sm:flex-nowrap"
+                        >
+                          <Link href={`/products/${slug}`}>
+                            <div className="flex items-center gap-4 sm:gap-2">
+                              <ImageTag src={images[0]} alt={description} />
+                              <div>
+                                <h4 className="mb-1 line-clamp-2 font-medium">
+                                  {name} - {size}
+                                </h4>
+                                <p className="flex flex-wrap gap-y-1 opacity-65">
+                                  <span>Quantity: {quantity}</span>
+                                  <span className="mx-2">|</span>
+                                  <span>
+                                    Price: ${discountedPriceDetails[0]}
+                                  </span>
+                                  <span className="mx-2">|</span>
+                                  <span>
+                                    Total: ${discountedPriceDetails[1]}
+                                  </span>
+                                </p>
+                              </div>
+                            </div>
+                          </Link>
+
+                          {status !== "processing" && status !== "waiting" && (
+                            <Button
+                              className="ml-auto flex items-center gap-2 text-green-600 before:border-green-600 before:bg-white"
+                              onClick={() =>
+                                handleBuyAgain(invoiceId, productId, size)
+                              }
+                              disabled={
+                                loadingStates[
+                                  `${invoiceId}-${productId}-${size}`
+                                ] || isLoadingGlobal
+                              }
+                            >
+                              {loadingStates[
+                                `${invoiceId}-${productId}-${size}`
+                              ] ? (
+                                <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-green-300 border-t-green-600" />
+                              ) : (
+                                <>
+                                  <GiShoppingCart />
+                                  <span className="hidden sm:inline sm:truncate">
+                                    Buy again
+                                  </span>
+                                </>
+                              )}
+                            </Button>
+                          )}
+                        </div>
+                      ),
                     )}
+                    <div className="flex justify-between">
+                      <Button
+                        className="flex items-center gap-2 text-black before:bg-white"
+                        onClick={() => {
+                          setDeliveryInfoData({
+                            recipient,
+                            phone,
+                            address,
+                            orderDate,
+                          });
+                          setState("isDeliveryInfoOpen", true);
+                        }}
+                      >
+                        <MdOutlinePlace />
+                        <span className="hidden sm:inline sm:truncate">
+                          Delivery Information
+                        </span>
+                      </Button>
+                      {(status === "processing" || status === "waiting") && (
+                        <Button
+                          className={`${status === "processing" ? "text-green-500 before:border-green-500" : "text-red-500 before:border-red-500"} flex items-center gap-2 before:bg-white`}
+                          onClick={() =>
+                            handleCancelReceive(
+                              invoiceId,
+                              invoiceProducts,
+                              status,
+                            )
+                          }
+                          disabled={loadingStates[invoiceId] || isLoadingGlobal}
+                        >
+                          {loadingStates[invoiceId] ? (
+                            <div
+                              className={`mx-auto h-4 w-4 animate-spin rounded-full border-4 ${status === "processing" ? "border-green-300 border-t-green-600" : "border-red-300 border-t-red-600"}`}
+                            />
+                          ) : (
+                            <>
+                              {status === "processing" ? (
+                                <MdCheck />
+                              ) : (
+                                <MdOutlineCancel />
+                              )}
+                              <span className="hidden sm:inline sm:truncate">
+                                {status === "processing"
+                                  ? "Received"
+                                  : "Cancel order"}
+                              </span>
+                            </>
+                          )}
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ),
+            );
+          },
         )}
       </div>
     </>

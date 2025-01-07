@@ -1,9 +1,9 @@
-import { CartProductsProps } from "@lib/definition";
+import { Cart } from "@lib/definition";
 import { fetchCart } from "@lib/data";
 import { create } from "zustand";
 
 interface CartState {
-  cartProducts: CartProductsProps;
+  cartProducts: Cart["products"] | null;
   isLoading: boolean;
   fetchCartProducts: (userId: string | undefined) => Promise<void>;
 }

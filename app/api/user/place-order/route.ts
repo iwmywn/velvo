@@ -37,17 +37,17 @@ export async function POST(req: Request) {
     return createResponse("User id is not valid!", 400);
 
   const transformedProducts = products.map(
-    ({ id, quantity, size, priceCentsAfterDiscount }) => {
-      if (!ObjectId.isValid(id)) {
+    ({ productId, quantity, size, discountedPriceDetails }) => {
+      if (!ObjectId.isValid(productId)) {
         throw new Error("Invalid product ID in products array!");
       }
       return {
-        productId: new ObjectId(id),
+        productId: new ObjectId(productId),
         quantity,
         size,
-        priceCentsAfterDiscount: [
-          priceCentsAfterDiscount[0],
-          priceCentsAfterDiscount[1],
+        discountedPriceDetails: [
+          discountedPriceDetails[0],
+          discountedPriceDetails[1],
         ],
       };
     },
@@ -70,16 +70,29 @@ export async function POST(req: Request) {
   }
 
   await Promise.all([
-    db.collection("invoices").insertOne({
-      recipient: fullName,
-      phone,
-      address: `${address}, ${ward}, ${district}, ${city}`,
-      date: new Date(),
-      status: "WAITING",
-      products: transformedProducts,
-      userId: new ObjectId(userId),
-      totalPriceCents,
-    }),
+    db.collection("invoiceLists").updateOne(
+      { userId: new ObjectId(userId) },
+      {
+        $push: {
+          invoices: {
+            $each: [
+              {
+                invoiceId: new ObjectId(),
+                recipient: fullName,
+                phone,
+                address: `${address}, ${ward}, ${district}, ${city}`,
+                status: "waiting",
+                totalPriceCents,
+                products: transformedProducts,
+                orderDate: new Date(),
+              },
+            ],
+            $position: 0,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any,
+        },
+      },
+    ),
     db
       .collection("carts")
       .updateOne({ userId: new ObjectId(userId) }, { $set: { products: [] } }),

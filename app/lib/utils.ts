@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Product, CartProductsProps } from "@lib/definition";
+import { Product, Cart, InvoiceList } from "@lib/definition";
 
 export function createResponse(message: string, status: number) {
   return new Response(JSON.stringify({ message }), { status });
@@ -79,23 +79,23 @@ export function getTotalPriceCents(
 
 export function transformProducts(
   products: {
-    id: string;
+    productId: string;
     quantity: number;
     size: string;
     priceCents: number;
     saleOff: number;
   }[],
 ): {
-  id: string;
+  productId: string;
   quantity: number;
   size: string;
-  priceCentsAfterDiscount: string[];
+  discountedPriceDetails: string[];
 }[] {
   return products.map((product) => ({
-    id: product.id,
+    productId: product.productId,
     quantity: product.quantity,
     size: product.size,
-    priceCentsAfterDiscount: [
+    discountedPriceDetails: [
       getPriceAfterDiscount(product.priceCents, product.saleOff),
       getPriceAfterDiscount(
         product.priceCents,
@@ -107,27 +107,63 @@ export function transformProducts(
 }
 
 export function transformCartProducts(
-  cartProducts: CartProductsProps,
+  cartProducts: Cart["products"] | null,
   products: Product[],
 ): (Product & { quantity: number; size: string })[] | null {
   if (!cartProducts || !products) return null;
 
+  const productMap = new Map(
+    products.map((product) => [product.productId, product]),
+  );
+
   return cartProducts
     .map((cartItem) => {
-      const product = products.find((p) => p.id === cartItem.productId);
+      const product = productMap.get(cartItem.productId);
       if (!product) return null;
 
       return {
-        id: product.id,
-        name: product.name,
-        priceCents: product.priceCents,
-        images: product.images,
-        description: product.description,
-        saleOff: product.saleOff,
-        slug: product.slug,
+        ...product,
         quantity: cartItem.quantity,
         size: cartItem.size,
       };
     })
     .filter(Boolean) as (Product & { quantity: number; size: string })[];
+}
+
+export function transformInvoiceProducts(
+  invoiceProducts: InvoiceList["invoices"][0]["products"] | null,
+  products: Product[],
+):
+  | (Product & {
+      quantity: number;
+      size: string;
+      discountedPriceDetails: [string, string];
+    })[]
+  | null {
+  if (!invoiceProducts) {
+    return null;
+  }
+
+  const productMap = new Map(
+    products.map((product) => [product.productId, product]),
+  );
+
+  return invoiceProducts
+    .map((invoiceProduct) => {
+      const product = productMap.get(invoiceProduct.productId);
+
+      if (!product) return null;
+
+      return {
+        ...product,
+        quantity: invoiceProduct.quantity,
+        size: invoiceProduct.size,
+        discountedPriceDetails: invoiceProduct.discountedPriceDetails,
+      };
+    })
+    .filter(Boolean) as (Product & {
+    quantity: number;
+    size: string;
+    discountedPriceDetails: [string, string];
+  })[];
 }

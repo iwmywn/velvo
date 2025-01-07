@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
-import { fetchCategories, fetchProducts } from "@lib/data";
+import { fetchProducts } from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
 import { capitalizeFirstLetter } from "@ui/utils";
-import { categories } from "@ui/data";
+import { customerGroup } from "@ui/data";
 
-const validCategories = new Set(categories);
+const validcustomerGroup = new Set(customerGroup);
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug: categoryName } = await params;
+  const { slug: customerGroupName } = await params;
 
   return {
-    title: `${!validCategories.has(categoryName) ? "NOT FOUND" : capitalizeFirstLetter(categoryName)}`,
+    title: `${!validcustomerGroup.has(customerGroupName) ? "NOT FOUND" : capitalizeFirstLetter(customerGroupName)}`,
   };
 }
 
@@ -25,37 +25,36 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [categories, products, { slug: categoryName }] = await Promise.all([
-    fetchCategories(),
+  const [fetcheProducts, { slug: customerGroupName }] = await Promise.all([
     fetchProducts(),
     params,
   ]);
-  const category = categories.find(
-    (cat) => cat.name === capitalizeFirstLetter(categoryName),
-  );
 
-  if (!category) return <NotFound />;
+  if (!validcustomerGroup.has(customerGroupName)) return <NotFound />;
 
-  const productsByCategory = products.filter(
-    (p) => p.categoryId === category.id,
+  const productsBycustomerGroup = fetcheProducts.filter(
+    (p) => p.customerGroup === capitalizeFirstLetter(customerGroupName),
   );
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: capitalizeFirstLetter(categoryName) },
+    { label: capitalizeFirstLetter(customerGroupName) },
   ];
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <ProductList products={productsByCategory} title={categoryName} />
+      <ProductList
+        products={productsBycustomerGroup}
+        title={customerGroupName}
+      />
     </>
   );
 }
 
 export async function generateStaticParams() {
-  return categories.map((cat) => ({
-    slug: cat,
+  return customerGroup.map((cg) => ({
+    slug: cg,
   }));
 }

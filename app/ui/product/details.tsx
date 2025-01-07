@@ -23,7 +23,7 @@ import ExpandableSections from "@ui/expandable";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
-    id: productId,
+    productId,
     name,
     priceCents,
     images,
@@ -177,7 +177,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           <div className="space-y-2">
             <p className="text-sm font-medium text-gray-700">Size</p>
             <div className="flex flex-wrap items-center gap-4">
-              {["S", "M", "L", "XL"].map((size) => {
+              {Object.keys(sizes).map((size) => {
                 const quantity = sizes[size as keyof typeof sizes];
                 return (
                   <label

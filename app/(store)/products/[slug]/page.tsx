@@ -4,18 +4,17 @@ import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
 import NotFound from "@/app/not-found";
-import { capitalizeFirstLetter } from "@ui/utils";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const [products, { slug: productSlug }] = await Promise.all([
+  const [fetchedProducts, { slug: productSlug }] = await Promise.all([
     fetchProducts(),
     params,
   ]);
-  const name = products.find((p) => p.slug === productSlug)?.name;
+  const name = fetchedProducts.find((p) => p.slug === productSlug)?.name;
 
   return {
     title: name || "NOT FOUND",
@@ -27,32 +26,31 @@ export default async function ProductPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [categories, products, { slug: productSlug }] = await Promise.all([
-    fetchCategories(),
-    fetchProducts(),
-    params,
-  ]);
-  const product = products.find((p) => p.slug === productSlug);
+  const [fetchedCategories, fetchedProducts, { slug: productSlug }] =
+    await Promise.all([fetchCategories(), fetchProducts(), params]);
+  const product = fetchedProducts.find((p) => p.slug === productSlug);
 
   if (!product) return <NotFound />;
 
-  const category = categories.find((cat) => cat.id === product.categoryId);
+  const category = fetchedCategories.find(
+    (cat) => cat.categoryId === product.categoryId,
+  );
 
   if (!category) return <NotFound />;
 
-  const similarProducts = products.filter(
-    (p) => p.categoryId === category.id && p.slug !== productSlug,
+  const similarProducts = fetchedProducts.filter(
+    (p) => p.categoryId === category.categoryId && p.slug !== productSlug,
   );
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: category.name,
-      href: `/${category.name.toLowerCase()}`,
+      label: product.customerGroup,
+      href: `/${product.customerGroup.toLowerCase()}`,
     },
     {
-      label: capitalizeFirstLetter(product.subCategory),
-      href: `/${category.name.toLowerCase()}/${product.subCategory}`,
+      label: category.name,
+      href: `/${product.customerGroup.toLowerCase()}/${category.name.toLowerCase()}`,
     },
     { label: product.name },
   ];
@@ -63,7 +61,9 @@ export default async function ProductPage({
 
       <ProductDetails product={product} />
 
-      <SimilarProducts similarProducts={similarProducts} />
+      {similarProducts.length > 0 && (
+        <SimilarProducts similarProducts={similarProducts} />
+      )}
     </div>
   );
 }

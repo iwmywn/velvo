@@ -8,7 +8,7 @@ import { useProductContext } from "@ui/contexts";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import ProductCard from "@ui/product/card";
 import Link from "next/link";
-import { collectionItems, bannerItems } from "@ui/data";
+import { collectionItems, bannerItems, baseImgUrl } from "@ui/data";
 
 export default function Home() {
   const { products } = useProductContext();
@@ -32,7 +32,7 @@ export default function Home() {
               <Link href={`/products/${href}`}>
                 <div className="relative w-full" style={{ paddingTop: "40%" }}>
                   <Image
-                    src={image}
+                    src={`${baseImgUrl}${image}`}
                     alt={label}
                     fill
                     sizes="100vw"
@@ -86,7 +86,7 @@ export default function Home() {
           }}
         >
           {lastTenProducts.map((product) => (
-            <SwiperSlide key={product.id}>
+            <SwiperSlide key={product.productId.toString()}>
               <ProductCard {...product} />
             </SwiperSlide>
           ))}
@@ -105,7 +105,7 @@ export default function Home() {
           >
             <div className="relative w-full" style={{ paddingTop: "80%" }}>
               <Image
-                src={image}
+                src={`${baseImgUrl}${image}`}
                 alt={label}
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"

@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { linkClass } from "@ui/form-class";
 import { menItems, womenItems, kidsItems } from "@ui/data";
+import { capitalizeFirstLetter } from "@ui/utils";
 
 export const CategoryDropDown = () => {
   return <CategoryTabs />;
@@ -195,20 +196,20 @@ const Nub = () => {
 };
 
 interface CategoryLinksProps {
-  items: ReadonlyArray<{ label: string; href: string }>;
+  items: ReadonlyArray<string>;
   sub: string;
 }
 
 const CategoryLinks: React.FC<CategoryLinksProps> = ({ items, sub }) => {
   return (
     <div className="flex flex-col items-center gap-3 text-sm">
-      {items.map(({ label, href }) => (
+      {items.map((item) => (
         <Link
-          key={href}
-          href={`/${sub}/${href}`}
+          key={item}
+          href={`/${sub}/${item}`}
           className={`${linkClass} text-nowrap`}
         >
-          {label}
+          {capitalizeFirstLetter(item)}
         </Link>
       ))}
     </div>

@@ -1,15 +1,15 @@
 import OrderList from "@ui/purchase/order-list";
-import { InvoiceProductsProps } from "@lib/definition";
+import { InvoiceList } from "@lib/definition";
 
 export default function ToShipAndReceive({
   invoiceProducts,
 }: {
-  invoiceProducts: InvoiceProductsProps;
+  invoiceProducts: InvoiceList["invoices"] | null;
 }) {
   return (
     <OrderList
       invoiceProducts={invoiceProducts}
-      orderStatus={["WAITING", "PROCESSING"]}
+      orderStatus={["waiting", "processing"]}
       emptyState="toShipNReceive"
     />
   );

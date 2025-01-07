@@ -32,7 +32,7 @@ export async function DELETE(req: Request) {
   await Promise.all([
     db.collection("users").deleteOne({ _id: new ObjectId(userId) }),
     db.collection("carts").deleteOne({ userId: new ObjectId(userId) }),
-    db.collection("invoices").deleteMany({ userId: new ObjectId(userId) }),
+    db.collection("invoiceLists").deleteOne({ userId: new ObjectId(userId) }),
   ]);
 
   return createResponse("Good bye.", 201);

@@ -39,13 +39,13 @@ export async function POST(req: Request) {
     .setIssuedAt()
     .setIssuer(process.env.JWT_ISSUER!)
     .setAudience(process.env.JWT_AUDIENCE!)
-    .setExpirationTime("1h")
+    .setExpirationTime("1d")
     .sign(secret);
 
   const cookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60,
+    maxAge: 60 * 60 * 24,
     path: "/",
     sameSite: "strict" as const,
   };

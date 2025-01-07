@@ -33,7 +33,7 @@ export default function Checkout({
   totalPriceCents,
 }: {
   products: {
-    id: string;
+    productId: string;
     quantity: number;
     size: string;
     priceCents: number;

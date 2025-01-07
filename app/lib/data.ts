@@ -1,10 +1,11 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
-import { Category, Product, Products } from "@lib/definition";
+import { Category, Product, InvoiceList, Cart } from "@lib/definition";
 import { ObjectId } from "mongodb";
+import { baseImgUrl } from "@ui/data";
 
-export async function fetchCategories() {
+export async function fetchCategories(): Promise<Category[]> {
   try {
     const db = await connectToDatabase();
     const categories = await db
@@ -14,7 +15,7 @@ export async function fetchCategories() {
 
     return categories.map(({ _id, ...rest }) => ({
       ...rest,
-      id: _id.toString(),
+      categoryId: _id.toString(),
     }));
   } catch (error) {
     console.error("MongoDB fetch error:", error);
@@ -22,7 +23,7 @@ export async function fetchCategories() {
   }
 }
 
-export async function fetchProducts() {
+export async function fetchProducts(): Promise<Product[]> {
   try {
     const db = await connectToDatabase();
     const products = await db
@@ -30,10 +31,11 @@ export async function fetchProducts() {
       .find({})
       .toArray();
 
-    return products.map(({ _id, categoryId, ...rest }) => ({
+    return products.map(({ _id, categoryId, images, ...rest }) => ({
       ...rest,
-      id: _id.toString(),
+      productId: _id.toString(),
       categoryId: categoryId.toString(),
+      images: images.map((image) => baseImgUrl + image),
     }));
   } catch (error) {
     console.error("MongoDB fetch error:", error);
@@ -41,14 +43,9 @@ export async function fetchProducts() {
   }
 }
 
-export async function fetchCart(userId: string | undefined): Promise<
-  | {
-      productId: string;
-      quantity: number;
-      size: string;
-    }[]
-  | null
-> {
+export async function fetchCart(
+  userId: string | undefined,
+): Promise<Cart["products"] | null> {
   if (!userId) return null;
 
   try {
@@ -71,116 +68,49 @@ export async function fetchCart(userId: string | undefined): Promise<
   }
 }
 
-export async function fetchInvoices(userId: string | undefined): Promise<
-  | {
-      invoiceId: string;
-      recipient: string;
-      phone: string;
-      address: string;
-      date: Date;
-      status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
-      products: (Product & {
-        quantity: number;
-        size: string;
-        priceCentsAfterDiscount: string[];
-      })[];
-      totalPriceCents: string;
-    }[]
-  | null
-> {
+export async function fetchCartQuantity(
+  userId: string | undefined,
+): Promise<number> {
+  const products = await fetchCart(userId);
+  if (!products) return 0;
+
+  return products.reduce((sum, product) => sum + product.quantity, 0);
+}
+
+export async function fetchInvoices(
+  userId: string | undefined,
+): Promise<InvoiceList["invoices"] | null> {
   if (!userId) return null;
 
   try {
     const db = await connectToDatabase();
 
-    const invoices = await db
-      .collection("invoices")
-      .find({ userId: new ObjectId(userId) })
-      .toArray();
+    const invoiceList = await db.collection("invoiceLists").findOne({
+      userId: new ObjectId(userId),
+    });
 
-    if (!invoices.length) return null;
+    if (!invoiceList || !invoiceList.invoices) return null;
 
-    const results = await Promise.all(
-      invoices.map(async (invoice) => {
-        const productIds = invoice.products.map(
-          (p: Products) => new ObjectId(p.productId),
-        );
-
-        const products = await db
-          .collection("products")
-          .find({ _id: { $in: productIds } })
-          .toArray();
-
-        const enrichedProducts = invoice.products.map(
-          (invoiceProducts: Products) => {
-            const product = products.find(
-              (p) => p._id.toString() === invoiceProducts.productId.toString(),
-            );
-
-            if (!product) return null;
-
-            return {
-              id: product._id.toString(),
-              name: product.name,
-              images: product.images,
-              description: product.description,
-              categoryId: product.categoryId.toString(),
-              saleOff: product.saleOff,
-              slug: product.slug,
-              sizes: product.sizes,
-              quantity: invoiceProducts.quantity,
-              size: invoiceProducts.size,
-              priceCentsAfterDiscount: [
-                invoiceProducts.priceCentsAfterDiscount[0],
-                invoiceProducts.priceCentsAfterDiscount[1],
-              ],
-            };
-          },
-        );
-
-        return {
-          invoiceId: invoice._id.toString(),
-          recipient: invoice.recipient,
-          phone: invoice.phone,
-          address: invoice.address,
-          date: invoice.date,
-          status: invoice.status,
-          products: enrichedProducts,
-          totalPriceCents: invoice.totalPriceCents,
-        };
+    return invoiceList.invoices.map(
+      ({
+        invoiceId,
+        products,
+        ...rest
+      }: {
+        invoiceId: ObjectId;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        products: any[];
+      }) => ({
+        ...rest,
+        invoiceId: invoiceId.toString(),
+        products: products.map((product) => ({
+          ...product,
+          productId: product.productId.toString(),
+        })),
       }),
     );
-
-    return results;
   } catch (error) {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch invoices.");
-  }
-}
-
-export async function fetchCartQuantity(
-  userId: string | undefined,
-): Promise<number> {
-  if (!userId) return 0;
-
-  try {
-    const db = await connectToDatabase();
-    const cart = await db
-      .collection("carts")
-      .findOne({ userId: new ObjectId(userId) });
-
-    if (!cart || cart.products.length === 0) return 0;
-
-    const totalQuantity = cart.products.reduce(
-      (sum: number, product: { quantity: number }) => {
-        return sum + product.quantity;
-      },
-      0,
-    );
-
-    return totalQuantity;
-  } catch (error) {
-    console.error("Error fetching cart product count:", error);
-    return 0;
   }
 }

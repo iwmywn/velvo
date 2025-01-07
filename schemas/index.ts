@@ -108,10 +108,10 @@ export const placeOrderWithIdSchema = placeOrderSchema.extend({
   userId: z.string().min(1, "User ID is required."),
   products: z
     .object({
-      id: z.string().min(1, "Product ID is required"),
+      productId: z.string().min(1, "Product ID is required"),
       quantity: z.number().min(1, "Quantity must be at least 1"),
       size: z.string().min(1, "Size is required"),
-      priceCentsAfterDiscount: z
+      discountedPriceDetails: z
         .array(z.string())
         .min(1, "PriceCents must be at least 1"),
     })

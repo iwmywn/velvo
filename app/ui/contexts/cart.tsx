@@ -10,12 +10,12 @@ import React, {
 } from "react";
 import { fetchCartQuantity, fetchCart, fetchInvoices } from "@lib/data";
 import { useAuthContext } from "@ui/contexts";
-import { CartProductsProps, InvoiceProductsProps } from "@lib/definition";
+import { Cart, InvoiceList } from "@lib/definition";
 
 interface CartContextProps {
   quantity: number;
-  cartProducts: CartProductsProps | null;
-  invoiceProducts: InvoiceProductsProps | null;
+  cartProducts: Cart["products"] | null;
+  invoiceProducts: InvoiceList["invoices"] | null;
   isLoading: boolean;
   refreshCart: (
     cartQuantity?: boolean,
@@ -28,11 +28,12 @@ const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [quantity, setQuantity] = useState<number>(0);
-  const [cartProducts, setCartProducts] = useState<CartProductsProps | null>(
+  const [cartProducts, setCartProducts] = useState<Cart["products"] | null>(
     null,
   );
-  const [invoiceProducts, setInvoiceProducts] =
-    useState<InvoiceProductsProps | null>(null);
+  const [invoiceProducts, setInvoiceProducts] = useState<
+    InvoiceList["invoices"] | null
+  >(null);
   const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 

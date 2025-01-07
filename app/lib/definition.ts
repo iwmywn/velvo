@@ -1,39 +1,48 @@
-import { ObjectId } from "mongodb";
-
 export type User = {
-  id: string;
+  userId: string;
   name: string;
   email: string;
   password: string;
   isVerified: boolean;
   image: string;
+  verificationToken: string;
+  resendVerification: number;
   address: {
     recipient: string;
     phone: string;
     address: string;
   }[];
-  verificationToken: string;
-  resendVerification: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type Invoice = {
-  id: string;
+export type InvoiceList = {
+  invoiceListId: string;
   userId: string;
-  recipient: string;
-  phone: string;
-  address: string;
-  date: Date;
-  status: string;
-  products: {
-    productId: string;
-    quantity: number;
-    size: string;
+  invoices: {
+    invoiceId: string;
+    recipient: string;
+    phone: string;
+    address: string;
+    status: "waiting" | "processing" | "completed" | "cancelled";
+    totalPriceCents: string;
+    products: {
+      productId: string;
+      quantity: number;
+      size: string;
+      /**
+       * [0] - Price after discount (cents)
+       * [1] - Total price after discount (cents, including quantity)
+       */
+      discountedPriceDetails: [string, string];
+    }[];
+    orderDate: Date;
+    receivedDate: Date;
   }[];
-  totalPriceCents: string;
 };
 
 export type Cart = {
-  id: string;
+  cartId: string;
   userId: string;
   products: {
     productId: string;
@@ -43,14 +52,12 @@ export type Cart = {
 };
 
 export type Category = {
-  id: string;
+  categoryId: string;
   name: string;
-  description: string;
-  image: string;
 };
 
 export type Product = {
-  id: string;
+  productId: string;
   name: string;
   priceCents: number;
   images: string[];
@@ -58,43 +65,9 @@ export type Product = {
   categoryId: string;
   saleOff: number;
   slug: string;
-  sizes: {
-    S: number;
-    M: number;
-    L: number;
-    XL: number;
-  };
-  subCategory: string;
+  customerGroup: "men" | "women" | "kids";
+  sizes: { [key: string]: number };
   keyFeatures: string[];
+  createdAt: Date;
+  updatedAt: Date;
 };
-
-export type Products = {
-  productId: ObjectId;
-  quantity: number;
-  size: string;
-  priceCentsAfterDiscount: string[];
-};
-
-interface InvoiceWithProducts {
-  invoiceId: string;
-  recipient: string;
-  phone: string;
-  address: string;
-  date: Date;
-  status: "WAITING" | "PROCESSING" | "COMPLETED" | "CANCELLED";
-  products: (Product & {
-    quantity: number;
-    size: string;
-    priceCentsAfterDiscount: string[];
-  })[];
-  totalPriceCents: string;
-}
-
-export type CartProductsProps =
-  | {
-      productId: string;
-      quantity: number;
-      size: string;
-    }[]
-  | null;
-export type InvoiceProductsProps = InvoiceWithProducts[] | null;

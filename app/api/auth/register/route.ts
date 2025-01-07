@@ -28,8 +28,10 @@ export async function POST(req: Request) {
 
   if (existingUser) return createResponse("Email already registered!", 400);
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const db = await connectToDatabase();
+  const [db, hashedPassword] = await Promise.all([
+    connectToDatabase(),
+    bcrypt.hash(password, 10),
+  ]);
   const verificationToken = await generateUniqueToken(db);
   const avatar = avatars[Math.floor(Math.random() * 20)];
 
@@ -41,12 +43,13 @@ export async function POST(req: Request) {
     image: `${baseImgUrl}${avatar}`,
     verificationToken,
     resendVerification: 1,
+    createdAt: new Date(),
   });
 
   if (!result.acknowledged)
     return createResponse("Account creation failed! Try again later.", 500);
 
-  await sendEmail(email, verificationToken, "verifyEmail");
+  // await sendEmail(email, verificationToken, "verifyEmail");
 
   return createResponse("Verification email sent.", 201);
 }

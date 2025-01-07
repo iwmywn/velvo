@@ -53,7 +53,7 @@ export default function SearchOverlay() {
         ) : filteredProducts.length > 0 ? (
           <div className="grid grid-cols-2 gap-4 p-4">
             {filteredProducts.map((product) => (
-              <span key={product.id} onClick={handleClose}>
+              <span key={product.productId} onClick={handleClose}>
                 <ProductCard {...product} />
               </span>
             ))}

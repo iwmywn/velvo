@@ -9,9 +9,7 @@ import verifyRecaptchaToken from "@lib/recaptcha";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
-  console.log(data);
   const { recaptchaToken, ...userData } = data;
-  console.log(recaptchaToken, userData);
 
   if (!recaptchaToken) return createResponse("Invalid field!", 400);
 

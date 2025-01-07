@@ -5,9 +5,9 @@ export { collections, collectionItems } from "./collections";
 export { baseImgUrl, navLinks, footerSections, socialLinks } from "./constants";
 export { emptyStates } from "./empty-state";
 export {
+  customerGroup,
   categories,
-  subCategories,
   menItems,
   womenItems,
   kidsItems,
-} from "./sub-categories";
+} from "./categories";
