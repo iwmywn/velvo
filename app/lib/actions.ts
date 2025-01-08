@@ -51,20 +51,18 @@ export async function sendEmail(
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: email,
-    subject: `${mode === "verifyEmail" ? "Verify your StyleWave account" : "Reset your Stylewave password"} `,
+    subject: `${mode === "verifyEmail" ? "Verify your Velvo account" : "Reset your Velvo password"} `,
     html: `
       <table
       style="width: 100%; background-color: #e7f1ff; padding: 20px 40px; border-radius: 12px; text-align: center; font-family: Arial, sans-serif;">
       <tr>
         <td>
-          <img style="width: 35px; height: 35px; margin-bottom: 10px;"
-            src="https://github.com/iwmywn/doan/blob/master/app/icon.png?raw=true" alt="logo">
-          <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">StyleWave</p>
+          <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">Velvo</p>
           <p style="font-size: 16px; margin: 10px 0 20px 0; line-height: 1.6;">
             Hey there, <br>
             ${
               mode === "verifyEmail"
-                ? "Thanks for joining StyleWave! We just need one more thing you - a quick confirmation of your email address. Click the button below to verify your email and get started."
+                ? "Thanks for joining Velvo! We just need one more thing you - a quick confirmation of your email address. Click the button below to verify your email and get started."
                 : "Nobody likes being locked out of their account. We're coming to your rescue - just click the button below to get started. If you didn't request a password reset, you can safely ignore this email."
             }
           </p>
@@ -304,7 +302,10 @@ export async function cancelReceiveOrder(
       await invoiceCollection.updateOne(
         { userId: new ObjectId(userId) },
         {
-          $pull: { invoices: { invoiceId: new ObjectId(invoiceId) } } as any,
+          $pull: {
+            invoices: { invoiceId: new ObjectId(invoiceId) },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          } as any,
         },
       ),
       await invoiceCollection.updateOne(
@@ -314,6 +315,7 @@ export async function cancelReceiveOrder(
             invoices: {
               $each: [fullInvoice],
               $position: 0,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } as any,
           },
         },

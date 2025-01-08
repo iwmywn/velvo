@@ -20,14 +20,12 @@ import {
 
 export const metadata: Metadata = {
   title: {
-    template: "%s - StyleWave",
-    default: siteConfig.maintenanceMode
-      ? "Maintenance - StyleWave"
-      : "StyleWave",
+    template: "%s | Velvo",
+    default: siteConfig.maintenanceMode ? "Maintenance | Velvo" : "Velvo",
   },
   description: siteConfig.maintenanceMode
     ? "Website is under maintenance"
-    : "StyleWave is your ultimate online fashion destination, offering a wide range of high-quality clothing that caters to every style. From trendy streetwear to elegant pieces, we bring you the latest fashion trends to keep your wardrobe fresh and stylish.",
+    : "Velvo is your ultimate online fashion destination, offering a wide range of high-quality clothing that caters to every style. From trendy streetwear to elegant pieces, we bring you the latest fashion trends to keep your wardrobe fresh and stylish.",
 };
 
 export default async function RootLayout({

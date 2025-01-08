@@ -36,7 +36,7 @@ const ActionButton = ({
 );
 
 export default function ProductRow({
-  id,
+  productId,
   name,
   priceCents,
   images,
@@ -77,7 +77,7 @@ export default function ProductRow({
 
   const handleAddToCart = () => {
     handleCartOperation(
-      () => addToCart(id, userId, size),
+      () => addToCart(productId, userId, size),
       ["Done."],
       setIsLoading,
     );
@@ -85,7 +85,7 @@ export default function ProductRow({
 
   const handleRemoveFromCart = () => {
     handleCartOperation(
-      () => removeFromCart(id, userId, size),
+      () => removeFromCart(productId, userId, size),
       ["Product removed from cart.", "Product quantity decreased."],
       setIsLoading,
     );
@@ -93,7 +93,7 @@ export default function ProductRow({
 
   const handleDeleteFromCart = () => {
     handleCartOperation(
-      () => deleteFromCart(id, userId, size),
+      () => deleteFromCart(productId, userId, size),
       ["Product removed from cart!"],
       setIsDeleting,
     );

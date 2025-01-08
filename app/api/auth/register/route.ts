@@ -49,7 +49,7 @@ export async function POST(req: Request) {
   if (!result.acknowledged)
     return createResponse("Account creation failed! Try again later.", 500);
 
-  // await sendEmail(email, verificationToken, "verifyEmail");
+  await sendEmail(email, verificationToken, "verifyEmail");
 
   return createResponse("Verification email sent.", 201);
 }

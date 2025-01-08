@@ -6,13 +6,13 @@ import { useRef } from "react";
 import NavMenu from "@ui/nav/nav-menu";
 import { useElementHeight } from "@ui/hooks";
 import AccountMenu from "@ui/nav/account-menu";
-import Image from "next/image";
 import { CategoryDropDown } from "@ui/shifting-dropdown";
 import SearchOverlay from "@ui/search/search-overlay";
 import CartOverlay from "@ui/cart/cart-overlay";
 import { CiSearch } from "react-icons/ci";
 import { GiShoppingCart } from "react-icons/gi";
 import { useCartContext, useUIStateContext } from "@ui/contexts";
+import logo from "@ui/logo";
 
 export default function Header() {
   const ref = useRef<HTMLElement | null>(null);
@@ -36,18 +36,8 @@ export default function Header() {
             <CategoryDropDown />
           </div>
 
-          <Link
-            className="select-none text-2xl font-bold"
-            href="/"
-            title="StyleWave"
-          >
-            <Image
-              src="/logo-text.svg"
-              alt="StyleWave"
-              width={132}
-              height={23}
-              priority
-            />
+          <Link className="h-6 select-none" href="/" title="Velvo">
+            {logo}
           </Link>
 
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[27rem] lg:flex-1 lg:gap-10">
