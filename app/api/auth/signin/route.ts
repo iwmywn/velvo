@@ -1,11 +1,10 @@
 "use server";
 
-import { SignJWT } from "jose";
 import { getUserByIdentifier } from "@lib/actions";
 import bcrypt from "bcrypt";
 import { signInSchema } from "@/schemas";
-import { serialize } from "cookie";
 import { createResponse } from "@lib/utils";
+import { createSession } from "@lib/session";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -30,33 +29,9 @@ export async function POST(req: Request) {
       400,
     );
 
-  const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
-  const token = await new SignJWT({
-    id: existingUser._id,
-    image: existingUser.image,
-  })
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setIssuer(process.env.JWT_ISSUER!)
-    .setAudience(process.env.JWT_AUDIENCE!)
-    .setExpirationTime("1d")
-    .sign(secret);
-
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60 * 24,
-    path: "/",
-    sameSite: "strict" as const,
-  };
-
-  const cookieHeader = serialize("auth_token", token, cookieOptions);
+  await createSession(existingUser._id.toString(), existingUser.image);
 
   return new Response(JSON.stringify({ message: "Signin successful." }), {
     status: 200,
-    headers: {
-      "Set-Cookie": cookieHeader,
-      Location: "/",
-    },
   });
 }

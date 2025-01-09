@@ -1,19 +1,22 @@
 "use server";
 
-import { deleteAccountWithIdScheme } from "@/schemas";
+import { deleteAccountScheme } from "@/schemas";
 import { connectToDatabase } from "@lib/mongodb";
 import { createResponse } from "@lib/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import { User } from "@lib/definition";
+import { User } from "@lib/definitions";
+import { verifySession } from "@lib/dal";
 
 export async function DELETE(req: Request) {
   const data = await req.json();
-  const parsedCredentials = deleteAccountWithIdScheme.safeParse(data);
+  const parsedCredentials = deleteAccountScheme.safeParse(data);
+  const { isAuth, userId } = await verifySession();
 
+  if (!isAuth) return createResponse("User is not authenticated", 401);
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
-  const { userId, password } = parsedCredentials.data;
+  const { password } = parsedCredentials.data;
 
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);

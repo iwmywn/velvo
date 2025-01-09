@@ -1,4 +1,4 @@
-import { Cart } from "@lib/definition";
+import { Cart } from "@lib/definitions";
 import { fetchCart } from "@lib/data";
 import { create } from "zustand";
 

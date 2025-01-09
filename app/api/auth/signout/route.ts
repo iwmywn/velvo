@@ -1,23 +1,9 @@
 "use server";
 
-import { serialize } from "cookie";
+import { deleteSession } from "@lib/session";
+import { redirect } from "next/navigation";
 
 export async function POST() {
-  const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 0,
-    path: "/",
-    sameSite: "strict" as const,
-  };
-
-  const cookieHeader = serialize("auth_token", "", cookieOptions);
-
-  return new Response(null, {
-    status: 303,
-    headers: {
-      "Set-Cookie": cookieHeader,
-      Location: "/user/signin",
-    },
-  });
+  await deleteSession();
+  redirect("/user/signin");
 }

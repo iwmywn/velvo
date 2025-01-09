@@ -71,3 +71,9 @@ export type Product = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type SessionPayload = {
+  userId: string;
+  image: string;
+  expires: Date;
+};

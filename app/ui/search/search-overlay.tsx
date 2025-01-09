@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import ProductCard from "@ui/product/card";
-import { Product } from "@lib/definition";
+import { Product } from "@lib/definitions";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
 import { useAnimation } from "@ui/hooks";

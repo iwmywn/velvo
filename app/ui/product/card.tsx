@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
 import { useState } from "react";
-import { Product } from "@lib/definition";
+import { Product } from "@lib/definitions";
 
 export default function ProductCard({
   name,

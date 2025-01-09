@@ -2,7 +2,7 @@
 
 import { ObjectId } from "mongodb";
 import { connectToDatabase } from "@lib/mongodb";
-import { User } from "@lib/definition";
+import { User } from "@lib/definitions";
 import nodemailer from "nodemailer";
 import { revalidatePath } from "next/cache";
 

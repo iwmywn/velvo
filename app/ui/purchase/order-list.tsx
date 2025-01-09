@@ -5,7 +5,7 @@ import Button from "@ui/button";
 import { GiShoppingCart } from "react-icons/gi";
 import { MdOutlineCancel, MdCheck } from "react-icons/md";
 import Link from "next/link";
-import { InvoiceList } from "@lib/definition";
+import { InvoiceList } from "@lib/definitions";
 import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
 import { toast } from "react-toastify";

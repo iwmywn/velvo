@@ -6,7 +6,7 @@ import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
-import { avatars, baseImgUrl } from "@ui/data";
+import { avatars } from "@ui/data";
 import verifyRecaptchaToken from "@lib/recaptcha";
 
 export async function POST(req: Request) {
@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     email,
     password: hashedPassword,
     isVerified: false,
-    image: `${baseImgUrl}${avatar}`,
+    image: `${avatar}`,
     verificationToken,
     resendVerification: 1,
     createdAt: new Date(),

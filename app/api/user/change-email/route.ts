@@ -1,20 +1,23 @@
 "use server";
 
-import { changeEmailWithIdScheme } from "@/schemas";
+import { changeEmailScheme } from "@/schemas";
 import { connectToDatabase } from "@lib/mongodb";
 import { createResponse } from "@lib/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import { User } from "@lib/definition";
+import { User } from "@lib/definitions";
 import { getUserByIdentifier } from "@lib/actions";
+import { verifySession } from "@lib/dal";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
-  const parsedCredentials = changeEmailWithIdScheme.safeParse(data);
+  const parsedCredentials = changeEmailScheme.safeParse(data);
+  const { isAuth, userId } = await verifySession();
 
+  if (!isAuth) return createResponse("User is not authenticated", 401);
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
-  const { userId, confirmEmail, password } = parsedCredentials.data;
+  const { confirmEmail, password } = parsedCredentials.data;
 
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);

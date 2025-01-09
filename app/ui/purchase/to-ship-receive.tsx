@@ -1,5 +1,5 @@
 import OrderList from "@ui/purchase/order-list";
-import { InvoiceList } from "@lib/definition";
+import { InvoiceList } from "@lib/definitions";
 
 export default function ToShipAndReceive({
   invoiceProducts,

@@ -2,7 +2,7 @@ import { getTotalPriceCents } from "@lib/utils";
 import ProductRow from "@ui/purchase/product-row";
 import Checkout from "@ui/purchase/checkout";
 import EmptyState from "@ui/cart/empty";
-import { Product } from "@lib/definition";
+import { Product } from "@lib/definitions";
 import { useCartContext } from "@ui/contexts";
 import Loading from "@ui/loading";
 

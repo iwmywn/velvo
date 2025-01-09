@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
 import Button from "@ui/button";
-import { Product } from "@lib/definition";
+import { Product } from "@lib/definitions";
 import ImageTag from "@ui/image";
 import {
   useAuthContext,

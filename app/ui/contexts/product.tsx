@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
-import { Product } from "@lib/definition";
+import { Product } from "@lib/definitions";
 
 interface ProductContextProps {
   products: Product[];

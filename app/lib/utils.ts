@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { Product, Cart, InvoiceList } from "@lib/definition";
+import { Product, Cart, InvoiceList } from "@lib/definitions";
 
 export function createResponse(message: string, status: number) {
   return new Response(JSON.stringify({ message }), { status });

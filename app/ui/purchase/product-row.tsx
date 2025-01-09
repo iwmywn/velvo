@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@lib/definition";
+import { Product } from "@lib/definitions";
 import { getPriceAfterDiscount } from "@lib/utils";
 import Button from "@ui/button";
 import ImageTag from "@ui/image";

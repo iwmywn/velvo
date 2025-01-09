@@ -1,4 +1,4 @@
-import { InvoiceList } from "@lib/definition";
+import { InvoiceList } from "@lib/definitions";
 import OrderList from "@ui/purchase/order-list";
 
 export default function Cancelled({

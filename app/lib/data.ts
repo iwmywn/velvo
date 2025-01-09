@@ -1,7 +1,7 @@
 "use server";
 
 import { connectToDatabase } from "@lib/mongodb";
-import { Category, Product, InvoiceList, Cart } from "@lib/definition";
+import { Category, Product, InvoiceList, Cart } from "@lib/definitions";
 import { ObjectId } from "mongodb";
 import { baseImgUrl } from "@ui/data";
 

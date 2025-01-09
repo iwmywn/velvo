@@ -6,10 +6,11 @@ import { useAuthContext } from "@ui/contexts";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Image from "next/image";
+import { baseImgUrl } from "@ui/data";
 
 export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { isSignedIn, image, isLoading } = useAuthContext();
+  const { isAuth, image, isLoading } = useAuthContext();
 
   return (
     <div className="relative" onMouseLeave={() => setIsOpen(false)}>
@@ -18,9 +19,9 @@ export default function AccountMenu() {
         onMouseEnter={() => setIsOpen(true)}
         onClick={() => setIsOpen(true)}
       >
-        {isSignedIn ? (
+        {isAuth ? (
           <Image
-            src={image!}
+            src={`${baseImgUrl}${image}`}
             fill
             sizes="(min-width: 768px) 24px, 22px"
             alt="The avatar style Adventurer is a remix of: Adventurer by Lisa Wischofsky, licensed under CC BY 4.0 ."
@@ -35,7 +36,7 @@ export default function AccountMenu() {
       </div>
 
       <AnimatePresence>
-        {isOpen && isSignedIn && (
+        {isOpen && isAuth && (
           <motion.div
             className="absolute top-[calc(100%_+_16px)] bg-white text-sm"
             initial={{ opacity: 0, y: -20, x: "-50%" }}

@@ -1,23 +1,16 @@
 "use server";
 
-import verifyJWTToken from "@api/auth";
-import { NextRequest } from "next/server";
+import { verifySession } from "@lib/dal";
 
-export async function GET(req: NextRequest) {
-  const token = req.cookies.get("auth_token")?.value;
+export async function GET() {
+  const { isAuth, userId, image } = await verifySession();
 
-  if (!token) {
-    return new Response(JSON.stringify({ isSignedIn: false }), { status: 401 });
-  }
-
-  const result = await verifyJWTToken(token);
-
-  if (result.isValid && result.payload?.id) {
+  if (isAuth) {
     return new Response(
       JSON.stringify({
-        isSignedIn: true,
-        userId: result.payload.id,
-        image: result.payload.image,
+        isAuth,
+        userId,
+        image,
       }),
       { status: 200 },
     );

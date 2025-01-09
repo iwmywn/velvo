@@ -9,19 +9,19 @@ import {
 } from "react";
 
 interface AuthContextProps {
-  isSignedIn: boolean;
+  isAuth: boolean;
   userId?: string;
   image?: string;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextProps>({
-  isSignedIn: false,
+  isAuth: false,
   isLoading: true,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | undefined>(undefined);
   const [image, setImage] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (res.ok) {
         const result: AuthContextProps = await res.json();
-        setIsSignedIn(result.isSignedIn);
+        setIsAuth(result.isAuth);
         setUserId(result.userId);
         setImage(result.image);
       }
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isSignedIn, userId, image, isLoading }}>
+    <AuthContext.Provider value={{ isAuth, userId, image, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

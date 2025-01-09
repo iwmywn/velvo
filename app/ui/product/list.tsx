@@ -1,6 +1,6 @@
 "use client";
 
-import { Product } from "@lib/definition";
+import { Product } from "@lib/definitions";
 import ProductCard from "@ui/product/card";
 
 export default function ProductList({

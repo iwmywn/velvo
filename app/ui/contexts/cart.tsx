@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { fetchCartQuantity, fetchCart, fetchInvoices } from "@lib/data";
 import { useAuthContext } from "@ui/contexts";
-import { Cart, InvoiceList } from "@lib/definition";
+import { Cart, InvoiceList } from "@lib/definitions";
 
 interface CartContextProps {
   quantity: number;

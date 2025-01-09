@@ -20,11 +20,9 @@ import {
   errorClass,
 } from "@ui/form-class";
 import { toast } from "react-toastify";
-import { useAuthContext } from "@ui/contexts";
 import { useAnimation, useOverflow } from "@ui/hooks";
 
 interface SettingsProps {
-  userId: string | undefined;
   handleClose: () => void;
 }
 
@@ -34,7 +32,6 @@ export default function AccountSettings() {
     "change-password" | "change-email" | "delete-account" | null
   >(null);
   const handleClose = () => triggerAnimation(() => setIsOpen(null));
-  const { userId } = useAuthContext();
 
   useOverflow(!!isOpen);
 
@@ -49,13 +46,13 @@ export default function AccountSettings() {
             onMouseDown={(e) => e.stopPropagation()}
           >
             {isOpen === "change-password" && (
-              <ChangePassword userId={userId} handleClose={handleClose} />
+              <ChangePassword handleClose={handleClose} />
             )}
             {isOpen === "change-email" && (
-              <ChangeEmail userId={userId} handleClose={handleClose} />
+              <ChangeEmail handleClose={handleClose} />
             )}
             {isOpen === "delete-account" && (
-              <DeleteAccount userId={userId} handleClose={handleClose} />
+              <DeleteAccount handleClose={handleClose} />
             )}
           </div>
         </Backdrop>
@@ -114,7 +111,7 @@ function Row({ children }: { children: ReactNode }) {
 
 type ChangePasswordFormData = z.infer<typeof changePasswordScheme>;
 
-function ChangePassword({ userId, handleClose }: SettingsProps) {
+function ChangePassword({ handleClose }: SettingsProps) {
   const {
     register,
     handleSubmit,
@@ -131,13 +128,12 @@ function ChangePassword({ userId, handleClose }: SettingsProps) {
 
   const onSubmit = async (data: ChangePasswordFormData) => {
     try {
-      const requestData = { ...data, userId };
       const res = await fetch(`/api/user/change-password`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData),
+        body: JSON.stringify(data),
       });
 
       const result = await res.json();
@@ -217,7 +213,7 @@ function ChangePassword({ userId, handleClose }: SettingsProps) {
 
 type ChangeEmailFormData = z.infer<typeof changeEmailScheme>;
 
-function ChangeEmail({ userId, handleClose }: SettingsProps) {
+function ChangeEmail({ handleClose }: SettingsProps) {
   const {
     register,
     handleSubmit,
@@ -234,13 +230,12 @@ function ChangeEmail({ userId, handleClose }: SettingsProps) {
 
   const onSubmit = async (data: ChangeEmailFormData) => {
     try {
-      const requestData = { ...data, userId };
       const res = await fetch(`/api/user/change-email`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData),
+        body: JSON.stringify(data),
       });
 
       const result = await res.json();
@@ -317,7 +312,7 @@ function ChangeEmail({ userId, handleClose }: SettingsProps) {
 
 type DeleteAccountFormData = z.infer<typeof deleteAccountScheme>;
 
-function DeleteAccount({ userId, handleClose }: SettingsProps) {
+function DeleteAccount({ handleClose }: SettingsProps) {
   const {
     register,
     handleSubmit,
@@ -334,13 +329,12 @@ function DeleteAccount({ userId, handleClose }: SettingsProps) {
     toast.success("Deleting your account...");
     toast.success("Thank you for using our website <3");
     try {
-      const requestData = { ...data, userId };
       const res = await fetch(`/api/user/delete-account`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestData),
+        body: JSON.stringify(data),
       });
 
       const result = await res.json();
