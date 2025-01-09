@@ -77,8 +77,7 @@ export const placeOrderSchema = z.object({
   address: z.string().min(1, "Please provide address"),
 });
 
-export const placeOrderWithIdSchema = placeOrderSchema.extend({
-  userId: z.string().min(1, "User ID is required."),
+export const placeOrderWithProductSchema = placeOrderSchema.extend({
   products: z
     .object({
       productId: z.string().min(1, "Product ID is required"),

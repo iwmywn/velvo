@@ -2,27 +2,29 @@
 
 import { createResponse } from "@lib/utils";
 import { connectToDatabase } from "@lib/mongodb";
-import { placeOrderWithIdSchema } from "@/schemas";
+import { placeOrderWithProductSchema } from "@/schemas";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 import verifyRecaptchaToken from "@lib/recaptcha";
+import { verifySession } from "@lib/dal";
 
 export async function POST(req: Request) {
   const data = await req.json();
   const { recaptchaToken, ...userData } = data;
+  const { isAuth, userId } = await verifySession();
 
+  if (!isAuth) return createResponse("User is not authenticated!", 401);
   if (!recaptchaToken) return createResponse("Invalid field!", 400);
 
   const verify = await verifyRecaptchaToken(recaptchaToken);
 
   if (!verify) return createResponse("Captcha challenge failed!", 422);
 
-  const parsedCredentials = placeOrderWithIdSchema.safeParse(userData);
+  const parsedCredentials = placeOrderWithProductSchema.safeParse(userData);
 
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const {
-    userId,
     fullName,
     phone,
     city,

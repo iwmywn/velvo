@@ -28,8 +28,8 @@ export async function decrypt(session: string | undefined = "") {
       audience: audience,
     });
     return payload;
-  } catch (error) {
-    console.log("Failed to verify session", error);
+  } catch {
+    console.log("Failed to verify session");
   }
 }
 

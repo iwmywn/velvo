@@ -13,7 +13,7 @@ export async function PATCH(req: Request) {
   const parsedCredentials = changePasswordScheme.safeParse(data);
   const { isAuth, userId } = await verifySession();
 
-  if (!isAuth) return createResponse("User is not authenticated", 401);
+  if (!isAuth) return createResponse("User is not authenticated!", 401);
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const { confirmPassword, currentPassword } = parsedCredentials.data;

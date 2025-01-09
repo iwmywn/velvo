@@ -15,11 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { placeOrderSchema } from "@/schemas";
 import { addresses } from "@ui/data";
-import {
-  useAuthContext,
-  useCartContext,
-  useUIStateContext,
-} from "@ui/contexts";
+import { useCartContext, useUIStateContext } from "@ui/contexts";
 import { toast } from "react-toastify";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
@@ -47,7 +43,6 @@ export default function Checkout({
   const [selectedDistrict, setSelectedDistrict] = useState<string>("");
   const [districts, setDistricts] = useState<string[]>([]);
   const [wards, setWards] = useState<string[]>([]);
-  const { userId } = useAuthContext();
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const router = useRouter();
@@ -116,7 +111,6 @@ export default function Checkout({
     try {
       const requestData = {
         ...data,
-        userId,
         products: updatedProducts,
         totalPriceCents,
         recaptchaToken,
