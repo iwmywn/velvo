@@ -1,5 +1,5 @@
 {
-  "name": "doan",
+  "name": "velvo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "@hookform/resolvers": "^3.10.0",
     "bcrypt": "^5.1.1",
     "cookie": "^1.0.2",
-    "framer-motion": "^11.16.1",
+    "framer-motion": "^11.16.4",
     "fuse.js": "^7.0.0",
     "jose": "^5.9.6",
     "mongodb": "^6.12.0",
