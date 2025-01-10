@@ -1,21 +1,22 @@
 "use server";
 
-import { connectToDatabase } from "@lib/mongodb";
 import { Category, Product, InvoiceList, Cart } from "@lib/definitions";
 import { ObjectId } from "mongodb";
 import { baseImgUrl } from "@ui/data";
+import {
+  getInvoiceListCollection,
+  getCartCollection,
+  getCategoryCollection,
+  getProductCollection,
+} from "@lib/collections";
 
 export async function fetchCategories(): Promise<Category[]> {
   try {
-    const db = await connectToDatabase();
-    const categories = await db
-      .collection<Category>("categories")
-      .find({})
-      .toArray();
+    const categories = await (await getCategoryCollection()).find({}).toArray();
 
     return categories.map(({ _id, ...rest }) => ({
       ...rest,
-      categoryId: _id.toString(),
+      _id: _id.toString(),
     }));
   } catch (error) {
     console.error("MongoDB fetch error:", error);
@@ -25,15 +26,11 @@ export async function fetchCategories(): Promise<Category[]> {
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    const db = await connectToDatabase();
-    const products = await db
-      .collection<Product>("products")
-      .find({})
-      .toArray();
+    const products = await (await getProductCollection()).find({}).toArray();
 
     return products.map(({ _id, categoryId, images, ...rest }) => ({
       ...rest,
-      productId: _id.toString(),
+      _id: _id.toString(),
       categoryId: categoryId.toString(),
       images: images.map((image) => baseImgUrl + image),
     }));
@@ -49,19 +46,11 @@ export async function fetchCart(
   if (!userId) return null;
 
   try {
-    const db = await connectToDatabase();
-    const cart = await db
-      .collection("carts")
-      .findOne({ userId: new ObjectId(userId) });
+    const cart = await (await getCartCollection()).findOne({ userId });
 
     if (!cart || cart.products.length === 0) return null;
 
-    return cart.products.map(
-      ({ productId, ...rest }: { productId: ObjectId }) => ({
-        ...rest,
-        productId: productId.toString(),
-      }),
-    );
+    return cart.products;
   } catch (error) {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch carts.");
@@ -83,32 +72,18 @@ export async function fetchInvoices(
   if (!userId) return null;
 
   try {
-    const db = await connectToDatabase();
-
-    const invoiceList = await db.collection("invoiceLists").findOne({
-      userId: new ObjectId(userId),
+    const invoiceList = await (
+      await getInvoiceListCollection()
+    ).findOne({
+      userId,
     });
 
     if (!invoiceList || !invoiceList.invoices) return null;
 
-    return invoiceList.invoices.map(
-      ({
-        invoiceId,
-        products,
-        ...rest
-      }: {
-        invoiceId: ObjectId;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        products: any[];
-      }) => ({
-        ...rest,
-        invoiceId: invoiceId.toString(),
-        products: products.map((product) => ({
-          ...product,
-          productId: product.productId.toString(),
-        })),
-      }),
-    );
+    return invoiceList.invoices.map(({ invoiceId, ...rest }) => ({
+      ...rest,
+      invoiceId: invoiceId.toString(),
+    }));
   } catch (error) {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch invoices.");

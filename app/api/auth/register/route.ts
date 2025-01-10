@@ -1,6 +1,5 @@
 "use server";
 
-import { connectToDatabase } from "@lib/mongodb";
 import bcrypt from "bcrypt";
 import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
@@ -8,6 +7,7 @@ import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
 import { avatars } from "@ui/data";
 import verifyRecaptchaToken from "@lib/recaptcha";
+import { getUserCollection } from "@lib/collections";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -28,14 +28,15 @@ export async function POST(req: Request) {
 
   if (existingUser) return createResponse("Email already registered!", 400);
 
-  const [db, hashedPassword] = await Promise.all([
-    connectToDatabase(),
+  const [verificationToken, hashedPassword] = await Promise.all([
+    generateUniqueToken(),
     bcrypt.hash(password, 10),
   ]);
-  const verificationToken = await generateUniqueToken(db);
   const avatar = avatars[Math.floor(Math.random() * 20)];
 
-  const result = await db.collection("users").insertOne({
+  const result = await (
+    await getUserCollection()
+  ).insertOne({
     name: `${firstName} ${lastName}`,
     email,
     password: hashedPassword,

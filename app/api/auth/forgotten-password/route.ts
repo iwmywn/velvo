@@ -1,11 +1,11 @@
 "use server";
 
-import { connectToDatabase } from "@lib/mongodb";
 import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { emailScheme } from "@/schemas";
 import { createResponse } from "@lib/utils";
 import { generateUniqueToken } from "@api/utils";
 import verifyRecaptchaToken from "@lib/recaptcha";
+import { getUserCollection } from "@lib/collections";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
@@ -36,10 +36,11 @@ export async function PATCH(req: Request) {
       429,
     );
 
-  const db = await connectToDatabase();
-  const verificationToken = await generateUniqueToken(db);
+  const verificationToken = await generateUniqueToken();
 
-  const result = await db.collection("users").updateOne(
+  const result = await (
+    await getUserCollection()
+  ).updateOne(
     { email: email },
     {
       $set: { verificationToken: verificationToken },

@@ -1,10 +1,14 @@
 "use server";
 
 import { ObjectId } from "mongodb";
-import { connectToDatabase } from "@lib/mongodb";
-import { User } from "@lib/definitions";
 import nodemailer from "nodemailer";
 import { revalidatePath } from "next/cache";
+import {
+  getCartCollection,
+  getInvoiceListCollection,
+  getProductCollection,
+  getUserCollection,
+} from "@lib/collections";
 
 /**
  *
@@ -13,7 +17,6 @@ import { revalidatePath } from "next/cache";
  */
 export async function getUserByIdentifier(identifier: string) {
   try {
-    const db = await connectToDatabase();
     let query;
 
     if (ObjectId.isValid(identifier)) {
@@ -22,7 +25,7 @@ export async function getUserByIdentifier(identifier: string) {
       query = { email: identifier };
     }
 
-    const user = await db.collection<User>("users").findOne(query);
+    const user = await (await getUserCollection()).findOne(query);
     return user;
   } catch (e) {
     console.error("Failed to fetch user:", e);
@@ -97,20 +100,18 @@ export async function addToCart(
   }
 
   try {
-    const db = await connectToDatabase();
-    const cartCollection = db.collection("carts");
-    const productCollection = db.collection("products");
+    const cartCollection = await getCartCollection();
+    const productCollection = await getProductCollection();
     const product = await productCollection.findOne({
       _id: new ObjectId(productId),
     });
     const remainingQuantity: number = product!.sizes[size];
-    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+    const cart = await cartCollection.findOne({ userId });
     let currentQuantityInCart: number = 0;
 
     if (cart) {
       const existingProduct = cart.products.find(
-        (p: { productId: ObjectId; size: string }) =>
-          p.productId.toString() === productId && p.size === size,
+        (p) => p.productId === productId && p.size === size,
       );
 
       if (existingProduct) {
@@ -125,18 +126,17 @@ export async function addToCart(
     }
 
     const existingProductIndex = cart!.products.findIndex(
-      (p: { productId: ObjectId; size: string }) =>
-        p.productId.toString() === productId && p.size === size,
+      (p) => p.productId === productId && p.size === size,
     );
 
     if (existingProductIndex !== -1) {
       await cartCollection.updateOne(
         {
-          userId: new ObjectId(userId),
+          userId,
           products: {
             $elemMatch: {
-              productId: new ObjectId(productId),
-              size: size,
+              productId,
+              size,
             },
           },
         },
@@ -144,20 +144,19 @@ export async function addToCart(
       );
     } else {
       await cartCollection.updateOne(
-        { userId: new ObjectId(userId) },
+        { userId },
         {
           $push: {
             products: {
               $each: [
                 {
-                  productId: new ObjectId(productId),
+                  productId,
                   quantity,
                   size,
                 },
               ],
               $position: 0,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any,
+            },
           },
         },
       );
@@ -180,34 +179,31 @@ export async function removeFromCart(
   }
 
   try {
-    const db = await connectToDatabase();
-    const cartCollection = db.collection("carts");
-    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+    const cartCollection = await getCartCollection();
+    const cart = await cartCollection.findOne({ userId });
 
     const existingProduct = cart!.products.find(
-      (p: { productId: ObjectId; size: string }) =>
-        p.productId.toString() === productId && p.size === size,
+      (p) => p.productId === productId && p.size === size,
     );
 
-    if (existingProduct.quantity === 1) {
+    if (existingProduct?.quantity === 1) {
       await cartCollection.updateOne(
-        { userId: new ObjectId(userId) },
+        { userId },
         {
           $pull: {
-            products: { productId: new ObjectId(productId), size },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
+            products: { productId, size },
+          },
         },
       );
       return "Product removed from cart.";
     } else {
       await cartCollection.updateOne(
         {
-          userId: new ObjectId(userId),
+          userId,
           products: {
             $elemMatch: {
-              productId: new ObjectId(productId),
-              size: size,
+              productId,
+              size,
             },
           },
         },
@@ -231,16 +227,14 @@ export async function deleteFromCart(
   }
 
   try {
-    const db = await connectToDatabase();
-    const cartCollection = db.collection("carts");
+    const cartCollection = await getCartCollection();
 
     const result = await cartCollection.updateOne(
-      { userId: new ObjectId(userId) },
+      { userId },
       {
         $pull: {
-          products: { productId: new ObjectId(productId), size },
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } as any,
+          products: { productId, size },
+        },
       },
     );
 
@@ -266,24 +260,10 @@ export async function cancelReceiveOrder(
   }
 
   try {
-    const db = await connectToDatabase();
-    const invoiceCollection = db.collection("invoiceLists");
-
-    const transformedProducts = products.map(
-      ({ productId, quantity, size }) => {
-        if (!ObjectId.isValid(productId)) {
-          throw new Error("Invalid product ID in products array!");
-        }
-        return {
-          productId: new ObjectId(productId),
-          quantity,
-          size,
-        };
-      },
-    );
+    const invoiceCollection = await getInvoiceListCollection();
 
     const user = await invoiceCollection.findOne(
-      { userId: new ObjectId(userId) },
+      { userId },
       {
         projection: {
           invoices: { $elemMatch: { invoiceId: new ObjectId(invoiceId) } },
@@ -299,36 +279,32 @@ export async function cancelReceiveOrder(
     fullInvoice.status = status;
 
     await Promise.all([
-      await invoiceCollection.updateOne(
-        { userId: new ObjectId(userId) },
+      invoiceCollection.updateOne(
+        { userId },
         {
           $pull: {
             invoices: { invoiceId: new ObjectId(invoiceId) },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
+          },
         },
       ),
-      await invoiceCollection.updateOne(
-        { userId: new ObjectId(userId) },
+      invoiceCollection.updateOne(
+        { userId },
         {
           $push: {
             invoices: {
               $each: [fullInvoice],
               $position: 0,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            } as any,
+            },
           },
         },
       ),
       ...(status === "cancelled"
-        ? transformedProducts.map(({ productId, quantity, size }) => {
+        ? products.map(async ({ productId, quantity, size }) => {
             const sizeField = `sizes.${size}`;
-            return db
-              .collection("products")
-              .updateOne(
-                { _id: new ObjectId(productId) },
-                { $inc: { [sizeField]: quantity } },
-              );
+            return (await getCartCollection()).updateOne(
+              { _id: new ObjectId(productId) },
+              { $inc: { [sizeField]: quantity } },
+            );
           })
         : []),
     ]);

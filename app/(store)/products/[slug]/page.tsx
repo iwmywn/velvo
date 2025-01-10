@@ -33,13 +33,13 @@ export default async function ProductPage({
   if (!product) return <NotFound />;
 
   const category = fetchedCategories.find(
-    (cat) => cat.categoryId === product.categoryId,
+    (cat) => cat._id === product.categoryId,
   );
 
   if (!category) return <NotFound />;
 
   const similarProducts = fetchedProducts.filter(
-    (p) => p.categoryId === category.categoryId && p.slug !== productSlug,
+    (p) => p.categoryId === category._id && p.slug !== productSlug,
   );
   const breadcrumbs = [
     { label: "Home", href: "/" },

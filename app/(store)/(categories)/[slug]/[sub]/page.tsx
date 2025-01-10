@@ -46,7 +46,7 @@ export default async function CategoryPage({
 
   const categoryId = fetchedCategories.find(
     (cat) => cat.name === capitalizeFirstLetter(categoryName),
-  )?.categoryId;
+  )?._id;
 
   const productsByCategory = fetchedProducts.filter(
     (p) =>

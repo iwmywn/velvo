@@ -1,34 +1,34 @@
 "use server";
 
-import { connectToDatabase } from "@lib/mongodb";
+import {
+  getUserCollection,
+  getCartCollection,
+  getInvoiceListCollection,
+} from "@lib/collections";
 import { createResponse } from "@lib/utils";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
-
-  // if (!token) return createResponse("Invalid token!", 400);
-
-  const db = await connectToDatabase();
-  const user = await db
-    .collection("users")
-    .findOne({ verificationToken: token });
+  const user = await (
+    await getUserCollection()
+  ).findOne({ verificationToken: token! });
 
   if (!user)
     return createResponse("Token expired or email already verified!", 404);
 
   try {
     const [, , userUpdateResult] = await Promise.all([
-      db.collection("carts").insertOne({
-        userId: user._id,
+      (await getCartCollection()).insertOne({
+        userId: user._id.toString(),
         products: [],
       }),
-      db.collection("invoiceLists").insertOne({
-        userId: user._id,
+      (await getInvoiceListCollection()).insertOne({
+        userId: user._id.toString(),
         invoices: [],
       }),
-      db.collection("users").updateOne(
-        { verificationToken: token },
+      (await getUserCollection()).updateOne(
+        { verificationToken: token! },
         {
           $set: { isVerified: true, updatedAt: new Date() },
           $unset: { verificationToken: "", resendVerification: "" },

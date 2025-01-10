@@ -38,30 +38,33 @@ export async function POST(req: Request) {
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
 
-  const transformedProducts = products.map(
-    ({ productId, quantity, size, discountedPriceDetails }) => {
-      if (!ObjectId.isValid(productId)) {
-        throw new Error("Invalid product ID in products array!");
-      }
-      return {
-        productId: new ObjectId(productId),
-        quantity,
-        size,
-        discountedPriceDetails: [
-          discountedPriceDetails[0],
-          discountedPriceDetails[1],
-        ],
-      };
-    },
-  );
+  // const transformedProducts = products.map(
+  //   ({ productId, quantity, size, discountedPriceDetails }) => {
+  //     if (!ObjectId.isValid(productId)) {
+  //       throw new Error("Invalid product ID in products array!");
+  //     }
+  //     return {
+  //       productId: new ObjectId(productId),
+  //       quantity,
+  //       size,
+  //       discountedPriceDetails: [
+  //         discountedPriceDetails[0],
+  //         discountedPriceDetails[1],
+  //       ],
+  //     };
+  //   },
+  // );
 
   const db = await connectToDatabase();
 
-  for (const { productId, quantity, size } of transformedProducts) {
+  for (const { productId, quantity, size } of products) {
     const sizeField = `sizes.${size}`;
     const product = await db
       .collection("products")
-      .findOne({ _id: productId }, { projection: { name: 1, [sizeField]: 1 } });
+      .findOne(
+        { _id: new ObjectId(productId) },
+        { projection: { name: 1, [sizeField]: 1 } },
+      );
 
     if (!product || (product.sizes?.[size] ?? 0) < quantity) {
       return createResponse(
@@ -85,7 +88,7 @@ export async function POST(req: Request) {
                 address: `${address}, ${ward}, ${district}, ${city}`,
                 status: "waiting",
                 totalPriceCents,
-                products: transformedProducts,
+                products: products,
                 orderDate: new Date(),
               },
             ],
@@ -98,11 +101,14 @@ export async function POST(req: Request) {
     db
       .collection("carts")
       .updateOne({ userId: new ObjectId(userId) }, { $set: { products: [] } }),
-    ...transformedProducts.map(async ({ productId, quantity, size }) => {
+    ...products.map(async ({ productId, quantity, size }) => {
       const sizeField = `sizes.${size}`;
       await db
         .collection("products")
-        .updateOne({ _id: productId }, { $inc: { [sizeField]: -quantity } });
+        .updateOne(
+          { _id: new ObjectId(productId) },
+          { $inc: { [sizeField]: -quantity } },
+        );
     }),
   ]);
 

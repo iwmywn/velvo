@@ -86,7 +86,7 @@ export default function Home() {
           }}
         >
           {lastTenProducts.map((product) => (
-            <SwiperSlide key={product.productId.toString()}>
+            <SwiperSlide key={product._id}>
               <ProductCard {...product} />
             </SwiperSlide>
           ))}

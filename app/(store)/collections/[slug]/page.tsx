@@ -32,7 +32,7 @@ export default async function CollectionsPage({
 
   const categoryId = fetchedCategories.find(
     (cat) => cat.name === capitalizeFirstLetter(collectionName),
-  )?.categoryId;
+  )?._id;
 
   const productsByCollection = fetchedProducts.filter(
     (p) => p.categoryId === categoryId,

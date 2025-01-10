@@ -1,16 +1,15 @@
 "use server";
 
-import { connectToDatabase } from "@lib/mongodb";
 import { createResponse } from "@lib/utils";
+import { getUserCollection } from "@lib/collections";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
 
-  const db = await connectToDatabase();
-  const user = await db
-    .collection("users")
-    .findOne({ verificationToken: token });
+  const user = await (
+    await getUserCollection()
+  ).findOne({ verificationToken: token! });
 
   if (!user) return createResponse("Token expired!", 404);
 

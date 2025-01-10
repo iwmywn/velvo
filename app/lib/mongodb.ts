@@ -1,4 +1,11 @@
-import { MongoClient, MongoClientOptions } from "mongodb";
+import {
+  Collection,
+  MongoClient,
+  MongoClientOptions,
+  Document,
+  WithId,
+  OptionalId,
+} from "mongodb";
 
 if (!process.env.MONGODB_URI) {
   throw new Error('Invalid/Missing environment variable: "MONGODB_URI"');
@@ -18,7 +25,7 @@ if (!globalThis._mongoClientPromise) {
 
 const clientPromise: Promise<MongoClient> = globalThis._mongoClientPromise;
 
-export async function connectToDatabase() {
+async function connectToDatabase() {
   const dbName = process.env.DB_NAME;
   if (!dbName) {
     throw new Error("Environment variable DB_NAME is not set");
@@ -26,6 +33,13 @@ export async function connectToDatabase() {
 
   const client = await clientPromise;
   return client.db(dbName);
+}
+
+export async function collection<T>(
+  collectionName: string,
+): Promise<Collection<OptionalId<T>>> {
+  const db = await connectToDatabase();
+  return db.collection<OptionalId<T>>(collectionName);
 }
 
 export default clientPromise;

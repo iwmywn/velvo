@@ -279,7 +279,7 @@ export default function OrderList({
                     {combinedinvoiceProducts!.map(
                       (
                         {
-                          productId,
+                          _id: productId,
                           name,
                           images,
                           description,

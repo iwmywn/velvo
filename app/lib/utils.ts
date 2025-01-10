@@ -79,7 +79,7 @@ export function getTotalPriceCents(
 
 export function transformProducts(
   products: {
-    productId: string;
+    _id: string;
     quantity: number;
     size: string;
     priceCents: number;
@@ -92,7 +92,7 @@ export function transformProducts(
   discountedPriceDetails: string[];
 }[] {
   return products.map((product) => ({
-    productId: product.productId,
+    productId: product._id,
     quantity: product.quantity,
     size: product.size,
     discountedPriceDetails: [
@@ -112,9 +112,7 @@ export function transformCartProducts(
 ): (Product & { quantity: number; size: string })[] | null {
   if (!cartProducts || !products) return null;
 
-  const productMap = new Map(
-    products.map((product) => [product.productId, product]),
-  );
+  const productMap = new Map(products.map((product) => [product._id, product]));
 
   return cartProducts
     .map((cartItem) => {
@@ -144,9 +142,7 @@ export function transformInvoiceProducts(
     return null;
   }
 
-  const productMap = new Map(
-    products.map((product) => [product.productId, product]),
-  );
+  const productMap = new Map(products.map((product) => [product._id, product]));
 
   return invoiceProducts
     .map((invoiceProduct) => {
