@@ -36,7 +36,7 @@ const ActionButton = ({
 );
 
 export default function ProductRow({
-  productId,
+  _id: productId,
   name,
   priceCents,
   images,

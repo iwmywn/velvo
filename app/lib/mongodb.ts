@@ -2,8 +2,6 @@ import {
   Collection,
   MongoClient,
   MongoClientOptions,
-  Document,
-  WithId,
   OptionalId,
 } from "mongodb";
 

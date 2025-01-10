@@ -1,4 +1,7 @@
-export type UserBase = {
+import { ObjectId } from "mongodb";
+
+type BaseUser<T> = {
+  _id: T;
   name: string;
   email: string;
   password: string;
@@ -15,45 +18,53 @@ export type UserBase = {
   updatedAt?: Date;
 };
 
-export type InvoiceBase = {
-  recipient: string;
-  phone: string;
-  address: string;
-  status: "waiting" | "processing" | "completed" | "cancelled";
-  totalPriceCents: string;
-  products: {
-    productId: string;
-    quantity: number;
-    size: string;
-    /**
-     * [0] - Price after discount (cents)
-     * [1] - Total price after discount (cents, including quantity)
-     */
-    discountedPriceDetails: [string, string];
-  }[];
-  orderDate: Date;
-  receivedDate: Date;
-};
-
-export type CartBase = {
-  userId: string;
-  products: {
-    productId: string;
-    quantity: number;
-    size: string;
+type BaseInvoiceList<T> = {
+  _id: T;
+  userId: T;
+  invoices: {
+    invoiceId: T;
+    recipient: string;
+    phone: string;
+    address: string;
+    status: "waiting" | "processing" | "completed" | "cancelled";
+    totalPriceCents: string;
+    products: {
+      productId: T;
+      quantity: number;
+      size: string;
+      /**
+       * [0] - Price after discount (cents)
+       * [1] - Total price after discount (cents, including quantity)
+       */
+      discountedPriceDetails: [string, string];
+    }[];
+    orderDate: Date;
+    receivedDate?: Date;
   }[];
 };
 
-export type CategoryBase = {
+type BaseCart<T> = {
+  _id: T;
+  userId: T;
+  products: {
+    productId: T;
+    quantity: number;
+    size: string;
+  }[];
+};
+
+type BaseCategory<T> = {
+  _id: T;
   name: string;
 };
 
-export type ProductBase = {
+type BaseProduct<T> = {
+  _id: T;
   name: string;
   priceCents: number;
   images: string[];
   description: string;
-  categoryId: string;
+  categoryId: T;
   saleOff: number;
   slug: string;
   customerGroup: "men" | "women" | "kids";
@@ -69,47 +80,17 @@ export type SessionPayload = {
   expires: Date;
 };
 
-export type User = UserBase & { _id: string };
-// export type DBUser = UserBase & {
-//   _id?: ObjectId;
-// };
+export type User = BaseUser<string>;
+export type DBUser = BaseUser<ObjectId>;
 
-export type InvoiceList = {
-  _id: string;
-  userId: string;
-  invoices: Array<
-    {
-      invoiceId: string;
-    } & InvoiceBase
-  >;
-};
-// export type DBInvoiceList = {
-//   _id?: ObjectId;
-//   userId: string;
-//   invoices: Array<
-//     {
-//       invoiceId: ObjectId;
-//     } & InvoiceBase
-//   >;
-// };
+export type InvoiceList = BaseInvoiceList<string>;
+export type DBInvoiceList = BaseInvoiceList<ObjectId>;
 
-export type Cart = CartBase & {
-  _id: string;
-};
-// export type DBCart = CartBase & {
-//   _id?: ObjectId;
-// };
+export type Cart = BaseCart<string>;
+export type DBCart = BaseCart<ObjectId>;
 
-export type Category = CategoryBase & {
-  _id: string;
-};
-// export type DBCategory = CategoryBase & {
-//   _id?: ObjectId;
-// };
+export type Category = BaseCategory<string>;
+export type DBCategory = BaseCategory<ObjectId>;
 
-export type Product = ProductBase & {
-  _id: string;
-};
-// export type DBProduct = ProductBase & {
-//   _id?: ObjectId;
-// };
+export type Product = BaseProduct<string>;
+export type DBProduct = BaseProduct<ObjectId>;

@@ -1,12 +1,11 @@
 "use server";
 
 import { changePasswordScheme } from "@/schemas";
-import { connectToDatabase } from "@lib/mongodb";
 import { createResponse } from "@lib/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import { User } from "@lib/definitions";
 import { verifySession } from "@lib/dal";
+import { getUserCollection } from "@lib/collections";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
@@ -21,10 +20,10 @@ export async function PATCH(req: Request) {
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
 
-  const db = await connectToDatabase();
-  const existingUser = await db
-    .collection<User>("users")
-    .findOne({ _id: new ObjectId(userId) });
+  const userCollection = await getUserCollection();
+  const existingUser = await userCollection.findOne({
+    _id: new ObjectId(userId),
+  });
 
   if (!existingUser) return createResponse("User not found!", 404);
 
@@ -38,12 +37,10 @@ export async function PATCH(req: Request) {
 
   const hashedPassword = await bcrypt.hash(confirmPassword, 10);
 
-  const result = await db
-    .collection("users")
-    .updateOne(
-      { _id: new ObjectId(userId) },
-      { $set: { password: hashedPassword, updatedAt: new Date() } },
-    );
+  const result = await userCollection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: { password: hashedPassword, updatedAt: new Date() } },
+  );
 
   if (result.modifiedCount === 0)
     return createResponse("Password update failed! Try again later.", 500);

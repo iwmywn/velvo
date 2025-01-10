@@ -20,11 +20,11 @@ export async function GET(req: Request) {
   try {
     const [, , userUpdateResult] = await Promise.all([
       (await getCartCollection()).insertOne({
-        userId: user._id.toString(),
+        userId: user._id,
         products: [],
       }),
       (await getInvoiceListCollection()).insertOne({
-        userId: user._id.toString(),
+        userId: user._id,
         invoices: [],
       }),
       (await getUserCollection()).updateOne(

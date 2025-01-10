@@ -1,12 +1,15 @@
 "use server";
 
 import { deleteAccountScheme } from "@/schemas";
-import { connectToDatabase } from "@lib/mongodb";
 import { createResponse } from "@lib/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import { User } from "@lib/definitions";
 import { verifySession } from "@lib/dal";
+import {
+  getCartCollection,
+  getInvoiceListCollection,
+  getUserCollection,
+} from "@lib/collections";
 
 export async function DELETE(req: Request) {
   const data = await req.json();
@@ -21,10 +24,15 @@ export async function DELETE(req: Request) {
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
 
-  const db = await connectToDatabase();
-  const existingUser = await db
-    .collection<User>("users")
-    .findOne({ _id: new ObjectId(userId) });
+  const [userCollection, cartCollection, invoiceListCollection] =
+    await Promise.all([
+      getUserCollection(),
+      getCartCollection(),
+      getInvoiceListCollection(),
+    ]);
+  const existingUser = await userCollection.findOne({
+    _id: new ObjectId(userId),
+  });
 
   if (!existingUser) return createResponse("User not found!", 404);
 
@@ -33,9 +41,9 @@ export async function DELETE(req: Request) {
   if (!isMatchPassword) return createResponse("Password is not correct", 400);
 
   await Promise.all([
-    db.collection("users").deleteOne({ _id: new ObjectId(userId) }),
-    db.collection("carts").deleteOne({ userId: new ObjectId(userId) }),
-    db.collection("invoiceLists").deleteOne({ userId: new ObjectId(userId) }),
+    userCollection.deleteOne({ _id: new ObjectId(userId) }),
+    cartCollection.deleteOne({ userId: new ObjectId(userId) }),
+    invoiceListCollection.deleteOne({ userId: new ObjectId(userId) }),
   ]);
 
   return createResponse("Good bye.", 201);

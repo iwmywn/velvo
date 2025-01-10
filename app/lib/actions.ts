@@ -106,12 +106,12 @@ export async function addToCart(
       _id: new ObjectId(productId),
     });
     const remainingQuantity: number = product!.sizes[size];
-    const cart = await cartCollection.findOne({ userId });
+    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
     let currentQuantityInCart: number = 0;
 
     if (cart) {
       const existingProduct = cart.products.find(
-        (p) => p.productId === productId && p.size === size,
+        (p) => p.productId.toString() === productId && p.size === size,
       );
 
       if (existingProduct) {
@@ -126,16 +126,16 @@ export async function addToCart(
     }
 
     const existingProductIndex = cart!.products.findIndex(
-      (p) => p.productId === productId && p.size === size,
+      (p) => p.productId.toString() === productId && p.size === size,
     );
 
     if (existingProductIndex !== -1) {
       await cartCollection.updateOne(
         {
-          userId,
+          userId: new ObjectId(userId),
           products: {
             $elemMatch: {
-              productId,
+              productId: new ObjectId(productId),
               size,
             },
           },
@@ -144,13 +144,13 @@ export async function addToCart(
       );
     } else {
       await cartCollection.updateOne(
-        { userId },
+        { userId: new ObjectId(userId) },
         {
           $push: {
             products: {
               $each: [
                 {
-                  productId,
+                  productId: new ObjectId(productId),
                   quantity,
                   size,
                 },
@@ -180,18 +180,18 @@ export async function removeFromCart(
 
   try {
     const cartCollection = await getCartCollection();
-    const cart = await cartCollection.findOne({ userId });
+    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
 
     const existingProduct = cart!.products.find(
-      (p) => p.productId === productId && p.size === size,
+      (p) => p.productId.toString() === productId && p.size === size,
     );
 
     if (existingProduct?.quantity === 1) {
       await cartCollection.updateOne(
-        { userId },
+        { userId: new ObjectId(userId) },
         {
           $pull: {
-            products: { productId, size },
+            products: { productId: new ObjectId(productId), size },
           },
         },
       );
@@ -199,10 +199,10 @@ export async function removeFromCart(
     } else {
       await cartCollection.updateOne(
         {
-          userId,
+          userId: new ObjectId(userId),
           products: {
             $elemMatch: {
-              productId,
+              productId: new ObjectId(productId),
               size,
             },
           },
@@ -230,10 +230,10 @@ export async function deleteFromCart(
     const cartCollection = await getCartCollection();
 
     const result = await cartCollection.updateOne(
-      { userId },
+      { userId: new ObjectId(userId) },
       {
         $pull: {
-          products: { productId, size },
+          products: { productId: new ObjectId(productId), size },
         },
       },
     );
@@ -263,7 +263,7 @@ export async function cancelReceiveOrder(
     const invoiceCollection = await getInvoiceListCollection();
 
     const user = await invoiceCollection.findOne(
-      { userId },
+      { userId: new ObjectId(userId) },
       {
         projection: {
           invoices: { $elemMatch: { invoiceId: new ObjectId(invoiceId) } },
@@ -280,7 +280,7 @@ export async function cancelReceiveOrder(
 
     await Promise.all([
       invoiceCollection.updateOne(
-        { userId },
+        { userId: new ObjectId(userId) },
         {
           $pull: {
             invoices: { invoiceId: new ObjectId(invoiceId) },
@@ -288,7 +288,7 @@ export async function cancelReceiveOrder(
         },
       ),
       invoiceCollection.updateOne(
-        { userId },
+        { userId: new ObjectId(userId) },
         {
           $push: {
             invoices: {

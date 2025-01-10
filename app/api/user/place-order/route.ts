@@ -1,12 +1,16 @@
 "use server";
 
 import { createResponse } from "@lib/utils";
-import { connectToDatabase } from "@lib/mongodb";
 import { placeOrderWithProductSchema } from "@/schemas";
 import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 import verifyRecaptchaToken from "@lib/recaptcha";
 import { verifySession } from "@lib/dal";
+import {
+  getCartCollection,
+  getInvoiceListCollection,
+  getProductCollection,
+} from "@lib/collections";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -38,33 +42,36 @@ export async function POST(req: Request) {
   if (!userId || !ObjectId.isValid(userId))
     return createResponse("User id is not valid!", 400);
 
-  // const transformedProducts = products.map(
-  //   ({ productId, quantity, size, discountedPriceDetails }) => {
-  //     if (!ObjectId.isValid(productId)) {
-  //       throw new Error("Invalid product ID in products array!");
-  //     }
-  //     return {
-  //       productId: new ObjectId(productId),
-  //       quantity,
-  //       size,
-  //       discountedPriceDetails: [
-  //         discountedPriceDetails[0],
-  //         discountedPriceDetails[1],
-  //       ],
-  //     };
-  //   },
-  // );
+  const transformedProducts = products.map(
+    ({ productId, quantity, size, discountedPriceDetails }) => {
+      if (!ObjectId.isValid(productId)) {
+        throw new Error("Invalid product ID in products array!");
+      }
+      return {
+        productId: new ObjectId(productId),
+        quantity,
+        size,
+        discountedPriceDetails: [
+          discountedPriceDetails[0],
+          discountedPriceDetails[1],
+        ] as [string, string],
+      };
+    },
+  );
 
-  const db = await connectToDatabase();
+  const [productCollection, invoiceListCollection, cartCollection] =
+    await Promise.all([
+      getProductCollection(),
+      getInvoiceListCollection(),
+      getCartCollection(),
+    ]);
 
-  for (const { productId, quantity, size } of products) {
+  for (const { productId, quantity, size } of transformedProducts) {
     const sizeField = `sizes.${size}`;
-    const product = await db
-      .collection("products")
-      .findOne(
-        { _id: new ObjectId(productId) },
-        { projection: { name: 1, [sizeField]: 1 } },
-      );
+    const product = await productCollection.findOne(
+      { _id: productId },
+      { projection: { name: 1, [sizeField]: 1 } },
+    );
 
     if (!product || (product.sizes?.[size] ?? 0) < quantity) {
       return createResponse(
@@ -75,7 +82,7 @@ export async function POST(req: Request) {
   }
 
   await Promise.all([
-    db.collection("invoiceLists").updateOne(
+    invoiceListCollection.updateOne(
       { userId: new ObjectId(userId) },
       {
         $push: {
@@ -88,27 +95,25 @@ export async function POST(req: Request) {
                 address: `${address}, ${ward}, ${district}, ${city}`,
                 status: "waiting",
                 totalPriceCents,
-                products: products,
+                products: transformedProducts,
                 orderDate: new Date(),
               },
             ],
             $position: 0,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
+          },
         },
       },
     ),
-    db
-      .collection("carts")
-      .updateOne({ userId: new ObjectId(userId) }, { $set: { products: [] } }),
+    cartCollection.updateOne(
+      { userId: new ObjectId(userId) },
+      { $set: { products: [] } },
+    ),
     ...products.map(async ({ productId, quantity, size }) => {
       const sizeField = `sizes.${size}`;
-      await db
-        .collection("products")
-        .updateOne(
-          { _id: new ObjectId(productId) },
-          { $inc: { [sizeField]: -quantity } },
-        );
+      await productCollection.updateOne(
+        { _id: new ObjectId(productId) },
+        { $inc: { [sizeField]: -quantity } },
+      );
     }),
   ]);
 

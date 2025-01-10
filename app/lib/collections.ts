@@ -1,36 +1,28 @@
 import { collection } from "@lib/mongodb";
 import {
-  UserBase,
-  InvoiceBase,
-  CartBase,
-  CategoryBase,
-  ProductBase,
+  DBUser,
+  DBInvoiceList,
+  DBCart,
+  DBCategory,
+  DBProduct,
 } from "@lib/definitions";
-import { ObjectId } from "mongodb";
 
 export async function getUserCollection() {
-  return await collection<UserBase>("users");
+  return await collection<DBUser>("users");
 }
 
 export async function getInvoiceListCollection() {
-  return await collection<{
-    userId: string;
-    invoices: Array<
-      {
-        invoiceId: ObjectId;
-      } & InvoiceBase
-    >;
-  }>("invoiceLists");
+  return await collection<DBInvoiceList>("invoiceLists");
 }
 
 export async function getCartCollection() {
-  return await collection<CartBase>("carts");
+  return await collection<DBCart>("carts");
 }
 
 export async function getCategoryCollection() {
-  return await collection<CategoryBase>("categories");
+  return await collection<DBCategory>("categories");
 }
 
 export async function getProductCollection() {
-  return await collection<ProductBase>("products");
+  return await collection<DBProduct>("products");
 }

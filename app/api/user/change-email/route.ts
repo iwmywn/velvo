@@ -1,13 +1,12 @@
 "use server";
 
 import { changeEmailScheme } from "@/schemas";
-import { connectToDatabase } from "@lib/mongodb";
 import { createResponse } from "@lib/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import { User } from "@lib/definitions";
 import { getUserByIdentifier } from "@lib/actions";
 import { verifySession } from "@lib/dal";
+import { getUserCollection } from "@lib/collections";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
@@ -27,10 +26,10 @@ export async function PATCH(req: Request) {
   if (existingEmail)
     return createResponse("This email is already in use!", 400);
 
-  const db = await connectToDatabase();
-  const existingUser = await db
-    .collection<User>("users")
-    .findOne({ _id: new ObjectId(userId) });
+  const userCollection = await getUserCollection();
+  const existingUser = await userCollection.findOne({
+    _id: new ObjectId(userId),
+  });
 
   if (!existingUser) return createResponse("User not found!", 404);
 
@@ -38,12 +37,10 @@ export async function PATCH(req: Request) {
 
   if (!isMatchPassword) return createResponse("Password is not correct", 400);
 
-  const result = await db
-    .collection("users")
-    .updateOne(
-      { _id: new ObjectId(userId) },
-      { $set: { email: confirmEmail, updatedAt: new Date() } },
-    );
+  const result = await userCollection.updateOne(
+    { _id: new ObjectId(userId) },
+    { $set: { email: confirmEmail, updatedAt: new Date() } },
+  );
 
   if (result.modifiedCount === 0)
     return createResponse("Email update failed! Try again later.", 500);
