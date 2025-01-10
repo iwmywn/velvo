@@ -23,7 +23,7 @@ import ExpandableSections from "@ui/expandable";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
-    productId,
+    _id: productId,
     name,
     priceCents,
     images,

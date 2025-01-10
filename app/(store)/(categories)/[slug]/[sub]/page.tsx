@@ -76,19 +76,15 @@ export default async function CategoryPage({
 }
 
 export async function generateStaticParams() {
-  const params = [];
-
   const categoryItems = [
     { group: "men", items: menItems },
     { group: "women", items: womenItems },
     { group: "kids", items: kidsItems },
   ];
 
-  for (const { group, items } of categoryItems) {
-    for (const href of items) {
-      params.push({ slug: group, sub: href });
-    }
-  }
+  const params = categoryItems.flatMap(({ group, items }) =>
+    items.map((href) => ({ slug: group, sub: href })),
+  );
 
   return params;
 }
