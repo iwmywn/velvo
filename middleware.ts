@@ -14,15 +14,15 @@ export async function middleware(req: NextRequest) {
   if (siteConfig.maintenanceMode && path !== "/")
     return NextResponse.redirect(new URL("/", nextUrl));
 
-  const session = await decrypt(cookie);
+  const payload = await decrypt(cookie);
 
-  if (authRoutes.some((route) => path.startsWith(route)) && session?.userId) {
+  if (authRoutes.some((route) => path.startsWith(route)) && payload?.userId) {
     return NextResponse.redirect(new URL(DEFAULT_SIGNIN_REDIRECT, nextUrl));
   }
 
   if (
     protectedRoutes.some((route) => path.startsWith(route)) &&
-    !session?.userId
+    !payload?.userId
   ) {
     const redirectUrl = new URL("/user/signin", nextUrl);
     redirectUrl.searchParams.set("next", path);

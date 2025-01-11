@@ -27,9 +27,10 @@ export async function decrypt(session: string | undefined = "") {
       issuer: issuer,
       audience: audience,
     });
-    return payload;
+    return payload as SessionPayload;
   } catch {
     console.log("Failed to verify session");
+    return null;
   }
 }
 

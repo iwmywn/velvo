@@ -5,16 +5,16 @@ import { decrypt } from "@lib/session";
 import { cache } from "react";
 
 export const verifySession = cache(async () => {
-  const cookie = (await cookies()).get("session")?.value;
-  const session = await decrypt(cookie);
+  const session = (await cookies()).get("session")?.value;
+  const payload = await decrypt(session);
 
-  if (!session?.userId) {
+  if (!payload) {
     return { isAuth: false };
   }
 
   return {
     isAuth: true,
-    userId: session.userId.toString(),
-    image: session.image,
+    userId: payload.userId,
+    image: payload.image,
   };
 });
