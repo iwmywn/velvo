@@ -11,7 +11,6 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { addToCart, cancelReceiveOrder } from "@lib/actions";
 import {
-  useAuthContext,
   useCartContext,
   useProductContext,
   useUIStateContext,
@@ -32,7 +31,6 @@ export default function OrderList({
   orderStatus: ("waiting" | "processing" | "completed" | "cancelled")[];
   emptyState: "toShipNReceive" | "cancelled" | "completed";
 }) {
-  const { userId } = useAuthContext();
   const router = useRouter();
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {},
@@ -95,21 +93,11 @@ export default function OrderList({
     }
 
     const statusUrl = status === "processing" ? "completed" : "cancelled";
-    const convertedProducts = products.map((p) => ({
-      productId: p.productId,
-      quantity: p.quantity,
-      size: p.size,
-    }));
 
     setButtonLoading(invoiceId, true);
     setIsLoadingGlobal(true);
     try {
-      const message = await cancelReceiveOrder(
-        userId,
-        invoiceId,
-        convertedProducts,
-        statusUrl,
-      );
+      const message = await cancelReceiveOrder(invoiceId, products, statusUrl);
 
       if (message === "Done.") {
         await refreshCart(false, false, true);
@@ -140,7 +128,7 @@ export default function OrderList({
     setIsLoadingGlobal(true);
 
     try {
-      const message = await addToCart(productId, userId, size);
+      const message = await addToCart(productId, size);
 
       if (message === "Done.") {
         await refreshCart(true, true, false);

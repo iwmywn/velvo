@@ -75,12 +75,7 @@ export default function ProductDetails({ product }: { product: Product }) {
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      const message = await addToCart(
-        productId,
-        userId,
-        selectedSize!,
-        quantity,
-      );
+      const message = await addToCart(productId, selectedSize!, quantity);
 
       if (message === "Done.") {
         await refreshCart(true, true, false);

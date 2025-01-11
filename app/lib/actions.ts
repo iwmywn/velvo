@@ -9,6 +9,8 @@ import {
   getProductCollection,
   getUserCollection,
 } from "@lib/collections";
+import { InvoiceList } from "@lib/definitions";
+import { verifySession } from "@lib/dal";
 
 /**
  *
@@ -91,10 +93,11 @@ export async function sendEmail(
 
 export async function addToCart(
   productId: string,
-  userId: string | undefined,
   size: string,
   quantity: number = 1,
 ): Promise<string> {
+  const { userId } = await verifySession();
+
   if (!userId || !productId) {
     return "User ID or Product ID is missing!";
   }
@@ -171,9 +174,10 @@ export async function addToCart(
 
 export async function removeFromCart(
   productId: string,
-  userId: string | undefined,
   size: string,
 ): Promise<string> {
+  const { userId } = await verifySession();
+
   if (!userId || !productId) {
     return "User ID or Product ID is missing!";
   }
@@ -219,9 +223,10 @@ export async function removeFromCart(
 
 export async function deleteFromCart(
   productId: string,
-  userId: string | undefined,
   size: string,
 ): Promise<string> {
+  const { userId } = await verifySession();
+
   if (!userId || !productId) {
     return "User ID or Product ID is missing!";
   }
@@ -250,11 +255,12 @@ export async function deleteFromCart(
 }
 
 export async function cancelReceiveOrder(
-  userId: string | undefined,
   invoiceId: string,
-  products: { productId: string; quantity: number; size: string }[],
+  products: InvoiceList["invoices"][0]["products"],
   status: "completed" | "cancelled",
 ): Promise<string> {
+  const { userId } = await verifySession();
+
   if (!userId || !invoiceId) {
     return "User ID or Product ID is missing!";
   }
@@ -301,7 +307,7 @@ export async function cancelReceiveOrder(
       ...(status === "cancelled"
         ? products.map(async ({ productId, quantity, size }) => {
             const sizeField = `sizes.${size}`;
-            return (await getCartCollection()).updateOne(
+            return (await getProductCollection()).updateOne(
               { _id: new ObjectId(productId) },
               { $inc: { [sizeField]: quantity } },
             );

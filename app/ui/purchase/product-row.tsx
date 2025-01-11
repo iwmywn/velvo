@@ -6,7 +6,7 @@ import Button from "@ui/button";
 import ImageTag from "@ui/image";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
-import { useCartContext, useAuthContext } from "@ui/contexts";
+import { useCartContext } from "@ui/contexts";
 import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -48,7 +48,6 @@ export default function ProductRow({
 }: Product & { quantity: number; size: string }) {
   const formattedPrice = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
   const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
-  const { userId } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const { refreshCart } = useCartContext();
@@ -77,7 +76,7 @@ export default function ProductRow({
 
   const handleAddToCart = () => {
     handleCartOperation(
-      () => addToCart(productId, userId, size),
+      () => addToCart(productId, size),
       ["Done."],
       setIsLoading,
     );
@@ -85,7 +84,7 @@ export default function ProductRow({
 
   const handleRemoveFromCart = () => {
     handleCartOperation(
-      () => removeFromCart(productId, userId, size),
+      () => removeFromCart(productId, size),
       ["Product removed from cart.", "Product quantity decreased."],
       setIsLoading,
     );
@@ -93,7 +92,7 @@ export default function ProductRow({
 
   const handleDeleteFromCart = () => {
     handleCartOperation(
-      () => deleteFromCart(productId, userId, size),
+      () => deleteFromCart(productId, size),
       ["Product removed from cart!"],
       setIsDeleting,
     );
