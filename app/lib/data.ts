@@ -1,14 +1,29 @@
 "use server";
 
-import { Category, Product, InvoiceList, Cart } from "@lib/definitions";
+import { Category, Product, InvoiceList, Cart, Avatar } from "@lib/definitions";
 import { baseImgUrl } from "@ui/data";
 import {
   getInvoiceListCollection,
   getCartCollection,
   getCategoryCollection,
   getProductCollection,
+  getAvatarCollection,
 } from "@lib/collections";
 import { ObjectId } from "mongodb";
+
+export async function fetchAvatars(): Promise<Avatar[]> {
+  try {
+    const avatars = await (await getAvatarCollection()).find({}).toArray();
+
+    return avatars.map(({ _id, ...rest }) => ({
+      ...rest,
+      _id: _id.toString(),
+    }));
+  } catch (error) {
+    console.error("MongoDB fetch error:", error);
+    throw new Error("Failed to fetch avatars.");
+  }
+}
 
 export async function fetchCategories(): Promise<Category[]> {
   try {

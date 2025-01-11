@@ -5,9 +5,9 @@ import { getUserByIdentifier, sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
 import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
-import { avatars } from "@ui/data";
 import verifyRecaptchaToken from "@lib/recaptcha";
 import { getUserCollection } from "@lib/collections";
+import { fetchAvatars } from "@lib/data";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -28,11 +28,12 @@ export async function POST(req: Request) {
 
   if (existingUser) return createResponse("Email already registered!", 400);
 
-  const [verificationToken, hashedPassword] = await Promise.all([
+  const [verificationToken, hashedPassword, avatars] = await Promise.all([
     generateUniqueToken(),
     bcrypt.hash(password, 10),
+    fetchAvatars(),
   ]);
-  const avatar = avatars[Math.floor(Math.random() * 20)];
+  const avatar = avatars[Math.floor(Math.random() * 20)].image;
 
   const result = await (
     await getUserCollection()

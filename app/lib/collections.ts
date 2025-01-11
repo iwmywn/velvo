@@ -5,7 +5,12 @@ import {
   DBCart,
   DBCategory,
   DBProduct,
+  DBAvatar,
 } from "@lib/definitions";
+
+export async function getAvatarCollection() {
+  return await collection<DBAvatar>("avatars");
+}
 
 export async function getUserCollection() {
   return await collection<DBUser>("users");

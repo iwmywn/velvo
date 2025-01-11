@@ -1,5 +1,4 @@
 export { addresses } from "./addresses";
-export { avatars } from "./avatars";
 export { bannerItems } from "./banner";
 export { collections, collectionItems } from "./collections";
 export { baseImgUrl, navLinks, footerSections, socialLinks } from "./constants";
