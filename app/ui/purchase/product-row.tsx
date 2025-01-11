@@ -20,7 +20,7 @@ const ActionButton = ({
   isDeleting: boolean;
 }) => (
   <Button
-    className="flex items-center justify-center gap-2 px-4 text-red-500 before:border-red-500 before:bg-white sm:max-w-[100px] sm:flex-1 sm:px-0"
+    className="gap-2 px-4 text-red-500 before:border-red-500 before:bg-white sm:max-w-[100px] sm:flex-1 sm:px-0"
     onClick={handleDeleteFromCart}
     disabled={isDeleting}
   >
@@ -103,7 +103,7 @@ export default function ProductRow({
       <Link href={`/products/${slug}`}>
         <div className="flex items-center gap-2 border sm:flex-col sm:justify-center sm:gap-1 sm:border-0 sm:py-1 sm:text-center">
           <ImageTag src={images[0]} alt={description} />
-          <span className="line-clamp-2 font-medium">
+          <span className="line-clamp-2 px-1 font-medium">
             {name} - {size}
           </span>
         </div>

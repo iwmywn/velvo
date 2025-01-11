@@ -36,12 +36,12 @@ export default function ToPay({
             <ProductRow key={`${product.slug}${product.size}`} {...product} />
           ))}
 
-          <div className="flex grid-cols-[2fr_1fr_1fr_1fr_1fr] items-center justify-between gap-2 border-t text-center sm:grid">
-            <div className="hidden p-2 text-left sm:block" />
-            <div className="hidden p-2 sm:block" />
-            <div className="p-2 font-semibold">TOTAL PRICE</div>
-            <div className="p-2 font-medium">${totalPriceCents}</div>
-            <div className="p-2">
+          <div className="flex grid-cols-[2fr_1fr_1fr_1fr_1fr] items-center justify-between gap-2 border-t pt-2 text-center sm:grid">
+            <div className="hidden text-left sm:block" />
+            <div className="hidden sm:block" />
+            <div className="font-semibold">TOTAL PRICE</div>
+            <div className="font-medium">${totalPriceCents}</div>
+            <div className="flex justify-center">
               <Checkout
                 products={cartProducts}
                 totalPriceCents={totalPriceCents}

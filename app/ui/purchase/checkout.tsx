@@ -145,7 +145,12 @@ export default function Checkout({
 
   return (
     <>
-      <Button onClick={() => setState("isCheckoutOpen", true)}>Checkout</Button>
+      <Button
+        className="sm:max-w-[100px] sm:flex-1 sm:px-0"
+        onClick={() => setState("isCheckoutOpen", true)}
+      >
+        Checkout
+      </Button>
       {showCaptcha && (
         <ReCaptchaPopup
           onClose={() => setShowCaptcha(false)}
