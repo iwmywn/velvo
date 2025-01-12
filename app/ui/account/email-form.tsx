@@ -62,13 +62,13 @@ export default function EmailForm({
         body: JSON.stringify({ ...data, recaptchaToken }),
       });
 
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
-        showToast(result.message, "success");
+        showToast(message, "success");
         reset();
       } else {
-        showToast(result.message, "warning");
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Email Form Error: ", error);

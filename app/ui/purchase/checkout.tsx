@@ -21,6 +21,7 @@ import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
 import { transformProducts } from "@lib/utils";
 import { useAnimation } from "@ui/hooks";
+import { mutate } from "swr";
 
 type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;
 
@@ -122,15 +123,16 @@ export default function Checkout({
         body: JSON.stringify(requestData),
       });
 
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
-        showToast(result.message, "success");
+        await mutate("/api/store/cart");
+        showToast(message, "success");
         reset();
         handleClose();
         router.push("/user/purchase?tab=to-ship-and-receive");
       } else {
-        showToast(result.message, "warning");
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Place order Error: ", error);

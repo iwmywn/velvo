@@ -64,13 +64,13 @@ export default function ResetPassword({
         body: JSON.stringify(data),
       });
 
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
-        showToast(result.message, "success");
+        showToast(message, "success");
         reset();
       } else {
-        showToast(result.message, "warning");
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Reset password Error: ", error);

@@ -16,7 +16,7 @@ export async function GET() {
   if (!invoiceList) return createResponse("Invoice List not found!", 404);
 
   if (invoiceList.invoices.length === 0)
-    return createResponse(JSON.stringify({ invoices: [] }), 200);
+    return createResponse({ invoices: [] }, 200);
 
   const invoices = invoiceList.invoices.map(
     ({ invoiceId, products, ...rest }) => ({
@@ -29,5 +29,5 @@ export async function GET() {
     }),
   );
 
-  return createResponse(JSON.stringify(invoices), 200);
+  return createResponse(invoices, 200);
 }

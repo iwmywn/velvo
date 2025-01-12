@@ -136,13 +136,13 @@ function ChangePassword({ handleClose }: SettingsProps) {
         body: JSON.stringify(data),
       });
 
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
-        showToast(result.message, "success");
+        showToast(message, "success");
         handleClose();
       } else {
-        showToast(result.message, "warning");
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Change password Error: ", error);
@@ -238,13 +238,13 @@ function ChangeEmail({ handleClose }: SettingsProps) {
         body: JSON.stringify(data),
       });
 
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
-        showToast(result.message, "success");
+        showToast(message, "success");
         handleClose();
       } else {
-        showToast(result.message, "warning");
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Change email Error: ", error);
@@ -336,15 +336,15 @@ function DeleteAccount({ handleClose }: SettingsProps) {
         body: JSON.stringify(data),
       });
 
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
-        showToast(result.message, "success");
+        showToast(message, "success");
         handleClose();
         await fetch("/api/auth/signout", { method: "POST" });
         window.location.href = "/user/signin";
       } else {
-        showToast(result.message, "warning");
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Delete account Error: ", error);

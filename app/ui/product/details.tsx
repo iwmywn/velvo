@@ -19,6 +19,7 @@ import SwiperCore from "swiper";
 import "swiper/css";
 import { useAnimation } from "@ui/hooks";
 import ExpandableSections from "@ui/expandable";
+import { mutate } from "swr";
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
@@ -76,6 +77,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       const message = await addToCart(productId, selectedSize!, quantity);
 
       if (message === "Done.") {
+        await mutate("/api/store/cart");
         setState("isCartOpen", true);
       } else {
         showToast(message, "warning");

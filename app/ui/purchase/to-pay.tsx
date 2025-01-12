@@ -19,7 +19,7 @@ export default function ToPay() {
 
   return (
     <>
-      {combinedCartProducts === null ? (
+      {combinedCartProducts.length === 0 ? (
         <EmptyState emptyState="toPay" />
       ) : (
         <div className="flex flex-col gap-4">

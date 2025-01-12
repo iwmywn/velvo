@@ -42,7 +42,7 @@ export default function SignIn() {
         body: JSON.stringify(data),
       });
 
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
         const searchParams = new URLSearchParams(window.location.search);
@@ -50,7 +50,7 @@ export default function SignIn() {
 
         window.location.href = callbackUrl;
       } else {
-        showToast(result.message, "warning");
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Sign in Error: ", error);

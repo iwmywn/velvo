@@ -14,7 +14,7 @@ export async function GET() {
   if (!cart) return createResponse("Cart not found!", 404);
 
   if (cart.products.length === 0)
-    return createResponse(JSON.stringify({ products: [], quantity: 0 }), 200);
+    return createResponse({ products: [], quantity: 0 }, 200);
 
   const products = cart.products.map(({ productId, ...rest }) => ({
     ...rest,
@@ -23,5 +23,5 @@ export async function GET() {
 
   const quantity = products.reduce((sum, product) => sum + product.quantity, 0);
 
-  return createResponse(JSON.stringify({ products, quantity }), 200);
+  return createResponse({ products, quantity }, 200);
 }

@@ -1,8 +1,8 @@
 import { Dispatch, SetStateAction } from "react";
 import { Product, Cart, InvoiceList } from "@lib/definitions";
 
-export function createResponse(message: string, status: number) {
-  return new Response(message, { status });
+export function createResponse(message: string | object, status: number) {
+  return new Response(JSON.stringify(message), { status });
 }
 
 export async function handleTokenVerification(
@@ -15,14 +15,14 @@ export async function handleTokenVerification(
   if (token) {
     try {
       const res = await fetch(`/api/auth/${endpoint}?token=${token}`);
-      const result = await res.json();
+      const message = await res.json();
 
       if (res.ok) {
         setStatus("success");
-        setMessage(result.message);
+        setMessage(message);
       } else {
         setStatus("error");
-        setMessage(result.message);
+        setMessage(message);
       }
     } catch (error) {
       console.error("Verification Token Error: ", error);
