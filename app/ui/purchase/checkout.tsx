@@ -15,8 +15,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { placeOrderSchema } from "@/schemas";
 import { addresses } from "@ui/data";
-import { useCartContext, useUIStateContext } from "@ui/contexts";
-import { toast } from "react-toastify";
+import { useUIStateContext } from "@ui/contexts";
+import showToast from "@ui/toast";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
 import { transformProducts } from "@lib/utils";
@@ -46,7 +46,6 @@ export default function Checkout({
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const router = useRouter();
-  const { refreshCart } = useCartContext();
   const updatedProducts = transformProducts(products);
   const handleClose = () =>
     triggerAnimation(() => setState("isCheckoutOpen", false));
@@ -126,17 +125,16 @@ export default function Checkout({
       const result = await res.json();
 
       if (res.ok) {
-        await refreshCart();
-        toast.success(result.message);
+        showToast(result.message, "success");
         reset();
         handleClose();
         router.push("/user/purchase?tab=to-ship-and-receive");
       } else {
-        toast.error(result.message);
+        showToast(result.message, "warning");
       }
     } catch (error) {
       console.error("Place order Error: ", error);
-      toast.error("Something went wrong! Try again later.");
+      showToast("Something went wrong! Try again later.", "warning");
     } finally {
       setRecaptchaToken(null);
       setShowCaptcha(false);

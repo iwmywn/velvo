@@ -6,11 +6,11 @@ import Button from "@ui/button";
 import ImageTag from "@ui/image";
 import Link from "next/link";
 import { MdDelete } from "react-icons/md";
-import { useCartContext } from "@ui/contexts";
 import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
-import { toast } from "react-toastify";
+import showToast from "@ui/toast";
 import { useState } from "react";
 import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
+import { mutate } from "swr";
 
 const ActionButton = ({
   handleDeleteFromCart,
@@ -50,7 +50,6 @@ export default function ProductRow({
   const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const { refreshCart } = useCartContext();
 
   const handleCartOperation = async (
     operation: () => Promise<string>,
@@ -62,13 +61,13 @@ export default function ProductRow({
       const message = await operation();
 
       if (successMessages.includes(message)) {
-        await refreshCart(true, true, false);
+        mutate("/api/store/cart");
       } else {
-        toast.error(message);
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Error handling cart operation:", error);
-      toast.error("Something went wrong! Please try again.");
+      showToast("Something went wrong! Please try again.", "warning");
     } finally {
       setLoading(false);
     }

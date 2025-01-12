@@ -11,7 +11,7 @@ import {
   linkClass,
 } from "@ui/form-class";
 import { FormButton } from "@ui/button";
-import { toast } from "react-toastify";
+import showToast from "@ui/toast";
 import { signInSchema } from "@/schemas";
 import { z } from "zod";
 import Link from "next/link";
@@ -50,11 +50,11 @@ export default function SignIn() {
 
         window.location.href = callbackUrl;
       } else {
-        toast.error(result.message);
+        showToast(result.message, "warning");
       }
     } catch (error) {
       console.error("Sign in Error: ", error);
-      toast.error("Something went wrong! Please try again.");
+      showToast("Something went wrong! Please try again.", "warning");
     }
   };
 

@@ -5,32 +5,27 @@ import Button from "@ui/button";
 import { GiShoppingCart } from "react-icons/gi";
 import { MdOutlineCancel, MdCheck } from "react-icons/md";
 import Link from "next/link";
-import { InvoiceList } from "@lib/definitions";
 import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
-import { toast } from "react-toastify";
+import showToast from "@ui/toast";
 import { addToCart, cancelReceiveOrder } from "@lib/actions";
-import {
-  useCartContext,
-  useProductContext,
-  useUIStateContext,
-} from "@ui/contexts";
+import { useProductContext, useUIStateContext } from "@ui/contexts";
 import { useRouter } from "next/navigation";
 import Backdrop from "@ui/overlay/backdrop";
 import { MdOutlinePlace } from "react-icons/md";
 import Loading from "@ui/loading";
 import { useAnimation } from "@ui/hooks";
 import { transformInvoiceProducts } from "@lib/utils";
+import { useInvoices } from "@lib/hooks";
 
 export default function OrderList({
-  invoiceProducts,
   orderStatus,
   emptyState,
 }: {
-  invoiceProducts: InvoiceList["invoices"] | null;
   orderStatus: ("waiting" | "processing" | "completed" | "cancelled")[];
   emptyState: "toShipNReceive" | "cancelled" | "completed";
 }) {
+  const { isLoading, invoices } = useInvoices();
   const router = useRouter();
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
     {},
@@ -53,20 +48,19 @@ export default function OrderList({
     orderDate: Date;
   } | null>(null);
   const { isAnimating, triggerAnimation } = useAnimation();
-  const { isLoading, refreshCart } = useCartContext();
   const { state, setState } = useUIStateContext();
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };
   const { products } = useProductContext();
 
-  const invoicesFilter = invoiceProducts?.filter(({ status }) =>
+  const invoicesFilter = invoices.filter(({ status }) =>
     orderStatus.includes(status),
   );
 
   if (isLoading) return <Loading />;
 
-  if (invoicesFilter === undefined || invoicesFilter.length === 0)
+  if (invoicesFilter.length === 0)
     return <EmptyState emptyState={emptyState} />;
 
   const handleClose = () =>
@@ -100,17 +94,17 @@ export default function OrderList({
       const message = await cancelReceiveOrder(invoiceId, products, statusUrl);
 
       if (message === "Done.") {
-        await refreshCart(false, false, true);
         router.push(`/user/purchase?tab=${statusUrl}`);
-        toast.success(
+        showToast(
           status === "processing" ? "Order Completed." : "Order Cancelled.",
+          "success",
         );
       } else {
-        toast.error(message);
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Cancel Receive Error: ", error);
-      toast.error("Something went wrong! Please try again.");
+      showToast("Something went wrong! Please try again.", "warning");
     } finally {
       setButtonLoading(invoiceId, false);
       setIsLoadingGlobal(false);
@@ -131,14 +125,13 @@ export default function OrderList({
       const message = await addToCart(productId, size);
 
       if (message === "Done.") {
-        await refreshCart(true, true, false);
         setState("isCartOpen", true);
       } else {
-        toast.error(message);
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Add to cart Error: ", error);
-      toast.error("Something went wrong! Please try again.");
+      showToast("Something went wrong! Please try again.", "warning");
     } finally {
       setButtonLoading(key, false);
       setIsLoadingGlobal(false);

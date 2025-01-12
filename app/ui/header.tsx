@@ -11,12 +11,17 @@ import SearchOverlay from "@ui/search/search-overlay";
 import CartOverlay from "@ui/cart/cart-overlay";
 import { CiSearch } from "react-icons/ci";
 import { GiShoppingCart } from "react-icons/gi";
-import { useCartContext, useUIStateContext } from "@ui/contexts";
+import { useUIStateContext } from "@ui/contexts";
 import logo from "@ui/logo";
+import showToast from "@ui/toast";
+import { useCart } from "@lib/hooks";
 
 export default function Header() {
   const ref = useRef<HTMLElement | null>(null);
-  const { quantity } = useCartContext();
+  const {
+    cart: { quantity },
+    isLoading,
+  } = useCart();
   const { state, setState } = useUIStateContext();
 
   useElementHeight(ref);
@@ -47,18 +52,23 @@ export default function Header() {
               title="Search"
             />
             <AccountMenu />
-            <span className="relative">
-              <GiShoppingCart
-                className="cursor-pointer text-[22px] md:text-2xl"
-                onClick={() => setState("isCartOpen", true)}
-                title="Cart"
-              />
-              {quantity > 0 && (
-                <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
-                  {quantity}
-                </span>
-              )}
-            </span>
+            {!isLoading && (
+              <span className="relative">
+                <GiShoppingCart
+                  className="cursor-pointer text-[22px] md:text-2xl"
+                  onClick={() => {
+                    if (quantity > 0) setState("isCartOpen", true);
+                    else showToast("Your shopping cart is empty.", "warning");
+                  }}
+                  title="Cart"
+                />
+                {quantity > 0 && (
+                  <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
+                    {quantity}
+                  </span>
+                )}
+              </span>
+            )}
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
               onClick={() => setState("isMenuOpen", true)}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import Button from "@ui/button";
 import ImageTag from "@ui/image";
 import {
@@ -11,32 +11,23 @@ import {
 } from "@lib/utils";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
-import {
-  useAuthContext,
-  useProductContext,
-  useUIStateContext,
-} from "@ui/contexts";
+import { useProductContext, useUIStateContext } from "@ui/contexts";
 import Loading from "@ui/loading";
 import { useAnimation } from "@ui/hooks";
-import { useCartStore } from "@lib/stored";
+import { useCart } from "@lib/hooks";
 
 export default function CartOverlay() {
   const { isAnimating, triggerAnimation } = useAnimation();
-  const { isLoading, cartProducts, fetchCartProducts } = useCartStore();
-  const { userId } = useAuthContext();
+  const { cart, isLoading } = useCart();
   const { products } = useProductContext();
   const { setState } = useUIStateContext();
   const handleClose = () =>
     triggerAnimation(() => setState("isCartOpen", false));
-  const combinedCartProducts = transformCartProducts(cartProducts, products);
+  const combinedCartProducts = transformCartProducts(cart.products, products);
   const totalPriceCents = useMemo(
     () => getTotalPriceCents(combinedCartProducts),
     [combinedCartProducts],
   );
-
-  useEffect(() => {
-    fetchCartProducts(userId);
-  }, [fetchCartProducts, userId]);
 
   return (
     <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
@@ -46,8 +37,6 @@ export default function CartOverlay() {
           <div className="mt-4">
             {isLoading ? (
               <Loading />
-            ) : cartProducts === null || combinedCartProducts === null ? (
-              <p>You have no products in your shopping cart.</p>
             ) : (
               combinedCartProducts.map(
                 ({

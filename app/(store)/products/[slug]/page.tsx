@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fetchCategories, fetchProducts } from "@lib/data";
+import { getCategories, getProducts } from "@lib/data";
 import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
@@ -11,7 +11,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const [fetchedProducts, { slug: productSlug }] = await Promise.all([
-    fetchProducts(),
+    getProducts(),
     params,
   ]);
   const name = fetchedProducts.find((p) => p.slug === productSlug)?.name;
@@ -27,7 +27,7 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const [fetchedCategories, fetchedProducts, { slug: productSlug }] =
-    await Promise.all([fetchCategories(), fetchProducts(), params]);
+    await Promise.all([getCategories(), getProducts(), params]);
   const product = fetchedProducts.find((p) => p.slug === productSlug);
 
   if (!product) return <NotFound />;
@@ -69,7 +69,7 @@ export default async function ProductPage({
 }
 
 export async function generateStaticParams() {
-  const products = await fetchProducts();
+  const products = await getProducts();
   return products.map((p) => ({
     slug: p.slug,
   }));

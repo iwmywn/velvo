@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fetchProducts } from "@lib/data";
+import { getProducts } from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
@@ -26,7 +26,7 @@ export default async function CategoryPage({
   params: Promise<{ slug: string }>;
 }) {
   const [fetcheProducts, { slug: customerGroupName }] = await Promise.all([
-    fetchProducts(),
+    getProducts(),
     params,
   ]);
 

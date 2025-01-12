@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from "react";
 import { Product, Cart, InvoiceList } from "@lib/definitions";
 
 export function createResponse(message: string, status: number) {
-  return new Response(JSON.stringify({ message }), { status });
+  return new Response(message, { status });
 }
 
 export async function handleTokenVerification(
@@ -63,7 +63,7 @@ export function getPriceAfterDiscount(
 }
 
 export function getTotalPriceCents(
-  products: (Product & { quantity: number })[] | null,
+  products: (Product & { quantity: number })[] | [],
 ): string {
   if (!products) return "0";
   return formatCurrency(
@@ -107,10 +107,10 @@ export function transformProducts(
 }
 
 export function transformCartProducts(
-  cartProducts: Cart["products"] | null,
+  cartProducts: Cart["products"] | [],
   products: Product[],
-): (Product & { quantity: number; size: string })[] | null {
-  if (!cartProducts || !products) return null;
+): (Product & { quantity: number; size: string })[] {
+  if (cartProducts.length === 0) return [];
 
   const productMap = new Map(products.map((product) => [product._id, product]));
 
@@ -129,18 +129,14 @@ export function transformCartProducts(
 }
 
 export function transformInvoiceProducts(
-  invoiceProducts: InvoiceList["invoices"][0]["products"] | null,
+  invoiceProducts: InvoiceList["invoices"][0]["products"] | [],
   products: Product[],
-):
-  | (Product & {
-      quantity: number;
-      size: string;
-      discountedPriceDetails: [string, string];
-    })[]
-  | null {
-  if (!invoiceProducts) {
-    return null;
-  }
+): (Product & {
+  quantity: number;
+  size: string;
+  discountedPriceDetails: [string, string];
+})[] {
+  if (invoiceProducts.length === 0) return [];
 
   const productMap = new Map(products.map((product) => [product._id, product]));
 

@@ -1,7 +1,7 @@
 import { shuffleProduct } from "@lib/utils";
 import ProductList from "@ui/product/list";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { fetchProducts } from "@lib/data";
+import { getProducts } from "@lib/data";
 import { Metadata } from "next";
 
 export function generateMetadata(): Metadata {
@@ -9,7 +9,7 @@ export function generateMetadata(): Metadata {
 }
 
 export default async function AllProductsPage() {
-  const products = await fetchProducts();
+  const products = await getProducts();
   const allProducts = shuffleProduct(products);
 
   return (

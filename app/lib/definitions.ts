@@ -80,10 +80,8 @@ type BaseProduct<T> = {
 };
 
 export type SessionPayload = {
-  isAuth?: boolean;
   userId: string;
   image: string;
-  expires: Date;
 };
 
 export type Avatar = BaseAvatar<string>;

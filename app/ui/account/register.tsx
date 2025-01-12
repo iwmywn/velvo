@@ -12,7 +12,7 @@ import {
   linkClass,
 } from "@ui/form-class";
 import { FormButton } from "@ui/button";
-import { toast } from "react-toastify";
+import showToast from "@ui/toast";
 import { registerSchema } from "@/schemas";
 import Link from "next/link";
 import ReCaptchaPopup from "@ui/recaptcha";
@@ -58,14 +58,14 @@ export default function Register() {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success(result.message);
+        showToast(result.message, "success");
         reset();
       } else {
-        toast.error(result.message);
+        showToast(result.message, "warning");
       }
     } catch (error) {
       console.error("Register Error: ", error);
-      toast.error("Something went wrong! Please try again.");
+      showToast("Something went wrong! Please try again.", "warning");
     } finally {
       setRecaptchaToken(null);
       setShowCaptcha(false);

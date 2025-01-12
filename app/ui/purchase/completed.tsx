@@ -1,16 +1,5 @@
-import { InvoiceList } from "@lib/definitions";
 import OrderList from "@ui/purchase/order-list";
 
-export default function Completed({
-  invoiceProducts,
-}: {
-  invoiceProducts: InvoiceList["invoices"] | null;
-}) {
-  return (
-    <OrderList
-      invoiceProducts={invoiceProducts}
-      orderStatus={["completed"]}
-      emptyState="completed"
-    />
-  );
+export default function Completed() {
+  return <OrderList orderStatus={["completed"]} emptyState="completed" />;
 }

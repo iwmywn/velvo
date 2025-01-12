@@ -3,12 +3,11 @@
 import { verifySession } from "@lib/dal";
 
 export async function GET() {
-  const { isAuth, userId, image } = await verifySession();
+  const { userId, image } = await verifySession();
 
-  if (isAuth) {
+  if (userId) {
     return new Response(
       JSON.stringify({
-        isAuth,
         userId,
         image,
       }),
@@ -16,5 +15,5 @@ export async function GET() {
     );
   }
 
-  return new Response(JSON.stringify({ isSignedIn: false }), { status: 401 });
+  return new Response(null, { status: 401 });
 }

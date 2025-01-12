@@ -1,3 +1,3 @@
 export const siteConfig = {
-  maintenanceMode: true,
+  maintenanceMode: false,
 };

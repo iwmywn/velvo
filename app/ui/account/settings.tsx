@@ -19,7 +19,7 @@ import {
   labelClass,
   errorClass,
 } from "@ui/form-class";
-import { toast } from "react-toastify";
+import showToast from "@ui/toast";
 import { useAnimation, useOverflow } from "@ui/hooks";
 
 interface SettingsProps {
@@ -139,14 +139,14 @@ function ChangePassword({ handleClose }: SettingsProps) {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success(result.message);
+        showToast(result.message, "success");
         handleClose();
       } else {
-        toast.error(result.message);
+        showToast(result.message, "warning");
       }
     } catch (error) {
       console.error("Change password Error: ", error);
-      toast.error("Something went wrong! Try again later.");
+      showToast("Something went wrong! Try again later.", "warning");
     }
   };
 
@@ -241,14 +241,14 @@ function ChangeEmail({ handleClose }: SettingsProps) {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success(result.message);
+        showToast(result.message, "success");
         handleClose();
       } else {
-        toast.error(result.message);
+        showToast(result.message, "warning");
       }
     } catch (error) {
       console.error("Change email Error: ", error);
-      toast.error("Something went wrong! Try again later.");
+      showToast("Something went wrong! Try again later.", "warning");
     }
   };
 
@@ -326,8 +326,7 @@ function DeleteAccount({ handleClose }: SettingsProps) {
   });
 
   const onSubmit = async (data: DeleteAccountFormData) => {
-    toast.success("Deleting your account...");
-    toast.success("Thank you for using our website <3");
+    showToast("Deleting your account...", "success");
     try {
       const res = await fetch(`/api/user/delete-account`, {
         method: "DELETE",
@@ -340,16 +339,16 @@ function DeleteAccount({ handleClose }: SettingsProps) {
       const result = await res.json();
 
       if (res.ok) {
-        toast.success(result.message);
+        showToast(result.message, "success");
         handleClose();
         await fetch("/api/auth/signout", { method: "POST" });
         window.location.href = "/user/signin";
       } else {
-        toast.error(result.message);
+        showToast(result.message, "warning");
       }
     } catch (error) {
       console.error("Delete account Error: ", error);
-      toast.error("Something went wrong! Try again later.");
+      showToast("Something went wrong! Try again later.", "warning");
     }
   };
 

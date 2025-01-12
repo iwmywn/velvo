@@ -1,7 +1,7 @@
 "use client";
 
 import Wrapper from "@ui/account/wrapper";
-import { toast } from "react-toastify";
+import showToast from "@ui/toast";
 import { FormButton } from "@ui/button";
 import { useState } from "react";
 import {
@@ -65,14 +65,14 @@ export default function EmailForm({
       const result = await res.json();
 
       if (res.ok) {
-        toast.success(result.message);
+        showToast(result.message, "success");
         reset();
       } else {
-        toast.error(result.message);
+        showToast(result.message, "warning");
       }
     } catch (error) {
       console.error("Email Form Error: ", error);
-      toast.error("Something went wrong! Please try again.");
+      showToast("Something went wrong! Please try again.", "warning");
     } finally {
       setRecaptchaToken(null);
       setShowCaptcha(false);

@@ -8,12 +8,11 @@ import { Product } from "@lib/definitions";
 import ImageTag from "@ui/image";
 import {
   useAuthContext,
-  useCartContext,
   useHeightContext,
   useUIStateContext,
 } from "@ui/contexts";
 import { addToCart } from "@lib/actions";
-import { toast } from "react-toastify";
+import showToast from "@ui/toast";
 import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore from "swiper";
@@ -39,7 +38,6 @@ export default function ProductDetails({ product }: { product: Product }) {
   const [isProductFloatVisible, setIsProductFloatVisible] =
     useState<boolean>(false);
   const { userId } = useAuthContext();
-  const { refreshCart } = useCartContext();
   const { heights } = useHeightContext();
   const { isAnimating, triggerAnimation } = useAnimation();
   const remainingQuantity = sizes[selectedSize as keyof typeof sizes];
@@ -78,14 +76,13 @@ export default function ProductDetails({ product }: { product: Product }) {
       const message = await addToCart(productId, selectedSize!, quantity);
 
       if (message === "Done.") {
-        await refreshCart(true, true, false);
         setState("isCartOpen", true);
       } else {
-        toast.error(message);
+        showToast(message, "warning");
       }
     } catch (error) {
       console.error("Add to cart Error: ", error);
-      toast.error("Something went wrong! Please try again.");
+      showToast("Something went wrong! Please try again.", "warning");
     } finally {
       setIsLoading(false);
     }

@@ -8,12 +8,9 @@ export const verifySession = cache(async () => {
   const session = (await cookies()).get("session")?.value;
   const payload = await decrypt(session);
 
-  if (!payload) {
-    return { isAuth: false };
-  }
+  if (!payload) return {};
 
   return {
-    isAuth: true,
     userId: payload.userId,
     image: payload.image,
   };

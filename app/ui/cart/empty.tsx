@@ -1,6 +1,7 @@
 import { emptyStates } from "@ui/data";
 import { GiShoppingCart } from "react-icons/gi";
 import Link from "next/link";
+import Button from "@ui/button";
 
 interface EmptyStateProps {
   emptyState: keyof typeof emptyStates;
@@ -17,11 +18,8 @@ export default function EmptyState({ emptyState }: EmptyStateProps) {
         </div>
         <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
         <p className="text-center text-gray-500">{description}</p>
-        <Link
-          className="mt-2 rounded-md border border-white bg-black px-5 py-3 text-sm text-white transition-all duration-500 hover:scale-95"
-          href="/"
-        >
-          Continue shopping
+        <Link href="/">
+          <Button>Continue shopping</Button>
         </Link>
       </div>
     </div>

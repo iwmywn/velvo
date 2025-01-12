@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fetchCategories, fetchProducts } from "@lib/data";
+import { getCategories, getProducts } from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
@@ -26,7 +26,7 @@ export default async function CollectionsPage({
   params: Promise<{ slug: string }>;
 }) {
   const [fetchedCategories, fetchedProducts, { slug: collectionName }] =
-    await Promise.all([fetchCategories(), fetchProducts(), params]);
+    await Promise.all([getCategories(), getProducts(), params]);
 
   if (!validCollections.has(collectionName)) return <NotFound />;
 

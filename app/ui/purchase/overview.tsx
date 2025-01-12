@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import ToPay from "@ui/purchase/to-pay";
 import ToShipAndReceive from "@ui/purchase/to-ship-receive";
@@ -9,8 +9,6 @@ import Cancelled from "@ui/purchase/cancelled";
 import Loading from "@ui/loading";
 import { useHideMenu } from "@ui/hooks";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { useCartContext, useProductContext } from "@ui/contexts";
-import { transformCartProducts } from "@lib/utils";
 
 const tabs = [
   { key: "to-pay", label: "TO PAY" },
@@ -37,12 +35,6 @@ export default function PurchaseOverview() {
   const searchParams = useSearchParams();
   const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { isLoading, refreshCart, cartProducts, invoiceProducts } =
-    useCartContext();
-  const { products } = useProductContext();
-  const combinedCartProducts = useMemo(() => {
-    return transformCartProducts(cartProducts, products);
-  }, [cartProducts, products]);
 
   useHideMenu(setIsOpen);
   useEffect(() => {
@@ -50,13 +42,6 @@ export default function PurchaseOverview() {
     const validTab = tabs.find(({ key }) => key === tabKey);
     setActiveTabKey(validTab ? validTab.key : tabs[0].key);
   }, [searchParams]);
-
-  useEffect(() => {
-    async function triggerRefetch() {
-      if (isLoading) await refreshCart();
-    }
-    triggerRefetch();
-  }, [isLoading, refreshCart]);
 
   if (!activeTabKey) {
     return <Loading />;
@@ -106,13 +91,13 @@ export default function PurchaseOverview() {
         {activeTab && (
           <div className="min-h-screen text-sm">
             {activeTab.key === "to-pay" ? (
-              <ToPay cartProducts={combinedCartProducts} />
+              <ToPay />
             ) : activeTab.key === "to-ship-and-receive" ? (
-              <ToShipAndReceive invoiceProducts={invoiceProducts} />
+              <ToShipAndReceive />
             ) : activeTab.key === "completed" ? (
-              <Completed invoiceProducts={invoiceProducts} />
+              <Completed />
             ) : (
-              <Cancelled invoiceProducts={invoiceProducts} />
+              <Cancelled />
             )}
           </div>
         )}

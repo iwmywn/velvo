@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { fetchProducts } from "@lib/data";
+import { getProducts } from "@lib/data";
 import {
   customerGroup,
   kidsItems,
@@ -15,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!baseUrl) {
     throw new Error("Environment variable NEXT_PUBLIC_URL is not defined.");
   }
-  const fetchedProducts = await fetchProducts();
+  const fetchedProducts = await getProducts();
   const categoryItems = [
     { group: "men", items: menItems },
     { group: "women", items: womenItems },

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fetchCategories, fetchProducts } from "@lib/data";
+import { getCategories, getProducts } from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
@@ -36,7 +36,7 @@ export default async function CategoryPage({
     fetchedCategories,
     fetchedProducts,
     { slug: customerGroup, sub: categoryName },
-  ] = await Promise.all([fetchCategories(), fetchProducts(), params]);
+  ] = await Promise.all([getCategories(), getProducts(), params]);
 
   if (
     !validCategories.has(categoryName) ||

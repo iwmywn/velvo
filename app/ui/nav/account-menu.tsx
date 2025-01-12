@@ -10,7 +10,7 @@ import { baseImgUrl } from "@ui/data";
 
 export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { isAuth, image, isLoading } = useAuthContext();
+  const { userId, image, isLoading } = useAuthContext();
 
   return (
     <div className="relative" onMouseLeave={() => setIsOpen(false)}>
@@ -19,7 +19,7 @@ export default function AccountMenu() {
         onMouseEnter={() => setIsOpen(true)}
         onClick={() => setIsOpen(true)}
       >
-        {isAuth ? (
+        {userId ? (
           <Image
             src={`${baseImgUrl}${image}`}
             fill
@@ -36,7 +36,7 @@ export default function AccountMenu() {
       </div>
 
       <AnimatePresence>
-        {isOpen && isAuth && (
+        {isOpen && userId && (
           <motion.div
             className="absolute top-[calc(100%_+_16px)] bg-white text-sm"
             initial={{ opacity: 0, y: -20, x: "-50%" }}

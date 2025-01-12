@@ -7,7 +7,7 @@ import { generateUniqueToken } from "@api/utils";
 import { createResponse } from "@lib/utils";
 import verifyRecaptchaToken from "@lib/recaptcha";
 import { getUserCollection } from "@lib/collections";
-import { fetchAvatars } from "@lib/data";
+import { getAvatars } from "@lib/data";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
   const [verificationToken, hashedPassword, avatars] = await Promise.all([
     generateUniqueToken(),
     bcrypt.hash(password, 10),
-    fetchAvatars(),
+    getAvatars(),
   ]);
   const avatar = avatars[Math.floor(Math.random() * 20)].image;
 

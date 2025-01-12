@@ -1,24 +1,25 @@
-import { getTotalPriceCents } from "@lib/utils";
+import { getTotalPriceCents, transformCartProducts } from "@lib/utils";
 import ProductRow from "@ui/purchase/product-row";
 import Checkout from "@ui/purchase/checkout";
 import EmptyState from "@ui/cart/empty";
-import { Product } from "@lib/definitions";
-import { useCartContext } from "@ui/contexts";
 import Loading from "@ui/loading";
+import { useCart } from "@lib/hooks";
+import { useProductContext } from "@ui/contexts";
+import { useMemo } from "react";
 
-export default function ToPay({
-  cartProducts,
-}: {
-  cartProducts: (Product & { quantity: number; size: string })[] | null;
-}) {
-  const totalPriceCents = getTotalPriceCents(cartProducts);
-  const { isLoading } = useCartContext();
+export default function ToPay() {
+  const { cart, isLoading } = useCart();
+  const { products } = useProductContext();
+  const combinedCartProducts = transformCartProducts(cart.products, products);
+  const totalPriceCents = useMemo(() => {
+    return getTotalPriceCents(combinedCartProducts);
+  }, [combinedCartProducts]);
 
   if (isLoading) return <Loading />;
 
   return (
     <>
-      {cartProducts === null ? (
+      {combinedCartProducts === null ? (
         <EmptyState emptyState="toPay" />
       ) : (
         <div className="flex flex-col gap-4">
@@ -32,7 +33,7 @@ export default function ToPay({
             )}
           </div>
 
-          {cartProducts.map((product) => (
+          {combinedCartProducts.map((product) => (
             <ProductRow key={`${product.slug}${product.size}`} {...product} />
           ))}
 
@@ -43,7 +44,7 @@ export default function ToPay({
             <div className="font-medium">${totalPriceCents}</div>
             <div className="flex justify-center">
               <Checkout
-                products={cartProducts}
+                products={combinedCartProducts}
                 totalPriceCents={totalPriceCents}
               />
             </div>

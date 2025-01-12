@@ -1,9 +1,9 @@
 "use client";
 
 import ReCAPTCHA from "react-google-recaptcha";
-import { toast } from "react-toastify";
 import { createPortal } from "react-dom";
 import { useAnimation, useOverflow } from "@ui/hooks";
+import showToast from "@ui/toast";
 
 interface ReCaptchaPopupProps {
   onClose: () => void;
@@ -20,7 +20,7 @@ export default function ReCaptchaPopup({
   const animteAndClose = () => triggerAnimation(() => onClose());
   const handleRecaptchaChange = async (token: string | null) => {
     if (!token) {
-      toast.error("CAPTCHA verification failed! Please try again.");
+      showToast("CAPTCHA verification failed! Please try again.", "warning");
       return;
     }
 
@@ -32,7 +32,7 @@ export default function ReCaptchaPopup({
 
   const handleClose = () => {
     animteAndClose();
-    toast.error("Please complete the CAPTCHA!");
+    showToast("Please complete the CAPTCHA!", "warning");
   };
 
   //eslint-disable-next-line react-hooks/rules-of-hooks

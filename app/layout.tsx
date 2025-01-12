@@ -7,12 +7,11 @@ import ScrollToTop from "@ui/to-top";
 import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Slide } from "react-toastify";
 import { siteConfig } from "@lib/config";
-import { fetchProducts } from "@lib/data";
+import { getProducts } from "@lib/data";
 import {
   AuthProvider,
-  CartProvider,
   HeightProvider,
   ProductProvider,
   UIStateProvider,
@@ -49,7 +48,7 @@ export default async function RootLayout({
     );
   }
 
-  const products = await fetchProducts();
+  const products = await getProducts();
 
   return (
     <html lang="en">
@@ -57,29 +56,31 @@ export default async function RootLayout({
         <UIStateProvider>
           <ProductProvider products={products}>
             <AuthProvider>
-              <CartProvider>
-                <div id="popups" className="relative z-[9999]">
-                  <ToastContainer
-                    closeButton={false}
-                    icon={false}
-                    hideProgressBar
-                    closeOnClick
-                    pauseOnFocusLoss
-                    pauseOnHover
-                  />
-                </div>
-                <PopUp />
-                <HeightProvider>
-                  <Header />
-                  <Gap z={10} />
-                  {children}
-                </HeightProvider>
-                <HeightProvider>
-                  <Gap z={-9999} />
-                  <Footer />
-                </HeightProvider>
-                <ScrollToTop />
-              </CartProvider>
+              <div id="popups" className="relative z-[9999]">
+                <ToastContainer
+                  closeButton={false}
+                  hideProgressBar
+                  closeOnClick
+                  pauseOnFocusLoss
+                  pauseOnHover
+                  position="top-center"
+                  stacked
+                  limit={3}
+                  transition={Slide}
+                  style={{ top: "65px" }}
+                />
+              </div>
+              <PopUp />
+              <HeightProvider>
+                <Header />
+                <Gap z={10} />
+                {children}
+              </HeightProvider>
+              <HeightProvider>
+                <Gap z={-9999} />
+                <Footer />
+              </HeightProvider>
+              <ScrollToTop />
             </AuthProvider>
           </ProductProvider>
         </UIStateProvider>

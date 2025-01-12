@@ -8,26 +8,11 @@
   }
 }
 
-.Toastify__toast--success {
-  background-color: rgba(46, 128, 49) !important;
-  border: 2px solid rgb(66, 255, 66) !important;
-}
-
-.Toastify__toast--error {
-  background-color: rgb(133, 53, 47) !important;
-  border: 2px solid rgb(255, 66, 66) !important;
-}
-
-.Toastify__toast--success:hover,
-.Toastify__toast--error:hover {
-  opacity: 0.9;
-}
-
 .Toastify__toast {
-  border-radius: 8px;
-  font-size: 14px;
-  color: #fff !important;
-  user-select: none;
+  font-size: 14px !important;
+  user-select: none !important;
+  min-height: auto !important;
+  color: #000 !important;
 }
 
 .custom-swiper .swiper-pagination-bullet-active {
