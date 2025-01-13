@@ -26,7 +26,7 @@ export default function Register() {
   const {
     register,
     handleSubmit,
-    reset,
+    // reset,
     formState: { errors, isValid, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -40,7 +40,7 @@ export default function Register() {
     },
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async () => {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
