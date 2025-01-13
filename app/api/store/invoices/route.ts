@@ -1,6 +1,6 @@
 import { getInvoiceListCollection } from "@lib/collections";
 import { verifySession } from "@lib/dal";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import { ObjectId } from "mongodb";
 
 export async function GET() {

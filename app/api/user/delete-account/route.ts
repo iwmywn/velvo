@@ -1,7 +1,7 @@
 "use server";
 
 import { deleteAccountScheme } from "@/schemas";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import { verifySession } from "@lib/dal";
@@ -20,10 +20,6 @@ export async function DELETE(req: Request) {
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const { password } = parsedCredentials.data;
-
-  if (!userId || !ObjectId.isValid(userId))
-    return createResponse("User id is not valid!", 400);
-
   const [userCollection, cartCollection, invoiceListCollection] =
     await Promise.all([
       getUserCollection(),

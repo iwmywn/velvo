@@ -2,7 +2,7 @@
 
 import { resetPasswordScheme } from "@/schemas";
 import { getUserCollection } from "@lib/collections";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import bcrypt from "bcrypt";
 
 export async function PATCH(req: Request) {
@@ -17,6 +17,7 @@ export async function PATCH(req: Request) {
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  // todo: filter (verificationToken & userid)
   const result = await (
     await getUserCollection()
   ).updateOne(

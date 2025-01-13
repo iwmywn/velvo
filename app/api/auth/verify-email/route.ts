@@ -5,7 +5,7 @@ import {
   getCartCollection,
   getInvoiceListCollection,
 } from "@lib/collections";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

@@ -1,10 +1,10 @@
 "use server";
 
-import { getUserByIdentifier } from "@lib/actions";
 import bcrypt from "bcrypt";
 import { signInSchema } from "@/schemas";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import { createSession } from "@lib/session";
+import { getUserByEmail } from "@lib/data";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const { email, password } = parsedCredentials.data;
-  const existingUser = await getUserByIdentifier(email);
+  const existingUser = await getUserByEmail(email);
 
   if (!existingUser)
     return createResponse("Email or password is incorrect!", 400);

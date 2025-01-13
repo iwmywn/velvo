@@ -7,33 +7,9 @@ import {
   getCartCollection,
   getInvoiceListCollection,
   getProductCollection,
-  getUserCollection,
 } from "@lib/collections";
 import { InvoiceList } from "@lib/definitions";
 import { verifySession } from "@lib/dal";
-
-/**
- *
- * @param identifier - Email or ID of the user
- * @returns The user document, if found
- */
-export async function getUserByIdentifier(identifier: string) {
-  try {
-    let query;
-
-    if (ObjectId.isValid(identifier)) {
-      query = { _id: new ObjectId(identifier) };
-    } else {
-      query = { email: identifier };
-    }
-
-    const user = await (await getUserCollection()).findOne(query);
-    return user;
-  } catch (e) {
-    console.error("Failed to fetch user:", e);
-    throw new Error("Failed to fetch user.");
-  }
-}
 
 export async function sendEmail(
   email: string,

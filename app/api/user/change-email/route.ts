@@ -1,12 +1,12 @@
 "use server";
 
 import { changeEmailScheme } from "@/schemas";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import { getUserByIdentifier } from "@lib/actions";
 import { verifySession } from "@lib/dal";
 import { getUserCollection } from "@lib/collections";
+import { getUserByEmail } from "@lib/data";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
@@ -17,11 +17,7 @@ export async function PATCH(req: Request) {
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const { confirmEmail, password } = parsedCredentials.data;
-
-  if (!userId || !ObjectId.isValid(userId))
-    return createResponse("User id is not valid!", 400);
-
-  const existingEmail = await getUserByIdentifier(confirmEmail);
+  const existingEmail = await getUserByEmail(confirmEmail);
 
   if (existingEmail)
     return createResponse("This email is already in use!", 400);

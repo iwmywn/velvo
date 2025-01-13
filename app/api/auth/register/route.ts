@@ -1,13 +1,13 @@
 "use server";
 
 import bcrypt from "bcrypt";
-import { getUserByIdentifier, sendEmail } from "@lib/actions";
+import { sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
-import { generateUniqueToken } from "@api/utils";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import verifyRecaptchaToken from "@lib/recaptcha";
 import { getUserCollection } from "@lib/collections";
-import { getAvatars } from "@lib/data";
+import { getAvatars, getUserByEmail } from "@lib/data";
+import { nanoid } from "nanoid";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -24,15 +24,15 @@ export async function POST(req: Request) {
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const { firstName, lastName, email, password } = parsedCredentials.data;
-  const existingUser = await getUserByIdentifier(email);
+  const existingUser = await getUserByEmail(email);
 
   if (existingUser) return createResponse("Email already registered!", 400);
 
-  const [verificationToken, hashedPassword, avatars] = await Promise.all([
-    generateUniqueToken(),
+  const [hashedPassword, avatars] = await Promise.all([
     bcrypt.hash(password, 10),
     getAvatars(),
   ]);
+  const verificationToken = nanoid();
   const avatar = avatars[Math.floor(Math.random() * 20)].image;
 
   const result = await (

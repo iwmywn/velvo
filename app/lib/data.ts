@@ -6,7 +6,17 @@ import {
   getCategoryCollection,
   getProductCollection,
   getAvatarCollection,
+  getUserCollection,
 } from "@lib/collections";
+
+export async function getUserByEmail(email: string) {
+  try {
+    const user = await (await getUserCollection()).findOne({ email });
+    return user;
+  } catch (error) {
+    console.error("Failed to fetch user:", error);
+  }
+}
 
 export async function getAvatars(): Promise<Avatar[]> {
   try {

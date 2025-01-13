@@ -1,7 +1,7 @@
 "use server";
 
 import { changePasswordScheme } from "@/schemas";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
 import { verifySession } from "@lib/dal";
@@ -16,10 +16,6 @@ export async function PATCH(req: Request) {
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const { confirmPassword, currentPassword } = parsedCredentials.data;
-
-  if (!userId || !ObjectId.isValid(userId))
-    return createResponse("User id is not valid!", 400);
-
   const userCollection = await getUserCollection();
   const existingUser = await userCollection.findOne({
     _id: new ObjectId(userId),

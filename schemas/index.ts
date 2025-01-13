@@ -80,12 +80,11 @@ export const placeOrderSchema = z.object({
 export const placeOrderWithProductSchema = placeOrderSchema.extend({
   products: z
     .object({
-      productId: z.string().min(1, "Product ID is required"),
+      _id: z.string().min(1, "Product ID is required"),
       quantity: z.number().min(1, "Quantity must be at least 1"),
       size: z.string().min(1, "Size is required"),
-      discountedPriceDetails: z
-        .array(z.string())
-        .min(1, "PriceCents must be at least 1"),
+      priceCents: z.number().min(1, "PriceCents must be at least 1"),
+      saleOff: z.number().min(1, "SaleOff must be at least 1"),
     })
     .array(),
   totalPriceCents: z.string().min(1, "Total price is required"),

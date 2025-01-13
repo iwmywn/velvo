@@ -1,11 +1,12 @@
 "use server";
 
-import { getUserByIdentifier, sendEmail } from "@lib/actions";
+import { sendEmail } from "@lib/actions";
 import { emailScheme } from "@/schemas";
-import { generateUniqueToken } from "@api/utils";
-import { createResponse } from "@lib/utils";
+import { createResponse } from "@api/utils";
 import verifyRecaptchaToken from "@lib/recaptcha";
 import { getUserCollection } from "@lib/collections";
+import { getUserByEmail } from "@lib/data";
+import { nanoid } from "nanoid";
 
 export async function PATCH(req: Request) {
   const data = await req.json();
@@ -22,7 +23,7 @@ export async function PATCH(req: Request) {
   if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
 
   const { email } = parsedCredentials.data;
-  const existingUser = await getUserByIdentifier(email);
+  const existingUser = await getUserByEmail(email);
 
   if (!existingUser)
     return createResponse(
@@ -39,7 +40,7 @@ export async function PATCH(req: Request) {
       429,
     );
 
-  const verificationToken = await generateUniqueToken();
+  const verificationToken = nanoid();
 
   const result = await (
     await getUserCollection()

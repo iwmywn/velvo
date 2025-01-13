@@ -1,10 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { Product, Cart, InvoiceList } from "@lib/definitions";
 
-export function createResponse(message: string | object, status: number) {
-  return new Response(JSON.stringify(message), { status });
-}
-
+// todo: rewrite handleTokenVerification
 export async function handleTokenVerification(
   endpoint: string,
   setStatus: Dispatch<SetStateAction<"success" | "error" | null>>,
@@ -75,35 +72,6 @@ export function getTotalPriceCents(
       0,
     ),
   );
-}
-
-export function transformProducts(
-  products: {
-    _id: string;
-    quantity: number;
-    size: string;
-    priceCents: number;
-    saleOff: number;
-  }[],
-): {
-  productId: string;
-  quantity: number;
-  size: string;
-  discountedPriceDetails: string[];
-}[] {
-  return products.map((product) => ({
-    productId: product._id,
-    quantity: product.quantity,
-    size: product.size,
-    discountedPriceDetails: [
-      getPriceAfterDiscount(product.priceCents, product.saleOff),
-      getPriceAfterDiscount(
-        product.priceCents,
-        product.saleOff,
-        product.quantity,
-      ),
-    ],
-  }));
 }
 
 export function transformCartProducts(

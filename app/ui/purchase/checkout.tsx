@@ -19,7 +19,6 @@ import { useUIStateContext } from "@ui/contexts";
 import showToast from "@ui/toast";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useRouter } from "next/navigation";
-import { transformProducts } from "@lib/utils";
 import { useAnimation } from "@ui/hooks";
 import { mutate } from "swr";
 
@@ -47,7 +46,6 @@ export default function Checkout({
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const router = useRouter();
-  const updatedProducts = transformProducts(products);
   const handleClose = () =>
     triggerAnimation(() => setState("isCheckoutOpen", false));
 
@@ -111,7 +109,7 @@ export default function Checkout({
     try {
       const requestData = {
         ...data,
-        products: updatedProducts,
+        products,
         totalPriceCents,
         recaptchaToken,
       };
@@ -126,7 +124,10 @@ export default function Checkout({
       const message = await res.json();
 
       if (res.ok) {
-        await mutate("/api/store/cart");
+        await Promise.all([
+          mutate("/api/store/cart"),
+          mutate("/api/store/invoices"),
+        ]);
         showToast(message, "success");
         reset();
         handleClose();

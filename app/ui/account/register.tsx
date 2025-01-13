@@ -47,22 +47,24 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...data, recaptchaToken }),
-      });
+      // reminder: accept registration
+      showToast("Temporarily unable to register!", "warning");
+      // const res = await fetch("/api/auth/register", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ ...data, recaptchaToken }),
+      // });
 
-      const message = await res.json();
+      // const message = await res.json();
 
-      if (res.ok) {
-        showToast(message, "success");
-        reset();
-      } else {
-        showToast(message, "warning");
-      }
+      // if (res.ok) {
+      //   showToast(message, "success");
+      //   reset();
+      // } else {
+      //   showToast(message, "warning");
+      // }
     } catch (error) {
       console.error("Register Error: ", error);
       showToast("Something went wrong! Please try again.", "warning");
