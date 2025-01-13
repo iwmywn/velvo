@@ -131,7 +131,7 @@ export default function Checkout({
         showToast(message, "success");
         reset();
         handleClose();
-        router.push("/user/purchase?tab=to-ship-and-receive");
+        router.push("/purchase?tab=to-ship-and-receive");
       } else {
         showToast(message, "warning");
       }

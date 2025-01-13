@@ -132,9 +132,9 @@ export default function ResetPassword({
           </Wrapper>
         </>
       ) : status === "error" ? (
-        <main className="mt-44">
+        <div className="mt-44">
           <Wrapper title={<FaXmark size={30} />}>{message}</Wrapper>
-        </main>
+        </div>
       ) : (
         <NotFound />
       )}

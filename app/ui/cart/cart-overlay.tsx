@@ -78,7 +78,7 @@ export default function CartOverlay() {
               <span className="font-medium">Total: </span>
               <span className="opacity-65">${totalPriceCents}</span>
             </div>
-            <Link href="/user/purchase" onClick={handleClose}>
+            <Link href="/purchase" onClick={handleClose}>
               <Button className="w-full">Go to Payment</Button>
             </Link>
           </div>

@@ -342,7 +342,7 @@ function DeleteAccount({ handleClose }: SettingsProps) {
         showToast(message, "success");
         handleClose();
         await fetch("/api/auth/signout", { method: "POST" });
-        window.location.href = "/user/signin";
+        window.location.href = "/signin";
       } else {
         showToast(message, "warning");
       }

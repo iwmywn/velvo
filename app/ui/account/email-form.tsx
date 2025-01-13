@@ -111,7 +111,7 @@ export default function EmailForm({
             buttonText={buttonText}
           />
         </form>
-        <Link className={linkClass} href="/user/signin">
+        <Link className={linkClass} href="/signin">
           Back to Sign In
         </Link>
       </Wrapper>

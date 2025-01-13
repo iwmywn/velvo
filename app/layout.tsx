@@ -39,9 +39,9 @@ export default async function RootLayout({
           <UIStateProvider>
             <div id="popups" className="relative z-[9999]" />
             <PopUp />
-            <div className="flex min-h-screen items-center justify-center text-3xl font-bold">
+            <main className="flex min-h-screen items-center justify-center text-3xl font-bold">
               Be right back!
-            </div>
+            </main>
           </UIStateProvider>
         </body>
       </html>
@@ -74,7 +74,9 @@ export default async function RootLayout({
               <HeightProvider>
                 <Header />
                 <Gap z={10} />
-                {children}
+                <main className="relative z-10 bg-white px-8 pb-5 pt-8 md:px-20">
+                  {children}
+                </main>
               </HeightProvider>
               <HeightProvider>
                 <Gap z={-9999} />

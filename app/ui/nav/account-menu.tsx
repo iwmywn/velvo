@@ -29,7 +29,7 @@ export default function AccountMenu() {
         ) : isLoading ? (
           <div className="h-[18px] w-[18px] animate-spin rounded-full border-4 border-gray-300 border-t-black md:h-5 md:w-5" />
         ) : (
-          <Link href="/user/signin" title="Sign in">
+          <Link href="/signin" title="Sign in">
             <CiUser className="text-[22px] md:text-2xl" />
           </Link>
         )}
@@ -52,13 +52,13 @@ export default function AccountMenu() {
             <div className="rounded-md border bg-white">
               <div className="relative z-[11] flex flex-col">
                 <Link
-                  href="/user/account-settings"
+                  href="/account"
                   className="text-nowrap px-4 py-2 hover:bg-slate-100"
                 >
-                  Account Settings
+                  My account
                 </Link>
                 <Link
-                  href="/user/purchase"
+                  href="/purchase"
                   className="text-nowrap px-4 py-2 hover:bg-slate-100"
                 >
                   My Purchase

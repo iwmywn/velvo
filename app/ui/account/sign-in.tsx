@@ -107,7 +107,7 @@ export default function SignIn() {
             buttonText="SIGN IN"
           />
         </form>
-        <Link className={linkClass} href="/user/forgotten-password">
+        <Link className={linkClass} href="/forgotten-password">
           Forgot password?
         </Link>
       </div>

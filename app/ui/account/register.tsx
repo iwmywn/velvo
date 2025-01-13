@@ -179,7 +179,7 @@ export default function Register() {
             buttonText="CONTINUE"
           />
         </form>
-        <Link className={linkClass} href="/user/resend-verification-email">
+        <Link className={linkClass} href="/resend-verification-email">
           Resend verification email?
         </Link>
       </div>

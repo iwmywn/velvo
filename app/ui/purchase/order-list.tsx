@@ -94,7 +94,7 @@ export default function OrderList({
       const message = await cancelReceiveOrder(invoiceId, products, statusUrl);
 
       if (message === "Done.") {
-        router.push(`/user/purchase?tab=${statusUrl}`);
+        router.push(`/purchase?tab=${statusUrl}`);
         showToast(
           status === "processing" ? "Order Completed." : "Order Cancelled.",
           "success",

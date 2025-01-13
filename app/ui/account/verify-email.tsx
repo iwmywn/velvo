@@ -26,7 +26,7 @@ export default function VerifyEmail({ token }: { token: string | undefined }) {
   }
 
   return (
-    <main className="mt-44">
+    <div className="mt-44">
       <Wrapper
         title={
           status === "success" ? (
@@ -40,6 +40,6 @@ export default function VerifyEmail({ token }: { token: string | undefined }) {
       >
         {message}
       </Wrapper>
-    </main>
+    </div>
   );
 }

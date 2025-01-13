@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
   }
 
   if (protectedRoutes.some((route) => path.startsWith(route)) && !payload) {
-    const redirectUrl = new URL("/user/signin", nextUrl);
+    const redirectUrl = new URL("/signin", nextUrl);
     redirectUrl.searchParams.set("next", path);
     return NextResponse.redirect(redirectUrl);
   }
