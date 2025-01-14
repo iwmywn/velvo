@@ -1,56 +1,34 @@
 "use client";
 
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, useContext, ReactNode } from "react";
 
-interface AuthContextProps {
-  userId?: string;
-  image?: string;
-  isLoading: boolean;
+interface User {
+  userId: string | undefined;
+  image: string | undefined;
 }
 
-const AuthContext = createContext<AuthContextProps>({
-  isLoading: true,
-});
+const AuthContext = createContext<User | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [userId, setUserId] = useState<string | undefined>(undefined);
-  const [image, setImage] = useState<string | undefined>(undefined);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    async function checkAuth() {
-      const res = await fetch("/api/auth/status", {
-        method: "GET",
-      });
-
-      if (res.ok) {
-        const result: AuthContextProps = await res.json();
-        setUserId(result.userId);
-        setImage(result.image);
-      }
-      setIsLoading(false);
-    }
-
-    checkAuth();
-  }, []);
-
+export const AuthProvider = ({
+  children,
+  userId,
+  image,
+}: {
+  children: ReactNode;
+  userId: string | undefined;
+  image: string | undefined;
+}) => {
   return (
-    <AuthContext.Provider value={{ userId, image, isLoading }}>
+    <AuthContext.Provider value={{ userId, image }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuthContext() {
-  const cxt = useContext(AuthContext);
-  if (!cxt) {
-    throw new Error("useAuthContext must be used within AuthProvider");
+export const useAuthContext = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
   }
-  return cxt;
-}
+  return context;
+};

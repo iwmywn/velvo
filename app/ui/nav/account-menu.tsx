@@ -10,7 +10,7 @@ import { baseImgUrl } from "@ui/data";
 
 export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { userId, image, isLoading } = useAuthContext();
+  const { userId, image } = useAuthContext();
 
   return (
     <div className="relative" onMouseLeave={() => setIsOpen(false)}>
@@ -26,8 +26,6 @@ export default function AccountMenu() {
             sizes="(min-width: 768px) 24px, 22px"
             alt="The avatar style Adventurer is a remix of: Adventurer by Lisa Wischofsky, licensed under CC BY 4.0 ."
           />
-        ) : isLoading ? (
-          <div className="h-[18px] w-[18px] animate-spin rounded-full border-4 border-gray-300 border-t-black md:h-5 md:w-5" />
         ) : (
           <Link href="/signin" title="Sign in">
             <CiUser className="text-[22px] md:text-2xl" />

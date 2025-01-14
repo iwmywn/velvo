@@ -16,6 +16,7 @@ import {
   ProductProvider,
   UIStateProvider,
 } from "@ui/contexts";
+import { verifySession } from "@lib/dal";
 
 export const metadata: Metadata = {
   title: {
@@ -48,14 +49,17 @@ export default async function RootLayout({
     );
   }
 
-  const products = await getProducts();
+  const [products, { userId, image }] = await Promise.all([
+    getProducts(),
+    verifySession(),
+  ]);
 
   return (
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
         <UIStateProvider>
           <ProductProvider products={products}>
-            <AuthProvider>
+            <AuthProvider userId={userId} image={image}>
               <div id="popups" className="relative z-[9999]">
                 <ToastContainer
                   closeButton={false}
