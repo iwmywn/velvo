@@ -30,7 +30,7 @@ export default function Home() {
           {bannerItems.map(({ label, href, image }) => (
             <SwiperSlide key={href}>
               <Link href={`/products/${href}`}>
-                <div className="relative w-full" style={{ paddingTop: "40%" }}>
+                <div className="relative w-full" style={{ paddingTop: "38%" }}>
                   <Image
                     src={`${baseImgUrl}${image}`}
                     alt={label}

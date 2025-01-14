@@ -3,7 +3,6 @@ import "@/app/globals.css";
 import { montserrat } from "@ui/fonts";
 import Header from "@ui/header";
 import Footer from "@ui/footer";
-import ScrollToTop from "@ui/to-top";
 import Gap from "@ui/gap";
 import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
@@ -71,14 +70,18 @@ export default async function RootLayout({
                   stacked
                   limit={3}
                   transition={Slide}
-                  style={{ top: "65px" }}
+                  style={{
+                    top: "65px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                  }}
                 />
               </div>
               <PopUp />
               <HeightProvider>
                 <Header />
                 <Gap z={10} />
-                <main className="relative z-10 bg-white px-8 pb-5 pt-8 md:px-20">
+                <main className="relative z-10 bg-white px-4 pb-5 pt-8 md:px-16">
                   {children}
                 </main>
               </HeightProvider>
@@ -86,7 +89,6 @@ export default async function RootLayout({
                 <Gap z={-9999} />
                 <Footer />
               </HeightProvider>
-              <ScrollToTop />
             </AuthProvider>
           </ProductProvider>
         </UIStateProvider>

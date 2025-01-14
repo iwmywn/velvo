@@ -36,7 +36,7 @@ export default function Header() {
         id="header"
         className="space-right fixed left-0 right-0 top-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
       >
-        <nav className="mx-8 flex w-full items-center justify-between pb-3 pt-4 md:mx-20 md:pb-4 md:pt-7">
+        <div className="mx-4 flex w-full items-center justify-between pb-3 pt-4 md:mx-16 md:pb-4 md:pt-7">
           <div className="hidden max-w-[27rem] flex-1 gap-2 lg:flex lg:items-center">
             <CategoryDropDown />
           </div>
@@ -74,7 +74,7 @@ export default function Header() {
               onClick={() => setState("isMenuOpen", true)}
             />
           </div>
-        </nav>
+        </div>
       </header>
     </>
   );

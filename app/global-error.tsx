@@ -13,7 +13,7 @@ export default function GlobalError({
   return (
     <html>
       <body className={`${montserrat.className} antialiased`}>
-        <main className="relative z-10 flex h-screen flex-col items-center gap-2 bg-white px-8 pt-52 text-center md:px-20">
+        <main className="relative z-10 flex h-screen flex-col items-center gap-2 bg-white px-4 pt-52 text-center md:px-16">
           <h2 className="text-lg font-semibold">Something went wrong!</h2>
           <p>{error.message}</p>
           <Button onClick={() => reset()}>Try again</Button>
