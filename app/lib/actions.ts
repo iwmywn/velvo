@@ -2,7 +2,7 @@
 
 import { ObjectId } from "mongodb";
 import nodemailer from "nodemailer";
-import { revalidatePath } from "next/cache";
+// import { revalidatePath } from "next/cache";
 import {
   getCartCollection,
   getInvoiceListCollection,
@@ -242,9 +242,9 @@ export async function cancelReceiveOrder(
   }
 
   try {
-    const invoiceCollection = await getInvoiceListCollection();
+    const invoiceListCollection = await getInvoiceListCollection();
 
-    const user = await invoiceCollection.findOne(
+    const invoiceList = await invoiceListCollection.findOne(
       { userId: new ObjectId(userId) },
       {
         projection: {
@@ -253,15 +253,19 @@ export async function cancelReceiveOrder(
       },
     );
 
-    if (!user || !user.invoices || user.invoices.length === 0) {
+    if (
+      !invoiceList ||
+      !invoiceList.invoices ||
+      invoiceList.invoices.length === 0
+    ) {
       throw new Error("Invoice not found!");
     }
 
-    const fullInvoice = user.invoices[0];
+    const fullInvoice = invoiceList.invoices[0];
     fullInvoice.status = status;
 
     await Promise.all([
-      invoiceCollection.updateOne(
+      invoiceListCollection.updateOne(
         { userId: new ObjectId(userId) },
         {
           $pull: {
@@ -269,7 +273,7 @@ export async function cancelReceiveOrder(
           },
         },
       ),
-      invoiceCollection.updateOne(
+      invoiceListCollection.updateOne(
         { userId: new ObjectId(userId) },
         {
           $push: {
@@ -281,17 +285,20 @@ export async function cancelReceiveOrder(
         },
       ),
       ...(status === "cancelled"
-        ? products.map(async ({ productId, quantity, size }) => {
+        ? products.map(({ productId, quantity, size }) => {
             const sizeField = `sizes.${size}`;
-            return (await getProductCollection()).updateOne(
-              { _id: new ObjectId(productId) },
-              { $inc: { [sizeField]: quantity } },
+            return getProductCollection().then((productCollection) =>
+              productCollection.updateOne(
+                { _id: new ObjectId(productId) },
+                { $inc: { [sizeField]: quantity } },
+              ),
             );
           })
         : []),
     ]);
 
-    revalidatePath("/product");
+    //todo: revalidatePath
+    // revalidatePath("/product");
     return "Done.";
   } catch (error) {
     console.error("Error:", error);

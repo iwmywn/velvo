@@ -17,6 +17,7 @@ import Loading from "@ui/loading";
 import { useAnimation } from "@ui/hooks";
 import { transformInvoiceProducts } from "@lib/utils";
 import { useInvoices } from "@lib/hooks";
+import { mutate } from "swr";
 
 export default function OrderList({
   orderStatus,
@@ -94,6 +95,7 @@ export default function OrderList({
       const message = await cancelReceiveOrder(invoiceId, products, statusUrl);
 
       if (message === "Done.") {
+        await mutate("/api/store/invoices");
         router.push(`/purchase?tab=${statusUrl}`);
         showToast(
           status === "processing" ? "Order Completed." : "Order Cancelled.",
@@ -125,6 +127,7 @@ export default function OrderList({
       const message = await addToCart(productId, size);
 
       if (message === "Done.") {
+        await mutate("/api/store/cart");
         setState("isCartOpen", true);
       } else {
         showToast(message, "warning");

@@ -5,7 +5,7 @@ import { ObjectId } from "mongodb";
 
 export async function GET() {
   const { userId } = await verifySession();
-  if (!userId) return createResponse("User is not authenticated!", 401);
+  if (!userId) return createResponse("User is not authenticated!", 200);
 
   const cart = await (
     await getCartCollection()
