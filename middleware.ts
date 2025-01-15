@@ -25,16 +25,18 @@ export async function middleware(req: NextRequest) {
     if (protectedRoutes.some((route) => path.startsWith(route))) {
       return redirectToSignIn();
     }
+
+    return NextResponse.next();
   }
 
   if (authRoutes.some((route) => path.startsWith(route)) && payload) {
     return NextResponse.redirect(new URL(DEFAULT_SIGNIN_REDIRECT, nextUrl));
   }
 
-  const expiresIn = new Date(payload!.expires).getTime() - Date.now();
+  const expiresIn = new Date(payload.expires).getTime() - Date.now();
 
-  if (expiresIn < 24 * 60 * 60 * 1000) {
-    await updateSession(session!);
+  if (expiresIn < 24 * 60 * 60 * 1000 && session) {
+    await updateSession(session);
   }
 
   const userId = req.cookies.get("userId")?.value;
@@ -42,15 +44,15 @@ export async function middleware(req: NextRequest) {
 
   if (!userId || !userImage) {
     const response = NextResponse.next();
-    const { userId, userImage } = payload!.user;
+    const { userId, userImage } = payload.user;
 
-    response.cookies.set("userId", userId!, {
+    response.cookies.set("userId", userId || "", {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
     });
 
-    response.cookies.set("userImage", userImage!, {
+    response.cookies.set("userImage", userImage || "", {
       httpOnly: true,
       sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
