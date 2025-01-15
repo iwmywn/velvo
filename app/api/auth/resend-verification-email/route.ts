@@ -31,7 +31,7 @@ export async function PATCH(req: Request) {
       200,
     );
 
-  if (existingUser.isVerified)
+  if (existingUser.emailVerified)
     return createResponse("Email already verified!", 400);
 
   if (existingUser.resendVerification >= 2)

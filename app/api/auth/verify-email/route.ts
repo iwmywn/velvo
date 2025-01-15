@@ -30,7 +30,7 @@ export async function GET(req: Request) {
       (await getUserCollection()).updateOne(
         { verificationToken: token! },
         {
-          $set: { isVerified: true, updatedAt: new Date() },
+          $set: { emailVerified: true, updatedAt: new Date() },
           $unset: { verificationToken: "", resendVerification: "" },
         },
       ),

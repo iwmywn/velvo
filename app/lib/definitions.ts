@@ -10,7 +10,7 @@ type BaseUser<T> = {
   name: string;
   email: string;
   password: string;
-  isVerified: boolean;
+  emailVerified: boolean;
   image: string;
   verificationToken: string;
   resendVerification: number;

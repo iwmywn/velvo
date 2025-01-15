@@ -66,6 +66,4 @@ export async function updateSession(session: string) {
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
-  cookieStore.delete("userId");
-  cookieStore.delete("userImage");
 }
