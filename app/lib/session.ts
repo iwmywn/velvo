@@ -1,8 +1,17 @@
 import "server-only";
 
-import { SignJWT, jwtVerify } from "jose";
-import { SessionPayload } from "@lib/definitions";
+import { type JWTPayload, SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+
+export interface User {
+  userId: string | undefined;
+  userImage: string | undefined;
+}
+
+interface SessionPayload extends JWTPayload {
+  user: User;
+  expires: Date;
+}
 
 const secretKey = process.env.JWT_SECRET;
 const encodedKey = new TextEncoder().encode(secretKey);
@@ -28,7 +37,7 @@ export async function encrypt(payload: SessionPayload) {
     .setIssuedAt()
     .setIssuer(issuer)
     .setAudience(audience)
-    .setExpirationTime("7d")
+    .setExpirationTime(expires)
     .sign(encodedKey);
 }
 
@@ -45,8 +54,8 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(userId: string, image: string) {
-  const session = await encrypt({ userId, image });
+export async function createSession(userId: string, userImage: string) {
+  const session = await encrypt({ user: { userId, userImage }, expires });
   await setSessionCookie(session);
 }
 
@@ -57,4 +66,6 @@ export async function updateSession(session: string) {
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
+  cookieStore.delete("userId");
+  cookieStore.delete("userImage");
 }

@@ -1,11 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, ReactNode } from "react";
-
-interface User {
-  userId: string | undefined;
-  userImage: string | undefined;
-}
+import { User } from "@lib/session";
 
 const AuthContext = createContext<User | undefined>(undefined);
 

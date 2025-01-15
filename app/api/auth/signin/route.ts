@@ -5,6 +5,7 @@ import { signInSchema } from "@/schemas";
 import { createResponse } from "@api/utils";
 import { createSession } from "@lib/session";
 import { getUserByEmail } from "@lib/data";
+import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
   const data = await req.json();
@@ -29,7 +30,22 @@ export async function POST(req: Request) {
       400,
     );
 
-  await createSession(existingUser._id.toString(), existingUser.image);
+  const { _id, image } = existingUser;
+  const [, cookieStore] = await Promise.all([
+    createSession(_id.toString(), image),
+    cookies(),
+  ]);
+
+  cookieStore.set("userId", _id.toString(), {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+  cookieStore.set("userImage", image, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
 
   return new Response(JSON.stringify({ message: "Signin successful." }), {
     status: 200,

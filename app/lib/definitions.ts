@@ -79,11 +79,6 @@ type BaseProduct<T> = {
   updatedAt?: Date;
 };
 
-export type SessionPayload = {
-  userId: string;
-  image: string;
-};
-
 export type Avatar = BaseAvatar<string>;
 export type DBAvatar = BaseAvatar<ObjectId>;
 
