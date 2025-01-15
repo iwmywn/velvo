@@ -7,7 +7,7 @@ import { updateSession } from "@lib/session";
 import { verifySession } from "@lib/dal";
 
 export async function middleware(req: NextRequest) {
-  const { nextUrl } = req;
+  const { nextUrl, cookies } = req;
   const path = nextUrl.pathname;
 
   if (siteConfig.maintenanceMode && path !== "/") {
@@ -19,13 +19,18 @@ export async function middleware(req: NextRequest) {
     redirectUrl.searchParams.set("next", path);
     return NextResponse.redirect(redirectUrl);
   };
-  const session = req.cookies.get("session")?.value;
+  const session = cookies.get("session")?.value;
+  const userIdStore = cookies.get("userId")?.value;
+  const userImageStore = cookies.get("userImage")?.value;
   const { userId, userImage, expires } = await verifySession();
 
   if (!userId) {
     if (protectedRoutes.some((route) => path.startsWith(route))) {
       return redirectToSignIn();
     }
+
+    if (userIdStore) cookies.delete("userId");
+    if (userImageStore) cookies.delete("userImage");
 
     return NextResponse.next();
   }
@@ -39,9 +44,6 @@ export async function middleware(req: NextRequest) {
   if (expiresIn < 24 * 60 * 60 * 1000 && session) {
     await updateSession(session);
   }
-
-  const userIdStore = req.cookies.get("userId")?.value;
-  const userImageStore = req.cookies.get("userImage")?.value;
 
   if (!userIdStore || !userImageStore) {
     const response = NextResponse.next();
