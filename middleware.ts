@@ -29,10 +29,12 @@ export async function middleware(req: NextRequest) {
       return redirectToSignIn();
     }
 
-    if (userIdStore) cookies.delete("userId");
-    if (userImageStore) cookies.delete("userImage");
+    const response = NextResponse.next();
 
-    return NextResponse.next();
+    if (userIdStore) response.cookies.delete("userId");
+    if (userImageStore) response.cookies.delete("userImage");
+
+    return response;
   }
 
   if (authRoutes.some((route) => path.startsWith(route)) && userId) {
