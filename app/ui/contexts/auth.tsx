@@ -4,7 +4,7 @@ import React, { createContext, useContext, ReactNode } from "react";
 
 interface User {
   userId: string | undefined;
-  image: string | undefined;
+  userImage: string | undefined;
 }
 
 const AuthContext = createContext<User | undefined>(undefined);
@@ -12,14 +12,14 @@ const AuthContext = createContext<User | undefined>(undefined);
 export const AuthProvider = ({
   children,
   userId,
-  image,
+  userImage,
 }: {
   children: ReactNode;
   userId: string | undefined;
-  image: string | undefined;
+  userImage: string | undefined;
 }) => {
   return (
-    <AuthContext.Provider value={{ userId, image }}>
+    <AuthContext.Provider value={{ userId, userImage }}>
       {children}
     </AuthContext.Provider>
   );

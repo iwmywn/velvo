@@ -10,7 +10,7 @@ import { baseImgUrl } from "@ui/data";
 
 export default function AccountMenu() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { userId, image } = useAuthContext();
+  const { userId, userImage } = useAuthContext();
 
   return (
     <div className="relative" onMouseLeave={() => setIsOpen(false)}>
@@ -21,7 +21,7 @@ export default function AccountMenu() {
       >
         {userId ? (
           <Image
-            src={`${baseImgUrl}${image}`}
+            src={`${baseImgUrl}${userImage}`}
             fill
             sizes="(min-width: 768px) 24px, 22px"
             alt="The avatar style Adventurer is a remix of: Adventurer by Lisa Wischofsky, licensed under CC BY 4.0 ."
