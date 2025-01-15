@@ -106,7 +106,7 @@ export default function Home() {
             <div className="relative w-full" style={{ paddingTop: "80%" }}>
               <Image
                 src={`${baseImgUrl}${image}`}
-                alt={label}
+                alt={`${label} collection preview`}
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"

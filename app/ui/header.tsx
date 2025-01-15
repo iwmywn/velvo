@@ -52,23 +52,22 @@ export default function Header() {
               title="Search"
             />
             <AccountMenu />
-            {!isLoading && (
-              <span className="relative">
-                <GiShoppingCart
-                  className="cursor-pointer text-[22px] md:text-2xl"
-                  onClick={() => {
-                    if (quantity > 0) setState("isCartOpen", true);
-                    else showToast("Your shopping cart is empty.", "warning");
-                  }}
-                  title="Cart"
-                />
-                {quantity > 0 && (
-                  <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
-                    {quantity}
-                  </span>
-                )}
-              </span>
-            )}
+            <span className="relative">
+              <GiShoppingCart
+                className="cursor-pointer text-[22px] md:text-2xl"
+                onClick={() => {
+                  if (quantity > 0) setState("isCartOpen", true);
+                  else if (isLoading) showToast("Loading cart...", "warning");
+                  else showToast("Your shopping cart is empty.", "warning");
+                }}
+                title="Cart"
+              />
+              {quantity > 0 && (
+                <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
+                  {quantity}
+                </span>
+              )}
+            </span>
             <IoIosMenu
               className="block cursor-pointer text-[22px] md:text-2xl lg:hidden"
               onClick={() => setState("isMenuOpen", true)}
