@@ -11,9 +11,11 @@ export const verifySession = cache(async () => {
   if (!payload) return {};
 
   const { userId, userImage } = payload.user;
+  const expires = payload.expires;
 
   return {
     userId,
     userImage,
+    expires,
   };
 });

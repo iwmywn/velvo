@@ -3,7 +3,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { authRoutes, DEFAULT_SIGNIN_REDIRECT, protectedRoutes } from "@/routes";
 import { siteConfig } from "@lib/config";
-import { decrypt, updateSession } from "@lib/session";
+import { updateSession } from "@lib/session";
+import { verifySession } from "@lib/dal";
 
 export async function middleware(req: NextRequest) {
   const { nextUrl } = req;
@@ -19,9 +20,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   };
   const session = req.cookies.get("session")?.value;
-  const payload = session ? await decrypt(session) : null;
+  const { userId, userImage, expires } = await verifySession();
 
-  if (!payload) {
+  if (!userId) {
     if (protectedRoutes.some((route) => path.startsWith(route))) {
       return redirectToSignIn();
     }
@@ -29,22 +30,21 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  if (authRoutes.some((route) => path.startsWith(route)) && payload) {
+  if (authRoutes.some((route) => path.startsWith(route)) && userId) {
     return NextResponse.redirect(new URL(DEFAULT_SIGNIN_REDIRECT, nextUrl));
   }
 
-  const expiresIn = new Date(payload.expires).getTime() - Date.now();
+  const expiresIn = new Date(expires).getTime() - Date.now();
 
   if (expiresIn < 24 * 60 * 60 * 1000 && session) {
     await updateSession(session);
   }
 
-  const userId = req.cookies.get("userId")?.value;
-  const userImage = req.cookies.get("userImage")?.value;
+  const userIdStore = req.cookies.get("userId")?.value;
+  const userImageStore = req.cookies.get("userImage")?.value;
 
-  if (!userId || !userImage) {
+  if (!userIdStore || !userImageStore) {
     const response = NextResponse.next();
-    const { userId, userImage } = payload.user;
 
     response.cookies.set("userId", userId || "", {
       httpOnly: true,
