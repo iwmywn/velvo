@@ -8,6 +8,7 @@ import {
   getAvatarCollection,
   getUserCollection,
 } from "@lib/collections";
+import { cache } from "react";
 
 export async function getUserByEmail(email: string) {
   try {
@@ -18,7 +19,7 @@ export async function getUserByEmail(email: string) {
   }
 }
 
-export async function getAvatars(): Promise<Avatar[]> {
+export const getAvatars = cache(async (): Promise<Avatar[]> => {
   try {
     const avatars = await (await getAvatarCollection()).find({}).toArray();
 
@@ -30,9 +31,9 @@ export async function getAvatars(): Promise<Avatar[]> {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch avatars.");
   }
-}
+});
 
-export async function getCategories(): Promise<Category[]> {
+export const getCategories = cache(async (): Promise<Category[]> => {
   try {
     const categories = await (await getCategoryCollection()).find({}).toArray();
 
@@ -44,9 +45,9 @@ export async function getCategories(): Promise<Category[]> {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch categories.");
   }
-}
+});
 
-export async function getProducts(): Promise<Product[]> {
+export const getProducts = cache(async (): Promise<Product[]> => {
   try {
     const products = await (await getProductCollection()).find({}).toArray();
 
@@ -60,4 +61,4 @@ export async function getProducts(): Promise<Product[]> {
     console.error("MongoDB fetch error:", error);
     throw new Error("Failed to fetch products.");
   }
-}
+});
