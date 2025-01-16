@@ -33,8 +33,8 @@ export const getAvatars = cache(async (): Promise<Avatar[]> => {
       _id: _id.toString(),
     }));
   } catch (error) {
-    console.error("MongoDB fetch error:", error);
-    throw new Error("Failed to fetch avatars.");
+    console.error("Failed to fetch avatars:", error);
+    return [];
   }
 });
 
@@ -47,8 +47,8 @@ export const getCategories = cache(async (): Promise<Category[]> => {
       _id: _id.toString(),
     }));
   } catch (error) {
-    console.error("MongoDB fetch error:", error);
-    throw new Error("Failed to fetch categories.");
+    console.error("Failed to fetch categories:", error);
+    return [];
   }
 });
 
@@ -63,8 +63,8 @@ export const getProducts = cache(async (): Promise<Product[]> => {
       images: images.map((image) => baseImgUrl + image),
     }));
   } catch (error) {
-    console.error("MongoDB fetch error:", error);
-    throw new Error("Failed to fetch products.");
+    console.error("Failed to fetch products:", error);
+    return [];
   }
 });
 
@@ -74,7 +74,7 @@ export async function getCart(): Promise<CartResponse> {
   try {
     const { userId } = await verifySession();
     if (!userId) {
-      return { error: "Please login to view cart!", ...defaultCart };
+      return { error: "Please sign in to view cart!", ...defaultCart };
     }
 
     const cart = await (
@@ -109,7 +109,7 @@ export async function getInvoices(): Promise<InvoicesResponse> {
   try {
     const { userId } = await verifySession();
     if (!userId) {
-      return { error: "Please login to view invoices!", ...defaultInvoices };
+      return { error: "Please sign in to view invoices!", ...defaultInvoices };
     }
 
     const invoiceList = await (

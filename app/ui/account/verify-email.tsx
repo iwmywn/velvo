@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import Loading from "@ui/loading";
-import Wrapper from "@ui/account/wrapper";
 import { handleTokenVerification } from "@lib/utils";
+import Title from "@ui/account/title";
 
 export default function VerifyEmail({ token }: { token: string | undefined }) {
   const [status, setStatus] = useState<"success" | "error" | null>(null);
@@ -26,8 +26,8 @@ export default function VerifyEmail({ token }: { token: string | undefined }) {
   }
 
   return (
-    <div className="mt-44">
-      <Wrapper
+    <>
+      <Title
         title={
           status === "success" ? (
             <FaCheck size={30} />
@@ -37,9 +37,8 @@ export default function VerifyEmail({ token }: { token: string | undefined }) {
             "Unknown"
           )
         }
-      >
-        {message}
-      </Wrapper>
-    </div>
+      />
+      {message}
+    </>
   );
 }

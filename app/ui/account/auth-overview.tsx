@@ -3,7 +3,7 @@
 import { useState } from "react";
 import SignIn from "@ui/account/sign-in";
 import Register from "@ui/account/register";
-import Wrapper from "@ui/account/wrapper";
+import Title from "@ui/account/title";
 
 const tabs = [
   {
@@ -20,7 +20,8 @@ export default function AuthOverview() {
   const [isSignIn, setIsSignIn] = useState<boolean>(true);
 
   return (
-    <Wrapper title="ACCOUNT">
+    <>
+      <Title title="ACCOUNT" />
       <div className="mb-3 flex w-full text-xs font-medium">
         {tabs.map(({ name, isActive }, index) => (
           <div
@@ -33,6 +34,6 @@ export default function AuthOverview() {
         ))}
       </div>
       {isSignIn ? <SignIn /> : <Register />}
-    </Wrapper>
+    </>
   );
 }

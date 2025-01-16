@@ -1,6 +1,5 @@
 "use client";
 
-import Wrapper from "@ui/account/wrapper";
 import showToast from "@ui/toast";
 import { FormButton } from "@ui/button";
 import { useState } from "react";
@@ -18,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import ReCaptchaPopup from "@ui/recaptcha";
+import Title from "@ui/account/title";
 
 type EmailFormData = z.infer<typeof emailScheme>;
 
@@ -87,34 +87,31 @@ export default function EmailForm({
           setRecaptchaToken={(token) => setRecaptchaToken(token)}
         />
       )}
-      <Wrapper title={title}>
-        <form onSubmit={handleSubmit(onSubmit)} className={`${formClass} my-5`}>
-          <div className={boxClass}>
-            <input
-              className={inputClass}
-              id="Email"
-              type="email"
-              placeholder="Email"
-              {...register("email")}
-              disabled={isSubmitting}
-            />
-            <label className={labelClass} htmlFor="Email">
-              Email
-            </label>
-            {errors.email && (
-              <p className={errorClass}>{errors.email.message}</p>
-            )}
-          </div>
-          <FormButton
-            isValid={isValid}
-            isSubmitting={isSubmitting}
-            buttonText={buttonText}
+      <Title title={title} />
+      <form onSubmit={handleSubmit(onSubmit)} className={`${formClass} my-5`}>
+        <div className={boxClass}>
+          <input
+            className={inputClass}
+            id="Email"
+            type="email"
+            placeholder="Email"
+            {...register("email")}
+            disabled={isSubmitting}
           />
-        </form>
-        <Link className={linkClass} href="/signin">
-          Back to Sign In
-        </Link>
-      </Wrapper>
+          <label className={labelClass} htmlFor="Email">
+            Email
+          </label>
+          {errors.email && <p className={errorClass}>{errors.email.message}</p>}
+        </div>
+        <FormButton
+          isValid={isValid}
+          isSubmitting={isSubmitting}
+          buttonText={buttonText}
+        />
+      </form>
+      <Link className={linkClass} href="/signin">
+        Back to Sign In
+      </Link>
     </>
   );
 }

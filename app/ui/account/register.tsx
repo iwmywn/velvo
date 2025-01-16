@@ -9,12 +9,10 @@ import {
   inputClass,
   labelClass,
   errorClass,
-  linkClass,
 } from "@ui/form-class";
 import { FormButton } from "@ui/button";
 import showToast from "@ui/toast";
 import { registerSchema } from "@/schemas";
-import Link from "next/link";
 import ReCaptchaPopup from "@ui/recaptcha";
 import { useState } from "react";
 
@@ -179,9 +177,9 @@ export default function Register() {
             buttonText="CONTINUE"
           />
         </form>
-        <Link className={linkClass} href="/resend-verification-email">
+        {/* <Link className={linkClass} href="/resend-verification-email">
           Resend verification email?
-        </Link>
+        </Link> */}
       </div>
     </>
   );
