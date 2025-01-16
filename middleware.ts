@@ -14,25 +14,21 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", nextUrl));
   }
 
-  const redirectToSignIn = () => {
-    const redirectUrl = new URL("/signin", nextUrl);
-    redirectUrl.searchParams.set("next", path);
-    return NextResponse.redirect(redirectUrl);
-  };
   const session = cookies.get("session")?.value;
   const userIdStore = cookies.get("userId")?.value;
   const userImageStore = cookies.get("userImage")?.value;
   const { userId, userImage, expires } = await verifySession();
 
   if (!userId) {
-    if (protectedRoutes.some((route) => path.startsWith(route))) {
-      return redirectToSignIn();
-    }
-
     const response = NextResponse.next();
 
     if (userIdStore) response.cookies.delete("userId");
     if (userImageStore) response.cookies.delete("userImage");
+    if (protectedRoutes.some((route) => path.startsWith(route))) {
+      const redirectUrl = new URL("/signin", nextUrl);
+      redirectUrl.searchParams.set("next", path);
+      return NextResponse.redirect(redirectUrl);
+    }
 
     return response;
   }
