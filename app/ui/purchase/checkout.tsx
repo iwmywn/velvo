@@ -113,7 +113,7 @@ export default function Checkout({
         totalPriceCents,
         recaptchaToken,
       };
-      const res = await fetch(`/api/user/place-order`, {
+      const res = await fetch(`/api/place-order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -56,7 +56,7 @@ export default function ResetPassword({
 
   const onSubmit = async (data: PasswordFormData) => {
     try {
-      const res = await fetch(`/api/auth/reset-password?token=${token}`, {
+      const res = await fetch(`/api/reset-password?token=${token}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

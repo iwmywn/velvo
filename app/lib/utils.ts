@@ -11,7 +11,7 @@ export async function handleTokenVerification(
 ) {
   if (token) {
     try {
-      const res = await fetch(`/api/auth/${endpoint}?token=${token}`);
+      const res = await fetch(`/api/${endpoint}?token=${token}`);
       const message = await res.json();
 
       if (res.ok) {

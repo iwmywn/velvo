@@ -128,7 +128,7 @@ function ChangePassword({ handleClose }: SettingsProps) {
 
   const onSubmit = async (data: ChangePasswordFormData) => {
     try {
-      const res = await fetch(`/api/user/change-password`, {
+      const res = await fetch(`/api/change-password`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -230,7 +230,7 @@ function ChangeEmail({ handleClose }: SettingsProps) {
 
   const onSubmit = async (data: ChangeEmailFormData) => {
     try {
-      const res = await fetch(`/api/user/change-email`, {
+      const res = await fetch(`/api/change-email`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -328,7 +328,7 @@ function DeleteAccount({ handleClose }: SettingsProps) {
   const onSubmit = async (data: DeleteAccountFormData) => {
     showToast("Deleting your account...", "success");
     try {
-      const res = await fetch(`/api/user/delete-account`, {
+      const res = await fetch(`/api/delete-account`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -341,7 +341,7 @@ function DeleteAccount({ handleClose }: SettingsProps) {
       if (res.ok) {
         showToast(message, "success");
         handleClose();
-        await fetch("/api/auth/signout", { method: "POST" });
+        await fetch("/api/signout", { method: "POST" });
         window.location.href = "/signin";
       } else {
         showToast(message, "warning");

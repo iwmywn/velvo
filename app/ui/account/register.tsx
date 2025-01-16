@@ -47,7 +47,7 @@ export default function Register() {
     try {
       // reminder: accept registration
       showToast("Temporarily unable to register!", "warning");
-      // const res = await fetch("/api/auth/register", {
+      // const res = await fetch("/api/register", {
       //   method: "POST",
       //   headers: {
       //     "Content-Type": "application/json",

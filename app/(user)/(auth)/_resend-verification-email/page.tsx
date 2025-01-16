@@ -9,7 +9,7 @@ export default function ResendVerificationEmailPage() {
   return (
     <EmailForm
       title="RESEND VERIFYCATION EMAIL"
-      enpoint="/api/auth/resend-verification-email"
+      enpoint="/api/resend-verification-email"
       buttonText="RESEND EMAIL"
     />
   );
