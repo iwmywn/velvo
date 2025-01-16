@@ -95,7 +95,7 @@ export default function OrderList({
       const message = await cancelReceiveOrder(invoiceId, products, statusUrl);
 
       if (message === "Done.") {
-        await mutate("/api/store/invoices");
+        await mutate("invoices");
         router.push(`/purchase?tab=${statusUrl}`);
         showToast(
           status === "processing" ? "Order Completed." : "Order Cancelled.",
@@ -127,7 +127,7 @@ export default function OrderList({
       const message = await addToCart(productId, size);
 
       if (message === "Done.") {
-        await mutate("/api/store/cart");
+        await mutate("cart");
         setState("isCartOpen", true);
       } else {
         showToast(message, "warning");

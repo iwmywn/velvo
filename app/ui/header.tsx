@@ -21,6 +21,7 @@ export default function Header() {
   const {
     cart: { quantity },
     isLoading,
+    isError,
   } = useCart();
   const { state, setState } = useUIStateContext();
 
@@ -58,6 +59,7 @@ export default function Header() {
                 onClick={() => {
                   if (quantity > 0) setState("isCartOpen", true);
                   else if (isLoading) showToast("Loading cart...", "warning");
+                  else if (isError) showToast(isError, "warning");
                   else showToast("Your shopping cart is empty.", "warning");
                 }}
                 title="Cart"

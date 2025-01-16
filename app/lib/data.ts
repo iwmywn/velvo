@@ -7,8 +7,13 @@ import {
   getProductCollection,
   getAvatarCollection,
   getUserCollection,
+  getCartCollection,
+  getInvoiceListCollection,
 } from "@lib/collections";
 import { cache } from "react";
+import { verifySession } from "@lib/dal";
+import { ObjectId } from "mongodb";
+import { CartResponse, InvoicesResponse } from "@lib/hooks";
 
 export async function getUserByEmail(email: string) {
   try {
@@ -62,3 +67,74 @@ export const getProducts = cache(async (): Promise<Product[]> => {
     throw new Error("Failed to fetch products.");
   }
 });
+
+export async function getCart(): Promise<CartResponse> {
+  const defaultCart = { products: [], quantity: 0 };
+
+  try {
+    const { userId } = await verifySession();
+    if (!userId) {
+      return { error: "Please login to view cart!", ...defaultCart };
+    }
+
+    const cart = await (
+      await getCartCollection()
+    ).findOne({ userId: new ObjectId(userId) });
+
+    if (!cart) {
+      return { error: "Cart not found!", ...defaultCart };
+    }
+
+    if (cart.products.length === 0) return { ...defaultCart };
+
+    const products = cart.products.map(({ productId, ...rest }) => ({
+      ...rest,
+      productId: productId.toString(),
+    }));
+
+    const quantity = products.reduce(
+      (sum, product) => sum + product.quantity,
+      0,
+    );
+
+    return { products, quantity };
+  } catch {
+    return { error: "An unexpected error occurred.", ...defaultCart };
+  }
+}
+
+export async function getInvoices(): Promise<InvoicesResponse> {
+  const defaultInvoices = { invoices: [] };
+
+  try {
+    const { userId } = await verifySession();
+    if (!userId) {
+      return { error: "Please login to view invoices!", ...defaultInvoices };
+    }
+
+    const invoiceList = await (
+      await getInvoiceListCollection()
+    ).findOne({ userId: new ObjectId(userId) });
+
+    if (!invoiceList) {
+      return { error: "Invoice List not found!", ...defaultInvoices };
+    }
+
+    if (invoiceList.invoices.length === 0) return { invoices: [] };
+
+    const invoices = invoiceList.invoices.map(
+      ({ invoiceId, products, ...rest }) => ({
+        ...rest,
+        invoiceId: invoiceId.toString(),
+        products: products.map(({ productId, ...rest }) => ({
+          ...rest,
+          productId: productId.toString(),
+        })),
+      }),
+    );
+
+    return { invoices };
+  } catch {
+    return { error: "An unexpected error occurred.", ...defaultInvoices };
+  }
+}

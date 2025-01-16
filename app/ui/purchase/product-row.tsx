@@ -61,7 +61,7 @@ export default function ProductRow({
       const message = await operation();
 
       if (successMessages.includes(message)) {
-        await mutate("/api/store/cart");
+        await mutate("cart");
       } else {
         showToast(message, "warning");
       }

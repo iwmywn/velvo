@@ -124,10 +124,7 @@ export default function Checkout({
       const message = await res.json();
 
       if (res.ok) {
-        await Promise.all([
-          mutate("/api/store/cart"),
-          mutate("/api/store/invoices"),
-        ]);
+        await Promise.all([mutate("cart"), mutate("invoices")]);
         showToast(message, "success");
         reset();
         handleClose();

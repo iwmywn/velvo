@@ -77,7 +77,7 @@ export default function ProductDetails({ product }: { product: Product }) {
       const message = await addToCart(productId, selectedSize!, quantity);
 
       if (message === "Done.") {
-        await mutate("/api/store/cart");
+        await mutate("cart");
         setState("isCartOpen", true);
       } else {
         showToast(message, "warning");
