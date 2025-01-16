@@ -23,7 +23,7 @@ export default function Footer() {
     <footer
       ref={ref}
       id="footer"
-      className="space-right fixed bottom-0 left-0 right-0 z-[9] flex flex-col items-center gap-10 border-t px-4 pb-4 pt-10 md:px-16"
+      className="space-right fixed bottom-0 left-0 right-0 z-[9] flex flex-col items-center gap-10 border-t px-6 pb-4 pt-10 md:px-16"
     >
       <div className="flex w-full flex-wrap justify-between gap-8 text-sm">
         {footerSections.map(({ title, links }, index) => (

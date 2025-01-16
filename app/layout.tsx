@@ -80,7 +80,7 @@ export default async function RootLayout({
               <HeightProvider>
                 <Header />
                 <Gap z={10} />
-                <main className="relative z-10 bg-white px-4 pb-5 pt-8 md:px-16">
+                <main className="relative z-10 bg-white px-6 pb-5 pt-8 md:px-16">
                   {children}
                 </main>
               </HeightProvider>
