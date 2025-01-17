@@ -2,7 +2,7 @@
 
 import { ObjectId } from "mongodb";
 import nodemailer from "nodemailer";
-// import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 import {
   getCartCollection,
   getInvoiceListCollection,
@@ -242,7 +242,10 @@ export async function cancelReceiveOrder(
   }
 
   try {
-    const invoiceListCollection = await getInvoiceListCollection();
+    const [invoiceListCollection, productCollection] = await Promise.all([
+      getInvoiceListCollection(),
+      getProductCollection(),
+    ]);
 
     const invoiceList = await invoiceListCollection.findOne(
       { userId: new ObjectId(userId) },
@@ -252,13 +255,19 @@ export async function cancelReceiveOrder(
         },
       },
     );
+    const productNames: string[] = [];
 
-    if (
-      !invoiceList ||
-      !invoiceList.invoices ||
-      invoiceList.invoices.length === 0
-    ) {
-      throw new Error("Invoice not found!");
+    for (const { productId } of products) {
+      const product = await productCollection.findOne(
+        { _id: new ObjectId(productId) },
+        { projection: { name: 1 } },
+      );
+
+      if (product) productNames.push(product.name);
+    }
+
+    if (!invoiceList) {
+      return "Invoice not found!";
     }
 
     const fullInvoice = invoiceList.invoices[0];
@@ -285,20 +294,19 @@ export async function cancelReceiveOrder(
         },
       ),
       ...(status === "cancelled"
-        ? products.map(({ productId, quantity, size }) => {
+        ? products.map(async ({ productId, quantity, size }) => {
             const sizeField = `sizes.${size}`;
-            return getProductCollection().then((productCollection) =>
-              productCollection.updateOne(
-                { _id: new ObjectId(productId) },
-                { $inc: { [sizeField]: quantity } },
-              ),
+            return await productCollection.updateOne(
+              { _id: new ObjectId(productId) },
+              { $inc: { [sizeField]: quantity } },
             );
           })
         : []),
     ]);
 
-    //todo: revalidatePath
-    // revalidatePath("/product");
+    productNames.forEach((name) => {
+      revalidatePath(`/products/${name}`);
+    });
     return "Done.";
   } catch (error) {
     console.error("Error:", error);

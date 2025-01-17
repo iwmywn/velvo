@@ -4,7 +4,7 @@ import { getPriceAfterDiscount } from "@lib/utils";
 import { createResponse } from "@api/utils";
 import { placeOrderWithProductSchema } from "@/schemas";
 import { ObjectId } from "mongodb";
-// import { revalidatePath } from "next/cache";
+import { revalidatePath } from "next/cache";
 import verifyRecaptchaToken from "@lib/recaptcha";
 import { verifySession } from "@lib/dal";
 import {
@@ -58,6 +58,7 @@ export async function POST(req: Request) {
       getInvoiceListCollection(),
       getCartCollection(),
     ]);
+  const productNames: string[] = [];
 
   for (const { productId, quantity, size } of transformedProducts) {
     const sizeField = `sizes.${size}`;
@@ -72,6 +73,8 @@ export async function POST(req: Request) {
         400,
       );
     }
+
+    productNames.push(product.name);
   }
 
   await Promise.all([
@@ -110,7 +113,8 @@ export async function POST(req: Request) {
     }),
   ]);
 
-  //todo: revalidatePath
-  // revalidatePath("/products/GWAS-Tote-Bag");
+  productNames.forEach((name) => {
+    revalidatePath(`/products/${name}`);
+  });
   return createResponse("Order created.", 201);
 }
