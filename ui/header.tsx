@@ -12,7 +12,6 @@ import CartOverlay from "@ui/cart/cart-overlay";
 import { CiSearch } from "react-icons/ci";
 import { GiShoppingCart } from "react-icons/gi";
 import { useUIStateContext } from "@ui/contexts";
-import logo from "@ui/logo";
 import showToast from "@ui/toast";
 import { useCart } from "@lib/hooks";
 
@@ -43,7 +42,7 @@ export default function Header() {
           </div>
 
           <Link className="h-6 select-none" href="/" title="Velvo">
-            {logo}
+            <img className="h-full" src="/svg/VELVO.svg" alt="Velvo logo" />
           </Link>
 
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[27rem] lg:flex-1 lg:gap-10">
