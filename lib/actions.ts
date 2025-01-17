@@ -273,15 +273,16 @@ export async function cancelReceiveOrder(
     const fullInvoice = invoiceList.invoices[0];
     fullInvoice.status = status;
 
-    await Promise.all([
-      invoiceListCollection.updateOne(
-        { userId: new ObjectId(userId) },
-        {
-          $pull: {
-            invoices: { invoiceId: new ObjectId(invoiceId) },
-          },
+    await invoiceListCollection.updateOne(
+      { userId: new ObjectId(userId) },
+      {
+        $pull: {
+          invoices: { invoiceId: new ObjectId(invoiceId) },
         },
-      ),
+      },
+    );
+
+    await Promise.all([
       invoiceListCollection.updateOne(
         { userId: new ObjectId(userId) },
         {
