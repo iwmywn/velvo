@@ -59,7 +59,6 @@ export default function Header() {
                   if (quantity > 0) setState("isCartOpen", true);
                   else if (isLoading) showToast("Loading cart...", "warning");
                   else if (isError) showToast(isError, "warning");
-                  else showToast("Your shopping cart is empty.", "warning");
                 }}
                 title="Cart"
               />

@@ -15,7 +15,10 @@ export interface InvoicesResponse {
 
 export function useCart() {
   const { data, isLoading } = useSWR<CartResponse>("cart", getCart);
-  const cart = data || { products: [], quantity: 0 };
+  const cart = {
+    products: data?.products || [],
+    quantity: data?.quantity || 0,
+  };
   const isError = data?.error || null;
 
   return {
