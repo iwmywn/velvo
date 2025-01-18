@@ -3,13 +3,13 @@ import { Cart, InvoiceList } from "@lib/definitions";
 import { getCart, getInvoices } from "@lib/data";
 
 export interface CartResponse {
-  products: Cart["products"];
-  quantity: number;
+  products?: Cart["products"];
+  quantity?: number;
   error?: string;
 }
 
 export interface InvoicesResponse {
-  invoices: InvoiceList["invoices"];
+  invoices?: InvoiceList["invoices"];
   error?: string;
 }
 

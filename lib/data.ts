@@ -69,12 +69,10 @@ export const getProducts = cache(async (): Promise<Product[]> => {
 });
 
 export async function getCart(): Promise<CartResponse> {
-  const defaultCart = { products: [], quantity: 0 };
-
   try {
     const { userId } = await verifySession();
     if (!userId) {
-      return { error: "Please sign in to view cart!", ...defaultCart };
+      return { error: "Please sign in to view cart!" };
     }
 
     const cart = await (
@@ -82,10 +80,11 @@ export async function getCart(): Promise<CartResponse> {
     ).findOne({ userId: new ObjectId(userId) });
 
     if (!cart) {
-      return { error: "Cart not found!", ...defaultCart };
+      return { error: "Cart not found!" };
     }
 
-    if (cart.products.length === 0) return { ...defaultCart };
+    if (cart.products.length === 0)
+      return { error: "Your shopping cart is empty." };
 
     const products = cart.products.map(({ productId, ...rest }) => ({
       ...rest,
@@ -99,17 +98,15 @@ export async function getCart(): Promise<CartResponse> {
 
     return { products, quantity };
   } catch {
-    return { error: "An unexpected error occurred.", ...defaultCart };
+    return { error: "An unexpected error occurred!" };
   }
 }
 
 export async function getInvoices(): Promise<InvoicesResponse> {
-  const defaultInvoices = { invoices: [] };
-
   try {
     const { userId } = await verifySession();
     if (!userId) {
-      return { error: "Please sign in to view invoices!", ...defaultInvoices };
+      return { error: "Please sign in to view invoices!" };
     }
 
     const invoiceList = await (
@@ -117,10 +114,10 @@ export async function getInvoices(): Promise<InvoicesResponse> {
     ).findOne({ userId: new ObjectId(userId) });
 
     if (!invoiceList) {
-      return { error: "Invoice List not found!", ...defaultInvoices };
+      return { error: "Invoice List not found!" };
     }
 
-    if (invoiceList.invoices.length === 0) return { invoices: [] };
+    if (invoiceList.invoices.length === 0) return { error: "No invoice!" };
 
     const invoices = invoiceList.invoices.map(
       ({ invoiceId, products, ...rest }) => ({
@@ -135,6 +132,6 @@ export async function getInvoices(): Promise<InvoicesResponse> {
 
     return { invoices };
   } catch {
-    return { error: "An unexpected error occurred.", ...defaultInvoices };
+    return { error: "An unexpected error occurred!" };
   }
 }
