@@ -73,7 +73,11 @@ type BaseProduct<T> = {
   saleOff: number;
   slug: string;
   customerGroup: "men" | "women" | "kids";
-  sizes: { [key: string]: number };
+  colors: {
+    [color: string]: {
+      sizes: { [size: string]: number };
+    };
+  };
   keyFeatures: string[];
   createdAt: Date;
   updatedAt?: Date;
