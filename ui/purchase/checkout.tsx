@@ -31,6 +31,7 @@ export default function Checkout({
   products: {
     _id: string;
     quantity: number;
+    color: string;
     size: string;
     priceCents: number;
     saleOff: number;

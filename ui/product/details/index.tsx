@@ -52,7 +52,12 @@ export default function ProductDetails({ product }: { product: Product }) {
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      const message = await addToCart(productId, selectedSize!, quantity);
+      const message = await addToCart(
+        productId,
+        selectedColor,
+        selectedSize,
+        quantity,
+      );
 
       if (message === "Done.") {
         await mutate("cart");

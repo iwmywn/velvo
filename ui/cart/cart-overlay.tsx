@@ -47,6 +47,7 @@ export default function CartOverlay() {
                   saleOff,
                   slug,
                   quantity,
+                  color,
                   size,
                 }) => (
                   <div
@@ -58,10 +59,12 @@ export default function CartOverlay() {
                       <span className="mb-1 line-clamp-1 font-medium">
                         {name}
                       </span>
-                      <span className="line-clamp-1 opacity-65">
-                        Quantity: {quantity}
+                      <span className="line-clamp-2 opacity-65">
+                        <span>Quantity: {quantity}</span>
                         <span className="mx-2">|</span>
-                        {size}
+                        <span>Color: {color}</span>
+                        <span className="mx-2">|</span>
+                        <span>Size: {size}</span>
                       </span>
                     </div>
                     <span className="opacity-65">

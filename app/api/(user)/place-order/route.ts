@@ -40,10 +40,11 @@ export async function POST(req: Request) {
     totalPriceCents,
   } = parsedCredentials.data;
   const transformedProducts = products.map(
-    ({ _id, quantity, size, priceCents, saleOff }) => {
+    ({ _id, quantity, color, size, priceCents, saleOff }) => {
       return {
         productId: new ObjectId(_id),
         quantity,
+        color,
         size,
         discountedPriceDetails: [
           getPriceAfterDiscount(priceCents, saleOff),
@@ -60,16 +61,19 @@ export async function POST(req: Request) {
     ]);
   const productNames: string[] = [];
 
-  for (const { productId, quantity, size } of transformedProducts) {
-    const sizeField = `sizes.${size}`;
+  for (const { productId, quantity, color, size } of transformedProducts) {
+    const sizeField = `colors.${color}.sizes.${size}`;
+
     const product = await productCollection.findOne(
       { _id: productId },
       { projection: { name: 1, [sizeField]: 1 } },
     );
 
-    if (!product || (product.sizes?.[size] ?? 0) < quantity) {
+    const availableStock = product?.colors?.[color]?.sizes?.[size] ?? 0;
+
+    if (!product || availableStock < quantity) {
       return createResponse(
-        `Not enough stock for product "${product?.name}" (size: ${size})!`,
+        `Not enough stock for product "${product?.name}", (color: ${color}) (size: ${size})!`,
         400,
       );
     }
@@ -104,8 +108,8 @@ export async function POST(req: Request) {
       { userId: new ObjectId(userId) },
       { $set: { products: [] } },
     ),
-    ...products.map(async ({ _id, quantity, size }) => {
-      const sizeField = `sizes.${size}`;
+    ...products.map(async ({ _id, quantity, color, size }) => {
+      const sizeField = `colors.${color}.sizes.${size}`;
       await productCollection.updateOne(
         { _id: new ObjectId(_id) },
         { $inc: { [sizeField]: -quantity } },

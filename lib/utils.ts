@@ -77,7 +77,7 @@ export function getTotalPriceCents(
 export function transformCartProducts(
   cartProducts: Cart["products"] | [],
   products: Product[],
-): (Product & { quantity: number; size: string })[] {
+): (Product & { quantity: number; color: string; size: string })[] {
   if (cartProducts.length === 0) return [];
 
   const productMap = new Map(products.map((product) => [product._id, product]));
@@ -90,10 +90,15 @@ export function transformCartProducts(
       return {
         ...product,
         quantity: cartItem.quantity,
+        color: cartItem.color,
         size: cartItem.size,
       };
     })
-    .filter(Boolean) as (Product & { quantity: number; size: string })[];
+    .filter(Boolean) as (Product & {
+    quantity: number;
+    color: string;
+    size: string;
+  })[];
 }
 
 export function transformInvoiceProducts(
@@ -101,6 +106,7 @@ export function transformInvoiceProducts(
   products: Product[],
 ): (Product & {
   quantity: number;
+  color: string;
   size: string;
   discountedPriceDetails: [string, string];
 })[] {
@@ -117,12 +123,14 @@ export function transformInvoiceProducts(
       return {
         ...product,
         quantity: invoiceProduct.quantity,
+        color: invoiceProduct.color,
         size: invoiceProduct.size,
         discountedPriceDetails: invoiceProduct.discountedPriceDetails,
       };
     })
     .filter(Boolean) as (Product & {
     quantity: number;
+    color: string;
     size: string;
     discountedPriceDetails: [string, string];
   })[];

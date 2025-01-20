@@ -69,13 +69,14 @@ export async function sendEmail(
 
 export async function addToCart(
   productId: string,
-  size: string,
+  color: string | null,
+  size: string | null,
   quantity: number = 1,
 ): Promise<string> {
   const { userId } = await verifySession();
 
-  if (!userId || !productId) {
-    return "User ID or Product ID is missing!";
+  if (!userId || !productId || !color || !size) {
+    return "Invalid field!";
   }
 
   try {
@@ -84,13 +85,16 @@ export async function addToCart(
     const product = await productCollection.findOne({
       _id: new ObjectId(productId),
     });
-    const remainingQuantity: number = product!.sizes[size];
+    const remainingQuantity: number = product!.colors[color].sizes[size];
     const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
     let currentQuantityInCart: number = 0;
 
     if (cart) {
       const existingProduct = cart.products.find(
-        (p) => p.productId.toString() === productId && p.size === size,
+        (p) =>
+          p.productId.toString() === productId &&
+          p.color === color &&
+          p.size === size,
       );
 
       if (existingProduct) {
@@ -105,7 +109,10 @@ export async function addToCart(
     }
 
     const existingProductIndex = cart!.products.findIndex(
-      (p) => p.productId.toString() === productId && p.size === size,
+      (p) =>
+        p.productId.toString() === productId &&
+        p.color === color &&
+        p.size === size,
     );
 
     if (existingProductIndex !== -1) {
@@ -115,6 +122,7 @@ export async function addToCart(
           products: {
             $elemMatch: {
               productId: new ObjectId(productId),
+              color,
               size,
             },
           },
@@ -131,6 +139,7 @@ export async function addToCart(
                 {
                   productId: new ObjectId(productId),
                   quantity,
+                  color,
                   size,
                 },
               ],
@@ -150,12 +159,13 @@ export async function addToCart(
 
 export async function removeFromCart(
   productId: string,
+  color: string,
   size: string,
 ): Promise<string> {
   const { userId } = await verifySession();
 
-  if (!userId || !productId) {
-    return "User ID or Product ID is missing!";
+  if (!userId || !productId || !color || !size) {
+    return "Invalid field!";
   }
 
   try {
@@ -163,7 +173,10 @@ export async function removeFromCart(
     const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
 
     const existingProduct = cart!.products.find(
-      (p) => p.productId.toString() === productId && p.size === size,
+      (p) =>
+        p.productId.toString() === productId &&
+        p.color === color &&
+        p.size === size,
     );
 
     if (existingProduct?.quantity === 1) {
@@ -171,7 +184,7 @@ export async function removeFromCart(
         { userId: new ObjectId(userId) },
         {
           $pull: {
-            products: { productId: new ObjectId(productId), size },
+            products: { productId: new ObjectId(productId), color, size },
           },
         },
       );
@@ -183,6 +196,7 @@ export async function removeFromCart(
           products: {
             $elemMatch: {
               productId: new ObjectId(productId),
+              color,
               size,
             },
           },
@@ -199,12 +213,13 @@ export async function removeFromCart(
 
 export async function deleteFromCart(
   productId: string,
+  color: string,
   size: string,
 ): Promise<string> {
   const { userId } = await verifySession();
 
-  if (!userId || !productId) {
-    return "User ID or Product ID is missing!";
+  if (!userId || !productId || !color || !size) {
+    return "Invalid field!";
   }
 
   try {
@@ -214,7 +229,7 @@ export async function deleteFromCart(
       { userId: new ObjectId(userId) },
       {
         $pull: {
-          products: { productId: new ObjectId(productId), size },
+          products: { productId: new ObjectId(productId), color, size },
         },
       },
     );
@@ -295,8 +310,8 @@ export async function cancelReceiveOrder(
         },
       ),
       ...(status === "cancelled"
-        ? products.map(async ({ productId, quantity, size }) => {
-            const sizeField = `sizes.${size}`;
+        ? products.map(async ({ productId, quantity, color, size }) => {
+            const sizeField = `colors.${color}.sizes.${size}`;
             return await productCollection.updateOne(
               { _id: new ObjectId(productId) },
               { $inc: { [sizeField]: quantity } },

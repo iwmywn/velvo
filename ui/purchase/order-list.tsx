@@ -37,6 +37,7 @@ export default function OrderList({
     products: {
       productId: string;
       quantity: number;
+      color: string;
       size: string;
       discountedPriceDetails: [string, string];
     }[];
@@ -75,6 +76,7 @@ export default function OrderList({
     products: {
       productId: string;
       quantity: number;
+      color: string;
       size: string;
       discountedPriceDetails: [string, string];
     }[],
@@ -117,6 +119,7 @@ export default function OrderList({
   const handleBuyAgain = async (
     invoiceId: string,
     productId: string,
+    color: string,
     size: string,
   ) => {
     const key = `${invoiceId}-${productId}-${size}`;
@@ -124,7 +127,7 @@ export default function OrderList({
     setIsLoadingGlobal(true);
 
     try {
-      const message = await addToCart(productId, size);
+      const message = await addToCart(productId, color, size);
 
       if (message === "Done.") {
         await mutate("cart");
@@ -269,6 +272,7 @@ export default function OrderList({
                           description,
                           slug,
                           quantity,
+                          color,
                           size,
                           discountedPriceDetails,
                         },
@@ -283,7 +287,7 @@ export default function OrderList({
                               <ImageTag src={images[0]} alt={description} />
                               <div>
                                 <h4 className="mb-1 line-clamp-2 font-medium">
-                                  {name} - {size}
+                                  {name} - {color} - {size}
                                 </h4>
                                 <p className="flex flex-wrap gap-y-1 opacity-65">
                                   <span>Quantity: {quantity}</span>
@@ -304,7 +308,12 @@ export default function OrderList({
                             <Button
                               className="ml-auto flex items-center gap-2 text-green-600 before:border-green-600 before:bg-white"
                               onClick={() =>
-                                handleBuyAgain(invoiceId, productId, size)
+                                handleBuyAgain(
+                                  invoiceId,
+                                  productId,
+                                  color,
+                                  size,
+                                )
                               }
                               disabled={
                                 loadingStates[

@@ -44,8 +44,9 @@ export default function ProductRow({
   saleOff,
   slug,
   quantity,
+  color,
   size,
-}: Product & { quantity: number; size: string }) {
+}: Product & { quantity: number; color: string; size: string }) {
   const formattedPrice = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
   const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -75,7 +76,7 @@ export default function ProductRow({
 
   const handleAddToCart = () => {
     handleCartOperation(
-      () => addToCart(productId, size),
+      () => addToCart(productId, color, size),
       ["Done."],
       setIsLoading,
     );
@@ -83,7 +84,7 @@ export default function ProductRow({
 
   const handleRemoveFromCart = () => {
     handleCartOperation(
-      () => removeFromCart(productId, size),
+      () => removeFromCart(productId, color, size),
       ["Product removed from cart.", "Product quantity decreased."],
       setIsLoading,
     );
@@ -91,7 +92,7 @@ export default function ProductRow({
 
   const handleDeleteFromCart = () => {
     handleCartOperation(
-      () => deleteFromCart(productId, size),
+      () => deleteFromCart(productId, color, size),
       ["Product removed from cart!"],
       setIsDeleting,
     );
@@ -103,7 +104,7 @@ export default function ProductRow({
         <div className="flex items-center gap-2 border sm:flex-col sm:justify-center sm:gap-1 sm:border-0 sm:py-1 sm:text-center">
           <ImageTag src={images[0]} alt={description} />
           <span className="line-clamp-2 px-1 font-medium">
-            {name} - {size}
+            {name} - {color} - {size}
           </span>
         </div>
       </Link>
