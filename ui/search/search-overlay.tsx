@@ -6,7 +6,7 @@ import { Product } from "@lib/definitions";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
 import { useAnimation } from "@ui/hooks";
-import { useProductContext, useUIStateContext } from "@ui/contexts";
+import { useStoreContext, useUIStateContext } from "@ui/contexts";
 import Fuse from "fuse.js";
 
 export default function SearchOverlay() {
@@ -16,7 +16,7 @@ export default function SearchOverlay() {
   const { setState } = useUIStateContext();
   const handleClose = () =>
     triggerAnimation(() => setState("isSearchOpen", false));
-  const { products } = useProductContext();
+  const { products } = useStoreContext();
   const fuse = useMemo(() => {
     return new Fuse(products, {
       keys: ["name"],

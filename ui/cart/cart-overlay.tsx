@@ -11,7 +11,7 @@ import {
 } from "@lib/utils";
 import Backdrop from "@ui/overlay/backdrop";
 import SlidingContainer from "@ui/overlay/sliding-container";
-import { useProductContext, useUIStateContext } from "@ui/contexts";
+import { useStoreContext, useUIStateContext } from "@ui/contexts";
 import Loading from "@ui/loading";
 import { useAnimation } from "@ui/hooks";
 import { useCart } from "@lib/hooks";
@@ -19,7 +19,7 @@ import { useCart } from "@lib/hooks";
 export default function CartOverlay() {
   const { isAnimating, triggerAnimation } = useAnimation();
   const { cart, isLoading } = useCart();
-  const { products } = useProductContext();
+  const { products } = useStoreContext();
   const { setState } = useUIStateContext();
   const handleClose = () =>
     triggerAnimation(() => setState("isCartOpen", false));

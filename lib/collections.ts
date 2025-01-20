@@ -6,10 +6,15 @@ import {
   DBCategory,
   DBProduct,
   DBAvatar,
+  DBBanner,
 } from "@lib/definitions";
 
 export async function getAvatarCollection() {
   return await collection<DBAvatar>("avatars");
+}
+
+export async function getBannerCollection() {
+  return await collection<DBBanner>("banners");
 }
 
 export async function getUserCollection() {

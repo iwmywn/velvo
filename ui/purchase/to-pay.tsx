@@ -4,12 +4,12 @@ import Checkout from "@ui/purchase/checkout";
 import EmptyState from "@ui/cart/empty";
 import Loading from "@ui/loading";
 import { useCart } from "@lib/hooks";
-import { useProductContext } from "@ui/contexts";
+import { useStoreContext } from "@ui/contexts";
 import { useMemo } from "react";
 
 export default function ToPay() {
   const { cart, isLoading } = useCart();
-  const { products } = useProductContext();
+  const { products } = useStoreContext();
   const combinedCartProducts = transformCartProducts(cart.products, products);
   const totalPriceCents = useMemo(() => {
     return getTotalPriceCents(combinedCartProducts);

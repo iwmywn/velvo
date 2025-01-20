@@ -4,14 +4,14 @@ import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay, Pagination } from "swiper/modules";
 import Image from "next/image";
-import { useProductContext } from "@ui/contexts";
+import { useStoreContext } from "@ui/contexts";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import ProductCard from "@ui/product/card";
 import Link from "next/link";
-import { collectionItems, bannerItems, baseImgUrl } from "@ui/data";
+import { collectionItems, baseImgUrl } from "@ui/data";
 
 export default function Home() {
-  const { products } = useProductContext();
+  const { products, banners } = useStoreContext();
   const lastTenProducts = products.slice(-10);
 
   return (
@@ -27,7 +27,7 @@ export default function Home() {
           slidesPerView={1}
           loop
         >
-          {bannerItems.map(({ label, href, image }) => (
+          {banners.map(({ label, href, image }) => (
             <SwiperSlide key={href}>
               <Link href={`/products/${href}`}>
                 <div className="relative w-full" style={{ paddingTop: "38%" }}>

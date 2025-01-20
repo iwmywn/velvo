@@ -5,6 +5,13 @@ type BaseAvatar<T> = {
   image: string;
 };
 
+type BaseBanner<T> = {
+  _id: T;
+  label: string;
+  href: string;
+  image: string;
+};
+
 type BaseUser<T> = {
   _id: T;
   name: string;
@@ -87,6 +94,9 @@ type BaseProduct<T> = {
 
 export type Avatar = BaseAvatar<string>;
 export type DBAvatar = BaseAvatar<ObjectId>;
+
+export type Banner = BaseBanner<string>;
+export type DBBanner = BaseBanner<ObjectId>;
 
 export type User = BaseUser<string>;
 export type DBUser = BaseUser<ObjectId>;

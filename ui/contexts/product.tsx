@@ -1,32 +1,33 @@
 "use client";
 
 import { createContext, useContext, ReactNode } from "react";
-import { Product } from "@lib/definitions";
+import { Product, Banner } from "@lib/definitions";
 
-interface ProductContextProps {
+interface StoreContextProps {
   products: Product[];
+  banners: Banner[];
 }
 
-const ProductContext = createContext<ProductContextProps | undefined>(
-  undefined,
-);
+const StoreContext = createContext<StoreContextProps | undefined>(undefined);
 
-export function ProductProvider({
+export function StoreProvider({
   children,
   products,
+  banners,
 }: {
   children: ReactNode;
   products: Product[];
+  banners: Banner[];
 }) {
   return (
-    <ProductContext.Provider value={{ products }}>
+    <StoreContext.Provider value={{ products, banners }}>
       {children}
-    </ProductContext.Provider>
+    </StoreContext.Provider>
   );
 }
 
-export function useProductContext() {
-  const cxt = useContext(ProductContext);
+export function useStoreContext() {
+  const cxt = useContext(StoreContext);
   if (!cxt) {
     throw new Error("useProduct must be used within a ProductProvider");
   }

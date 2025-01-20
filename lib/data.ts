@@ -1,6 +1,6 @@
 "use server";
 
-import { Category, Product, Avatar } from "@lib/definitions";
+import { Category, Product, Avatar, Banner } from "@lib/definitions";
 import { baseImgUrl } from "@ui/data";
 import {
   getCategoryCollection,
@@ -9,6 +9,7 @@ import {
   getUserCollection,
   getCartCollection,
   getInvoiceListCollection,
+  getBannerCollection,
 } from "@lib/collections";
 import { cache } from "react";
 import { verifySession } from "@lib/dal";
@@ -34,6 +35,20 @@ export const getAvatars = cache(async (): Promise<Avatar[]> => {
     }));
   } catch (error) {
     console.error("Failed to fetch avatars:", error);
+    return [];
+  }
+});
+
+export const getBanners = cache(async (): Promise<Banner[]> => {
+  try {
+    const banners = await (await getBannerCollection()).find({}).toArray();
+
+    return banners.map(({ _id, ...rest }) => ({
+      ...rest,
+      _id: _id.toString(),
+    }));
+  } catch (error) {
+    console.log("Failed to fetch banners:", error);
     return [];
   }
 });

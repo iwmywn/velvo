@@ -9,7 +9,7 @@ import EmptyState from "@ui/cart/empty";
 import { useState } from "react";
 import showToast from "@ui/toast";
 import { addToCart, cancelReceiveOrder } from "@lib/actions";
-import { useProductContext, useUIStateContext } from "@ui/contexts";
+import { useStoreContext, useUIStateContext } from "@ui/contexts";
 import { useRouter } from "next/navigation";
 import Backdrop from "@ui/overlay/backdrop";
 import { MdOutlinePlace } from "react-icons/md";
@@ -54,7 +54,7 @@ export default function OrderList({
   const setButtonLoading = (key: string, isLoading: boolean) => {
     setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
   };
-  const { products } = useProductContext();
+  const { products } = useStoreContext();
 
   const invoicesFilter = invoices.filter(({ status }) =>
     orderStatus.includes(status),

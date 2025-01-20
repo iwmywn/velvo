@@ -8,11 +8,11 @@ import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Slide } from "react-toastify";
 import { siteConfig } from "@lib/config";
-import { getProducts } from "@lib/data";
+import { getBanners, getProducts } from "@lib/data";
 import {
   AuthProvider,
   HeightProvider,
-  ProductProvider,
+  StoreProvider,
   UIStateProvider,
 } from "@ui/contexts";
 import { cookies } from "next/headers";
@@ -48,7 +48,11 @@ export default async function RootLayout({
     );
   }
 
-  const [products, cookieStore] = await Promise.all([getProducts(), cookies()]);
+  const [products, banners, cookieStore] = await Promise.all([
+    getProducts(),
+    getBanners(),
+    cookies(),
+  ]);
   const userId = cookieStore.get("userId")?.value;
   const userImage = cookieStore.get("userImage")?.value;
 
@@ -56,7 +60,7 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
         <UIStateProvider>
-          <ProductProvider products={products}>
+          <StoreProvider products={products} banners={banners}>
             <AuthProvider userId={userId} userImage={userImage}>
               <div id="popups" className="relative z-[9999]">
                 <ToastContainer
@@ -89,7 +93,7 @@ export default async function RootLayout({
                 <Footer />
               </HeightProvider>
             </AuthProvider>
-          </ProductProvider>
+          </StoreProvider>
         </UIStateProvider>
       </body>
     </html>
