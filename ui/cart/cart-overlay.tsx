@@ -52,7 +52,7 @@ export default function CartOverlay() {
                 }) => (
                   <div
                     className="mb-2 flex items-center gap-2"
-                    key={`${slug}-${size}`}
+                    key={`${slug}-${color}-${size}`}
                   >
                     <ImageTag src={images[0]} alt={description} />
                     <div className="flex-1">
