@@ -7,8 +7,8 @@ type BaseAvatar<T> = {
 
 type BaseBanner<T> = {
   _id: T;
-  label: string;
-  href: string;
+  name: string;
+  url: string;
   image: string;
 };
 
