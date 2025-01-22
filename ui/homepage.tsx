@@ -32,7 +32,7 @@ export default function Home() {
               <Link href={`/products/${url}`}>
                 <div className="relative w-full" style={{ paddingTop: "38%" }}>
                   <Image
-                    src={`${baseImgUrl}${image}`}
+                    src={image}
                     alt={name}
                     fill
                     sizes="100vw"

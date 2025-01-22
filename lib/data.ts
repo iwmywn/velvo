@@ -43,9 +43,10 @@ export const getBanners = cache(async (): Promise<Banner[]> => {
   try {
     const banners = await (await getBannerCollection()).find({}).toArray();
 
-    return banners.map(({ _id, ...rest }) => ({
+    return banners.map(({ _id, image, ...rest }) => ({
       ...rest,
       _id: _id.toString(),
+      image: `${baseImgUrl}${image}`,
     }));
   } catch (error) {
     console.log("Failed to fetch banners:", error);
