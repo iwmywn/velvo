@@ -8,7 +8,7 @@ type BaseAvatar<T> = {
 type BaseBanner<T> = {
   _id: T;
   name: string;
-  url: string;
+  slug: string;
   image: string;
 };
 
@@ -67,9 +67,16 @@ type BaseCart<T> = {
   }[];
 };
 
+type SubCategory<T> = {
+  name: string;
+  subcategories?: SubCategory<T>[];
+  productIds?: T[];
+};
+
 type BaseCategory<T> = {
   _id: T;
   name: string;
+  subcategories?: SubCategory<T>[];
 };
 
 type BaseProduct<T> = {
@@ -78,10 +85,8 @@ type BaseProduct<T> = {
   priceCents: number;
   images: string[];
   description: string;
-  categoryId: T;
   saleOff: number;
   slug: string;
-  customerGroup: "men" | "women" | "kids";
   colors: {
     [color: string]: {
       sizes: { [size: string]: number };

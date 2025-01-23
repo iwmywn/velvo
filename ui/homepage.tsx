@@ -27,9 +27,9 @@ export default function Home() {
           slidesPerView={1}
           loop
         >
-          {banners.map(({ name, url, image }) => (
-            <SwiperSlide key={url}>
-              <Link href={`/products/${url}`}>
+          {banners.map(({ name, slug, image }) => (
+            <SwiperSlide key={slug}>
+              <Link href={`/products/${slug}`}>
                 <div className="relative w-full" style={{ paddingTop: "38%" }}>
                   <Image
                     src={image}
