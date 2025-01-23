@@ -1,11 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer utilities {
-  * {
-    @apply scrollbar-thin;
-  }
+* {
+  scrollbar-width: thin;
 }
 
 .Toastify__toast {

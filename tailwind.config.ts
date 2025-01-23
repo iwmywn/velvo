@@ -107,5 +107,4 @@ export default {
     },
   },
   darkMode: "selector",
-  plugins: [require("tailwind-scrollbar")],
 } satisfies Config;
