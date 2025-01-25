@@ -48,8 +48,8 @@ export default function ProductFloat({
   return (
     (isProductFloatVisible || isAnimating) && (
       <div
-        className={`space-right fixed left-0 right-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur ${
-          isAnimating ? "animate-centerToTop" : "animate-topToCenter"
+        className={`space-right fixed right-0 left-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur ${
+          isAnimating ? "animate-center-to-top" : "animate-top-to-center"
         }`}
         style={{ top: heights }}
       >

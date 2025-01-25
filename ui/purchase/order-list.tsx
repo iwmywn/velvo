@@ -150,7 +150,7 @@ export default function OrderList({
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
-              isAnimating ? "animate-zoomOut" : "animate-zoomIn"
+              isAnimating ? "animate-zoom-out" : "animate-zoom-in"
             }`}
             onMouseDown={(e) => e.stopPropagation()}
           >
@@ -190,7 +190,7 @@ export default function OrderList({
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
-              isAnimating ? "animate-zoomOut" : "animate-zoomIn"
+              isAnimating ? "animate-zoom-out" : "animate-zoom-in"
             }`}
             onMouseDown={(e) => e.stopPropagation()}
           >
@@ -247,11 +247,11 @@ export default function OrderList({
             return (
               <div key={invoiceId} className="relative border">
                 <div
-                  className={`absolute left-0 top-0 z-[1] ml-auto px-2 text-center text-[10px] uppercase text-white ${status === "waiting" ? "bg-blue-500" : status === "processing" ? "bg-yellow-500" : status === "completed" ? "bg-green-500" : "bg-red-500"}`}
+                  className={`absolute top-0 left-0 z-[1] ml-auto px-2 text-center text-[10px] text-white uppercase ${status === "waiting" ? "bg-blue-500" : status === "processing" ? "bg-yellow-500" : status === "completed" ? "bg-green-500" : "bg-red-500"}`}
                 >
                   {status}
                 </div>
-                <div className="flex justify-between gap-5 border-b bg-slate-50 px-4 pb-4 pt-8">
+                <div className="flex justify-between gap-5 border-b bg-slate-50 px-4 pt-8 pb-4">
                   <div>
                     <span className="font-medium">Order ID:</span>{" "}
                     <span className="opacity-65">{invoiceId}</span>

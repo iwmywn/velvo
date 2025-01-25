@@ -43,7 +43,7 @@ export default function PopUp() {
     state.isPopupOpen && (
       <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
         <div
-          className={`relative rounded-2xl bg-white px-8 py-6 text-black ${isAnimating ? "animate-popUpOut" : "animate-popUpIn"}`}
+          className={`relative rounded-2xl bg-white px-8 py-6 text-black ${isAnimating ? "animate-pop-up-out" : "animate-pop-up-in"}`}
           onMouseDown={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col items-center justify-center gap-2 text-sm">

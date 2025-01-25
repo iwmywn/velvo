@@ -1,7 +1,132 @@
 @import "tailwindcss";
 
-* {
-  scrollbar-width: thin;
+@layer base {
+  * {
+    scrollbar-width: thin;
+  }
+}
+
+@theme {
+  --animate-top-to-center: top-to-center 0.3s ease-in-out;
+  --animate-center-to-top: center-to-top 0.3s ease-in-out;
+  --animate-right-to-left: right-to-left 0.3s ease-in-out;
+  --animate-left-to-right: left-to-right 0.3s ease-in-out;
+  --animate-bottom-to-center: bottom-to-center 0.3s ease-in-out;
+  --animate-center-to-bottom: center-to-bottom 0.3s ease-in-out;
+  --animate-pop-up-in: pop-up-in 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --animate-pop-up-out: pop-up-out 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --animate-fade-in: fade-in 0.3s ease-in-out;
+  --animate-fade-out: fade-out 0.3s ease-in-out;
+  --animate-zoom-in: zoom-in 0.3s ease-in-out;
+  --animate-zoom-out: zoom-out 0.3s ease-in-out;
+
+  @keyframes top-to-center {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes center-to-top {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-150%);
+    }
+  }
+
+  @keyframes right-to-left {
+    0% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes left-to-right {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(150%);
+    }
+  }
+
+  @keyframes bottom-to-center {
+    0% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes center-to-bottom {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(150%);
+    }
+  }
+
+  @keyframes pop-up-in {
+    0% {
+      transform: translateY(-150%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pop-up-out {
+    0% {
+      transform: translateY(0%);
+    }
+    100% {
+      transform: translateY(150%);
+    }
+  }
+
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes zoom-in {
+    0% {
+      transform: scale(0);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes zoom-out {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(0);
+    }
+  }
 }
 
 .Toastify__toast {

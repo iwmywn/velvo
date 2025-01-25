@@ -7,10 +7,10 @@ export default function SlidingContainer({
 }) {
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 h-[80%] overflow-y-auto rounded-tl-lg rounded-tr-lg bg-white sm:left-auto sm:top-0 sm:h-auto sm:w-[50%] sm:rounded-bl-lg sm:rounded-tr-none lg:w-[33%] ${
+      className={`fixed right-0 bottom-0 left-0 h-[80%] overflow-y-auto rounded-tl-lg rounded-tr-lg bg-white sm:top-0 sm:left-auto sm:h-auto sm:w-[50%] sm:rounded-tr-none sm:rounded-bl-lg lg:w-[33%] ${
         isAnimating
-          ? "animate-centerToBottom sm:animate-leftToRight"
-          : "animate-bottomToCenter sm:animate-rightToLeft"
+          ? "animate-center-to-bottom sm:animate-left-to-right"
+          : "animate-bottom-to-center sm:animate-right-to-left"
       }`}
       onMouseDown={(e) => e.stopPropagation()}
     >

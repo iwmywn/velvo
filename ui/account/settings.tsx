@@ -41,7 +41,7 @@ export default function AccountSettings() {
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
             className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
-              isAnimating ? "animate-zoomOut" : "animate-zoomIn"
+              isAnimating ? "animate-zoom-out" : "animate-zoom-in"
             }`}
             onMouseDown={(e) => e.stopPropagation()}
           >

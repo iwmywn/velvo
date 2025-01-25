@@ -40,11 +40,11 @@ export default function ReCaptchaPopup({
 
   return createPortal(
     <div
-      className={`fixed inset-0 z-[9998] flex items-center justify-center bg-black/80 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
+      className={`fixed inset-0 z-[9998] flex items-center justify-center bg-black/80 ${isAnimating ? "animate-fade-out" : "animate-fadeIn"}`}
       onClick={handleClose}
     >
       <div
-        className={`rounded bg-white p-4 shadow-lg ${isAnimating ? "animate-zoomOut" : "animate-zoomIn"}`}
+        className={`rounded bg-white p-4 shadow-lg ${isAnimating ? "animate-zoom-out" : "animate-zoom-in"}`}
         onClick={(e) => e.stopPropagation()}
       >
         <ReCAPTCHA

@@ -48,7 +48,7 @@ export default function Home() {
         <SwiperNavButton direction="next" className="categories-next" />
       </div>
 
-      <h2 className="mb-4 mt-10 text-center text-xl font-bold">
+      <h2 className="mt-10 mb-4 text-center text-xl font-bold">
         LATEST PRODUCTS
       </h2>
       <div className="group relative">
@@ -95,7 +95,7 @@ export default function Home() {
         <SwiperNavButton direction="next" className="product-card-next" />
       </div>
 
-      <h2 className="mb-8 mt-10 text-center text-xl font-bold">WARDROBE</h2>
+      <h2 className="mt-10 mb-8 text-center text-xl font-bold">WARDROBE</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
         {collectionItems.map(({ label, href, image }) => (
           <Link

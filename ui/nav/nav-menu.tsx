@@ -13,11 +13,11 @@ export default function NavMenu() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-black/80 ${isAnimating ? "animate-fadeOut" : "animate-fadeIn"}`}
+      className={`fixed inset-0 z-[9999] bg-black/80 ${isAnimating ? "animate-fade-out" : "animate-fade-in"}`}
       onClick={handleCloseMenu}
     >
       <div
-        className={`flex flex-col items-center justify-center gap-2 rounded-b-lg bg-white py-3 ${isAnimating ? "animate-centerToTop" : "animate-topToCenter"}`}
+        className={`flex flex-col items-center justify-center gap-2 rounded-b-lg bg-white py-3 ${isAnimating ? "animate-center-to-top" : "animate-top-to-center"}`}
         onClick={(e) => e.stopPropagation()}
       >
         {navLinks.map(({ label, href }, index) => (
