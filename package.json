@@ -10,10 +10,10 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
-    "@tailwindcss/postcss": "^4.0.3",
+    "@tailwindcss/postcss": "^4.0.4",
     "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
-    "framer-motion": "^12.0.11",
+    "framer-motion": "^12.4.0",
     "fuse.js": "^7.1.0",
     "jose": "^5.9.6",
     "mongodb": "^6.13.0",
@@ -27,7 +27,7 @@
     "react-icons": "^5.4.0",
     "react-toastify": "^11.0.3",
     "swiper": "^11.2.2",
-    "swr": "^2.3.0",
+    "swr": "^2.3.2",
     "tailwind-merge": "^3.0.1",
     "zod": "^3.24.1"
   },
@@ -47,7 +47,7 @@
     "postcss": "^8.5.1",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^4.0.3",
+    "tailwindcss": "^4.0.4",
     "typescript": "^5"
   },
   "lint-staged": {
