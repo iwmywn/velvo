@@ -89,7 +89,7 @@ export default function ProductDetails({ product }: { product: Product }) {
         buttonRef={buttonRef}
       />
       <div className="my-10 grid grid-cols-5 gap-x-5 gap-y-5 lg:grid-cols-12 lg:gap-6">
-        <div className="col-span-5 grid grid-cols-[1fr_1fr_1fr] gap-4 sm:col-span-1 sm:flex sm:flex-col lg:col-span-2 min-[1400px]:col-span-1">
+        <div className="col-span-5 grid grid-cols-[1fr_1fr_1fr] gap-4 min-[1400px]:col-span-1 sm:col-span-1 sm:flex sm:flex-col lg:col-span-2">
           {images.map((img, index) => (
             <div
               key={index}
@@ -105,7 +105,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           ))}
         </div>
 
-        <div className="relative col-span-5 sm:col-span-4 lg:col-span-6 min-[1400px]:col-span-7">
+        <div className="relative col-span-5 min-[1400px]:col-span-7 sm:col-span-4 lg:col-span-6">
           <Swiper
             slidesPerView={1}
             onSlideChange={(swiper) =>
@@ -231,7 +231,7 @@ export default function ProductDetails({ product }: { product: Product }) {
               >
                 <HiMinusSmall />
               </button>
-              <span className="select-none px-5 text-center">{quantity}</span>
+              <span className="px-5 text-center select-none">{quantity}</span>
               <button
                 className={`flex items-center justify-center border-l px-3 py-2 transition-all duration-300 ${quantity < remainingQuantity ? "hover:bg-slate-100" : "opacity-50"}`}
                 onClick={() => setQuantity((prev) => prev + 1)}
