@@ -1,6 +1,6 @@
 "use server";
 
-import { Category, Product, Avatar, Banner } from "@lib/definitions";
+import { Product, Avatar, Banner } from "@lib/definitions";
 import { baseImgUrl } from "@ui/data";
 import {
   getCategoryCollection,
@@ -54,14 +54,24 @@ export const getBanners = cache(async (): Promise<Banner[]> => {
   }
 });
 
-export const getCategories = cache(async (): Promise<Category[]> => {
+export const getCategoriesName = cache(async (): Promise<string[]> => {
   try {
     const categories = await (await getCategoryCollection()).find({}).toArray();
 
-    return categories.map(({ _id, ...rest }) => ({
-      ...rest,
-      _id: _id.toString(),
-    }));
+    return categories.map((cat) => cat.name);
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+    return [];
+  }
+});
+
+export const getSubCategoriesName = cache(async (): Promise<string[]> => {
+  try {
+    const categories = await (await getCategoryCollection()).find({}).toArray();
+
+    return categories.flatMap((cat) =>
+      cat.subcategories ? cat.subcategories.map((sub) => sub.name) : [],
+    );
   } catch (error) {
     console.error("Failed to fetch categories:", error);
     return [];
@@ -72,10 +82,9 @@ export const getProducts = cache(async (): Promise<Product[]> => {
   try {
     const products = await (await getProductCollection()).find({}).toArray();
 
-    return products.map(({ _id, categoryId, images, ...rest }) => ({
+    return products.map(({ _id, images, ...rest }) => ({
       ...rest,
       _id: _id.toString(),
-      categoryId: categoryId.toString(),
       images: images.map((image) => baseImgUrl + image),
     }));
   } catch (error) {
