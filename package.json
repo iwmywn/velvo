@@ -18,7 +18,7 @@
     "jose": "^5.9.6",
     "mongodb": "^6.13.0",
     "nanoid": "^5.0.9",
-    "next": "15.1.6",
+    "next": "15.1.7",
     "nodemailer": "^6.10.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -29,7 +29,7 @@
     "swiper": "^11.2.2",
     "swr": "^2.3.2",
     "tailwind-merge": "^3.0.1",
-    "zod": "^3.24.1"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -42,10 +42,10 @@
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
     "eslint": "^9",
-    "eslint-config-next": "15.1.6",
+    "eslint-config-next": "15.1.7",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
-    "postcss": "^8.5.1",
+    "postcss": "^8.5.2",
     "prettier": "^3.5.0",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "tailwindcss": "^4.0.6",
