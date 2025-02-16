@@ -43,7 +43,12 @@ export async function middleware(req: NextRequest) {
     await updateSession(session);
   }
 
-  if (!userIdStore || !userImageStore) {
+  if (
+    !userIdStore ||
+    !userImageStore ||
+    userIdStore !== userId ||
+    userImageStore !== userImage
+  ) {
     const response = NextResponse.next();
 
     response.cookies.set("userId", userId || "", {
