@@ -3,7 +3,7 @@
 import { changeEmailScheme } from "@/schemas";
 import { createResponse } from "@api/utils";
 import { ObjectId } from "mongodb";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { verifySession } from "@lib/dal";
 import { getUserCollection } from "@lib/collections";
 import { getUserByEmail } from "@lib/data";

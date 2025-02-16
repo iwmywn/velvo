@@ -1,6 +1,6 @@
 "use server";
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { signInSchema } from "@/schemas";
 import { createResponse } from "@api/utils";
 import { createSession } from "@lib/session";

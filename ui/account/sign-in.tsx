@@ -61,7 +61,7 @@ export default function SignIn() {
   return (
     <>
       <div className="flex w-full flex-col items-center px-5">
-        <h3 className="mb-2 mt-5 text-left font-medium text-black/75">
+        <h3 className="mt-5 mb-2 text-left font-medium text-black/75">
           WELCOME BACK
         </h3>
         <span className="mb-8 text-center text-black/70">

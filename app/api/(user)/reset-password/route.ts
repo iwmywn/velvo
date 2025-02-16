@@ -3,7 +3,7 @@
 import { resetPasswordScheme } from "@/schemas";
 import { getUserCollection } from "@lib/collections";
 import { createResponse } from "@api/utils";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 export async function PATCH(req: Request) {
   const { searchParams } = new URL(req.url);

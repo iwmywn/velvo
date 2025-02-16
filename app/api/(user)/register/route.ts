@@ -1,6 +1,6 @@
 "use server";
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { sendEmail } from "@lib/actions";
 import { registerSchema } from "@/schemas";
 import { createResponse } from "@api/utils";
