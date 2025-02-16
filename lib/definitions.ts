@@ -67,16 +67,10 @@ type BaseCart<T> = {
   }[];
 };
 
-export type SubCategory<T> = {
-  name: string;
-  subcategories?: SubCategory<T>[];
-  productIds?: T[];
-};
-
 type BaseCategory<T> = {
   _id: T;
   name: string;
-  subcategories?: SubCategory<T>[];
+  subcategories: { name: string; productIds: T[] }[];
 };
 
 type BaseProduct<T> = {
