@@ -1,29 +1,27 @@
 import type { Metadata } from "next";
-import { getCategories, getProducts } from "@lib/data";
+import {
+  getCategoriesByCustomerGroup,
+  getCustomerGroups,
+  getProductIdsByCategory,
+  getProducts,
+} from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
 import { capitalizeFirstLetter } from "@ui/utils";
-import {
-  customerGroup,
-  categories,
-  menItems,
-  womenItems,
-  kidsItems,
-} from "@ui/data";
-
-const validCustomerGroup = new Set(customerGroup);
-const validCategories = new Set(categories);
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string; sub: string }>;
 }): Promise<Metadata> {
-  const { slug: customerGroup, sub: categoryName } = await params;
+  const [{ slug: customerGroup, sub: category }, customerGroups] =
+    await Promise.all([params, getCustomerGroups()]);
+
+  const categories = await getCategoriesByCustomerGroup(customerGroup);
 
   return {
-    title: `${!validCategories.has(categoryName) || !validCustomerGroup.has(customerGroup) ? "NOT FOUND" : `${capitalizeFirstLetter(customerGroup)} / ${capitalizeFirstLetter(categoryName)}`}`,
+    title: `${!categories.includes(category) || !customerGroups.includes(customerGroup) ? "NOT FOUND" : `${capitalizeFirstLetter(customerGroup)} / ${capitalizeFirstLetter(category)}`}`,
   };
 }
 
@@ -32,26 +30,18 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ slug: string; sub: string }>;
 }) {
-  const [
-    fetchedCategories,
-    fetchedProducts,
-    { slug: customerGroup, sub: categoryName },
-  ] = await Promise.all([getCategories(), getProducts(), params]);
+  const [products, customerGroups, { slug: customerGroup, sub: category }] =
+    await Promise.all([getProducts(), getCustomerGroups(), params]);
 
-  if (
-    !validCategories.has(categoryName) ||
-    !validCustomerGroup.has(customerGroup)
-  )
+  const categories = await getCategoriesByCustomerGroup(customerGroup);
+
+  if (!categories.includes(category) || !customerGroups.includes(customerGroup))
     return <NotFound />;
 
-  const categoryId = fetchedCategories.find(
-    (cat) => cat.name === capitalizeFirstLetter(categoryName),
-  )?._id;
+  const productIds = await getProductIdsByCategory(customerGroup, category);
 
-  const productsByCategory = fetchedProducts.filter(
-    (p) =>
-      p.customerGroup === capitalizeFirstLetter(customerGroup) &&
-      p.categoryId === categoryId,
+  const productsByCategory = products.filter((product) =>
+    productIds.includes(product._id),
   );
 
   const breadcrumbs = [
@@ -61,7 +51,7 @@ export default async function CategoryPage({
       label: capitalizeFirstLetter(customerGroup),
       href: `/${customerGroup}`,
     },
-    { label: capitalizeFirstLetter(categoryName) },
+    { label: capitalizeFirstLetter(category) },
   ];
 
   return (
@@ -69,18 +59,20 @@ export default async function CategoryPage({
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <ProductList
         products={productsByCategory}
-        title={`${customerGroup} / ${categoryName}`}
+        title={`${customerGroup} / ${category}`}
       />
     </>
   );
 }
 
 export async function generateStaticParams() {
-  const categoryItems = [
-    { group: "men", items: menItems },
-    { group: "women", items: womenItems },
-    { group: "kids", items: kidsItems },
-  ];
+  const customerGroups = await getCustomerGroups();
+  const categoryItems = await Promise.all(
+    customerGroups.map(async (group) => {
+      const items = await getCategoriesByCustomerGroup(group);
+      return { group, items };
+    }),
+  );
 
   const params = categoryItems.flatMap(({ group, items }) =>
     items.map((href) => ({ slug: group, sub: href })),

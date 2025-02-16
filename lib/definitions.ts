@@ -12,6 +12,12 @@ type BaseBanner<T> = {
   image: string;
 };
 
+type BaseCollection<T> = {
+  _id: T;
+  name: string;
+  image: string;
+};
+
 type BaseUser<T> = {
   _id: T;
   name: string;
@@ -96,6 +102,9 @@ export type DBAvatar = BaseAvatar<ObjectId>;
 
 export type Banner = BaseBanner<string>;
 export type DBBanner = BaseBanner<ObjectId>;
+
+export type Collection = BaseCollection<string>;
+export type DBCollection = BaseCollection<ObjectId>;
 
 export type User = BaseUser<string>;
 export type DBUser = BaseUser<ObjectId>;

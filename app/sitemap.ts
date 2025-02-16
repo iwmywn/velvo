@@ -1,12 +1,10 @@
 import type { MetadataRoute } from "next";
-import { getProducts } from "@lib/data";
 import {
-  customerGroup,
-  kidsItems,
-  menItems,
-  womenItems,
-  collections,
-} from "@ui/data";
+  getCategoriesByCustomerGroup,
+  getCollections,
+  getCustomerGroups,
+  getProducts,
+} from "@lib/data";
 
 type Item = MetadataRoute.Sitemap[number];
 
@@ -15,12 +13,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!baseUrl) {
     throw new Error("Environment variable NEXT_PUBLIC_URL is not defined.");
   }
-  const fetchedProducts = await getProducts();
-  const categoryItems = [
-    { group: "men", items: menItems },
-    { group: "women", items: womenItems },
-    { group: "kids", items: kidsItems },
-  ];
+  const [products, customerGroups, collections, categoryItems] =
+    await Promise.all([
+      getProducts(),
+      getCustomerGroups(),
+      getCollections(),
+      (async () => {
+        const groups = await getCustomerGroups();
+        return Promise.all(
+          groups.map(async (group) => ({
+            group,
+            items: await getCategoriesByCustomerGroup(group),
+          })),
+        );
+      })(),
+    ]);
 
   const defaultUrl = {
     url: baseUrl,
@@ -39,14 +46,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const collectionUrls = collections.map(
     (coll) =>
       ({
-        url: `${baseUrl}/${coll}`,
+        url: `${baseUrl}/collections/${coll.name}`,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.7,
       }) satisfies Item,
   );
 
-  const productUrls = fetchedProducts.map(
+  const productUrls = products.map(
     ({ slug }) =>
       ({
         url: `${baseUrl}/products/${slug}`,
@@ -56,7 +63,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }) satisfies Item,
   );
 
-  const categoryUrls = customerGroup.map(
+  const categoryUrls = customerGroups.map(
     (cg) =>
       ({
         url: `${baseUrl}/${cg}`,

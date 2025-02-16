@@ -1,19 +1,3 @@
-const customerGroup: string[] = ["men", "women", "kids"] as const;
-
-const categories: string[] = [
-  "jackets",
-  "shirts",
-  "bags",
-  "pants",
-  "sweaters",
-  "skirts",
-  "t-shirts",
-  "dresses",
-  "hats",
-  "shorts",
-  "hoodies",
-] as const;
-
 const menItems = ["shirts", "jackets", "hoodies", "pants", "bags"] as const;
 
 const womenItems = [
@@ -36,4 +20,4 @@ const kidsItems = [
   "hats",
 ] as const;
 
-export { customerGroup, categories, menItems, womenItems, kidsItems };
+export { menItems, womenItems, kidsItems };

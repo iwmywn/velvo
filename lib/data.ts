@@ -1,6 +1,6 @@
 "use server";
 
-import { Product, Avatar, Banner } from "@lib/definitions";
+import { Product, Avatar, Banner, Collection } from "@lib/definitions";
 import { baseImgUrl } from "@ui/data";
 import {
   getCategoryCollection,
@@ -10,6 +10,7 @@ import {
   getCartCollection,
   getInvoiceListCollection,
   getBannerCollection,
+  getCollectionCollection,
 } from "@lib/collections";
 import { cache } from "react";
 import { verifySession } from "@lib/dal";
@@ -54,7 +55,24 @@ export const getBanners = cache(async (): Promise<Banner[]> => {
   }
 });
 
-export const getCategoriesName = cache(async (): Promise<string[]> => {
+export const getCollections = cache(async (): Promise<Collection[]> => {
+  try {
+    const collections = await (await getCollectionCollection())
+      .find({})
+      .toArray();
+
+    return collections.map(({ _id, image, ...rest }) => ({
+      ...rest,
+      _id: _id.toString(),
+      image: `${baseImgUrl}${image}`,
+    }));
+  } catch (error) {
+    console.log("Failed to fetch collections:", error);
+    return [];
+  }
+});
+
+export const getCustomerGroups = cache(async (): Promise<string[]> => {
   try {
     const categories = await (await getCategoryCollection()).find({}).toArray();
 
@@ -65,18 +83,122 @@ export const getCategoriesName = cache(async (): Promise<string[]> => {
   }
 });
 
-export const getSubCategoriesName = cache(async (): Promise<string[]> => {
+export const getCategories = cache(async (): Promise<string[]> => {
   try {
     const categories = await (await getCategoryCollection()).find({}).toArray();
 
     return categories.flatMap((cat) =>
-      cat.subcategories ? cat.subcategories.map((sub) => sub.name) : [],
+      cat.subcategories.map((sub) => sub.name),
     );
   } catch (error) {
     console.error("Failed to fetch categories:", error);
     return [];
   }
 });
+
+export const getCategoriesByCustomerGroup = cache(
+  async (customerGroup: string): Promise<string[]> => {
+    try {
+      const category = await (
+        await getCategoryCollection()
+      ).findOne({ name: customerGroup });
+
+      if (!category) return [];
+
+      return category.subcategories.map((sub) => sub.name);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+      return [];
+    }
+  },
+);
+
+export const getProductIdsByCustomerGroup = cache(
+  async (customerGroup: string): Promise<string[]> => {
+    try {
+      const category = await (
+        await getCategoryCollection()
+      ).findOne({ name: customerGroup });
+
+      if (!category) return [];
+
+      return category.subcategories.flatMap((sub) =>
+        sub.productIds.map(String),
+      );
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      return [];
+    }
+  },
+);
+
+export const getProductIdsByCategory = cache(
+  async (customerGroup: string, categoryName: string): Promise<string[]> => {
+    try {
+      const category = await (
+        await getCategoryCollection()
+      ).findOne({ name: customerGroup });
+
+      if (!category) return [];
+
+      return category.subcategories
+        .filter((sub) => sub.name === categoryName)
+        .flatMap((sub) => sub.productIds.map(String));
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      return [];
+    }
+  },
+);
+
+export const getCategoryByProductId = cache(
+  async (
+    productId: string,
+  ): Promise<{ customerGroup: string; categoryName: string } | null> => {
+    try {
+      const category = await (
+        await getCategoryCollection()
+      ).findOne(
+        { "subcategories.productIds": new ObjectId(productId) },
+        { projection: { name: 1, "subcategories.$": 1 } },
+      );
+
+      if (!category || !category.subcategories.length) return null;
+
+      return {
+        customerGroup: category.name,
+        categoryName: category.subcategories[0].name,
+      };
+    } catch (error) {
+      console.error("Failed to find category:", error);
+      return null;
+    }
+  },
+);
+
+export const getProductIdsByCollection = cache(
+  async (collection: string): Promise<string[]> => {
+    try {
+      const categories = await (await getCategoryCollection())
+        .find(
+          { "subcategories.name": collection },
+          { projection: { "subcategories.$": 1 } },
+        )
+        .toArray();
+
+      if (!categories.length) return [];
+
+      return categories.flatMap((cat) =>
+        cat.subcategories.flatMap((sub) =>
+          sub.name === collection ? sub.productIds.map(String) : [],
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to fetch productIds:", error);
+      return [];
+    }
+  },
+);
 
 export const getProducts = cache(async (): Promise<Product[]> => {
   try {
@@ -92,6 +214,30 @@ export const getProducts = cache(async (): Promise<Product[]> => {
     return [];
   }
 });
+
+export const getSimilarProductIds = cache(
+  async (productId: string): Promise<string[]> => {
+    try {
+      const category = await (
+        await getCategoryCollection()
+      ).findOne(
+        { "subcategories.productIds": new ObjectId(productId) },
+        { projection: { "subcategories.$": 1 } },
+      );
+
+      if (!category || !category.subcategories.length) return [];
+
+      const similarProductIds = category.subcategories[0].productIds
+        .map(String)
+        .filter((id) => id !== productId);
+
+      return similarProductIds;
+    } catch (error) {
+      console.error("Failed to find productId:", error);
+      return [];
+    }
+  },
+);
 
 export async function getCart(): Promise<CartResponse> {
   try {

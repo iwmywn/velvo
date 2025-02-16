@@ -7,6 +7,7 @@ import {
   DBProduct,
   DBAvatar,
   DBBanner,
+  DBCollection,
 } from "@lib/definitions";
 
 export async function getAvatarCollection() {
@@ -15,6 +16,10 @@ export async function getAvatarCollection() {
 
 export async function getBannerCollection() {
   return await collection<DBBanner>("banners");
+}
+
+export async function getCollectionCollection() {
+  return await collection<DBCollection>("collections");
 }
 
 export async function getUserCollection() {

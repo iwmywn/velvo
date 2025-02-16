@@ -1,20 +1,25 @@
 import type { Metadata } from "next";
-import { getCategories, getProducts } from "@lib/data";
+import {
+  getCategoryByProductId,
+  getProducts,
+  getSimilarProductIds,
+} from "@lib/data";
 import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
 import NotFound from "@/app/not-found";
+import { capitalizeFirstLetter } from "@ui/utils";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const [fetchedProducts, { slug: productSlug }] = await Promise.all([
+  const [products, { slug: productSlug }] = await Promise.all([
     getProducts(),
     params,
   ]);
-  const name = fetchedProducts.find((p) => p.slug === productSlug)?.name;
+  const name = products.find((p) => p.slug === productSlug)?.name;
 
   return {
     title: name || "NOT FOUND",
@@ -26,31 +31,34 @@ export default async function ProductPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [fetchedCategories, fetchedProducts, { slug: productSlug }] =
-    await Promise.all([getCategories(), getProducts(), params]);
-  const product = fetchedProducts.find((p) => p.slug === productSlug);
+  const [products, { slug: productSlug }] = await Promise.all([
+    getProducts(),
+    params,
+  ]);
+  const product = products.find((p) => p.slug === productSlug);
 
   if (!product) return <NotFound />;
 
-  const category = fetchedCategories.find(
-    (cat) => cat._id === product.categoryId,
+  const result = await getCategoryByProductId(product._id);
+
+  if (!result) return <NotFound />;
+
+  const { customerGroup, categoryName } = result;
+  const similarProductIds = await getSimilarProductIds(product._id);
+  const similarProducts = products.filter((product) =>
+    similarProductIds.includes(product._id),
   );
 
-  if (!category) return <NotFound />;
-
-  const similarProducts = fetchedProducts.filter(
-    (p) => p.categoryId === category._id && p.slug !== productSlug,
-  );
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: product.customerGroup,
-      href: `/${product.customerGroup.toLowerCase()}`,
+      label: capitalizeFirstLetter(customerGroup),
+      href: `/${customerGroup}`,
     },
     {
-      label: category.name,
-      href: `/${product.customerGroup.toLowerCase()}/${category.name.toLowerCase()}`,
+      label: capitalizeFirstLetter(categoryName),
+      href: `/${customerGroup}/${categoryName}`,
     },
     { label: product.name },
   ];

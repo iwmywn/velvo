@@ -8,9 +8,9 @@ import { useStoreContext } from "@ui/contexts";
 import { GrPrevious, GrNext } from "react-icons/gr";
 import ProductCard from "@ui/product/card";
 import Link from "next/link";
-import { collectionItems, baseImgUrl } from "@ui/data";
+import { Collection } from "@lib/definitions";
 
-export default function Home() {
+export default function Home({ collections }: { collections: Collection[] }) {
   const { products, banners } = useStoreContext();
   const lastTenProducts = products.slice(-10);
 
@@ -97,23 +97,23 @@ export default function Home() {
 
       <h2 className="mt-10 mb-8 text-center text-xl font-bold">WARDROBE</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
-        {collectionItems.map(({ label, href, image }) => (
+        {collections.map(({ _id, name, image }) => (
           <Link
-            key={label}
-            href={`/collections/${href}`}
+            key={_id}
+            href={`/collections/${name}`}
             className="group relative block overflow-hidden rounded"
           >
             <div className="relative w-full" style={{ paddingTop: "80%" }}>
               <Image
-                src={`${baseImgUrl}${image}`}
-                alt={`${label} collection preview`}
+                src={image}
+                alt={`${name} collection preview`}
                 fill
                 sizes="(max-width: 640px) 100vw, 50vw"
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
               />
             </div>
             <div className="absolute inset-0 flex items-center justify-center bg-black/30 text-white opacity-0 transition-opacity group-hover:opacity-100">
-              <span className="text-lg font-bold uppercase">{label}</span>
+              <span className="text-lg font-bold uppercase">{name}</span>
             </div>
           </Link>
         ))}

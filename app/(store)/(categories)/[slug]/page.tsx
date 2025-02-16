@@ -1,22 +1,26 @@
 import type { Metadata } from "next";
-import { getProducts } from "@lib/data";
+import {
+  getProductIdsByCustomerGroup,
+  getProducts,
+  getCustomerGroups,
+} from "@lib/data";
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
 import { capitalizeFirstLetter } from "@ui/utils";
-import { customerGroup } from "@ui/data";
-
-const validcustomerGroup = new Set(customerGroup);
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug: customerGroupName } = await params;
+  const [{ slug: customerGroup }, customerGroups] = await Promise.all([
+    params,
+    getCustomerGroups(),
+  ]);
 
   return {
-    title: `${!validcustomerGroup.has(customerGroupName) ? "NOT FOUND" : capitalizeFirstLetter(customerGroupName)}`,
+    title: `${!customerGroups.includes(customerGroup) ? "NOT FOUND" : capitalizeFirstLetter(customerGroup)}`,
   };
 }
 
@@ -25,36 +29,36 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [fetcheProducts, { slug: customerGroupName }] = await Promise.all([
-    getProducts(),
-    params,
-  ]);
+  const [products, { slug: customerGroup }, customerGroups] = await Promise.all(
+    [getProducts(), params, getCustomerGroups()],
+  );
 
-  if (!validcustomerGroup.has(customerGroupName)) return <NotFound />;
+  if (!customerGroups.includes(customerGroup)) return <NotFound />;
 
-  const productsBycustomerGroup = fetcheProducts.filter(
-    (p) => p.customerGroup === capitalizeFirstLetter(customerGroupName),
+  const productIds = await getProductIdsByCustomerGroup(customerGroup);
+
+  const productsByCustomerGroup = products.filter((product) =>
+    productIds.includes(product._id),
   );
 
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: capitalizeFirstLetter(customerGroupName) },
+    { label: capitalizeFirstLetter(customerGroup) },
   ];
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <ProductList
-        products={productsBycustomerGroup}
-        title={customerGroupName}
-      />
+      <ProductList products={productsByCustomerGroup} title={customerGroup} />
     </>
   );
 }
 
 export async function generateStaticParams() {
-  return customerGroup.map((cg) => ({
-    slug: cg,
+  const categoriesName = await getCustomerGroups();
+
+  return categoriesName.map((name) => ({
+    slug: name,
   }));
 }
