@@ -9,10 +9,10 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@hookform/resolvers": "^4.0.0",
+    "@hookform/resolvers": "^4.1.0",
     "@tailwindcss/postcss": "^4.0.6",
     "axios": "^1.7.9",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.0",
     "framer-motion": "^12.4.3",
     "fuse.js": "^7.1.0",
     "jose": "^5.9.6",
@@ -33,7 +33,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
-    "@types/bcrypt": "^5.0.2",
     "@types/node": "22.13.4",
     "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
