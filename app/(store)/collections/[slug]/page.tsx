@@ -62,6 +62,6 @@ export default async function CollectionsPage({
 export async function generateStaticParams() {
   const collections = await getCollections();
   return collections.map((coll) => ({
-    slug: `collections/${coll.name}`,
+    slug: coll.name,
   }));
 }
