@@ -89,7 +89,7 @@ export default function ProductDetails({ product }: { product: Product }) {
         buttonRef={buttonRef}
       />
       <div className="my-10 grid grid-cols-5 gap-x-5 gap-y-5 lg:grid-cols-12 lg:gap-6">
-        <div className="col-span-5 grid grid-cols-[1fr_1fr_1fr] gap-4 min-[1400px]:col-span-1 sm:col-span-1 sm:flex sm:flex-col lg:col-span-2">
+        <div className="col-span-5 grid grid-cols-[1fr_1fr_1fr] gap-4 sm:col-span-1 sm:flex sm:flex-col lg:col-span-2 min-[87.5rem]:col-span-1">
           {images.map((img, index) => (
             <div
               key={index}
@@ -105,7 +105,7 @@ export default function ProductDetails({ product }: { product: Product }) {
           ))}
         </div>
 
-        <div className="relative col-span-5 min-[1400px]:col-span-7 sm:col-span-4 lg:col-span-6">
+        <div className="relative col-span-5 sm:col-span-4 lg:col-span-6 min-[87.5rem]:col-span-7">
           <Swiper
             slidesPerView={1}
             onSlideChange={(swiper) =>
