@@ -17,6 +17,10 @@
   button {
     cursor: pointer;
   }
+
+  button[disabled] {
+    pointer-events: none;
+  }
 }
 
 @theme {
