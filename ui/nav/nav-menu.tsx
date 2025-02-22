@@ -1,13 +1,13 @@
 "use client";
 
-import { navLinks } from "@ui/data";
 import Link from "next/link";
 import { useAnimation } from "@ui/hooks";
-import { useUIStateContext } from "@ui/contexts";
+import { useStoreContext, useUIStateContext } from "@ui/contexts";
 
 export default function NavMenu() {
   const { isAnimating, triggerAnimation } = useAnimation();
   const { setState } = useUIStateContext();
+  const { customerGroups } = useStoreContext();
   const handleCloseMenu = () =>
     triggerAnimation(() => setState("isMenuOpen", false));
 
@@ -20,14 +20,14 @@ export default function NavMenu() {
         className={`flex flex-col items-center justify-center gap-2 rounded-b-lg bg-white py-3 ${isAnimating ? "animate-center-to-top" : "animate-top-to-center"}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {navLinks.map(({ label, href }, index) => (
+        {customerGroups.map((cg, index) => (
           <Link
             key={index}
             className="w-full py-[6px] text-center text-sm font-medium transition-all duration-300 hover:bg-slate-100"
-            href={href}
+            href={`/${cg}`}
             onClick={handleCloseMenu}
           >
-            {label.toUpperCase()}
+            {cg.toUpperCase()}
           </Link>
         ))}
       </div>

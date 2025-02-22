@@ -2,15 +2,6 @@ import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
 const baseImgUrl = "https://res.cloudinary.com/dku9repmn/image/upload/";
 
-const navLinks = [
-  {
-    label: "Men",
-    href: "/men",
-  },
-  { label: "Women", href: "/women" },
-  { label: "Kids", href: "/kids" },
-] as const;
-
 const footerSections = [
   {
     title: "May We Help You?",
@@ -24,10 +15,6 @@ const footerSections = [
         href: "mailto:tuanha321@uef.edu.vn",
       },
     ],
-  },
-  {
-    title: "Categories",
-    links: navLinks,
   },
   {
     title: "The company",
@@ -63,4 +50,4 @@ const socialLinks = [
   },
 ] as const;
 
-export { baseImgUrl, navLinks, footerSections, socialLinks };
+export { baseImgUrl, footerSections, socialLinks };

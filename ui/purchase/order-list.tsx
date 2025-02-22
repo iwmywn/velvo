@@ -247,7 +247,7 @@ export default function OrderList({
             return (
               <div key={invoiceId} className="relative border">
                 <div
-                  className={`absolute top-0 left-0 z-[1] ml-auto px-2 text-center text-[10px] text-white uppercase ${status === "waiting" ? "bg-blue-500" : status === "processing" ? "bg-yellow-500" : status === "completed" ? "bg-green-500" : "bg-red-500"}`}
+                  className={`absolute top-0 left-0 z-[1] ml-auto px-2 py-0.5 text-center text-[10px] text-white uppercase ${status === "waiting" ? "bg-blue-500" : status === "processing" ? "bg-yellow-500" : status === "completed" ? "bg-green-500" : "bg-red-500"}`}
                 >
                   {status}
                 </div>

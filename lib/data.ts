@@ -96,6 +96,22 @@ export const getCategories = cache(async (): Promise<string[]> => {
   }
 });
 
+export const getCustomerGroupCategories = cache(async () => {
+  try {
+    const customerGroups = await getCustomerGroups();
+
+    return Promise.all(
+      customerGroups.map(async (group) => {
+        const items = await getCategoriesByCustomerGroup(group);
+        return { group, items };
+      }),
+    );
+  } catch (error) {
+    console.error("Failed to fetch customer group categories:", error);
+    return [];
+  }
+});
+
 export const getCategoriesByCustomerGroup = cache(
   async (customerGroup: string): Promise<string[]> => {
     try {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import {
   getCategoriesByCustomerGroup,
+  getCustomerGroupCategories,
   getCustomerGroups,
   getProductIdsByCategory,
   getProducts,
@@ -66,13 +67,7 @@ export default async function CategoryPage({
 }
 
 export async function generateStaticParams() {
-  const customerGroups = await getCustomerGroups();
-  const categoryItems = await Promise.all(
-    customerGroups.map(async (group) => {
-      const items = await getCategoriesByCustomerGroup(group);
-      return { group, items };
-    }),
-  );
+  const categoryItems = await getCustomerGroupCategories();
 
   const params = categoryItems.flatMap(({ group, items }) =>
     items.map((href) => ({ slug: group, sub: href })),

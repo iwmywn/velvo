@@ -1,18 +1,30 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState, FC } from "react";
 import { FiChevronDown } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { linkClass } from "@ui/form-class";
-import { menItems, womenItems, kidsItems } from "@ui/data";
 import { capitalizeFirstLetter } from "@ui/utils";
+import { useStoreContext } from "./contexts";
 
 export const CategoryDropDown = () => {
   return <CategoryTabs />;
 };
 
 const CategoryTabs = () => {
+  const { categories } = useStoreContext();
+
+  const CATEGORY_TABS = useMemo(
+    () =>
+      categories.map(({ group, items }, idx) => ({
+        title: group,
+        Component: () => <CategoryLinks group={group} items={items} />,
+        id: idx + 1,
+      })),
+    [categories],
+  );
+
   const [selected, setSelected] = useState<number | null>(null);
   const [dir, setDir] = useState<null | "l" | "r">(null);
   const [buttonWidths, setButtonWidths] = useState<number[]>([]);
@@ -49,7 +61,7 @@ const CategoryTabs = () => {
       tabsElements.forEach((el) => observerRef.current?.unobserve(el));
       observerRef.current?.disconnect();
     };
-  }, []);
+  }, [CATEGORY_TABS, calculateButtonWidths]);
 
   return (
     <div
@@ -73,6 +85,7 @@ const CategoryTabs = () => {
             dir={dir}
             selected={selected}
             buttonWidths={buttonWidths}
+            categoryTabs={CATEGORY_TABS}
           />
         )}
       </AnimatePresence>
@@ -96,7 +109,7 @@ const CategoryTab = ({
       id={`shift-tab-${tab}`}
       onMouseEnter={() => handleSetSelected(tab)}
       onClick={() => handleSetSelected(tab)}
-      className={`flex items-center gap-1 text-nowrap px-3 py-1.5 text-sm transition-colors ${
+      className={`flex items-center gap-1 px-3 py-1.5 text-sm text-nowrap uppercase transition-colors ${
         selected === tab && "opacity-70"
       }`}
     >
@@ -112,23 +125,24 @@ const CategoryContent = ({
   selected,
   dir,
   buttonWidths,
+  categoryTabs,
 }: {
   selected: number | null;
   dir: null | "l" | "r";
   buttonWidths: number[];
+  categoryTabs: { title: string; Component: FC; id: number }[];
 }) => {
   const calculateLeft = (): number => {
-    if (selected === null) return 0;
-    const halfFirstButtonWidths: number = buttonWidths[0] / 2;
-    const halfSecondButtonWidths: number = buttonWidths[1] / 2;
-    const halfThirdButtonWidths: number = buttonWidths[2] / 2;
-    let left = halfFirstButtonWidths;
+    if (selected === null || selected < 1 || selected > buttonWidths.length)
+      return 0;
 
-    if (selected === 2) left = buttonWidths[0] + 8 + halfSecondButtonWidths;
-    if (selected === 3)
-      left = buttonWidths[0] + buttonWidths[1] + 16 + halfThirdButtonWidths;
+    const halfCurrentButtonWidth = buttonWidths[selected - 1] / 2;
 
-    return left;
+    const left = buttonWidths
+      .slice(0, selected - 1)
+      .reduce((sum, width) => sum + width + 8, 0);
+
+    return left + halfCurrentButtonWidth;
   };
 
   return (
@@ -156,7 +170,7 @@ const CategoryContent = ({
       <Bridge />
       <Nub />
 
-      {CATEGORY_TABS.map((t) => {
+      {categoryTabs.map((t) => {
         return (
           <div className="overflow-hidden" key={t.id}>
             {selected === t.id && (
@@ -178,7 +192,7 @@ const CategoryContent = ({
   );
 };
 
-const Bridge = () => <div className="absolute -top-4 left-0 right-0 h-4" />;
+const Bridge = () => <div className="absolute -top-4 right-0 left-0 h-4" />;
 
 const Nub = () => {
   return (
@@ -196,17 +210,17 @@ const Nub = () => {
 };
 
 interface CategoryLinksProps {
+  group: string;
   items: ReadonlyArray<string>;
-  sub: string;
 }
 
-const CategoryLinks: React.FC<CategoryLinksProps> = ({ items, sub }) => {
+const CategoryLinks: React.FC<CategoryLinksProps> = ({ group, items }) => {
   return (
     <div className="flex flex-col items-center gap-3 text-sm">
       {items.map((item) => (
         <Link
           key={item}
-          href={`/${sub}/${item}`}
+          href={`/${group}/${item}`}
           className={`${linkClass} text-nowrap`}
         >
           {capitalizeFirstLetter(item)}
@@ -215,30 +229,3 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ items, sub }) => {
     </div>
   );
 };
-
-const Men = () => {
-  return <CategoryLinks items={menItems} sub="men" />;
-};
-
-const Women = () => {
-  return <CategoryLinks items={womenItems} sub="women" />;
-};
-
-const Kids = () => {
-  return <CategoryLinks items={kidsItems} sub="kids" />;
-};
-
-const CATEGORY_TABS = [
-  {
-    title: "MEN",
-    Component: Men,
-  },
-  {
-    title: "WOMEN",
-    Component: Women,
-  },
-  {
-    title: "KIDS",
-    Component: Kids,
-  },
-].map((n, idx) => ({ ...n, id: idx + 1 }));

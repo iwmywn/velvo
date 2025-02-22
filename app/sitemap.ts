@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import {
-  getCategoriesByCustomerGroup,
   getCollections,
+  getCustomerGroupCategories,
   getCustomerGroups,
   getProducts,
 } from "@lib/data";
@@ -18,15 +18,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getProducts(),
       getCustomerGroups(),
       getCollections(),
-      (async () => {
-        const groups = await getCustomerGroups();
-        return Promise.all(
-          groups.map(async (group) => ({
-            group,
-            items: await getCategoriesByCustomerGroup(group),
-          })),
-        );
-      })(),
+      getCustomerGroupCategories(),
     ]);
 
   const defaultUrl = {

@@ -8,7 +8,12 @@ import PopUp from "@ui/pop-up";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, Slide } from "react-toastify";
 import { siteConfig } from "@lib/config";
-import { getBanners, getProducts } from "@lib/data";
+import {
+  getBanners,
+  getCustomerGroupCategories,
+  getCustomerGroups,
+  getProducts,
+} from "@lib/data";
 import {
   AuthProvider,
   HeightProvider,
@@ -48,11 +53,14 @@ export default async function RootLayout({
     );
   }
 
-  const [products, banners, cookieStore] = await Promise.all([
-    getProducts(),
-    getBanners(),
-    cookies(),
-  ]);
+  const [products, banners, cookieStore, customerGroups, categoryItems] =
+    await Promise.all([
+      getProducts(),
+      getBanners(),
+      cookies(),
+      getCustomerGroups(),
+      getCustomerGroupCategories(),
+    ]);
   const userId = cookieStore.get("userId")?.value;
   const userImage = cookieStore.get("userImage")?.value;
 
@@ -60,7 +68,12 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${montserrat.className} antialiased`}>
         <UIStateProvider>
-          <StoreProvider products={products} banners={banners}>
+          <StoreProvider
+            products={products}
+            banners={banners}
+            customerGroups={customerGroups}
+            categories={categoryItems}
+          >
             <AuthProvider userId={userId} userImage={userImage}>
               <div id="popups" className="relative z-[9999]">
                 <ToastContainer
@@ -84,7 +97,7 @@ export default async function RootLayout({
               <HeightProvider>
                 <Header />
                 <Gap z={10} />
-                <main className="relative z-10 bg-white px-6 pb-5 pt-8 md:px-16">
+                <main className="relative z-10 bg-white px-6 pt-8 pb-5 md:px-16">
                   {children}
                 </main>
               </HeightProvider>
