@@ -12,7 +12,7 @@ interface StoreContextProps {
   products: Product[];
   banners: Banner[];
   customerGroups: string[];
-  categories: CustomerGroupCategory[];
+  categoryItems: CustomerGroupCategory[];
 }
 
 const StoreContext = createContext<StoreContextProps | undefined>(undefined);
@@ -22,17 +22,17 @@ export function StoreProvider({
   products,
   banners,
   customerGroups,
-  categories,
+  categoryItems,
 }: {
   children: ReactNode;
   products: Product[];
   banners: Banner[];
   customerGroups: string[];
-  categories: CustomerGroupCategory[];
+  categoryItems: CustomerGroupCategory[];
 }) {
   return (
     <StoreContext.Provider
-      value={{ products, banners, customerGroups, categories }}
+      value={{ products, banners, customerGroups, categoryItems }}
     >
       {children}
     </StoreContext.Provider>

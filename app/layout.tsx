@@ -72,7 +72,7 @@ export default async function RootLayout({
             products={products}
             banners={banners}
             customerGroups={customerGroups}
-            categories={categoryItems}
+            categoryItems={categoryItems}
           >
             <AuthProvider userId={userId} userImage={userImage}>
               <div id="popups" className="relative z-[9999]">

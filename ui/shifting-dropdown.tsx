@@ -13,16 +13,16 @@ export const CategoryDropDown = () => {
 };
 
 const CategoryTabs = () => {
-  const { categories } = useStoreContext();
+  const { categoryItems } = useStoreContext();
 
   const CATEGORY_TABS = useMemo(
     () =>
-      categories.map(({ group, items }, idx) => ({
+      categoryItems.map(({ group, items }, idx) => ({
         title: group,
         Component: () => <CategoryLinks group={group} items={items} />,
         id: idx + 1,
       })),
-    [categories],
+    [categoryItems],
   );
 
   const [selected, setSelected] = useState<number | null>(null);
