@@ -3,7 +3,7 @@ import {
   DBUser,
   DBInvoiceList,
   DBCart,
-  DBCategory,
+  DBCustomerCategories,
   DBProduct,
   DBAvatar,
   DBBanner,
@@ -34,8 +34,8 @@ export async function getCartCollection() {
   return await collection<DBCart>("carts");
 }
 
-export async function getCategoryCollection() {
-  return await collection<DBCategory>("categories");
+export async function getCustomerCategoriesCollection() {
+  return await collection<DBCustomerCategories>("customerCategories");
 }
 
 export async function getProductCollection() {

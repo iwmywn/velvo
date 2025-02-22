@@ -73,7 +73,7 @@ type BaseCart<T> = {
   }[];
 };
 
-type BaseCategory<T> = {
+type BaseCustomerCategories<T> = {
   _id: T;
   name: string;
   subcategories: { name: string; productIds: T[] }[];
@@ -115,8 +115,8 @@ export type DBInvoiceList = BaseInvoiceList<ObjectId>;
 export type Cart = BaseCart<string>;
 export type DBCart = BaseCart<ObjectId>;
 
-export type Category = BaseCategory<string>;
-export type DBCategory = BaseCategory<ObjectId>;
+export type CustomerCategories = BaseCustomerCategories<string>;
+export type DBCustomerCategories = BaseCustomerCategories<ObjectId>;
 
 export type Product = BaseProduct<string>;
 export type DBProduct = BaseProduct<ObjectId>;

@@ -3,7 +3,7 @@
 import { Product, Avatar, Banner, Collection } from "@lib/definitions";
 import { baseImgUrl } from "@ui/data";
 import {
-  getCategoryCollection,
+  getCustomerCategoriesCollection,
   getProductCollection,
   getAvatarCollection,
   getUserCollection,
@@ -74,7 +74,9 @@ export const getCollections = cache(async (): Promise<Collection[]> => {
 
 export const getCustomerGroups = cache(async (): Promise<string[]> => {
   try {
-    const categories = await (await getCategoryCollection()).find({}).toArray();
+    const categories = await (await getCustomerCategoriesCollection())
+      .find({})
+      .toArray();
 
     return categories.map((cat) => cat.name);
   } catch (error) {
@@ -85,7 +87,9 @@ export const getCustomerGroups = cache(async (): Promise<string[]> => {
 
 export const getCategories = cache(async (): Promise<string[]> => {
   try {
-    const categories = await (await getCategoryCollection()).find({}).toArray();
+    const categories = await (await getCustomerCategoriesCollection())
+      .find({})
+      .toArray();
 
     return categories.flatMap((cat) =>
       cat.subcategories.map((sub) => sub.name),
@@ -116,7 +120,7 @@ export const getCategoriesByCustomerGroup = cache(
   async (customerGroup: string): Promise<string[]> => {
     try {
       const category = await (
-        await getCategoryCollection()
+        await getCustomerCategoriesCollection()
       ).findOne({ name: customerGroup });
 
       if (!category) return [];
@@ -133,7 +137,7 @@ export const getProductIdsByCustomerGroup = cache(
   async (customerGroup: string): Promise<string[]> => {
     try {
       const category = await (
-        await getCategoryCollection()
+        await getCustomerCategoriesCollection()
       ).findOne({ name: customerGroup });
 
       if (!category) return [];
@@ -152,7 +156,7 @@ export const getProductIdsByCategory = cache(
   async (customerGroup: string, categoryName: string): Promise<string[]> => {
     try {
       const category = await (
-        await getCategoryCollection()
+        await getCustomerCategoriesCollection()
       ).findOne({ name: customerGroup });
 
       if (!category) return [];
@@ -173,7 +177,7 @@ export const getCategoryByProductId = cache(
   ): Promise<{ customerGroup: string; categoryName: string } | null> => {
     try {
       const category = await (
-        await getCategoryCollection()
+        await getCustomerCategoriesCollection()
       ).findOne(
         { "subcategories.productIds": new ObjectId(productId) },
         { projection: { name: 1, "subcategories.$": 1 } },
@@ -195,7 +199,7 @@ export const getCategoryByProductId = cache(
 export const getProductIdsByCollection = cache(
   async (collection: string): Promise<string[]> => {
     try {
-      const categories = await (await getCategoryCollection())
+      const categories = await (await getCustomerCategoriesCollection())
         .find(
           { "subcategories.name": collection },
           { projection: { "subcategories.$": 1 } },
@@ -235,7 +239,7 @@ export const getSimilarProductIds = cache(
   async (productId: string): Promise<string[]> => {
     try {
       const category = await (
-        await getCategoryCollection()
+        await getCustomerCategoriesCollection()
       ).findOne(
         { "subcategories.productIds": new ObjectId(productId) },
         { projection: { "subcategories.$": 1 } },
