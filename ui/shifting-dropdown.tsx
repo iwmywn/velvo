@@ -61,7 +61,7 @@ const CategoryTabs = () => {
       tabsElements.forEach((el) => observerRef.current?.unobserve(el));
       observerRef.current?.disconnect();
     };
-  }, [CATEGORY_TABS, calculateButtonWidths]);
+  }, []);
 
   return (
     <div
