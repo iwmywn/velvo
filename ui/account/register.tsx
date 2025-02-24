@@ -24,7 +24,7 @@ export default function Register() {
   const {
     register,
     handleSubmit,
-    // reset,
+    reset,
     formState: { errors, isValid, isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -38,31 +38,29 @@ export default function Register() {
     },
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: RegisterFormData) => {
     if (!showCaptcha && !recaptchaToken) {
       setShowCaptcha(true);
       return;
     }
 
     try {
-      // reminder: accept registration
-      showToast("Temporarily unable to register!", "warning");
-      // const res = await fetch("/api/register", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ ...data, recaptchaToken }),
-      // });
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...data, recaptchaToken }),
+      });
 
-      // const message = await res.json();
+      const message = await res.json();
 
-      // if (res.ok) {
-      //   showToast(message, "success");
-      //   reset();
-      // } else {
-      //   showToast(message, "warning");
-      // }
+      if (res.ok) {
+        showToast(message, "success");
+        reset();
+      } else {
+        showToast(message, "warning");
+      }
     } catch (error) {
       console.error("Register Error: ", error);
       showToast("Something went wrong! Please try again.", "warning");
@@ -81,7 +79,7 @@ export default function Register() {
         />
       )}
       <div className="flex w-full flex-col items-center px-5">
-        <span className="mb-2 mt-5 text-center text-black/70">
+        <span className="mt-5 mb-2 text-center text-black/70">
           Create an account and benefit from a more personal shopping
           experience, and quicker online checkout.
         </span>
