@@ -41,7 +41,6 @@ export default async function CollectionsPage({
   const productsByCollection = products.filter((product) =>
     productIds.includes(product._id),
   );
-
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
@@ -61,6 +60,7 @@ export default async function CollectionsPage({
 
 export async function generateStaticParams() {
   const collections = await getCollections();
+
   return collections.map((coll) => ({
     slug: coll.name,
   }));

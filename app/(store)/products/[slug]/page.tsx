@@ -48,7 +48,6 @@ export default async function ProductPage({
   const similarProducts = products.filter((product) =>
     similarProductIds.includes(product._id),
   );
-
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
@@ -78,6 +77,7 @@ export default async function ProductPage({
 
 export async function generateStaticParams() {
   const products = await getProducts();
+
   return products.map((p) => ({
     slug: p.slug,
   }));

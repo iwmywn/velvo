@@ -36,11 +36,9 @@ export default async function CategoryPage({
   if (!customerGroups.includes(customerGroup)) return <NotFound />;
 
   const productIds = await getProductIdsByCustomerGroup(customerGroup);
-
   const productsByCustomerGroup = products.filter((product) =>
     productIds.includes(product._id),
   );
-
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },

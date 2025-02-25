@@ -18,7 +18,6 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const [{ slug: customerGroup, sub: category }, customerGroups] =
     await Promise.all([params, getCustomerGroups()]);
-
   const categories = await getCategoriesByCustomerGroup(customerGroup);
 
   return {
@@ -33,18 +32,15 @@ export default async function CategoryPage({
 }) {
   const [products, customerGroups, { slug: customerGroup, sub: category }] =
     await Promise.all([getProducts(), getCustomerGroups(), params]);
-
   const categories = await getCategoriesByCustomerGroup(customerGroup);
 
   if (!categories.includes(category) || !customerGroups.includes(customerGroup))
     return <NotFound />;
 
   const productIds = await getProductIdsByCategory(customerGroup, category);
-
   const productsByCategory = products.filter((product) =>
     productIds.includes(product._id),
   );
-
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
@@ -68,7 +64,6 @@ export default async function CategoryPage({
 
 export async function generateStaticParams() {
   const categoryItems = await getCustomerGroupCategories();
-
   const params = categoryItems.flatMap(({ group, items }) =>
     items.map((href) => ({ slug: group, sub: href })),
   );
