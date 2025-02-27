@@ -14,10 +14,10 @@
     "bcryptjs": "^3.0.2",
     "framer-motion": "^12.4.7",
     "fuse.js": "^7.1.0",
-    "jose": "^6.0.7",
+    "jose": "^6.0.8",
     "mongodb": "^6.13.1",
     "nanoid": "^5.1.2",
-    "next": "15.1.7",
+    "next": "15.2.0",
     "nodemailer": "^6.10.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -40,7 +40,7 @@
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.6",
     "eslint": "^9",
-    "eslint-config-next": "15.1.7",
+    "eslint-config-next": "15.2.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.4.3",
     "postcss": "^8.5.3",
@@ -55,5 +55,11 @@
       "eslint"
     ],
     "*.{css,json,md}": "prettier --write"
+  },
+  "packageManager": "pnpm@10.5.2",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   }
 }
