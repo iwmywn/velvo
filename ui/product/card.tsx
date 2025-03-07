@@ -26,7 +26,7 @@ export default function ProductCard({
       onMouseLeave={() => setCurrentImageIndex(0)}
     >
       {saleOff > 0 && (
-        <div className="absolute -left-2 top-5 z-[1] h-7 whitespace-nowrap bg-red-600 px-[15px] py-[6px] text-xs font-semibold text-white before:absolute before:-bottom-2 before:left-0 before:right-auto before:border-x-4 before:border-y-4 before:border-red-700 before:border-b-transparent before:border-l-transparent after:absolute after:-right-2 after:left-auto after:top-0 after:h-7 after:border-x-8 after:border-y-[14px] after:border-red-600 after:border-r-transparent">
+        <div className="absolute top-5 -left-2 z-[1] h-7 bg-red-600 px-[15px] py-[6px] text-xs font-semibold whitespace-nowrap text-white before:absolute before:right-auto before:-bottom-2 before:left-0 before:border-x-4 before:border-y-4 before:border-red-700 before:border-b-transparent before:border-l-transparent after:absolute after:top-0 after:-right-2 after:left-auto after:h-7 after:border-x-8 after:border-y-[14px] after:border-red-600 after:border-r-transparent">
           {saleOff}% OFF
         </div>
       )}
@@ -42,7 +42,7 @@ export default function ProductCard({
         />
       </div>
       <div className="flex flex-col gap-2 p-4">
-        <h3 className="truncate text-center text-sm font-semibold uppercase text-gray-900">
+        <h3 className="truncate text-center text-sm font-semibold text-gray-900 uppercase">
           {name}
         </h3>
         <div className="flex items-center justify-center gap-3">

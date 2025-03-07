@@ -34,9 +34,9 @@ export default function Header() {
       <header
         ref={ref}
         id="header"
-        className="space-right fixed left-0 right-0 top-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
+        className="space-right fixed top-0 right-0 left-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
       >
-        <div className="mx-6 flex w-full items-center justify-between pb-3 pt-4 md:mx-16 md:pb-4 md:pt-7">
+        <div className="mx-6 flex w-full items-center justify-between pt-4 pb-3 md:mx-16 md:pt-7 md:pb-4">
           <div className="hidden max-w-[27rem] flex-1 gap-2 lg:flex lg:items-center">
             <CategoryDropDown />
           </div>
@@ -63,7 +63,7 @@ export default function Header() {
                 title="Cart"
               />
               {quantity > 0 && (
-                <span className="pointer-events-none absolute -right-3 -top-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
+                <span className="pointer-events-none absolute -top-3 -right-3 flex h-5 w-5 items-center justify-center rounded-full border bg-white text-xs text-black">
                   {quantity}
                 </span>
               )}

@@ -23,7 +23,7 @@ export default function ToPay() {
         <EmptyState emptyState="toPay" />
       ) : (
         <div className="flex flex-col gap-4">
-          <div className="hidden select-none grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-2 border text-center font-medium sm:grid">
+          <div className="hidden grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-2 border text-center font-medium select-none sm:grid">
             {["Product", "Price", "Quantity", "Sub Total", "Action"].map(
               (head) => (
                 <div className="p-2" key={head}>

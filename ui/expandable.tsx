@@ -62,7 +62,7 @@ function ExpandableSection({
       </div>
       <div
         ref={ref}
-        className="transition-max-height mb-1 mt-3 overflow-hidden duration-500 ease-in-out"
+        className="transition-max-height mt-3 mb-1 overflow-hidden duration-500 ease-in-out"
         style={{ maxHeight }}
       >
         {Array.isArray(body) ? (

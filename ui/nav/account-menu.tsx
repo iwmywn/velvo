@@ -45,25 +45,25 @@ export default function AccountMenu() {
             exit={{ opacity: 0, y: 20 }}
             style={{ left: "50%" }}
           >
-            <div className="absolute -top-4 left-0 right-0 h-4" />
-            <span className="absolute left-1/2 top-0 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-tl border border-b-transparent border-r-transparent bg-white" />
+            <div className="absolute -top-4 right-0 left-0 h-4" />
+            <span className="absolute top-0 left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-tl border border-r-transparent border-b-transparent bg-white" />
             <div className="rounded-md border bg-white">
               <div className="relative z-[11] flex flex-col">
                 <Link
                   href="/account"
-                  className="text-nowrap px-4 py-2 hover:bg-slate-100"
+                  className="px-4 py-2 text-nowrap hover:bg-slate-100"
                 >
                   My account
                 </Link>
                 <Link
                   href="/purchase"
-                  className="text-nowrap px-4 py-2 hover:bg-slate-100"
+                  className="px-4 py-2 text-nowrap hover:bg-slate-100"
                 >
                   My Purchase
                 </Link>
                 <form action="/api/signout" method="POST">
                   <button
-                    className="w-full text-nowrap px-4 py-2 text-left hover:bg-slate-100"
+                    className="w-full px-4 py-2 text-left text-nowrap hover:bg-slate-100"
                     onClick={() => {
                       sessionStorage.removeItem("cart");
                       sessionStorage.removeItem("cartQuantity");

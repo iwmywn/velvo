@@ -132,7 +132,7 @@ export default function ProductRow({
           >
             <HiMinusSmall />
           </button>
-          <span className="flex-1 select-none text-center">
+          <span className="flex-1 text-center select-none">
             {isAdd(isLoading, quantity)}
           </span>
           <button

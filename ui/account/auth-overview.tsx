@@ -26,7 +26,7 @@ export default function AuthOverview() {
         {tabs.map(({ name, isActive }, index) => (
           <div
             key={index}
-            className={`relative flex w-[50%] cursor-pointer items-center justify-center py-3 ${isSignIn === isActive && "after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-black"}`}
+            className={`relative flex w-[50%] cursor-pointer items-center justify-center py-3 ${isSignIn === isActive && "after:absolute after:right-0 after:bottom-0 after:left-0 after:h-[2px] after:bg-black"}`}
             onClick={() => setIsSignIn(isActive)}
           >
             {name}

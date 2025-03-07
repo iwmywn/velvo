@@ -51,7 +51,7 @@ export default function PurchaseOverview() {
   const tabsHTML = tabs.map(({ key, label }) => (
     <div
       key={key}
-      className={`cursor-pointer whitespace-nowrap p-2 text-sm transition-all duration-300 ${
+      className={`cursor-pointer p-2 text-sm whitespace-nowrap transition-all duration-300 ${
         activeTabKey === key ? "bg-slate-100" : "hover:bg-slate-100"
       }`}
       onClick={() => {
@@ -79,7 +79,7 @@ export default function PurchaseOverview() {
             {tabs.find((tab) => tab.key === activeTabKey)?.label}
           </div>
           {isOpen && (
-            <div className="absolute left-0 top-[100%] mt-1 w-full border bg-white shadow-md">
+            <div className="absolute top-[100%] left-0 mt-1 w-full border bg-white shadow-md">
               {tabsHTML}
             </div>
           )}
