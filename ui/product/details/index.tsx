@@ -31,6 +31,7 @@ export default function ProductDetails({ product }: { product: Product }) {
     saleOff,
     colors,
     keyFeatures,
+    availableColors,
   } = product;
   const [selectedImage, setSelectedImage] = useState<string>(images[0]);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
@@ -43,6 +44,7 @@ export default function ProductDetails({ product }: { product: Product }) {
     selectedColor && selectedSize
       ? colors[selectedColor]?.sizes[selectedSize] || 0
       : 0;
+  const isAvailable = selectedColor && availableColors.includes(selectedColor);
   const formattedPrice = `$${formatCurrency(priceCents)}`;
   const priceAfterDiscount = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
   const swiperRef = useRef<SwiperCore | null>(null);
@@ -116,15 +118,16 @@ export default function ProductDetails({ product }: { product: Product }) {
           >
             {images.map((img, index) => (
               <SwiperSlide key={index}>
-                <div className="flex h-[18.75rem] items-center justify-center p-5">
+                <div className="flex items-center justify-center">
                   <Image
                     src={img}
                     alt={name}
-                    width={300}
-                    height={300}
+                    width={340}
+                    height={340}
                     loading="eager"
-                    sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 300px"
+                    sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 340px"
                     style={{ objectFit: "cover", objectPosition: "center" }}
+                    className="h-auto w-full sm:w-[340px]"
                   />
                 </div>
               </SwiperSlide>
@@ -152,72 +155,95 @@ export default function ProductDetails({ product }: { product: Product }) {
           <div className="space-y-2">
             <p className="text-sm font-medium">Color</p>
             <div className="flex flex-wrap items-center gap-4">
-              {Object.keys(colors).map((color) => (
-                <label
-                  key={color}
-                  className={`relative flex h-9 items-center justify-center gap-x-2 overflow-hidden rounded border p-2 text-sm hover:bg-slate-100 ${selectedColor === color ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
-                >
-                  <input
-                    type="radio"
-                    name="color"
-                    value={color}
-                    checked={selectedColor === color}
-                    onChange={() => {
-                      setSelectedColor(color);
-                      setSelectedSize(null);
-                      setQuantity(0);
-                    }}
-                    className="hidden"
-                  />
-                  <span className="select-none">{color}</span>
-                </label>
-              ))}
+              {Object.keys(colors).map((color) => {
+                const isAvai = availableColors.includes(color);
+
+                return (
+                  <label
+                    key={color}
+                    className={`relative flex h-9 items-center justify-center gap-x-2 overflow-hidden rounded border p-2 text-sm hover:bg-slate-100 ${selectedColor === color ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
+                  >
+                    {!isAvai && (
+                      <span
+                        className={`absolute inset-0 before:absolute before:h-[1px] before:w-[150%] before:origin-top-left before:rotate-[36deg] ${selectedColor === color ? "before:bg-[linear-gradient(90deg,_black,_gray,_black)]" : "before:bg-gray-200"}`}
+                      />
+                    )}
+
+                    <input
+                      type="radio"
+                      name="color"
+                      value={color}
+                      checked={selectedColor === color}
+                      onChange={() => {
+                        setSelectedColor(color);
+                        setSelectedSize(null);
+                        setQuantity(0);
+                      }}
+                      className="hidden"
+                    />
+                    <span className="select-none">{color}</span>
+                  </label>
+                );
+              })}
             </div>
 
             <div className="h-1" />
 
             {selectedColor && (
               <>
-                <p className="text-sm font-medium">Size</p>
-                <div className="flex flex-wrap items-center gap-4">
-                  {Object.keys(colors[selectedColor].sizes).map((size) => {
-                    const quantity = colors[selectedColor].sizes[size];
-                    return (
-                      <label
-                        translate="no"
-                        key={size}
-                        className={`relative flex h-9 w-12 items-center justify-center gap-x-2 overflow-hidden rounded border text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
-                      >
-                        {quantity === 0 && (
-                          <span
-                            className={`absolute inset-0 before:absolute before:h-[1px] before:w-[150%] before:origin-top-left before:rotate-[36deg] ${selectedSize === size ? "before:bg-[linear-gradient(90deg,_black,_gray,_black)]" : "before:bg-gray-200"}`}
-                          />
-                        )}
-                        <input
-                          type="radio"
-                          name="size"
-                          value={size}
-                          checked={selectedSize === size}
-                          onChange={() => {
-                            setSelectedSize(size);
-                            setQuantity(1);
-                          }}
-                          className="hidden"
-                        />
-                        <span className="select-none">{size}</span>
-                      </label>
-                    );
-                  })}
-                  {selectedSize && (
-                    <span
-                      className={`text-sm font-medium ${colors[selectedColor].sizes[selectedSize] > 0 ? "text-green-600" : "text-red-600"}`}
-                    >
-                      {colors[selectedColor].sizes[selectedSize] > 0
-                        ? `In stock: ${colors[selectedColor].sizes[selectedSize]}`
-                        : "Out of stock"}
-                    </span>
-                  )}
-                </div>
+                {isAvailable ? (
+                  <>
+                    <p className="text-sm font-medium">Size</p>
+                    <div className="flex flex-wrap items-center gap-4">
+                      {Object.keys(colors[selectedColor].sizes).map((size) => {
+                        const qty = colors[selectedColor].sizes[size];
+
+                        return (
+                          <label
+                            translate="no"
+                            key={size}
+                            className={`relative flex h-9 w-12 items-center justify-center gap-x-2 overflow-hidden rounded border text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
+                          >
+                            {qty === 0 && (
+                              <span
+                                className={`absolute inset-0 before:absolute before:h-[1px] before:w-[150%] before:origin-top-left before:rotate-[36deg] ${selectedSize === size ? "before:bg-[linear-gradient(90deg,_black,_gray,_black)]" : "before:bg-gray-200"}`}
+                              />
+                            )}
+                            <input
+                              type="radio"
+                              name="size"
+                              value={size}
+                              checked={selectedSize === size}
+                              onChange={() => {
+                                setSelectedSize(size);
+                                setQuantity(1);
+                              }}
+                              className="hidden"
+                            />
+                            <span className="select-none">{size}</span>
+                          </label>
+                        );
+                      })}
+                      {selectedSize && (
+                        <span
+                          className={`text-sm font-medium ${
+                            remainingQuantity > 0
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }`}
+                        >
+                          {remainingQuantity > 0
+                            ? `In stock: ${remainingQuantity}`
+                            : "Out of stock"}
+                        </span>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm font-medium text-red-600">
+                    Out of stock
+                  </p>
+                )}
               </>
             )}
           </div>
@@ -245,22 +271,24 @@ export default function ProductDetails({ product }: { product: Product }) {
             ref={buttonRef}
             className="relative flex h-10 w-full items-center justify-center"
             disabled={
-              userId === undefined ||
-              selectedSize === null ||
-              (selectedSize !== null && remainingQuantity <= 0) ||
+              !userId ||
+              !selectedSize ||
+              (selectedSize && remainingQuantity <= 0) ||
               isLoading
             }
             onClick={handleAddToCart}
           >
             {isLoading ? (
               <div className="absolute mx-auto h-5 w-5 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
-            ) : userId === undefined ? (
+            ) : !userId ? (
               "PLEASE SIGN IN TO BUY"
-            ) : selectedColor === null ? (
+            ) : !selectedColor ? (
               "PLEASE SELECT COLOR"
-            ) : selectedSize === null ? (
+            ) : !isAvailable ? (
+              "SOLD OUT"
+            ) : !selectedSize ? (
               "PLEASE SELECT SIZE"
-            ) : selectedSize !== null && remainingQuantity > 0 ? (
+            ) : selectedSize && remainingQuantity > 0 ? (
               "ADD TO CART"
             ) : (
               "SOLD OUT"

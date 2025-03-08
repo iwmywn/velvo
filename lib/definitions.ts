@@ -92,6 +92,7 @@ type BaseProduct<T> = {
       sizes: { [size: string]: number };
     };
   };
+  availableColors: string[];
   keyFeatures: string[];
   createdAt: Date;
   updatedAt?: Date;
