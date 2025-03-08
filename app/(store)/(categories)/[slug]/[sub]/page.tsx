@@ -9,19 +9,20 @@ import {
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { capitalizeFirstLetter } from "@ui/utils";
+import { capitalizeWords, convertFromSlug } from "@ui/utils";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string; sub: string }>;
 }): Promise<Metadata> {
-  const [{ slug: customerGroup, sub: category }, customerGroups] =
+  const [{ slug: customerGroup, sub: rawCategory }, customerGroups] =
     await Promise.all([params, getCustomerGroups()]);
+  const category = convertFromSlug(rawCategory);
   const categories = await getCategoriesByCustomerGroup(customerGroup);
 
   return {
-    title: `${!categories.includes(category) || !customerGroups.includes(customerGroup) ? "NOT FOUND" : `${capitalizeFirstLetter(customerGroup)} / ${capitalizeFirstLetter(category)}`}`,
+    title: `${!categories.includes(category) || !customerGroups.includes(customerGroup) ? "NOT FOUND" : `${capitalizeWords(customerGroup)} / ${capitalizeWords(category)}`}`,
   };
 }
 
@@ -30,8 +31,9 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ slug: string; sub: string }>;
 }) {
-  const [products, customerGroups, { slug: customerGroup, sub: category }] =
+  const [products, customerGroups, { slug: customerGroup, sub: rawCategory }] =
     await Promise.all([getProducts(), getCustomerGroups(), params]);
+  const category = convertFromSlug(rawCategory);
   const categories = await getCategoriesByCustomerGroup(customerGroup);
 
   if (!categories.includes(category) || !customerGroups.includes(customerGroup))
@@ -45,19 +47,16 @@ export default async function CategoryPage({
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: capitalizeFirstLetter(customerGroup),
+      label: capitalizeWords(customerGroup),
       href: `/${customerGroup}`,
     },
-    { label: capitalizeFirstLetter(category) },
+    { label: capitalizeWords(category) },
   ];
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <ProductList
-        products={productsByCategory}
-        title={`${customerGroup} / ${category}`}
-      />
+      <ProductList products={productsByCategory} title={`${category}`} />
     </>
   );
 }

@@ -8,7 +8,7 @@ import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
 import NotFound from "@/app/not-found";
-import { capitalizeFirstLetter } from "@ui/utils";
+import { capitalizeWords } from "@ui/utils";
 
 export async function generateMetadata({
   params,
@@ -52,11 +52,11 @@ export default async function ProductPage({
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: capitalizeFirstLetter(customerGroup),
+      label: capitalizeWords(customerGroup),
       href: `/${customerGroup}`,
     },
     {
-      label: capitalizeFirstLetter(categoryName),
+      label: capitalizeWords(categoryName),
       href: `/${customerGroup}/${categoryName}`,
     },
     { label: product.name },

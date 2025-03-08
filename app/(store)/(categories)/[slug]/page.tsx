@@ -7,7 +7,7 @@ import {
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { capitalizeFirstLetter } from "@ui/utils";
+import { capitalizeWords } from "@ui/utils";
 
 export async function generateMetadata({
   params,
@@ -20,7 +20,7 @@ export async function generateMetadata({
   ]);
 
   return {
-    title: `${!customerGroups.includes(customerGroup) ? "NOT FOUND" : capitalizeFirstLetter(customerGroup)}`,
+    title: `${!customerGroups.includes(customerGroup) ? "NOT FOUND" : capitalizeWords(customerGroup)}`,
   };
 }
 
@@ -42,7 +42,7 @@ export default async function CategoryPage({
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: capitalizeFirstLetter(customerGroup) },
+    { label: capitalizeWords(customerGroup) },
   ];
 
   return (

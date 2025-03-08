@@ -5,8 +5,9 @@ import { FiChevronDown } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { linkClass } from "@ui/form-class";
-import { capitalizeFirstLetter } from "@ui/utils";
+import { capitalizeWords } from "@ui/utils";
 import { useStoreContext } from "./contexts";
+import { convertToSlug } from "@ui/utils";
 
 export const CategoryDropDown = () => {
   return <CategoryTabs />;
@@ -220,10 +221,10 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ group, items }) => {
       {items.map((item) => (
         <Link
           key={item}
-          href={`/${group}/${item}`}
+          href={`/${group}/${convertToSlug(item)}`}
           className={`${linkClass} text-nowrap`}
         >
-          {capitalizeFirstLetter(item)}
+          {capitalizeWords(item)}
         </Link>
       ))}
     </div>
