@@ -181,7 +181,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                       }}
                       className="hidden"
                     />
-                    <span className="select-none">{color}</span>
+                    <span className="uppercase select-none">{color}</span>
                   </label>
                 );
               })}
