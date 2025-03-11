@@ -43,7 +43,6 @@ export default function CartOverlay() {
                   name,
                   priceCents,
                   images,
-                  description,
                   saleOff,
                   slug,
                   quantity,
@@ -54,7 +53,7 @@ export default function CartOverlay() {
                     className="mb-2 flex items-center gap-2"
                     key={`${slug}-${color}-${size}`}
                   >
-                    <ImageTag src={images[0]} alt={description} />
+                    <ImageTag src={images[0]} alt={name} />
                     <div className="flex-1">
                       <span className="mb-1 line-clamp-1 font-medium">
                         {name}

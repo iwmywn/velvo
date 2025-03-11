@@ -269,7 +269,6 @@ export default function OrderList({
                           _id: productId,
                           name,
                           images,
-                          description,
                           slug,
                           quantity,
                           color,
@@ -284,7 +283,7 @@ export default function OrderList({
                         >
                           <Link href={`/products/${slug}`}>
                             <div className="flex items-center gap-4 sm:gap-2">
-                              <ImageTag src={images[0]} alt={description} />
+                              <ImageTag src={images[0]} alt={name} />
                               <div>
                                 <h4 className="mb-1 line-clamp-2 font-medium">
                                   {name} - {color} - {size}

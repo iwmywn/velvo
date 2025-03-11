@@ -102,7 +102,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                   : "border-slate-200"
               }`}
             >
-              <ImageTag src={img} alt={description} loading="eager" />
+              <ImageTag src={img} alt={name} loading="eager" />
             </div>
           ))}
         </div>
@@ -202,7 +202,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                           <label
                             translate="no"
                             key={size}
-                            className={`relative flex h-9 w-12 items-center justify-center gap-x-2 overflow-hidden rounded border text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
+                            className={`relative flex h-10.5 w-14 items-center justify-center gap-x-2 overflow-hidden rounded border text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
                           >
                             {qty === 0 && (
                               <span

@@ -1,6 +1,6 @@
 import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 
-const baseImgUrl = "https://res.cloudinary.com/dku9repmn/image/upload/";
+const baseImgUrl = "https://res.cloudinary.com/duobwq5xg/image/upload/";
 
 const footerSections = [
   {
