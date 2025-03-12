@@ -161,11 +161,11 @@ export default function ProductDetails({ product }: { product: Product }) {
                 return (
                   <label
                     key={color}
-                    className={`relative flex h-9 items-center justify-center gap-x-2 overflow-hidden rounded border p-2 text-sm hover:bg-slate-100 ${selectedColor === color ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
+                    className={`relative flex items-center justify-center gap-x-2 overflow-hidden rounded border px-2.5 py-1.5 text-sm hover:bg-slate-100 ${selectedColor === color ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
                   >
                     {!isAvai && (
                       <span
-                        className={`absolute inset-0 before:absolute before:h-[1px] before:w-[150%] before:origin-top-left before:rotate-[36deg] ${selectedColor === color ? "before:bg-[linear-gradient(90deg,_black,_gray,_black)]" : "before:bg-gray-200"}`}
+                        className={`absolute inset-0 before:absolute before:top-[50%] before:right-0 before:left-0 before:h-[1px] before:translate-y-[-50%] ${selectedColor === color ? "before:bg-black" : "before:bg-gray-200"}`}
                       />
                     )}
 
@@ -202,11 +202,11 @@ export default function ProductDetails({ product }: { product: Product }) {
                           <label
                             translate="no"
                             key={size}
-                            className={`relative flex h-10.5 w-14 items-center justify-center gap-x-2 overflow-hidden rounded border text-sm hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
+                            className={`relative flex items-center justify-center gap-x-2 overflow-hidden rounded border px-2.5 py-1.5 text-sm whitespace-nowrap hover:bg-slate-100 ${selectedSize === size ? "border-black bg-slate-50" : "border-slate-200"} cursor-pointer`}
                           >
                             {qty === 0 && (
                               <span
-                                className={`absolute inset-0 before:absolute before:h-[1px] before:w-[150%] before:origin-top-left before:rotate-[36deg] ${selectedSize === size ? "before:bg-[linear-gradient(90deg,_black,_gray,_black)]" : "before:bg-gray-200"}`}
+                                className={`absolute inset-0 before:absolute before:top-[50%] before:right-0 before:left-0 before:h-[1px] before:translate-y-[-50%] ${selectedSize === size ? "before:bg-black" : "before:bg-gray-200"}`}
                               />
                             )}
                             <input
