@@ -50,7 +50,7 @@ type BaseInvoiceList<T> = {
       productId: T;
       quantity: number;
       color: string;
-      size: string;
+      size?: string;
       /**
        * [0] - Price after discount (cents)
        * [1] - Total price after discount (cents, including quantity)
@@ -69,7 +69,7 @@ type BaseCart<T> = {
     productId: T;
     quantity: number;
     color: string;
-    size: string;
+    size?: string;
   }[];
 };
 
@@ -88,9 +88,7 @@ type BaseProduct<T> = {
   saleOff: number;
   slug: string;
   colors: {
-    [color: string]: {
-      sizes: { [size: string]: number };
-    };
+    [color: string]: { sizes: { [size: string]: number } } | number;
   };
   availableColors: string[];
   keyFeatures: string[];

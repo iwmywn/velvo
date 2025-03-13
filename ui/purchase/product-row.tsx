@@ -103,7 +103,7 @@ export default function ProductRow({
         <div className="flex items-center gap-2 border sm:flex-col sm:justify-center sm:gap-1 sm:border-0 sm:py-1 sm:text-center">
           <ImageTag src={images[0]} alt={name} />
           <span className="line-clamp-2 px-1 font-medium">
-            {name} - {color} - {size}
+            {name} - {color} {size && `- ${size}`}
           </span>
         </div>
       </Link>

@@ -38,7 +38,7 @@ export default function OrderList({
       productId: string;
       quantity: number;
       color: string;
-      size: string;
+      size?: string;
       discountedPriceDetails: [string, string];
     }[];
     status: "processing" | "waiting";
@@ -77,7 +77,7 @@ export default function OrderList({
       productId: string;
       quantity: number;
       color: string;
-      size: string;
+      size?: string;
       discountedPriceDetails: [string, string];
     }[],
     status: "processing" | "waiting",
@@ -286,7 +286,7 @@ export default function OrderList({
                               <ImageTag src={images[0]} alt={name} />
                               <div>
                                 <h4 className="mb-1 line-clamp-2 font-medium">
-                                  {name} - {color} - {size}
+                                  {name} - {color} {size && `- ${size}`}
                                 </h4>
                                 <p className="flex flex-wrap gap-y-1 opacity-65">
                                   <span>Quantity: {quantity}</span>

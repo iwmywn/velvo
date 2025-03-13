@@ -33,7 +33,7 @@ export default function CartOverlay() {
     <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
       <SlidingContainer isAnimating={isAnimating}>
         <div className="flex h-full flex-col px-6 pt-6 text-sm">
-          <h2 className="text-base font-bold uppercase">SHOPPING CART</h2>
+          <h2 className="text-base font-bold">SHOPPING CART</h2>
           <div className="mt-4">
             {isLoading ? (
               <Loading />
@@ -62,8 +62,12 @@ export default function CartOverlay() {
                         <span>Quantity: {quantity}</span>
                         <span className="mx-2">|</span>
                         <span>Color: {color}</span>
-                        <span className="mx-2">|</span>
-                        <span>Size: {size}</span>
+                        {size && (
+                          <>
+                            <span className="mx-2">|</span>
+                            <span>Size: {size}</span>
+                          </>
+                        )}
                       </span>
                     </div>
                     <span className="opacity-65">

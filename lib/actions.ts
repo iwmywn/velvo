@@ -70,12 +70,12 @@ export async function sendEmail(
 export async function addToCart(
   productId: string,
   color: string | null,
-  size: string | null,
+  size?: string | null,
   quantity: number = 1,
 ): Promise<string> {
   const { userId } = await verifySession();
 
-  if (!userId || !productId || !color || !size) {
+  if (!userId || !productId || !color) {
     return "Invalid field!";
   }
 
@@ -85,7 +85,14 @@ export async function addToCart(
     const product = await productCollection.findOne({
       _id: new ObjectId(productId),
     });
-    const remainingQuantity: number = product!.colors[color].sizes[size];
+    const withSize = typeof size === "string";
+    const remainingQuantity: number = color
+      ? size && typeof product!.colors[color] === "object"
+        ? product!.colors[color].sizes[size]
+        : typeof product!.colors[color] === "number"
+          ? product!.colors[color]
+          : 0
+      : 0;
     const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
     let currentQuantityInCart: number = 0;
 
@@ -94,8 +101,11 @@ export async function addToCart(
         (p) =>
           p.productId.toString() === productId &&
           p.color === color &&
+          withSize &&
           p.size === size,
       );
+
+      console.log(existingProduct);
 
       if (existingProduct) {
         currentQuantityInCart = existingProduct.quantity;
@@ -112,7 +122,7 @@ export async function addToCart(
       (p) =>
         p.productId.toString() === productId &&
         p.color === color &&
-        p.size === size,
+        (!withSize || p.size === size),
     );
 
     if (existingProductIndex !== -1) {
@@ -123,7 +133,7 @@ export async function addToCart(
             $elemMatch: {
               productId: new ObjectId(productId),
               color,
-              size,
+              ...(withSize ? { size } : {}),
             },
           },
         },
@@ -140,7 +150,7 @@ export async function addToCart(
                   productId: new ObjectId(productId),
                   quantity,
                   color,
-                  size,
+                  ...(withSize ? { size } : {}),
                 },
               ],
               $position: 0,
@@ -160,22 +170,24 @@ export async function addToCart(
 export async function removeFromCart(
   productId: string,
   color: string,
-  size: string,
+  size?: string,
 ): Promise<string> {
   const { userId } = await verifySession();
 
-  if (!userId || !productId || !color || !size) {
+  if (!userId || !productId || !color) {
     return "Invalid field!";
   }
 
   try {
     const cartCollection = await getCartCollection();
+    const withSize = typeof size === "string";
     const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
 
     const existingProduct = cart!.products.find(
       (p) =>
         p.productId.toString() === productId &&
         p.color === color &&
+        withSize &&
         p.size === size,
     );
 
@@ -184,7 +196,11 @@ export async function removeFromCart(
         { userId: new ObjectId(userId) },
         {
           $pull: {
-            products: { productId: new ObjectId(productId), color, size },
+            products: {
+              productId: new ObjectId(productId),
+              color,
+              ...(withSize ? { size } : {}),
+            },
           },
         },
       );
@@ -197,7 +213,7 @@ export async function removeFromCart(
             $elemMatch: {
               productId: new ObjectId(productId),
               color,
-              size,
+              ...(withSize ? { size } : {}),
             },
           },
         },
@@ -214,22 +230,27 @@ export async function removeFromCart(
 export async function deleteFromCart(
   productId: string,
   color: string,
-  size: string,
+  size?: string,
 ): Promise<string> {
   const { userId } = await verifySession();
 
-  if (!userId || !productId || !color || !size) {
+  if (!userId || !productId || !color) {
     return "Invalid field!";
   }
 
   try {
     const cartCollection = await getCartCollection();
+    const withSize = typeof size === "string";
 
     const result = await cartCollection.updateOne(
       { userId: new ObjectId(userId) },
       {
         $pull: {
-          products: { productId: new ObjectId(productId), color, size },
+          products: {
+            productId: new ObjectId(productId),
+            color,
+            ...(withSize ? { size } : {}),
+          },
         },
       },
     );
@@ -311,10 +332,13 @@ export async function cancelReceiveOrder(
       ),
       ...(status === "cancelled"
         ? products.map(async ({ productId, quantity, color, size }) => {
-            const sizeField = `colors.${color}.sizes.${size}`;
+            const updateField = size
+              ? `colors.${color}.sizes.${size}`
+              : `colors.${color}`;
+
             return await productCollection.updateOne(
               { _id: new ObjectId(productId) },
-              { $inc: { [sizeField]: quantity } },
+              { $inc: { [updateField]: quantity } },
             );
           })
         : []),

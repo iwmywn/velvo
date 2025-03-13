@@ -45,7 +45,7 @@ export async function POST(req: Request) {
         productId: new ObjectId(_id),
         quantity,
         color,
-        size,
+        ...(size ? { size } : {}),
         discountedPriceDetails: [
           getPriceAfterDiscount(priceCents, saleOff),
           getPriceAfterDiscount(priceCents, saleOff, quantity),
@@ -53,27 +53,45 @@ export async function POST(req: Request) {
       };
     },
   );
+
   const [productCollection, invoiceListCollection, cartCollection] =
     await Promise.all([
       getProductCollection(),
       getInvoiceListCollection(),
       getCartCollection(),
     ]);
+
   const productNames: string[] = [];
 
   for (const { productId, quantity, color, size } of transformedProducts) {
-    const sizeField = `colors.${color}.sizes.${size}`;
-
     const product = await productCollection.findOne(
       { _id: productId },
-      { projection: { name: 1, [sizeField]: 1 } },
+      { projection: { name: 1, [`colors.${color}`]: 1 } },
     );
 
-    const availableStock = product?.colors?.[color]?.sizes?.[size] ?? 0;
+    if (!product) {
+      return createResponse(`Product not found!`, 400);
+    }
 
-    if (!product || availableStock < quantity) {
+    let availableStock: number;
+
+    if (size) {
+      availableStock =
+        typeof product?.colors?.[color] === "object"
+          ? product.colors[color].sizes[size]
+          : 0;
+    } else {
+      availableStock =
+        typeof product?.colors?.[color] === "number"
+          ? product.colors[color]
+          : 0;
+    }
+
+    if (availableStock < quantity) {
       return createResponse(
-        `Not enough stock for product "${product?.name}", (color: ${color}) (size: ${size})!`,
+        `Not enough stock for product "${product.name}", (color: ${color}) ${
+          size ? `(size: ${size})` : ""
+        }!`,
         400,
       );
     }
@@ -109,10 +127,13 @@ export async function POST(req: Request) {
       { $set: { products: [] } },
     ),
     ...products.map(async ({ _id, quantity, color, size }) => {
-      const sizeField = `colors.${color}.sizes.${size}`;
+      const updateField = size
+        ? `colors.${color}.sizes.${size}`
+        : `colors.${color}`;
+
       await productCollection.updateOne(
         { _id: new ObjectId(_id) },
-        { $inc: { [sizeField]: -quantity } },
+        { $inc: { [updateField]: -quantity } },
       );
     }),
   ]);
@@ -120,5 +141,6 @@ export async function POST(req: Request) {
   productNames.forEach((name) => {
     revalidatePath(`/products/${name}`);
   });
+
   return createResponse("Order created.", 201);
 }
