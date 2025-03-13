@@ -8,7 +8,7 @@ import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
 import NotFound from "@/app/not-found";
-import { capitalizeWords, convertToSlug } from "@ui/utils";
+import { capitalizeWords } from "@ui/utils";
 
 export async function generateMetadata({
   params,
@@ -43,7 +43,7 @@ export default async function ProductPage({
 
   if (!result) return <NotFound />;
 
-  const { customerGroup, categoryName } = result;
+  const { customerGroup, categoryName, categorySlug } = result;
   const similarProductIds = await getSimilarProductIds(product._id);
   const similarProducts = products.filter((product) =>
     similarProductIds.includes(product._id),
@@ -57,7 +57,7 @@ export default async function ProductPage({
     },
     {
       label: capitalizeWords(categoryName),
-      href: `/${customerGroup}/${convertToSlug(categoryName)}`,
+      href: `/${customerGroup}/${categorySlug}`,
     },
     { label: product.name },
   ];

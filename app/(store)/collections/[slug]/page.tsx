@@ -62,6 +62,6 @@ export async function generateStaticParams() {
   const collections = await getCollections();
 
   return collections.map((coll) => ({
-    slug: coll.name,
+    slug: coll.slug,
   }));
 }

@@ -85,20 +85,25 @@ export const getCustomerGroups = cache(async (): Promise<string[]> => {
   }
 });
 
-export const getCategories = cache(async (): Promise<string[]> => {
-  try {
-    const categories = await (await getCustomerCategoriesCollection())
-      .find({})
-      .toArray();
+export const getCategories = cache(
+  async (): Promise<{ name: string; slug: string }[]> => {
+    try {
+      const categories = await (await getCustomerCategoriesCollection())
+        .find({})
+        .toArray();
 
-    return categories.flatMap((cat) =>
-      cat.subcategories.map((sub) => sub.name),
-    );
-  } catch (error) {
-    console.error("Failed to fetch categories:", error);
-    return [];
-  }
-});
+      return categories.flatMap((cat) =>
+        cat.subcategories.map((sub) => ({
+          name: sub.name,
+          slug: sub.slug,
+        })),
+      );
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+      return [];
+    }
+  },
+);
 
 export const getCustomerGroupCategories = cache(async () => {
   try {
@@ -117,7 +122,7 @@ export const getCustomerGroupCategories = cache(async () => {
 });
 
 export const getCategoriesByCustomerGroup = cache(
-  async (customerGroup: string): Promise<string[]> => {
+  async (customerGroup: string): Promise<{ name: string; slug: string }[]> => {
     try {
       const category = await (
         await getCustomerCategoriesCollection()
@@ -125,7 +130,10 @@ export const getCategoriesByCustomerGroup = cache(
 
       if (!category) return [];
 
-      return category.subcategories.map((sub) => sub.name);
+      return category.subcategories.map((sub) => ({
+        name: sub.name,
+        slug: sub.slug,
+      }));
     } catch (error) {
       console.error("Failed to fetch categories:", error);
       return [];
@@ -153,7 +161,7 @@ export const getProductIdsByCustomerGroup = cache(
 );
 
 export const getProductIdsByCategory = cache(
-  async (customerGroup: string, categoryName: string): Promise<string[]> => {
+  async (customerGroup: string, categorySlug: string): Promise<string[]> => {
     try {
       const category = await (
         await getCustomerCategoriesCollection()
@@ -162,7 +170,7 @@ export const getProductIdsByCategory = cache(
       if (!category) return [];
 
       return category.subcategories
-        .filter((sub) => sub.name === categoryName)
+        .filter((sub) => sub.slug === categorySlug)
         .flatMap((sub) => sub.productIds.map(String));
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -174,7 +182,11 @@ export const getProductIdsByCategory = cache(
 export const getCategoryByProductId = cache(
   async (
     productId: string,
-  ): Promise<{ customerGroup: string; categoryName: string } | null> => {
+  ): Promise<{
+    customerGroup: string;
+    categoryName: string;
+    categorySlug: string;
+  } | null> => {
     try {
       const category = await (
         await getCustomerCategoriesCollection()
@@ -188,6 +200,7 @@ export const getCategoryByProductId = cache(
       return {
         customerGroup: category.name,
         categoryName: category.subcategories[0].name,
+        categorySlug: category.subcategories[0].slug,
       };
     } catch (error) {
       console.error("Failed to find category:", error);
@@ -197,11 +210,11 @@ export const getCategoryByProductId = cache(
 );
 
 export const getProductIdsByCollection = cache(
-  async (collection: string): Promise<string[]> => {
+  async (collectionSlug: string): Promise<string[]> => {
     try {
       const categories = await (await getCustomerCategoriesCollection())
         .find(
-          { "subcategories.name": collection },
+          { "subcategories.slug": collectionSlug },
           { projection: { "subcategories.$": 1 } },
         )
         .toArray();
@@ -210,7 +223,7 @@ export const getProductIdsByCollection = cache(
 
       return categories.flatMap((cat) =>
         cat.subcategories.flatMap((sub) =>
-          sub.name === collection ? sub.productIds.map(String) : [],
+          sub.slug === collectionSlug ? sub.productIds.map(String) : [],
         ),
       );
     } catch (error) {

@@ -67,9 +67,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const subCategoryUrls = categoryItems.flatMap(({ group, items }) =>
     items.map(
-      (href) =>
+      (item) =>
         ({
-          url: `${baseUrl}/${group}/${href}`,
+          url: `${baseUrl}/${group}/${item.slug}`,
           lastModified: new Date(),
           changeFrequency: "daily",
           priority: 0.5,

@@ -5,10 +5,10 @@ export function capitalizeWords(text: string): string {
     .join(" ");
 }
 
-export function convertToSlug(text: string): string {
-  return text.replace(/&/g, "and").replace(/\s+/g, "-");
-}
+// export function convertToSlug(text: string): string {
+//   return text.replace(/&/g, "and").replace(/\s+/g, "-");
+// }
 
-export function convertFromSlug(slug: string): string {
-  return slug.replace(/and/g, "&").replace(/-/g, " ");
-}
+// export function convertFromSlug(slug: string): string {
+//   return slug.replace(/and/g, "&").replace(/-/g, " ");
+// }

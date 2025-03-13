@@ -5,7 +5,7 @@ import { Product, Banner } from "@lib/definitions";
 
 type CustomerGroupCategory = {
   group: string;
-  items: string[];
+  items: { name: string; slug: string }[];
 };
 
 interface StoreContextProps {

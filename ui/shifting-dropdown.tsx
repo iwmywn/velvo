@@ -7,7 +7,6 @@ import Link from "next/link";
 import { linkClass } from "@ui/form-class";
 import { capitalizeWords } from "@ui/utils";
 import { useStoreContext } from "./contexts";
-import { convertToSlug } from "@ui/utils";
 
 export const CategoryDropDown = () => {
   return <CategoryTabs />;
@@ -212,7 +211,7 @@ const Nub = () => {
 
 interface CategoryLinksProps {
   group: string;
-  items: ReadonlyArray<string>;
+  items: { name: string; slug: string }[];
 }
 
 const CategoryLinks: React.FC<CategoryLinksProps> = ({ group, items }) => {
@@ -220,11 +219,11 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ group, items }) => {
     <div className="flex flex-col items-center gap-3 text-sm">
       {items.map((item) => (
         <Link
-          key={item}
-          href={`/${group}/${convertToSlug(item)}`}
+          key={`${group}${item.slug}`}
+          href={`/${group}/${item.slug}`}
           className={`${linkClass} text-nowrap`}
         >
-          {capitalizeWords(item)}
+          {capitalizeWords(item.name)}
         </Link>
       ))}
     </div>

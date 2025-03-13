@@ -9,20 +9,20 @@ import {
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { capitalizeWords, convertFromSlug } from "@ui/utils";
+import { capitalizeWords } from "@ui/utils";
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string; sub: string }>;
 }): Promise<Metadata> {
-  const [{ slug: customerGroup, sub: rawCategory }, customerGroups] =
+  const [{ slug: customerGroup, sub: category }, customerGroups] =
     await Promise.all([params, getCustomerGroups()]);
-  const category = convertFromSlug(rawCategory);
   const categories = await getCategoriesByCustomerGroup(customerGroup);
+  const categoryName = categories.find((cat) => cat.slug === category)?.name;
 
   return {
-    title: `${!categories.includes(category) || !customerGroups.includes(customerGroup) ? "NOT FOUND" : `${capitalizeWords(customerGroup)} / ${capitalizeWords(category)}`}`,
+    title: `${!categoryName || !customerGroups.includes(customerGroup) ? "NOT FOUND" : `${capitalizeWords(customerGroup)} / ${capitalizeWords(categoryName)}`}`,
   };
 }
 
@@ -31,12 +31,13 @@ export default async function CategoryPage({
 }: {
   params: Promise<{ slug: string; sub: string }>;
 }) {
-  const [products, customerGroups, { slug: customerGroup, sub: rawCategory }] =
+  const [products, customerGroups, { slug: customerGroup, sub: category }] =
     await Promise.all([getProducts(), getCustomerGroups(), params]);
-  const category = convertFromSlug(rawCategory);
-  const categories = await getCategoriesByCustomerGroup(customerGroup);
 
-  if (!categories.includes(category) || !customerGroups.includes(customerGroup))
+  const categories = await getCategoriesByCustomerGroup(customerGroup);
+  const categoryName = categories.find((cat) => cat.slug === category)?.name;
+
+  if (!categoryName || !customerGroups.includes(customerGroup))
     return <NotFound />;
 
   const productIds = await getProductIdsByCategory(customerGroup, category);
@@ -50,13 +51,13 @@ export default async function CategoryPage({
       label: capitalizeWords(customerGroup),
       href: `/${customerGroup}`,
     },
-    { label: capitalizeWords(category) },
+    { label: capitalizeWords(categoryName) },
   ];
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <ProductList products={productsByCategory} title={`${category}`} />
+      <ProductList products={productsByCategory} title={categoryName} />
     </>
   );
 }
@@ -64,7 +65,7 @@ export default async function CategoryPage({
 export async function generateStaticParams() {
   const categoryItems = await getCustomerGroupCategories();
   const params = categoryItems.flatMap(({ group, items }) =>
-    items.map((href) => ({ slug: group, sub: href })),
+    items.map((item) => ({ slug: group, sub: item.slug })),
   );
 
   return params;

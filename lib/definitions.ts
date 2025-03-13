@@ -16,6 +16,7 @@ type BaseCollection<T> = {
   _id: T;
   name: string;
   image: string;
+  slug: string;
 };
 
 type BaseUser<T> = {
@@ -76,7 +77,7 @@ type BaseCart<T> = {
 type BaseCustomerCategories<T> = {
   _id: T;
   name: string;
-  subcategories: { name: string; productIds: T[] }[];
+  subcategories: { name: string; slug: string; productIds: T[] }[];
 };
 
 type BaseProduct<T> = {
