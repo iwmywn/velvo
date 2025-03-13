@@ -18,9 +18,12 @@ export async function generateMetadata({
     params,
     getCollections(),
   ]);
+  const collectionName = collections.find(
+    (col) => col.slug === collection,
+  )?.name;
 
   return {
-    title: `${!collections.find((col) => col.name === collection) ? "NOT FOUND" : `Collection / ${capitalizeWords(collection)}`}`,
+    title: `${!collectionName ? "NOT FOUND" : `Collection / ${capitalizeWords(collectionName)}`}`,
   };
 }
 
@@ -34,8 +37,11 @@ export default async function CollectionsPage({
     getCollections(),
     params,
   ]);
+  const collectionName = collections.find(
+    (col) => col.slug === collection,
+  )?.name;
 
-  if (!collections.find((col) => col.name === collection)) return <NotFound />;
+  if (!collectionName) return <NotFound />;
 
   const productIds = await getProductIdsByCollection(collection);
   const productsByCollection = products.filter((product) =>
@@ -44,7 +50,7 @@ export default async function CollectionsPage({
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: capitalizeWords(collection) },
+    { label: capitalizeWords(collectionName) },
   ];
 
   return (
