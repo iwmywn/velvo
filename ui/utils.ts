@@ -6,9 +6,9 @@ export function capitalizeWords(text: string): string {
 }
 
 export function convertToSlug(text: string): string {
-  return text.replace(/ & /g, " and ").replace(/\s+/g, "-");
+  return text.replace(/&/g, "and").replace(/\s+/g, "-");
 }
 
 export function convertFromSlug(slug: string): string {
-  return slug.replace(/-and-/g, " & ").replace(/-/g, " ");
+  return slug.replace(/and/g, "&").replace(/-/g, " ");
 }
