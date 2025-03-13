@@ -8,7 +8,7 @@ import ProductDetails from "@ui/product/details";
 import SimilarProducts from "@ui/product/similar";
 import BreadCrumbs from "@ui/breadcrumbs";
 import NotFound from "@/app/not-found";
-import { capitalizeWords } from "@ui/utils";
+import { capitalizeWords, convertToSlug } from "@ui/utils";
 
 export async function generateMetadata({
   params,
@@ -57,7 +57,7 @@ export default async function ProductPage({
     },
     {
       label: capitalizeWords(categoryName),
-      href: `/${customerGroup}/${categoryName}`,
+      href: `/${customerGroup}/${convertToSlug(categoryName)}`,
     },
     { label: product.name },
   ];
