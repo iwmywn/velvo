@@ -77,6 +77,7 @@ type BaseCart<T> = {
 type BaseCustomerCategories<T> = {
   _id: T;
   name: string;
+  slug: string;
   subcategories: { name: string; slug: string; productIds: T[] }[];
 };
 

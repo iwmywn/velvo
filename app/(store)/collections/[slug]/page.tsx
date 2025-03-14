@@ -7,7 +7,6 @@ import {
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { capitalizeWords } from "@ui/utils";
 
 export async function generateMetadata({
   params,
@@ -23,7 +22,7 @@ export async function generateMetadata({
   )?.name;
 
   return {
-    title: `${!collectionName ? "NOT FOUND" : `Collection / ${capitalizeWords(collectionName)}`}`,
+    title: `${!collectionName ? "NOT FOUND" : `Collection / ${collectionName}`}`,
   };
 }
 
@@ -50,7 +49,7 @@ export default async function CollectionsPage({
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: capitalizeWords(collectionName) },
+    { label: collectionName },
   ];
 
   return (

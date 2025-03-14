@@ -5,7 +5,6 @@ import { FiChevronDown } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { linkClass } from "@ui/form-class";
-import { capitalizeWords } from "@ui/utils";
 import { useStoreContext } from "./contexts";
 
 export const CategoryDropDown = () => {
@@ -223,7 +222,7 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ group, items }) => {
           href={`/${group}/${item.slug}`}
           className={`${linkClass} text-nowrap`}
         >
-          {capitalizeWords(item.name)}
+          {item.name}
         </Link>
       ))}
     </div>

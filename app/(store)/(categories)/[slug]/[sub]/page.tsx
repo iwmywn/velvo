@@ -9,7 +9,6 @@ import {
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { capitalizeWords } from "@ui/utils";
 
 export async function generateMetadata({
   params,
@@ -20,9 +19,12 @@ export async function generateMetadata({
     await Promise.all([params, getCustomerGroups()]);
   const categories = await getCategoriesByCustomerGroup(customerGroup);
   const categoryName = categories.find((cat) => cat.slug === category)?.name;
+  const customerGroupName = customerGroups.find(
+    (cgs) => cgs.slug === customerGroup,
+  )?.name;
 
   return {
-    title: `${!categoryName || !customerGroups.includes(customerGroup) ? "NOT FOUND" : `${capitalizeWords(customerGroup)} / ${capitalizeWords(categoryName)}`}`,
+    title: `${!categoryName || !customerGroupName ? "NOT FOUND" : `${customerGroupName} / ${categoryName}`}`,
   };
 }
 
@@ -35,10 +37,12 @@ export default async function CategoryPage({
     await Promise.all([getProducts(), getCustomerGroups(), params]);
 
   const categories = await getCategoriesByCustomerGroup(customerGroup);
+  const customerGroupName = customerGroups.find(
+    (cgs) => cgs.slug === customerGroup,
+  )?.name;
   const categoryName = categories.find((cat) => cat.slug === category)?.name;
 
-  if (!categoryName || !customerGroups.includes(customerGroup))
-    return <NotFound />;
+  if (!categoryName || !customerGroupName) return <NotFound />;
 
   const productIds = await getProductIdsByCategory(customerGroup, category);
   const productsByCategory = products.filter((product) =>
@@ -48,10 +52,10 @@ export default async function CategoryPage({
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: capitalizeWords(customerGroup),
+      label: customerGroupName,
       href: `/${customerGroup}`,
     },
-    { label: capitalizeWords(categoryName) },
+    { label: categoryName },
   ];
 
   return (

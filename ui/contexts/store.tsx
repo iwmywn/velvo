@@ -11,7 +11,7 @@ type CustomerGroupCategory = {
 interface StoreContextProps {
   products: Product[];
   banners: Banner[];
-  customerGroups: string[];
+  customerGroups: { name: string; slug: string }[];
   categoryItems: CustomerGroupCategory[];
 }
 
@@ -27,7 +27,7 @@ export function StoreProvider({
   children: ReactNode;
   products: Product[];
   banners: Banner[];
-  customerGroups: string[];
+  customerGroups: { name: string; slug: string }[];
   categoryItems: CustomerGroupCategory[];
 }) {
   return (

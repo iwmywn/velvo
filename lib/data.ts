@@ -72,18 +72,20 @@ export const getCollections = cache(async (): Promise<Collection[]> => {
   }
 });
 
-export const getCustomerGroups = cache(async (): Promise<string[]> => {
-  try {
-    const categories = await (await getCustomerCategoriesCollection())
-      .find({})
-      .toArray();
+export const getCustomerGroups = cache(
+  async (): Promise<{ name: string; slug: string }[]> => {
+    try {
+      const categories = await (await getCustomerCategoriesCollection())
+        .find({})
+        .toArray();
 
-    return categories.map((cat) => cat.name);
-  } catch (error) {
-    console.error("Failed to fetch categories:", error);
-    return [];
-  }
-});
+      return categories.map((cat) => ({ name: cat.name, slug: cat.slug }));
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+      return [];
+    }
+  },
+);
 
 export const getCategories = cache(
   async (): Promise<{ name: string; slug: string }[]> => {
@@ -111,8 +113,9 @@ export const getCustomerGroupCategories = cache(async () => {
 
     return Promise.all(
       customerGroups.map(async (group) => {
-        const items = await getCategoriesByCustomerGroup(group);
-        return { group, items };
+        const { slug } = group;
+        const items = await getCategoriesByCustomerGroup(slug);
+        return { group: slug, items };
       }),
     );
   } catch (error) {
@@ -122,11 +125,13 @@ export const getCustomerGroupCategories = cache(async () => {
 });
 
 export const getCategoriesByCustomerGroup = cache(
-  async (customerGroup: string): Promise<{ name: string; slug: string }[]> => {
+  async (
+    customerGroupSlug: string,
+  ): Promise<{ name: string; slug: string }[]> => {
     try {
       const category = await (
         await getCustomerCategoriesCollection()
-      ).findOne({ name: customerGroup });
+      ).findOne({ slug: customerGroupSlug });
 
       if (!category) return [];
 
@@ -142,11 +147,11 @@ export const getCategoriesByCustomerGroup = cache(
 );
 
 export const getProductIdsByCustomerGroup = cache(
-  async (customerGroup: string): Promise<string[]> => {
+  async (customerGroupSlug: string): Promise<string[]> => {
     try {
       const category = await (
         await getCustomerCategoriesCollection()
-      ).findOne({ name: customerGroup });
+      ).findOne({ slug: customerGroupSlug });
 
       if (!category) return [];
 
@@ -161,11 +166,14 @@ export const getProductIdsByCustomerGroup = cache(
 );
 
 export const getProductIdsByCategory = cache(
-  async (customerGroup: string, categorySlug: string): Promise<string[]> => {
+  async (
+    customerGroupSlug: string,
+    categorySlug: string,
+  ): Promise<string[]> => {
     try {
       const category = await (
         await getCustomerCategoriesCollection()
-      ).findOne({ name: customerGroup });
+      ).findOne({ slug: customerGroupSlug });
 
       if (!category) return [];
 
@@ -183,7 +191,8 @@ export const getCategoryByProductId = cache(
   async (
     productId: string,
   ): Promise<{
-    customerGroup: string;
+    customerGroupName: string;
+    customerGroupSlug: string;
     categoryName: string;
     categorySlug: string;
   } | null> => {
@@ -192,13 +201,14 @@ export const getCategoryByProductId = cache(
         await getCustomerCategoriesCollection()
       ).findOne(
         { "subcategories.productIds": new ObjectId(productId) },
-        { projection: { name: 1, "subcategories.$": 1 } },
+        { projection: { name: 1, slug: 1, "subcategories.$": 1 } },
       );
 
       if (!category || !category.subcategories.length) return null;
 
       return {
-        customerGroup: category.name,
+        customerGroupName: category.name,
+        customerGroupSlug: category.slug,
         categoryName: category.subcategories[0].name,
         categorySlug: category.subcategories[0].slug,
       };

@@ -7,7 +7,6 @@ import {
 import ProductList from "@ui/product/list";
 import NotFound from "@/app/not-found";
 import BreadCrumbs from "@ui/breadcrumbs";
-import { capitalizeWords } from "@ui/utils";
 
 export async function generateMetadata({
   params,
@@ -18,9 +17,12 @@ export async function generateMetadata({
     params,
     getCustomerGroups(),
   ]);
+  const customerGroupName = customerGroups.find(
+    (cgs) => cgs.slug === customerGroup,
+  )?.name;
 
   return {
-    title: `${!customerGroups.includes(customerGroup) ? "NOT FOUND" : capitalizeWords(customerGroup)}`,
+    title: `${!customerGroupName ? "NOT FOUND" : customerGroupName}`,
   };
 }
 
@@ -32,8 +34,11 @@ export default async function CategoryPage({
   const [products, { slug: customerGroup }, customerGroups] = await Promise.all(
     [getProducts(), params, getCustomerGroups()],
   );
+  const customerGroupName = customerGroups.find(
+    (cgs) => cgs.slug === customerGroup,
+  )?.name;
 
-  if (!customerGroups.includes(customerGroup)) return <NotFound />;
+  if (!customerGroupName) return <NotFound />;
 
   const productIds = await getProductIdsByCustomerGroup(customerGroup);
   const productsByCustomerGroup = products.filter((product) =>
@@ -42,21 +47,24 @@ export default async function CategoryPage({
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
-    { label: capitalizeWords(customerGroup) },
+    { label: customerGroupName },
   ];
 
   return (
     <>
       <BreadCrumbs breadcrumbs={breadcrumbs} />
-      <ProductList products={productsByCustomerGroup} title={customerGroup} />
+      <ProductList
+        products={productsByCustomerGroup}
+        title={customerGroupName}
+      />
     </>
   );
 }
 
 export async function generateStaticParams() {
-  const categoriesName = await getCustomerGroups();
+  const customerGroups = await getCustomerGroups();
 
-  return categoriesName.map((name) => ({
-    slug: name,
+  return customerGroups.map((cgs) => ({
+    slug: cgs.slug,
   }));
 }

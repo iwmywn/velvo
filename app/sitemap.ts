@@ -38,7 +38,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const collectionUrls = collections.map(
     (coll) =>
       ({
-        url: `${baseUrl}/collections/${coll.name}`,
+        url: `${baseUrl}/collections/${coll.slug}`,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.7,
@@ -58,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const categoryUrls = customerGroups.map(
     (cg) =>
       ({
-        url: `${baseUrl}/${cg}`,
+        url: `${baseUrl}/${cg.slug}`,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.4,
