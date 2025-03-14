@@ -13,12 +13,12 @@ export async function generateMetadata({
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const [{ slug: collection }, collections] = await Promise.all([
+  const [{ slug: collectionSlug }, collections] = await Promise.all([
     params,
     getCollections(),
   ]);
   const collectionName = collections.find(
-    (col) => col.slug === collection,
+    (col) => col.slug === collectionSlug,
   )?.name;
 
   return {
@@ -31,18 +31,18 @@ export default async function CollectionsPage({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const [products, collections, { slug: collection }] = await Promise.all([
+  const [products, collections, { slug: collectionSlug }] = await Promise.all([
     getProducts(),
     getCollections(),
     params,
   ]);
   const collectionName = collections.find(
-    (col) => col.slug === collection,
+    (col) => col.slug === collectionSlug,
   )?.name;
 
   if (!collectionName) return <NotFound />;
 
-  const productIds = await getProductIdsByCollection(collection);
+  const productIds = await getProductIdsByCollection(collectionSlug);
   const productsByCollection = products.filter((product) =>
     productIds.includes(product._id),
   );
@@ -57,7 +57,7 @@ export default async function CollectionsPage({
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <ProductList
         products={productsByCollection}
-        title={`Collection / ${collection}`}
+        title={`Collection / ${collectionName}`}
       />
     </>
   );
@@ -66,7 +66,7 @@ export default async function CollectionsPage({
 export async function generateStaticParams() {
   const collections = await getCollections();
 
-  return collections.map((coll) => ({
-    slug: coll.slug,
+  return collections.map(({ slug }) => ({
+    slug,
   }));
 }

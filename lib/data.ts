@@ -3,7 +3,7 @@
 import { Product, Avatar, Banner, Collection } from "@lib/definitions";
 import { baseImgUrl } from "@ui/data";
 import {
-  getCustomerCategoriesCollection,
+  getCategoriesCollection,
   getProductCollection,
   getAvatarCollection,
   getUserCollection,
@@ -72,14 +72,14 @@ export const getCollections = cache(async (): Promise<Collection[]> => {
   }
 });
 
-export const getCustomerGroups = cache(
+export const getMainCategories = cache(
   async (): Promise<{ name: string; slug: string }[]> => {
     try {
-      const categories = await (await getCustomerCategoriesCollection())
+      const categories = await (await getCategoriesCollection())
         .find({})
         .toArray();
 
-      return categories.map((cat) => ({ name: cat.name, slug: cat.slug }));
+      return categories.map((cats) => ({ name: cats.name, slug: cats.slug }));
     } catch (error) {
       console.error("Failed to fetch categories:", error);
       return [];
@@ -87,35 +87,35 @@ export const getCustomerGroups = cache(
   },
 );
 
-export const getCategories = cache(
-  async (): Promise<{ name: string; slug: string }[]> => {
-    try {
-      const categories = await (await getCustomerCategoriesCollection())
-        .find({})
-        .toArray();
+// export const getSubCategories = cache(
+//   async (): Promise<{ name: string; slug: string }[]> => {
+//     try {
+//       const categories = await (await getCategoriesCollection())
+//         .find({})
+//         .toArray();
 
-      return categories.flatMap((cat) =>
-        cat.subcategories.map((sub) => ({
-          name: sub.name,
-          slug: sub.slug,
-        })),
-      );
-    } catch (error) {
-      console.error("Failed to fetch categories:", error);
-      return [];
-    }
-  },
-);
+//       return categories.flatMap((cat) =>
+//         cat.subcategories.map((sub) => ({
+//           name: sub.name,
+//           slug: sub.slug,
+//         })),
+//       );
+//     } catch (error) {
+//       console.error("Failed to fetch categories:", error);
+//       return [];
+//     }
+//   },
+// );
 
-export const getCustomerGroupCategories = cache(async () => {
+export const getMainCategoriesWithSubcategories = cache(async () => {
   try {
-    const customerGroups = await getCustomerGroups();
+    const mainCategories = await getMainCategories();
 
     return Promise.all(
-      customerGroups.map(async (group) => {
-        const { slug } = group;
-        const items = await getCategoriesByCustomerGroup(slug);
-        return { group: slug, items };
+      mainCategories.map(async (main) => {
+        const { slug } = main;
+        const sub = await getSubCategoriesByMainCategory(slug);
+        return { main, sub };
       }),
     );
   } catch (error) {
@@ -124,14 +124,14 @@ export const getCustomerGroupCategories = cache(async () => {
   }
 });
 
-export const getCategoriesByCustomerGroup = cache(
+export const getSubCategoriesByMainCategory = cache(
   async (
-    customerGroupSlug: string,
+    mainCategorySlug: string,
   ): Promise<{ name: string; slug: string }[]> => {
     try {
       const category = await (
-        await getCustomerCategoriesCollection()
-      ).findOne({ slug: customerGroupSlug });
+        await getCategoriesCollection()
+      ).findOne({ slug: mainCategorySlug });
 
       if (!category) return [];
 
@@ -146,12 +146,12 @@ export const getCategoriesByCustomerGroup = cache(
   },
 );
 
-export const getProductIdsByCustomerGroup = cache(
-  async (customerGroupSlug: string): Promise<string[]> => {
+export const getProductIdsByMainCategory = cache(
+  async (mainCategorySlug: string): Promise<string[]> => {
     try {
       const category = await (
-        await getCustomerCategoriesCollection()
-      ).findOne({ slug: customerGroupSlug });
+        await getCategoriesCollection()
+      ).findOne({ slug: mainCategorySlug });
 
       if (!category) return [];
 
@@ -167,18 +167,18 @@ export const getProductIdsByCustomerGroup = cache(
 
 export const getProductIdsByCategory = cache(
   async (
-    customerGroupSlug: string,
-    categorySlug: string,
+    mainCategorySlug: string,
+    subCategorySlug: string,
   ): Promise<string[]> => {
     try {
       const category = await (
-        await getCustomerCategoriesCollection()
-      ).findOne({ slug: customerGroupSlug });
+        await getCategoriesCollection()
+      ).findOne({ slug: mainCategorySlug });
 
       if (!category) return [];
 
       return category.subcategories
-        .filter((sub) => sub.slug === categorySlug)
+        .filter((sub) => sub.slug === subCategorySlug)
         .flatMap((sub) => sub.productIds.map(String));
     } catch (error) {
       console.error("Failed to fetch products:", error);
@@ -187,18 +187,18 @@ export const getProductIdsByCategory = cache(
   },
 );
 
-export const getCategoryByProductId = cache(
+export const getCategoryDetailsByProductId = cache(
   async (
     productId: string,
   ): Promise<{
-    customerGroupName: string;
-    customerGroupSlug: string;
-    categoryName: string;
-    categorySlug: string;
+    mainCategoryName: string;
+    mainCategorySlug: string;
+    subCategoryName: string;
+    subCategorySlug: string;
   } | null> => {
     try {
       const category = await (
-        await getCustomerCategoriesCollection()
+        await getCategoriesCollection()
       ).findOne(
         { "subcategories.productIds": new ObjectId(productId) },
         { projection: { name: 1, slug: 1, "subcategories.$": 1 } },
@@ -207,10 +207,10 @@ export const getCategoryByProductId = cache(
       if (!category || !category.subcategories.length) return null;
 
       return {
-        customerGroupName: category.name,
-        customerGroupSlug: category.slug,
-        categoryName: category.subcategories[0].name,
-        categorySlug: category.subcategories[0].slug,
+        mainCategoryName: category.name,
+        mainCategorySlug: category.slug,
+        subCategoryName: category.subcategories[0].name,
+        subCategorySlug: category.subcategories[0].slug,
       };
     } catch (error) {
       console.error("Failed to find category:", error);
@@ -222,7 +222,7 @@ export const getCategoryByProductId = cache(
 export const getProductIdsByCollection = cache(
   async (collectionSlug: string): Promise<string[]> => {
     try {
-      const categories = await (await getCustomerCategoriesCollection())
+      const categories = await (await getCategoriesCollection())
         .find(
           { "subcategories.slug": collectionSlug },
           { projection: { "subcategories.$": 1 } },
@@ -262,7 +262,7 @@ export const getSimilarProductIds = cache(
   async (productId: string): Promise<string[]> => {
     try {
       const category = await (
-        await getCustomerCategoriesCollection()
+        await getCategoriesCollection()
       ).findOne(
         { "subcategories.productIds": new ObjectId(productId) },
         { projection: { "subcategories.$": 1 } },

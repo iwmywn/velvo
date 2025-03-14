@@ -1,8 +1,8 @@
 import type { MetadataRoute } from "next";
 import {
   getCollections,
-  getCustomerGroupCategories,
-  getCustomerGroups,
+  getMainCategoriesWithSubcategories,
+  getMainCategories,
   getProducts,
 } from "@lib/data";
 
@@ -13,12 +13,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!baseUrl) {
     throw new Error("Environment variable NEXT_PUBLIC_URL is not defined.");
   }
-  const [products, customerGroups, collections, categoryItems] =
+  const [products, mainCategories, collections, mainSubCategories] =
     await Promise.all([
       getProducts(),
-      getCustomerGroups(),
+      getMainCategories(),
       getCollections(),
-      getCustomerGroupCategories(),
+      getMainCategoriesWithSubcategories(),
     ]);
 
   const defaultUrl = {
@@ -36,9 +36,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   } satisfies Item;
 
   const collectionUrls = collections.map(
-    (coll) =>
+    ({ slug }) =>
       ({
-        url: `${baseUrl}/collections/${coll.slug}`,
+        url: `${baseUrl}/collections/${slug}`,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.7,
@@ -55,21 +55,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }) satisfies Item,
   );
 
-  const categoryUrls = customerGroups.map(
-    (cg) =>
+  const categoryUrls = mainCategories.map(
+    ({ slug }) =>
       ({
-        url: `${baseUrl}/${cg.slug}`,
+        url: `${baseUrl}/${slug}`,
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.4,
       }) satisfies Item,
   );
 
-  const subCategoryUrls = categoryItems.flatMap(({ group, items }) =>
-    items.map(
+  const subCategoryUrls = mainSubCategories.flatMap(({ main, sub }) =>
+    sub.map(
       (item) =>
         ({
-          url: `${baseUrl}/${group}/${item.slug}`,
+          url: `${baseUrl}/${main.slug}/${item.slug}`,
           lastModified: new Date(),
           changeFrequency: "daily",
           priority: 0.5,

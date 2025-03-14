@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import {
-  getCategoryByProductId,
+  getCategoryDetailsByProductId,
   getProducts,
   getSimilarProductIds,
 } from "@lib/data";
@@ -18,10 +18,10 @@ export async function generateMetadata({
     getProducts(),
     params,
   ]);
-  const name = products.find((p) => p.slug === productSlug)?.name;
+  const productName = products.find((p) => p.slug === productSlug)?.name;
 
   return {
-    title: name || "NOT FOUND",
+    title: productName || "NOT FOUND",
   };
 }
 
@@ -38,12 +38,16 @@ export default async function ProductPage({
 
   if (!product) return <NotFound />;
 
-  const result = await getCategoryByProductId(product._id);
+  const details = await getCategoryDetailsByProductId(product._id);
 
-  if (!result) return <NotFound />;
+  if (!details) return <NotFound />;
 
-  const { customerGroupName, customerGroupSlug, categoryName, categorySlug } =
-    result;
+  const {
+    mainCategoryName,
+    mainCategorySlug,
+    subCategoryName,
+    subCategorySlug,
+  } = details;
   const similarProductIds = await getSimilarProductIds(product._id);
   const similarProducts = products.filter((product) =>
     similarProductIds.includes(product._id),
@@ -52,12 +56,12 @@ export default async function ProductPage({
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     {
-      label: customerGroupName,
-      href: `/${customerGroupSlug}`,
+      label: mainCategoryName,
+      href: `/${mainCategorySlug}`,
     },
     {
-      label: categoryName,
-      href: `/${customerGroupSlug}/${categorySlug}`,
+      label: subCategoryName,
+      href: `/${mainCategorySlug}/${subCategorySlug}`,
     },
     { label: product.name },
   ];
@@ -78,7 +82,7 @@ export default async function ProductPage({
 export async function generateStaticParams() {
   const products = await getProducts();
 
-  return products.map((p) => ({
-    slug: p.slug,
+  return products.map(({ slug }) => ({
+    slug,
   }));
 }

@@ -97,10 +97,10 @@ export default function Home({ collections }: { collections: Collection[] }) {
 
       <h2 className="mt-10 mb-8 text-center text-xl font-bold">WARDROBE</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
-        {collections.map(({ _id, name, image }) => (
+        {collections.map(({ _id, name, slug, image }) => (
           <Link
             key={_id}
-            href={`/collections/${name}`}
+            href={`/collections/${slug}`}
             className="group relative block overflow-hidden rounded"
           >
             <div className="relative w-full" style={{ paddingTop: "80%" }}>

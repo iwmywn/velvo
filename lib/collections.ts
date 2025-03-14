@@ -34,8 +34,8 @@ export async function getCartCollection() {
   return await collection<DBCart>("carts");
 }
 
-export async function getCustomerCategoriesCollection() {
-  return await collection<DBCustomerCategories>("customerCategories");
+export async function getCategoriesCollection() {
+  return await collection<DBCustomerCategories>("categories");
 }
 
 export async function getProductCollection() {

@@ -12,16 +12,16 @@ export const CategoryDropDown = () => {
 };
 
 const CategoryTabs = () => {
-  const { categoryItems } = useStoreContext();
+  const { mainSubCategories } = useStoreContext();
 
   const CATEGORY_TABS = useMemo(
     () =>
-      categoryItems.map(({ group, items }, idx) => ({
-        title: group,
-        Component: () => <CategoryLinks group={group} items={items} />,
+      mainSubCategories.map(({ main, sub }, idx) => ({
+        title: main.name,
+        Component: () => <CategoryLinks main={main} sub={sub} />,
         id: idx + 1,
       })),
-    [categoryItems],
+    [mainSubCategories],
   );
 
   const [selected, setSelected] = useState<number | null>(null);
@@ -209,17 +209,17 @@ const Nub = () => {
 };
 
 interface CategoryLinksProps {
-  group: string;
-  items: { name: string; slug: string }[];
+  main: { name: string; slug: string };
+  sub: { name: string; slug: string }[];
 }
 
-const CategoryLinks: React.FC<CategoryLinksProps> = ({ group, items }) => {
+const CategoryLinks: React.FC<CategoryLinksProps> = ({ main, sub }) => {
   return (
     <div className="flex flex-col items-center gap-3 text-sm">
-      {items.map((item) => (
+      {sub.map((item) => (
         <Link
-          key={`${group}${item.slug}`}
-          href={`/${group}/${item.slug}`}
+          key={`${main.name}${item.name}`}
+          href={`/${main.slug}/${item.slug}`}
           className={`${linkClass} text-nowrap`}
         >
           {item.name}

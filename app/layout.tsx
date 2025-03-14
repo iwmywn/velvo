@@ -10,8 +10,8 @@ import { ToastContainer, Slide } from "react-toastify";
 import { siteConfig } from "@lib/config";
 import {
   getBanners,
-  getCustomerGroupCategories,
-  getCustomerGroups,
+  getMainCategoriesWithSubcategories,
+  getMainCategories,
   getProducts,
 } from "@lib/data";
 import {
@@ -53,13 +53,13 @@ export default async function RootLayout({
     );
   }
 
-  const [products, banners, cookieStore, customerGroups, categoryItems] =
+  const [products, banners, cookieStore, mainCategories, mainSubCategories] =
     await Promise.all([
       getProducts(),
       getBanners(),
       cookies(),
-      getCustomerGroups(),
-      getCustomerGroupCategories(),
+      getMainCategories(),
+      getMainCategoriesWithSubcategories(),
     ]);
   const userId = cookieStore.get("userId")?.value;
   const userImage = cookieStore.get("userImage")?.value;
@@ -71,8 +71,8 @@ export default async function RootLayout({
           <StoreProvider
             products={products}
             banners={banners}
-            customerGroups={customerGroups}
-            categoryItems={categoryItems}
+            mainCategories={mainCategories}
+            mainSubCategories={mainSubCategories}
           >
             <AuthProvider userId={userId} userImage={userImage}>
               <div id="popups" className="relative z-[9999]">
