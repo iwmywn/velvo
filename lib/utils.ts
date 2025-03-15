@@ -1,17 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
 import { Product, Cart, InvoiceList } from "@lib/definitions";
 
-// todo: rewrite handleTokenVerification
+// todo: rework this func
 export async function handleTokenVerification(
   endpoint: string,
   setStatus: Dispatch<SetStateAction<"success" | "error" | null>>,
   setMessage: Dispatch<SetStateAction<string>>,
   setLoading: Dispatch<SetStateAction<boolean>>,
   token: string | undefined,
+  email: string | undefined,
 ) {
-  if (token) {
+  if (token || email) {
     try {
-      const res = await fetch(`/api/${endpoint}?token=${token}`);
+      const res = await fetch(`/api/${endpoint}?user=${email}&token=${token}`);
       const message = await res.json();
 
       if (res.ok) {

@@ -27,7 +27,7 @@ export async function sendEmail(
 
   const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${
     mode === "verifyEmail" ? "verifyEmail" : "resetPassword"
-  }&token=${token}`;
+  }&user=${email}&token=${token}`;
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,

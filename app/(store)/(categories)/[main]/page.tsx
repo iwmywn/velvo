@@ -26,7 +26,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({
+export default async function MainCategoryPage({
   params,
 }: {
   params: Promise<{ main: string }>;

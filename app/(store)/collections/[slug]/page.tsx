@@ -26,7 +26,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CollectionsPage({
+export default async function CollectionPage({
   params,
 }: {
   params: Promise<{ slug: string }>;

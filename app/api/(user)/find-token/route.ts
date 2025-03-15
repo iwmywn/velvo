@@ -6,11 +6,13 @@ import { getUserCollection } from "@lib/collections";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
+  const email = searchParams.get("user");
 
-  // todo: filter (verificationToken & userid)
+  if (!token || !email) return createResponse("Invalid field!", 400);
+
   const user = await (
     await getUserCollection()
-  ).findOne({ verificationToken: token! });
+  ).findOne({ email: email, verificationToken: token });
 
   if (!user) return createResponse("Token expired!", 404);
 

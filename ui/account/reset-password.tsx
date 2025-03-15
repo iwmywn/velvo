@@ -24,8 +24,10 @@ type PasswordFormData = z.infer<typeof resetPasswordScheme>;
 
 export default function ResetPassword({
   token,
+  email,
 }: {
   token: string | undefined;
+  email: string | undefined;
 }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [status, setStatus] = useState<"success" | "error" | null>(null);
@@ -51,8 +53,9 @@ export default function ResetPassword({
       setMessage,
       setLoading,
       token,
+      email,
     );
-  }, [token]);
+  }, [token, email]);
 
   const onSubmit = async (data: PasswordFormData) => {
     try {

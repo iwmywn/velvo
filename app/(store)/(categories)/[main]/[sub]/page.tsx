@@ -30,7 +30,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function CategoryPage({
+export default async function SubCategoryPage({
   params,
 }: {
   params: Promise<{ main: string; sub: string }>;

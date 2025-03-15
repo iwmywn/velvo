@@ -60,6 +60,7 @@ const CategoryTabs = () => {
       tabsElements.forEach((el) => observerRef.current?.unobserve(el));
       observerRef.current?.disconnect();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

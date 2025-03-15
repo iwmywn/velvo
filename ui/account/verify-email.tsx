@@ -6,7 +6,13 @@ import Loading from "@ui/loading";
 import { handleTokenVerification } from "@lib/utils";
 import Title from "@ui/account/title";
 
-export default function VerifyEmail({ token }: { token: string | undefined }) {
+export default function VerifyEmail({
+  token,
+  email,
+}: {
+  token: string | undefined;
+  email: string | undefined;
+}) {
   const [status, setStatus] = useState<"success" | "error" | null>(null);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,8 +24,9 @@ export default function VerifyEmail({ token }: { token: string | undefined }) {
       setMessage,
       setLoading,
       token,
+      email,
     );
-  }, [token]);
+  }, [token, email]);
 
   if (loading) {
     return <Loading />;
