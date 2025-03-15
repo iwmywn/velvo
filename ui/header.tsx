@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { IoIosMenu } from "react-icons/io";
 import { useRef } from "react";
 import NavMenu from "@ui/nav/nav-menu";
@@ -40,11 +41,20 @@ export default function Header() {
           <div className="hidden max-w-[27rem] flex-1 gap-2 lg:flex lg:items-center">
             <CategoryDropDown />
           </div>
-
-          <Link className="h-6 select-none" href="/" title="Velvo">
-            <img className="h-full" src="/svg/VELVO.svg" alt="Velvo logo" />
+          <Link
+            className="relative h-6 w-auto select-none"
+            href="/"
+            title="Velvo"
+          >
+            <Image
+              src="/svg/VELVO.svg"
+              alt="Velvo logo"
+              width={735}
+              height={153}
+              className="h-full w-auto"
+              loading="eager"
+            />
           </Link>
-
           <div className="flex items-center justify-end gap-5 text-base lg:max-w-[27rem] lg:flex-1 lg:gap-10">
             <CiSearch
               className="cursor-pointer text-[22px] md:text-2xl"
