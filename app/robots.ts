@@ -7,7 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         "/signin",
         "/forgotten-password",
-        "/resend-verification-email",
         "/email-handler",
         "/account",
         "/purchase",
