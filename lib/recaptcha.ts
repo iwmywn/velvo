@@ -7,6 +7,8 @@ export default async function verifyRecaptchaToken(token: string) {
     throw new Error("RECAPTCHA_SECRET is not defined");
   }
 
+  if (!token) return false;
+
   const res = await fetch(`https://www.google.com/recaptcha/api/siteverify`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },

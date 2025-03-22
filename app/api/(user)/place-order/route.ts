@@ -19,7 +19,6 @@ export async function POST(req: Request) {
   const { userId } = await verifySession();
 
   if (!userId) return createResponse("User is not authenticated!", 401);
-  if (!recaptchaToken) return createResponse("Invalid field!", 400);
 
   const verify = await verifyRecaptchaToken(recaptchaToken);
 

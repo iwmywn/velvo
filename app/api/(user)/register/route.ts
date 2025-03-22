@@ -13,8 +13,6 @@ export async function POST(req: Request) {
   const data = await req.json();
   const { recaptchaToken, ...userData } = data;
 
-  if (!recaptchaToken) return createResponse("Invalid field!", 400);
-
   const verify = await verifyRecaptchaToken(recaptchaToken);
 
   if (!verify) return createResponse("Captcha challenge failed!", 422);
