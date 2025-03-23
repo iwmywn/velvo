@@ -59,13 +59,16 @@ export default function ResetPassword({
 
   const onSubmit = async (data: PasswordFormData) => {
     try {
-      const res = await fetch(`/api/reset-password?token=${token}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        `/api/reset-password?user=${email}&token=${token}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data),
-      });
+      );
 
       const message = await res.json();
 
