@@ -6,7 +6,7 @@ import { getUserCollection } from "@lib/collections";
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
-  const email = searchParams.get("user");
+  const email = searchParams.get("email");
 
   if (!token || !email) return createResponse("Invalid field!", 400);
 

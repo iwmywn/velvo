@@ -29,7 +29,7 @@ export default async function EmailHandlerPage({
   const params = await searchParams;
   const mode = typeof params.mode === "string" ? params.mode : undefined;
   const token = typeof params.token === "string" ? params.token : undefined;
-  const email = typeof params.user === "string" ? params.user : undefined;
+  const email = typeof params.email === "string" ? params.email : undefined;
 
   if (mode === "verifyEmail")
     return <VerifyEmail token={token} email={email} />;

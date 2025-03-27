@@ -8,7 +8,7 @@ import bcrypt from "bcryptjs";
 export async function PATCH(req: Request) {
   const { searchParams } = new URL(req.url);
   const token = searchParams.get("token");
-  const email = searchParams.get("user");
+  const email = searchParams.get("email");
   const data = await req.json();
   const parsedCredentials = resetPasswordScheme.safeParse(data);
 
@@ -23,7 +23,7 @@ export async function PATCH(req: Request) {
   ).updateOne(
     { email: email!, verificationToken: token! },
     {
-      $set: { password: hashedPassword },
+      $set: { password: hashedPassword, updatedAt: new Date() },
       $unset: { verificationToken: "", resendVerification: "" },
     },
   );
