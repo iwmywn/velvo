@@ -17,7 +17,6 @@ import { z } from "zod";
 import Loading from "@ui/loading";
 import { FaXmark } from "react-icons/fa6";
 import NotFound from "@/app/not-found";
-import { handleTokenVerification } from "@lib/utils";
 import Title from "@ui/account/title";
 
 type PasswordFormData = z.infer<typeof resetPasswordScheme>;
@@ -30,7 +29,7 @@ export default function ResetPassword({
   email: string | undefined;
 }) {
   const [loading, setLoading] = useState<boolean>(true);
-  const [status, setStatus] = useState<"success" | "error" | null>(null);
+  const [status, setStatus] = useState<"success" | "error">("error");
   const [message, setMessage] = useState<string>("");
   const {
     register,
@@ -47,14 +46,34 @@ export default function ResetPassword({
   });
 
   useEffect(() => {
-    handleTokenVerification(
-      "find-token",
-      setStatus,
-      setMessage,
-      setLoading,
-      token,
-      email,
-    );
+    const fetchToken = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/find-token?email=${email}&token=${token}`,
+        );
+        const message = await res.json();
+
+        if (res.ok) {
+          setStatus("success");
+          setMessage(message);
+        } else {
+          setMessage(message);
+        }
+      } catch (error) {
+        console.error("Verification Token Error: ", error);
+        setMessage("Something went wrong! Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token && email) {
+      fetchToken();
+    } else {
+      setMessage("Invalid token!");
+      setLoading(false);
+    }
   }, [token, email]);
 
   const onSubmit = async (data: PasswordFormData) => {

@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import Loading from "@ui/loading";
-import { handleTokenVerification } from "@lib/utils";
 import Title from "@ui/account/title";
+import { IconType } from "react-icons/lib";
 
 export default function VerifyEmail({
   token,
@@ -13,19 +13,39 @@ export default function VerifyEmail({
   token: string | undefined;
   email: string | undefined;
 }) {
-  const [status, setStatus] = useState<"success" | "error" | null>(null);
+  const [Icon, setIcon] = useState<IconType>(() => FaXmark);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    handleTokenVerification(
-      "verify-email",
-      setStatus,
-      setMessage,
-      setLoading,
-      token,
-      email,
-    );
+    const fetchToken = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/verify-email?email=${email}&token=${token}`,
+        );
+        const message = await res.json();
+
+        if (res.ok) {
+          setIcon(() => FaCheck);
+          setMessage(message);
+        } else {
+          setMessage(message);
+        }
+      } catch (error) {
+        console.error("Verification Token Error: ", error);
+        setMessage("Something went wrong! Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (token && email) {
+      fetchToken();
+    } else {
+      setMessage("Invalid token!");
+      setLoading(false);
+    }
   }, [token, email]);
 
   if (loading) {
@@ -34,17 +54,7 @@ export default function VerifyEmail({
 
   return (
     <>
-      <Title
-        title={
-          status === "success" ? (
-            <FaCheck size={30} />
-          ) : status === "error" ? (
-            <FaXmark size={30} />
-          ) : (
-            "Unknown"
-          )
-        }
-      />
+      <Title title={<Icon size={30} />} />
       {message}
     </>
   );

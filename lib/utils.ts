@@ -1,40 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
 import { Product, Cart, InvoiceList } from "@lib/definitions";
-
-// todo: rework this func
-export async function handleTokenVerification(
-  endpoint: string,
-  setStatus: Dispatch<SetStateAction<"success" | "error" | null>>,
-  setMessage: Dispatch<SetStateAction<string>>,
-  setLoading: Dispatch<SetStateAction<boolean>>,
-  token: string | undefined,
-  email: string | undefined,
-) {
-  if (token || email) {
-    try {
-      const res = await fetch(`/api/${endpoint}?email=${email}&token=${token}`);
-      const message = await res.json();
-
-      if (res.ok) {
-        setStatus("success");
-        setMessage(message);
-      } else {
-        setStatus("error");
-        setMessage(message);
-      }
-    } catch (error) {
-      console.error("Verification Token Error: ", error);
-      setStatus("error");
-      setMessage("Something went wrong! Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  } else {
-    setStatus("error");
-    setMessage("Invalid token!");
-    setLoading(false);
-  }
-}
 
 export function shuffleProduct(product: Product[]) {
   const shuffledProduct = [...product];
