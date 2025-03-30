@@ -1,6 +1,6 @@
 "use server";
 
-import { sendEmail } from "@lib/actions";
+import { sendEmail } from "@lib/email";
 import { emailScheme } from "@/schemas";
 import { createResponse } from "@api/utils";
 import verifyRecaptchaToken from "@lib/recaptcha";

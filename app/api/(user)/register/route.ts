@@ -1,7 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import { sendEmail } from "@lib/actions";
+import { sendEmail } from "@lib/email";
 import { registerSchema } from "@/schemas";
 import { createResponse } from "@api/utils";
 import verifyRecaptchaToken from "@lib/recaptcha";
