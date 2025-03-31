@@ -14,14 +14,21 @@ export async function sendEmail(
     },
   });
 
-  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${
-    mode === "verifyEmail" ? "verifyEmail" : "resetPassword"
-  }&email=${email}&token=${token}`;
+  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`;
+  const subject =
+    mode === "verifyEmail"
+      ? "Verify your Velvo account"
+      : "Reset your Velvo password";
+  const message =
+    mode === "verifyEmail"
+      ? "Thank you for joining Velvo! We just need one final step from you - please confirm your email address by clicking the button below to verify it and get started."
+      : "No one likes being locked out of their account, and we're here to help. Just click the button below to get started. If you didn't request a password reset, feel free to ignore this email.";
+  const btnText = mode === "verifyEmail" ? "Verify" : "Reset your password";
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
     to: email,
-    subject: `${mode === "verifyEmail" ? "Verify your Velvo account" : "Reset your Velvo password"} `,
+    subject: subject,
     html: `
       <table
       style="width: 100%; background-color: #e7f1ff; padding: 20px 40px; border-radius: 12px; text-align: center; font-family: Arial, sans-serif;">
@@ -30,14 +37,10 @@ export async function sendEmail(
           <p style="font-size: 22px; font-weight: 600; margin-bottom: 20px; margin-top: 0px">Velvo</p>
           <p style="font-size: 16px; margin: 10px 0 20px 0; line-height: 1.6;">
             Hey there, <br>
-            ${
-              mode === "verifyEmail"
-                ? "Thanks for joining Velvo! We just need one more thing you - a quick confirmation of your email address. Click the button below to verify your email and get started."
-                : "Nobody likes being locked out of their account. We're coming to your rescue - just click the button below to get started. If you didn't request a password reset, you can safely ignore this email."
-            }
+            ${message}
           </p>
           <a href="${emailHandlerUrl}"
-            style="display: inline-block; padding: 8px 20px; background-color: #3e71b8; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 16px;">${mode === "verifyEmail" ? "Verify" : "Reset your password"}</a>
+            style="display: inline-block; padding: 8px 20px; background-color: #3e71b8; color: #fff; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 16px;">${btnText}</a>
           <p style="font-size: 14px; margin-top: 20px;">
             Cheers,
             <span style="margin-top: 8px; display: block"></span>
