@@ -54,12 +54,8 @@ export default function ResetPassword({
         );
         const message = await res.json();
 
-        if (res.ok) {
-          setStatus("success");
-          setMessage(message);
-        } else {
-          setMessage(message);
-        }
+        if (res.ok) setStatus("success");
+        setMessage(message);
       } catch (error) {
         console.error("Verification Token Error: ", error);
         setMessage("Something went wrong! Please try again.");
@@ -68,12 +64,7 @@ export default function ResetPassword({
       }
     };
 
-    if (token && email) {
-      fetchToken();
-    } else {
-      setMessage("Invalid token!");
-      setLoading(false);
-    }
+    fetchToken();
   }, [token, email]);
 
   const onSubmit = async (data: PasswordFormData) => {

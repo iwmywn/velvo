@@ -26,12 +26,8 @@ export default function VerifyEmail({
         );
         const message = await res.json();
 
-        if (res.ok) {
-          setIcon(() => FaCheck);
-          setMessage(message);
-        } else {
-          setMessage(message);
-        }
+        if (res.ok) setIcon(() => FaCheck);
+        setMessage(message);
       } catch (error) {
         console.error("Verification Token Error: ", error);
         setMessage("Something went wrong! Please try again.");
@@ -40,12 +36,7 @@ export default function VerifyEmail({
       }
     };
 
-    if (token && email) {
-      fetchToken();
-    } else {
-      setMessage("Invalid token!");
-      setLoading(false);
-    }
+    fetchToken();
   }, [token, email]);
 
   if (loading) {
