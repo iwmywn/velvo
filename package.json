@@ -48,6 +48,7 @@
     "eslint-config-next": "15.2.4",
     "eslint-plugin-react-hooks": "5.2.0",
     "husky": "9.1.7",
+    "knip": "5.46.5",
     "lint-staged": "15.5.0",
     "only-allow": "1.2.1",
     "postcss": "8.5.3",
