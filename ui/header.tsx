@@ -1,31 +1,31 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { IoIosMenu } from "react-icons/io";
-import { useRef } from "react";
-import NavMenu from "@ui/nav/nav-menu";
-import { useElementHeight } from "@ui/hooks";
-import AccountMenu from "@ui/nav/account-menu";
-import { CategoryDropDown } from "@ui/shifting-dropdown";
-import SearchOverlay from "@ui/search/search-overlay";
-import CartOverlay from "@ui/cart/cart-overlay";
-import { CiSearch } from "react-icons/ci";
-import { GiShoppingCart } from "react-icons/gi";
-import { useUIStateContext } from "@ui/contexts";
-import showToast from "@ui/toast";
-import { useCart } from "@lib/hooks";
+import Link from "next/link"
+import Image from "next/image"
+import { IoIosMenu } from "react-icons/io"
+import { useRef } from "react"
+import NavMenu from "@ui/nav/nav-menu"
+import { useElementHeight } from "@ui/hooks"
+import AccountMenu from "@ui/nav/account-menu"
+import { CategoryDropDown } from "@ui/shifting-dropdown"
+import SearchOverlay from "@ui/search/search-overlay"
+import CartOverlay from "@ui/cart/cart-overlay"
+import { CiSearch } from "react-icons/ci"
+import { GiShoppingCart } from "react-icons/gi"
+import { useUIStateContext } from "@ui/contexts"
+import showToast from "@ui/toast"
+import { useCart } from "@lib/hooks"
 
 export default function Header() {
-  const ref = useRef<HTMLElement | null>(null);
+  const ref = useRef<HTMLElement | null>(null)
   const {
     cart: { quantity },
     isLoading,
     isError,
-  } = useCart();
-  const { state, setState } = useUIStateContext();
+  } = useCart()
+  const { state, setState } = useUIStateContext()
 
-  useElementHeight(ref);
+  useElementHeight(ref)
 
   return (
     <>
@@ -66,9 +66,9 @@ export default function Header() {
               <GiShoppingCart
                 className="cursor-pointer text-[22px] md:text-2xl"
                 onClick={() => {
-                  if (quantity > 0) setState("isCartOpen", true);
-                  else if (isLoading) showToast("Loading cart...", "warning");
-                  else if (isError) showToast(isError, "warning");
+                  if (quantity > 0) setState("isCartOpen", true)
+                  else if (isLoading) showToast("Loading cart...", "warning")
+                  else if (isError) showToast(isError, "warning")
                 }}
                 title="Cart"
               />
@@ -86,5 +86,5 @@ export default function Header() {
         </div>
       </header>
     </>
-  );
+  )
 }

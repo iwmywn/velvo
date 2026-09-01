@@ -1,21 +1,21 @@
-import "server-only";
+import "server-only"
 
-import { cookies } from "next/headers";
-import { decrypt } from "@lib/session";
-import { cache } from "react";
+import { cookies } from "next/headers"
+import { decrypt } from "@lib/session"
+import { cache } from "react"
 
 export const verifySession = cache(async () => {
-  const session = (await cookies()).get("session")?.value;
-  const payload = await decrypt(session);
+  const session = (await cookies()).get("session")?.value
+  const payload = await decrypt(session)
 
-  if (!payload) return {};
+  if (!payload) return {}
 
-  const { userId, userImage } = payload.user;
-  const expires = payload.expires;
+  const { userId, userImage } = payload.user
+  const expires = payload.expires
 
   return {
     userId,
     userImage,
     expires,
-  };
-});
+  }
+})

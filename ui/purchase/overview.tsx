@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import ToPay from "@ui/purchase/to-pay";
-import ToShipAndReceive from "@ui/purchase/to-ship-receive";
-import Completed from "@ui/purchase/completed";
-import Cancelled from "@ui/purchase/cancelled";
-import Loading from "@ui/loading";
-import { useHideMenu } from "@ui/hooks";
-import BreadCrumbs from "@ui/breadcrumbs";
+import { useState, useEffect } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import ToPay from "@ui/purchase/to-pay"
+import ToShipAndReceive from "@ui/purchase/to-ship-receive"
+import Completed from "@ui/purchase/completed"
+import Cancelled from "@ui/purchase/cancelled"
+import Loading from "@ui/loading"
+import { useHideMenu } from "@ui/hooks"
+import BreadCrumbs from "@ui/breadcrumbs"
 
 const tabs = [
   { key: "to-pay", label: "TO PAY" },
@@ -18,7 +18,7 @@ const tabs = [
   },
   { key: "completed", label: "COMPLETED" },
   { key: "cancelled", label: "CANCELLED" },
-] as const;
+] as const
 
 const breadcrumbs = [
   {
@@ -28,26 +28,27 @@ const breadcrumbs = [
   {
     label: "My purchase",
   },
-];
+]
 
 export default function PurchaseOverview() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [activeTabKey, setActiveTabKey] = useState<string | null>(null);
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [activeTabKey, setActiveTabKey] = useState<string | null>(null)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  useHideMenu(setIsOpen);
+  useHideMenu(setIsOpen)
   useEffect(() => {
-    const tabKey = searchParams?.get("tab");
-    const validTab = tabs.find(({ key }) => key === tabKey);
-    setActiveTabKey(validTab ? validTab.key : tabs[0].key);
-  }, [searchParams]);
+    const tabKey = searchParams?.get("tab")
+    const validTab = tabs.find(({ key }) => key === tabKey)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setActiveTabKey(validTab ? validTab.key : tabs[0].key)
+  }, [searchParams])
 
   if (!activeTabKey) {
-    return <Loading />;
+    return <Loading />
   }
 
-  const activeTab = tabs.find((tab) => tab.key === activeTabKey);
+  const activeTab = tabs.find((tab) => tab.key === activeTabKey)
   const tabsHTML = tabs.map(({ key, label }) => (
     <div
       key={key}
@@ -56,13 +57,13 @@ export default function PurchaseOverview() {
       }`}
       onClick={() => {
         if (activeTabKey !== key) {
-          router.push(`?tab=${key}`);
+          router.push(`?tab=${key}`)
         }
       }}
     >
       {label}
     </div>
-  ));
+  ))
 
   return (
     <>
@@ -71,8 +72,8 @@ export default function PurchaseOverview() {
         <div
           className="relative z-[11] mb-5 block min-w-[250px] text-center text-sm font-medium lg:hidden"
           onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen(!isOpen);
+            e.stopPropagation()
+            setIsOpen(!isOpen)
           }}
         >
           <div className="cursor-pointer border p-2">
@@ -103,5 +104,5 @@ export default function PurchaseOverview() {
         )}
       </div>
     </>
-  );
+  )
 }

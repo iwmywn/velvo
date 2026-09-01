@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { montserrat } from "@ui/fonts";
-import Button from "@ui/button";
+import { montserrat } from "@ui/fonts"
+import Button from "@ui/button"
 
 export default function GlobalError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+  error: Error & { digest?: string }
+  reset: () => void
 }) {
   return (
     <html>
@@ -20,5 +20,5 @@ export default function GlobalError({
         </main>
       </body>
     </html>
-  );
+  )
 }

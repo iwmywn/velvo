@@ -1,14 +1,14 @@
-import { emptyStates } from "@ui/data";
-import { GiShoppingCart } from "react-icons/gi";
-import Link from "next/link";
-import Button from "@ui/button";
+import { emptyStates } from "@ui/data"
+import { GiShoppingCart } from "react-icons/gi"
+import Link from "next/link"
+import Button from "@ui/button"
 
 interface EmptyStateProps {
-  emptyState: keyof typeof emptyStates;
+  emptyState: keyof typeof emptyStates
 }
 
 export default function EmptyState({ emptyState }: EmptyStateProps) {
-  const { title, description } = emptyStates[emptyState];
+  const { title, description } = emptyStates[emptyState]
 
   return (
     <div className="flex flex-col items-center">
@@ -23,5 +23,5 @@ export default function EmptyState({ emptyState }: EmptyStateProps) {
         </Link>
       </div>
     </div>
-  );
+  )
 }

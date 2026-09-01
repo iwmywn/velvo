@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useEffect, Fragment } from "react";
-import { FaGithub } from "react-icons/fa";
-import Backdrop from "@ui/overlay/backdrop";
-import { linkClass } from "@ui/form-class";
-import { useAnimation } from "@ui/hooks";
-import { useUIStateContext } from "@ui/contexts";
+import Link from "next/link"
+import { useEffect, Fragment } from "react"
+import { FaGithub } from "react-icons/fa"
+import Backdrop from "@ui/overlay/backdrop"
+import { linkClass } from "@ui/form-class"
+import { useAnimation } from "@ui/hooks"
+import { useUIStateContext } from "@ui/contexts"
 
 const contact = [
   {
@@ -21,23 +21,23 @@ const contact = [
     email: "tuanha321@uef.edu.vn",
     github: "iwmywn",
   },
-];
+]
 
 export default function PopUp() {
-  const { state, setState } = useUIStateContext();
-  const { isAnimating, triggerAnimation } = useAnimation();
+  const { state, setState } = useUIStateContext()
+  const { isAnimating, triggerAnimation } = useAnimation()
 
   useEffect(() => {
     if (!(sessionStorage.getItem("popup") === "true")) {
-      setState("isPopupOpen", true);
+      setState("isPopupOpen", true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   const handleClose = () => {
-    sessionStorage.setItem("popup", "true");
-    triggerAnimation(() => setState("isPopupOpen", false));
-  };
+    sessionStorage.setItem("popup", "true")
+    triggerAnimation(() => setState("isPopupOpen", false))
+  }
 
   return (
     state.isPopupOpen && (
@@ -78,5 +78,5 @@ export default function PopUp() {
         </div>
       </Backdrop>
     )
-  );
+  )
 }

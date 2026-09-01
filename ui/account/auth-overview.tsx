@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import SignIn from "@ui/account/sign-in";
-import Register from "@ui/account/register";
-import Title from "@ui/account/title";
+import { useState } from "react"
+import SignIn from "@ui/account/sign-in"
+import Register from "@ui/account/register"
+import Title from "@ui/account/title"
 
 const tabs = [
   {
@@ -14,10 +14,10 @@ const tabs = [
     name: "REGISTER",
     isActive: false,
   },
-] as const;
+] as const
 
 export default function AuthOverview() {
-  const [isSignIn, setIsSignIn] = useState<boolean>(true);
+  const [isSignIn, setIsSignIn] = useState<boolean>(true)
 
   return (
     <>
@@ -35,5 +35,5 @@ export default function AuthOverview() {
       </div>
       {isSignIn ? <SignIn /> : <Register />}
     </>
-  );
+  )
 }

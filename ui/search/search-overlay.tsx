@@ -1,37 +1,38 @@
-"use client";
+"use client"
 
-import { useEffect, useMemo, useState } from "react";
-import ProductCard from "@ui/product/card";
-import { Product } from "@lib/definitions";
-import Backdrop from "@ui/overlay/backdrop";
-import SlidingContainer from "@ui/overlay/sliding-container";
-import { useAnimation } from "@ui/hooks";
-import { useStoreContext, useUIStateContext } from "@ui/contexts";
-import Fuse from "fuse.js";
+import { useEffect, useMemo, useState } from "react"
+import ProductCard from "@ui/product/card"
+import { Product } from "@lib/definitions"
+import Backdrop from "@ui/overlay/backdrop"
+import SlidingContainer from "@ui/overlay/sliding-container"
+import { useAnimation } from "@ui/hooks"
+import { useStoreContext, useUIStateContext } from "@ui/contexts"
+import Fuse from "fuse.js"
 
 export default function SearchOverlay() {
-  const { isAnimating, triggerAnimation } = useAnimation();
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const { setState } = useUIStateContext();
+  const { isAnimating, triggerAnimation } = useAnimation()
+  const [searchTerm, setSearchTerm] = useState<string>("")
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const { setState } = useUIStateContext()
   const handleClose = () =>
-    triggerAnimation(() => setState("isSearchOpen", false));
-  const { products } = useStoreContext();
+    triggerAnimation(() => setState("isSearchOpen", false))
+  const { products } = useStoreContext()
   const fuse = useMemo(() => {
     return new Fuse(products, {
       keys: ["name"],
       threshold: 0.4,
-    });
-  }, [products]);
+    })
+  }, [products])
 
   useEffect(() => {
     if (searchTerm.trim() === "") {
-      setFilteredProducts([]);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFilteredProducts([])
     } else {
-      const results = fuse.search(searchTerm).map((result) => result.item);
-      setFilteredProducts(results);
+      const results = fuse.search(searchTerm).map((result) => result.item)
+      setFilteredProducts(results)
     }
-  }, [searchTerm, fuse]);
+  }, [searchTerm, fuse])
 
   return (
     <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
@@ -63,5 +64,5 @@ export default function SearchOverlay() {
         )}
       </SlidingContainer>
     </Backdrop>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import showToast from "@ui/toast";
-import { FormButton } from "@ui/button";
-import { useState } from "react";
+import showToast from "@ui/toast"
+import { FormButton } from "@ui/button"
+import { useState } from "react"
 import {
   formClass,
   boxClass,
@@ -10,21 +10,21 @@ import {
   labelClass,
   errorClass,
   linkClass,
-} from "@ui/form-class";
-import { emailScheme } from "@/schemas";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import ReCaptchaPopup from "@ui/recaptcha";
-import Title from "@ui/account/title";
+} from "@ui/form-class"
+import { emailScheme } from "@/schemas"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import Link from "next/link"
+import ReCaptchaPopup from "@ui/recaptcha"
+import Title from "@ui/account/title"
 
-type EmailFormData = z.infer<typeof emailScheme>;
+type EmailFormData = z.infer<typeof emailScheme>
 
 interface EmailFormProps {
-  title: string;
-  enpoint: string;
-  buttonText: string;
+  title: string
+  enpoint: string
+  buttonText: string
 }
 
 export default function EmailForm({
@@ -32,8 +32,8 @@ export default function EmailForm({
   enpoint,
   buttonText,
 }: EmailFormProps) {
-  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
@@ -45,12 +45,12 @@ export default function EmailForm({
     defaultValues: {
       email: "",
     },
-  });
+  })
 
   const onSubmit = async (data: EmailFormData) => {
     if (!showCaptcha && !recaptchaToken) {
-      setShowCaptcha(true);
-      return;
+      setShowCaptcha(true)
+      return
     }
 
     try {
@@ -60,24 +60,24 @@ export default function EmailForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...data, recaptchaToken }),
-      });
+      })
 
-      const message = await res.json();
+      const message = await res.json()
 
       if (res.ok) {
-        showToast(message, "success");
-        reset();
+        showToast(message, "success")
+        reset()
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Email Form Error: ", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Email Form Error: ", error)
+      showToast("Something went wrong! Please try again.", "warning")
     } finally {
-      setRecaptchaToken(null);
-      setShowCaptcha(false);
+      setRecaptchaToken(null)
+      setShowCaptcha(false)
     }
-  };
+  }
 
   return (
     <>
@@ -113,5 +113,5 @@ export default function EmailForm({
         Back to Sign In
       </Link>
     </>
-  );
+  )
 }

@@ -1,32 +1,32 @@
-"use server";
+"use server"
 
-import { getPriceAfterDiscount } from "@lib/utils";
-import { createResponse } from "@api/utils";
-import { placeOrderWithProductSchema } from "@/schemas";
-import { ObjectId } from "mongodb";
-import { revalidatePath } from "next/cache";
-import verifyRecaptchaToken from "@lib/recaptcha";
-import { verifySession } from "@lib/dal";
+import { getPriceAfterDiscount } from "@lib/utils"
+import { createResponse } from "@api/utils"
+import { placeOrderWithProductSchema } from "@/schemas"
+import { ObjectId } from "mongodb"
+import { revalidatePath } from "next/cache"
+import verifyRecaptchaToken from "@lib/recaptcha"
+import { verifySession } from "@lib/dal"
 import {
   getCartCollection,
   getInvoiceListCollection,
   getProductCollection,
-} from "@lib/collections";
+} from "@lib/collections"
 
 export async function POST(req: Request) {
-  const data = await req.json();
-  const { recaptchaToken, ...userData } = data;
-  const { userId } = await verifySession();
+  const data = await req.json()
+  const { recaptchaToken, ...userData } = data
+  const { userId } = await verifySession()
 
-  if (!userId) return createResponse("User is not authenticated!", 401);
+  if (!userId) return createResponse("User is not authenticated!", 401)
 
-  const verify = await verifyRecaptchaToken(recaptchaToken);
+  const verify = await verifyRecaptchaToken(recaptchaToken)
 
-  if (!verify) return createResponse("Captcha challenge failed!", 422);
+  if (!verify) return createResponse("Captcha challenge failed!", 422)
 
-  const parsedCredentials = placeOrderWithProductSchema.safeParse(userData);
+  const parsedCredentials = placeOrderWithProductSchema.safeParse(userData)
 
-  if (!parsedCredentials.success) return createResponse("Invalid field!", 400);
+  if (!parsedCredentials.success) return createResponse("Invalid field!", 400)
 
   const {
     fullName,
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     address,
     products,
     totalPriceCents,
-  } = parsedCredentials.data;
+  } = parsedCredentials.data
   const transformedProducts = products.map(
     ({ _id, quantity, color, size, priceCents, saleOff }) => {
       return {
@@ -49,41 +49,39 @@ export async function POST(req: Request) {
           getPriceAfterDiscount(priceCents, saleOff),
           getPriceAfterDiscount(priceCents, saleOff, quantity),
         ] as [string, string],
-      };
-    },
-  );
+      }
+    }
+  )
 
   const [productCollection, invoiceListCollection, cartCollection] =
     await Promise.all([
       getProductCollection(),
       getInvoiceListCollection(),
       getCartCollection(),
-    ]);
+    ])
 
-  const productNames: string[] = [];
+  const productNames: string[] = []
 
   for (const { productId, quantity, color, size } of transformedProducts) {
     const product = await productCollection.findOne(
       { _id: productId },
-      { projection: { name: 1, [`colors.${color}`]: 1 } },
-    );
+      { projection: { name: 1, [`colors.${color}`]: 1 } }
+    )
 
     if (!product) {
-      return createResponse(`Product not found!`, 400);
+      return createResponse(`Product not found!`, 400)
     }
 
-    let availableStock: number;
+    let availableStock: number
 
     if (size) {
       availableStock =
         typeof product?.colors?.[color] === "object"
           ? product.colors[color].sizes[size]
-          : 0;
+          : 0
     } else {
       availableStock =
-        typeof product?.colors?.[color] === "number"
-          ? product.colors[color]
-          : 0;
+        typeof product?.colors?.[color] === "number" ? product.colors[color] : 0
     }
 
     if (availableStock < quantity) {
@@ -91,11 +89,11 @@ export async function POST(req: Request) {
         `Not enough stock for product "${product.name}", (color: ${color}) ${
           size ? `(size: ${size})` : ""
         }!`,
-        400,
-      );
+        400
+      )
     }
 
-    productNames.push(product.name);
+    productNames.push(product.name)
   }
 
   await Promise.all([
@@ -119,27 +117,27 @@ export async function POST(req: Request) {
             $position: 0,
           },
         },
-      },
+      }
     ),
     cartCollection.updateOne(
       { userId: new ObjectId(userId) },
-      { $set: { products: [] } },
+      { $set: { products: [] } }
     ),
     ...products.map(async ({ _id, quantity, color, size }) => {
       const updateField = size
         ? `colors.${color}.sizes.${size}`
-        : `colors.${color}`;
+        : `colors.${color}`
 
       await productCollection.updateOne(
         { _id: new ObjectId(_id) },
-        { $inc: { [updateField]: -quantity } },
-      );
+        { $inc: { [updateField]: -quantity } }
+      )
     }),
-  ]);
+  ])
 
   productNames.forEach((name) => {
-    revalidatePath(`/products/${name}`);
-  });
+    revalidatePath(`/products/${name}`)
+  })
 
-  return createResponse("Order created.", 201);
+  return createResponse("Order created.", 201)
 }

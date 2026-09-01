@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import { Product } from "@lib/definitions";
-import { getPriceAfterDiscount } from "@lib/utils";
-import Button from "@ui/button";
-import ImageTag from "@ui/image";
-import Link from "next/link";
-import { MdDelete } from "react-icons/md";
-import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions";
-import showToast from "@ui/toast";
-import { useState } from "react";
-import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
-import { mutate } from "swr";
+import { Product } from "@lib/definitions"
+import { getPriceAfterDiscount } from "@lib/utils"
+import Button from "@ui/button"
+import ImageTag from "@ui/image"
+import Link from "next/link"
+import { MdDelete } from "react-icons/md"
+import { addToCart, removeFromCart, deleteFromCart } from "@lib/actions"
+import showToast from "@ui/toast"
+import { useState } from "react"
+import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2"
+import { mutate } from "swr"
 
 const ActionButton = ({
   handleDeleteFromCart,
   isDeleting,
 }: {
-  handleDeleteFromCart: () => void;
-  isDeleting: boolean;
+  handleDeleteFromCart: () => void
+  isDeleting: boolean
 }) => (
   <Button
     className="gap-2 px-4 text-red-500 before:border-red-500 before:bg-white sm:max-w-[100px] sm:flex-1 sm:px-0"
@@ -33,7 +33,7 @@ const ActionButton = ({
       </>
     )}
   </Button>
-);
+)
 
 export default function ProductRow({
   _id: productId,
@@ -46,56 +46,56 @@ export default function ProductRow({
   color,
   size,
 }: Product & { quantity: number; color: string; size: string }) {
-  const formattedPrice = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
-  const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`;
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const formattedPrice = `$${getPriceAfterDiscount(priceCents, saleOff)}`
+  const formattedTotal = `$${getPriceAfterDiscount(priceCents, saleOff, quantity)}`
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isDeleting, setIsDeleting] = useState<boolean>(false)
 
   const handleCartOperation = async (
     operation: () => Promise<string>,
     successMessages: string[],
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+    setLoading: React.Dispatch<React.SetStateAction<boolean>>
   ) => {
-    setLoading(true);
+    setLoading(true)
     try {
-      const message = await operation();
+      const message = await operation()
 
       if (successMessages.includes(message)) {
-        await mutate("cart");
+        await mutate("cart")
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Error handling cart operation:", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Error handling cart operation:", error)
+      showToast("Something went wrong! Please try again.", "warning")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const handleAddToCart = () => {
     handleCartOperation(
       () => addToCart(productId, color, size),
       ["Done."],
-      setIsLoading,
-    );
-  };
+      setIsLoading
+    )
+  }
 
   const handleRemoveFromCart = () => {
     handleCartOperation(
       () => removeFromCart(productId, color, size),
       ["Product removed from cart.", "Product quantity decreased."],
-      setIsLoading,
-    );
-  };
+      setIsLoading
+    )
+  }
 
   const handleDeleteFromCart = () => {
     handleCartOperation(
       () => deleteFromCart(productId, color, size),
       ["Product removed from cart!"],
-      setIsDeleting,
-    );
-  };
+      setIsDeleting
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4 border p-2 text-sm sm:grid sm:grid-cols-[2fr_1fr_1fr_1fr_1fr] sm:gap-2 sm:p-0">
@@ -160,7 +160,7 @@ export default function ProductRow({
         />
       </div>
     </div>
-  );
+  )
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -169,5 +169,5 @@ function isAdd(isLoading: boolean, which: any) {
     <div className="mx-auto h-4 w-4 animate-spin rounded-full border-4 border-gray-300 border-t-black" />
   ) : (
     which
-  );
+  )
 }

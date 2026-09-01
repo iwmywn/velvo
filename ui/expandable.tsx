@@ -1,25 +1,25 @@
-import { useState, useRef, useEffect } from "react";
-import { HiMinusSmall, HiPlusSmall } from "react-icons/hi2";
+import { useState, useRef, useEffect } from "react"
+import { HiMinusSmall, HiPlusSmall } from "react-icons/hi2"
 
 interface ExpandableSectionProps {
-  label: string;
-  body: string | string[];
-  isExpanded: boolean;
-  onToggle: (label: string) => void;
+  label: string
+  body: string | string[]
+  isExpanded: boolean
+  onToggle: (label: string) => void
 }
 
 interface ExpandableSectionsProps {
-  sections: { label: string; body: string | string[] }[];
+  sections: { label: string; body: string | string[] }[]
 }
 
 export default function ExpandableSections({
   sections,
 }: ExpandableSectionsProps) {
-  const [expandedSection, setExpandedSection] = useState<string | null>(null);
+  const [expandedSection, setExpandedSection] = useState<string | null>(null)
 
   const handleToggle = (label: string) => {
-    setExpandedSection((prev) => (prev === label ? null : label));
-  };
+    setExpandedSection((prev) => (prev === label ? null : label))
+  }
 
   return (
     <div className="text-xs">
@@ -33,7 +33,7 @@ export default function ExpandableSections({
         />
       ))}
     </div>
-  );
+  )
 }
 
 function ExpandableSection({
@@ -42,14 +42,14 @@ function ExpandableSection({
   isExpanded,
   onToggle,
 }: ExpandableSectionProps) {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [maxHeight, setMaxHeight] = useState<string>("0px");
+  const ref = useRef<HTMLDivElement | null>(null)
+  const [maxHeight, setMaxHeight] = useState<string>("0px")
 
   useEffect(() => {
     if (ref.current) {
-      setMaxHeight(isExpanded ? `${ref.current.scrollHeight}px` : "0px");
+      setMaxHeight(isExpanded ? `${ref.current.scrollHeight}px` : "0px")
     }
-  }, [isExpanded]);
+  }, [isExpanded])
 
   return (
     <>
@@ -76,5 +76,5 @@ function ExpandableSection({
         )}
       </div>
     </>
-  );
+  )
 }

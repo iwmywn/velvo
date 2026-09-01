@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useAnimation } from "@ui/hooks";
-import { useStoreContext, useUIStateContext } from "@ui/contexts";
+import Link from "next/link"
+import { useAnimation } from "@ui/hooks"
+import { useStoreContext, useUIStateContext } from "@ui/contexts"
 
 export default function NavMenu() {
-  const { isAnimating, triggerAnimation } = useAnimation();
-  const { setState } = useUIStateContext();
-  const { mainCategories } = useStoreContext();
+  const { isAnimating, triggerAnimation } = useAnimation()
+  const { setState } = useUIStateContext()
+  const { mainCategories } = useStoreContext()
   const handleCloseMenu = () =>
-    triggerAnimation(() => setState("isMenuOpen", false));
+    triggerAnimation(() => setState("isMenuOpen", false))
 
   return (
     <div
@@ -32,5 +32,5 @@ export default function NavMenu() {
         ))}
       </div>
     </div>
-  );
+  )
 }

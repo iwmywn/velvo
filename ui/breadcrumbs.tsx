@@ -1,14 +1,14 @@
-import Link from "next/link";
-import { Fragment } from "react";
-import { PiGreaterThanThin } from "react-icons/pi";
+import Link from "next/link"
+import { Fragment } from "react"
+import { PiGreaterThanThin } from "react-icons/pi"
 
 interface BreadcrumbItem {
-  label: string;
-  href?: string;
+  label: string
+  href?: string
 }
 
 interface BreadcrumbsProps {
-  breadcrumbs: BreadcrumbItem[];
+  breadcrumbs: BreadcrumbItem[]
 }
 
 export default function BreadCrumbs({ breadcrumbs }: BreadcrumbsProps) {
@@ -30,5 +30,5 @@ export default function BreadCrumbs({ breadcrumbs }: BreadcrumbsProps) {
         </Fragment>
       ))}
     </div>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { CiUser } from "react-icons/ci";
-import { useAuthContext } from "@ui/contexts";
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
-import Image from "next/image";
-import { baseImgUrl } from "@ui/data";
+import Link from "next/link"
+import { CiUser } from "react-icons/ci"
+import { useAuthContext } from "@ui/contexts"
+import { motion, AnimatePresence } from "framer-motion"
+import { useState } from "react"
+import Image from "next/image"
+import { baseImgUrl } from "@ui/data"
 
 export default function AccountMenu() {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { userId, userImage } = useAuthContext();
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const { userId, userImage } = useAuthContext()
 
   return (
     <div className="relative" onMouseLeave={() => setIsOpen(false)}>
@@ -65,8 +65,8 @@ export default function AccountMenu() {
                   <button
                     className="w-full px-4 py-2 text-left text-nowrap hover:bg-slate-100"
                     onClick={() => {
-                      sessionStorage.removeItem("cart");
-                      sessionStorage.removeItem("cartQuantity");
+                      sessionStorage.removeItem("cart")
+                      sessionStorage.removeItem("cartQuantity")
                     }}
                   >
                     Sign out
@@ -78,5 +78,5 @@ export default function AccountMenu() {
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }

@@ -1,33 +1,33 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useMemo } from "react";
-import Button from "@ui/button";
-import ImageTag from "@ui/image";
+import Link from "next/link"
+import { useMemo } from "react"
+import Button from "@ui/button"
+import ImageTag from "@ui/image"
 import {
   getPriceAfterDiscount,
   getTotalPriceCents,
   transformCartProducts,
-} from "@lib/utils";
-import Backdrop from "@ui/overlay/backdrop";
-import SlidingContainer from "@ui/overlay/sliding-container";
-import { useStoreContext, useUIStateContext } from "@ui/contexts";
-import Loading from "@ui/loading";
-import { useAnimation } from "@ui/hooks";
-import { useCart } from "@lib/hooks";
+} from "@lib/utils"
+import Backdrop from "@ui/overlay/backdrop"
+import SlidingContainer from "@ui/overlay/sliding-container"
+import { useStoreContext, useUIStateContext } from "@ui/contexts"
+import Loading from "@ui/loading"
+import { useAnimation } from "@ui/hooks"
+import { useCart } from "@lib/hooks"
 
 export default function CartOverlay() {
-  const { isAnimating, triggerAnimation } = useAnimation();
-  const { cart, isLoading } = useCart();
-  const { products } = useStoreContext();
-  const { setState } = useUIStateContext();
+  const { isAnimating, triggerAnimation } = useAnimation()
+  const { cart, isLoading } = useCart()
+  const { products } = useStoreContext()
+  const { setState } = useUIStateContext()
   const handleClose = () =>
-    triggerAnimation(() => setState("isCartOpen", false));
-  const combinedCartProducts = transformCartProducts(cart.products, products);
+    triggerAnimation(() => setState("isCartOpen", false))
+  const combinedCartProducts = transformCartProducts(cart.products, products)
   const totalPriceCents = useMemo(
     () => getTotalPriceCents(combinedCartProducts),
-    [combinedCartProducts],
-  );
+    [combinedCartProducts]
+  )
 
   return (
     <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
@@ -74,7 +74,7 @@ export default function CartOverlay() {
                       ${getPriceAfterDiscount(priceCents, saleOff)}
                     </span>
                   </div>
-                ),
+                )
               )
             )}
           </div>
@@ -91,5 +91,5 @@ export default function CartOverlay() {
         </div>
       </SlidingContainer>
     </Backdrop>
-  );
+  )
 }

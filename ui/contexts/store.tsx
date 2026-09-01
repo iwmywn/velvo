@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import { createContext, useContext, ReactNode } from "react";
-import { Product, Banner } from "@lib/definitions";
+import { createContext, useContext, ReactNode } from "react"
+import { Product, Banner } from "@lib/definitions"
 
-type Category = { name: string; slug: string };
+type Category = { name: string; slug: string }
 
 type MainSubCategories = {
-  main: Category;
-  sub: Category[];
-};
-
-interface StoreContextProps {
-  products: Product[];
-  banners: Banner[];
-  mainCategories: Category[];
-  mainSubCategories: MainSubCategories[];
+  main: Category
+  sub: Category[]
 }
 
-const StoreContext = createContext<StoreContextProps | undefined>(undefined);
+interface StoreContextProps {
+  products: Product[]
+  banners: Banner[]
+  mainCategories: Category[]
+  mainSubCategories: MainSubCategories[]
+}
+
+const StoreContext = createContext<StoreContextProps | undefined>(undefined)
 
 export function StoreProvider({
   children,
@@ -26,11 +26,11 @@ export function StoreProvider({
   mainCategories,
   mainSubCategories,
 }: {
-  children: ReactNode;
-  products: Product[];
-  banners: Banner[];
-  mainCategories: Category[];
-  mainSubCategories: MainSubCategories[];
+  children: ReactNode
+  products: Product[]
+  banners: Banner[]
+  mainCategories: Category[]
+  mainSubCategories: MainSubCategories[]
 }) {
   return (
     <StoreContext.Provider
@@ -38,13 +38,13 @@ export function StoreProvider({
     >
       {children}
     </StoreContext.Provider>
-  );
+  )
 }
 
 export function useStoreContext() {
-  const cxt = useContext(StoreContext);
+  const cxt = useContext(StoreContext)
   if (!cxt) {
-    throw new Error("useProduct must be used within a ProductProvider");
+    throw new Error("useProduct must be used within a ProductProvider")
   }
-  return cxt;
+  return cxt
 }

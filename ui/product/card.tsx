@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import Image from "next/image";
-import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
-import { useState } from "react";
-import { Product } from "@lib/definitions";
+import Link from "next/link"
+import Image from "next/image"
+import { formatCurrency, getPriceAfterDiscount } from "@lib/utils"
+import { useState } from "react"
+import { Product } from "@lib/definitions"
 
 export default function ProductCard({
   name,
@@ -13,15 +13,15 @@ export default function ProductCard({
   saleOff,
   slug,
 }: Product) {
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-  const priceAfterDiscount = getPriceAfterDiscount(priceCents, saleOff);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
+  const priceAfterDiscount = getPriceAfterDiscount(priceCents, saleOff)
 
   return (
     <Link
       href={`/products/${slug}`}
       className="group/product-card relative flex flex-col rounded border border-slate-200 bg-white transition-transform duration-300 hover:scale-105"
       onMouseEnter={() => {
-        if (images.length > 1) setCurrentImageIndex(1);
+        if (images.length > 1) setCurrentImageIndex(1)
       }}
       onMouseLeave={() => setCurrentImageIndex(0)}
     >
@@ -57,5 +57,5 @@ export default function ProductCard({
         </div>
       </div>
     </Link>
-  );
+  )
 }

@@ -1,9 +1,9 @@
-import Image from "next/image";
-import { twMerge } from "tailwind-merge";
+import Image from "next/image"
+import { twMerge } from "tailwind-merge"
 
 interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  src: string;
-  alt: string;
+  src: string
+  alt: string
 }
 
 export default function ImageTag({ src, alt, className, ...rest }: ImageProps) {
@@ -22,5 +22,5 @@ export default function ImageTag({ src, alt, className, ...rest }: ImageProps) {
         }}
       />
     </span>
-  );
+  )
 }

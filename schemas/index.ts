@@ -1,18 +1,18 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const basePasswordScheme = z.object({
   password: z.string().min(8, "Password must be at least 8 characters."),
   confirmPassword: z.string(),
-});
+})
 
 export const emailScheme = z.object({
   email: z.string().email("Invalid email address."),
-});
+})
 
 export const signInSchema = z.object({
   email: z.string().email("Invalid email address."),
   password: z.string().min(8, "Password must be at least 8 characters."),
-});
+})
 
 export const registerSchema = z
   .object({
@@ -24,15 +24,15 @@ export const registerSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match.",
     path: ["confirmPassword"],
-  });
+  })
 
 export const resetPasswordScheme = basePasswordScheme.refine(
   (data) => data.password === data.confirmPassword,
   {
     message: "Passwords do not match.",
     path: ["confirmPassword"],
-  },
-);
+  }
+)
 
 export const changePasswordScheme = basePasswordScheme
   .extend({
@@ -47,7 +47,7 @@ export const changePasswordScheme = basePasswordScheme
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match.",
     path: ["confirmPassword"],
-  });
+  })
 
 export const changeEmailScheme = z
   .object({
@@ -58,11 +58,11 @@ export const changeEmailScheme = z
   .refine((data) => data.email === data.confirmEmail, {
     message: "Emails do not match.",
     path: ["confirmEmail"],
-  });
+  })
 
 export const deleteAccountScheme = z.object({
   password: z.string().min(8, "Password must be at least 8 characters."),
-});
+})
 
 export const placeOrderSchema = z.object({
   fullName: z.string().min(1, "Full Name is required"),
@@ -75,7 +75,7 @@ export const placeOrderSchema = z.object({
   district: z.string().nonempty("District is required"),
   ward: z.string().nonempty("Ward is required"),
   address: z.string().min(1, "Please provide address"),
-});
+})
 
 export const placeOrderWithProductSchema = placeOrderSchema.extend({
   products: z
@@ -89,4 +89,4 @@ export const placeOrderWithProductSchema = placeOrderSchema.extend({
     })
     .array(),
   totalPriceCents: z.string().min(1, "Total price is required"),
-});
+})

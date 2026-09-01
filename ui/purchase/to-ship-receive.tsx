@@ -1,4 +1,4 @@
-import OrderList from "@ui/purchase/order-list";
+import OrderList from "@ui/purchase/order-list"
 
 export default function ToShipAndReceive() {
   return (
@@ -6,5 +6,5 @@ export default function ToShipAndReceive() {
       orderStatus={["waiting", "processing"]}
       emptyState="toShipNReceive"
     />
-  );
+  )
 }

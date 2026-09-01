@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import { ReactNode, useEffect, useMemo, useRef, useState, FC } from "react";
-import { FiChevronDown } from "react-icons/fi";
-import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
-import { linkClass } from "@ui/form-class";
-import { useStoreContext } from "./contexts";
+import { ReactNode, useEffect, useMemo, useRef, useState, FC } from "react"
+import { FiChevronDown } from "react-icons/fi"
+import { AnimatePresence, motion } from "framer-motion"
+import Link from "next/link"
+import { linkClass } from "@ui/form-class"
+import { useStoreContext } from "./contexts"
 
 export const CategoryDropDown = () => {
-  return <CategoryTabs />;
-};
+  return <CategoryTabs />
+}
 
 const CategoryTabs = () => {
-  const { mainSubCategories } = useStoreContext();
+  const { mainSubCategories } = useStoreContext()
 
   const CATEGORY_TABS = useMemo(
     () =>
@@ -21,47 +21,48 @@ const CategoryTabs = () => {
         Component: () => <CategoryLinks main={main} sub={sub} />,
         id: idx + 1,
       })),
-    [mainSubCategories],
-  );
+    [mainSubCategories]
+  )
 
-  const [selected, setSelected] = useState<number | null>(null);
-  const [dir, setDir] = useState<null | "l" | "r">(null);
-  const [buttonWidths, setButtonWidths] = useState<number[]>([]);
-  const observerRef = useRef<ResizeObserver | null>(null);
+  const [selected, setSelected] = useState<number | null>(null)
+  const [dir, setDir] = useState<null | "l" | "r">(null)
+  const [buttonWidths, setButtonWidths] = useState<number[]>([])
+  const observerRef = useRef<ResizeObserver | null>(null)
 
   const handleSetSelected = (val: number | null) => {
     if (typeof selected === "number" && typeof val === "number") {
-      setDir(selected > val ? "r" : "l");
+      setDir(selected > val ? "r" : "l")
     } else if (val === null) {
-      setDir(null);
+      setDir(null)
     }
-    setSelected(val);
-  };
+    setSelected(val)
+  }
 
   const calculateButtonWidths = () => {
     const widths = CATEGORY_TABS.map(({ id }) => {
-      const tabElement = document.getElementById(`shift-tab-${id}`);
-      return tabElement ? tabElement.getBoundingClientRect().width : 0;
-    });
-    setButtonWidths(widths);
-  };
+      const tabElement = document.getElementById(`shift-tab-${id}`)
+      return tabElement ? tabElement.getBoundingClientRect().width : 0
+    })
+    setButtonWidths(widths)
+  }
 
   useEffect(() => {
     const tabsElements = CATEGORY_TABS.map(({ id }) =>
-      document.getElementById(`shift-tab-${id}`),
-    ).filter(Boolean) as HTMLElement[];
+      document.getElementById(`shift-tab-${id}`)
+    ).filter(Boolean) as HTMLElement[]
 
-    observerRef.current = new ResizeObserver(() => calculateButtonWidths());
-    tabsElements.forEach((el) => observerRef.current?.observe(el));
+    observerRef.current = new ResizeObserver(() => calculateButtonWidths())
+    tabsElements.forEach((el) => observerRef.current?.observe(el))
 
-    calculateButtonWidths();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    calculateButtonWidths()
 
     return () => {
-      tabsElements.forEach((el) => observerRef.current?.unobserve(el));
-      observerRef.current?.disconnect();
-    };
+      tabsElements.forEach((el) => observerRef.current?.unobserve(el))
+      observerRef.current?.disconnect()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [])
 
   return (
     <div
@@ -90,8 +91,8 @@ const CategoryTabs = () => {
         )}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}
 
 const CategoryTab = ({
   children,
@@ -99,10 +100,10 @@ const CategoryTab = ({
   handleSetSelected,
   selected,
 }: {
-  children: ReactNode;
-  tab: number;
-  handleSetSelected: (val: number | null) => void;
-  selected: number | null;
+  children: ReactNode
+  tab: number
+  handleSetSelected: (val: number | null) => void
+  selected: number | null
 }) => {
   return (
     <button
@@ -118,8 +119,8 @@ const CategoryTab = ({
         className={`transition-transform ${selected === tab ? "rotate-180" : ""}`}
       />
     </button>
-  );
-};
+  )
+}
 
 const CategoryContent = ({
   selected,
@@ -127,23 +128,23 @@ const CategoryContent = ({
   buttonWidths,
   categoryTabs,
 }: {
-  selected: number | null;
-  dir: null | "l" | "r";
-  buttonWidths: number[];
-  categoryTabs: { title: string; Component: FC; id: number }[];
+  selected: number | null
+  dir: null | "l" | "r"
+  buttonWidths: number[]
+  categoryTabs: { title: string; Component: FC; id: number }[]
 }) => {
   const calculateLeft = (): number => {
     if (selected === null || selected < 1 || selected > buttonWidths.length)
-      return 0;
+      return 0
 
-    const halfCurrentButtonWidth = buttonWidths[selected - 1] / 2;
+    const halfCurrentButtonWidth = buttonWidths[selected - 1] / 2
 
     const left = buttonWidths
       .slice(0, selected - 1)
-      .reduce((sum, width) => sum + width + 8, 0);
+      .reduce((sum, width) => sum + width + 8, 0)
 
-    return left + halfCurrentButtonWidth;
-  };
+    return left + halfCurrentButtonWidth
+  }
 
   return (
     <motion.div
@@ -186,13 +187,13 @@ const CategoryContent = ({
               </motion.div>
             )}
           </div>
-        );
+        )
       })}
     </motion.div>
-  );
-};
+  )
+}
 
-const Bridge = () => <div className="absolute -top-4 right-0 left-0 h-4" />;
+const Bridge = () => <div className="absolute -top-4 right-0 left-0 h-4" />
 
 const Nub = () => {
   return (
@@ -206,12 +207,12 @@ const Nub = () => {
       transition={{ duration: 0.25, ease: "easeInOut" }}
       className="absolute top-0 h-4 w-4 rounded-tl border bg-white"
     />
-  );
-};
+  )
+}
 
 interface CategoryLinksProps {
-  main: { name: string; slug: string };
-  sub: { name: string; slug: string }[];
+  main: { name: string; slug: string }
+  sub: { name: string; slug: string }[]
 }
 
 const CategoryLinks: React.FC<CategoryLinksProps> = ({ main, sub }) => {
@@ -227,5 +228,5 @@ const CategoryLinks: React.FC<CategoryLinksProps> = ({ main, sub }) => {
         </Link>
       ))}
     </div>
-  );
-};
+  )
+}

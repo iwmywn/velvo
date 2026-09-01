@@ -1,148 +1,147 @@
-"use client";
+"use client"
 
-import ImageTag from "@ui/image";
-import Button from "@ui/button";
-import { GiShoppingCart } from "react-icons/gi";
-import { MdOutlineCancel, MdCheck } from "react-icons/md";
-import Link from "next/link";
-import EmptyState from "@ui/cart/empty";
-import { useState } from "react";
-import showToast from "@ui/toast";
-import { addToCart, cancelReceiveOrder } from "@lib/actions";
-import { useStoreContext, useUIStateContext } from "@ui/contexts";
-import { useRouter } from "next/navigation";
-import Backdrop from "@ui/overlay/backdrop";
-import { MdOutlinePlace } from "react-icons/md";
-import Loading from "@ui/loading";
-import { useAnimation } from "@ui/hooks";
-import { transformInvoiceProducts } from "@lib/utils";
-import { useInvoices } from "@lib/hooks";
-import { mutate } from "swr";
+import ImageTag from "@ui/image"
+import Button from "@ui/button"
+import { GiShoppingCart } from "react-icons/gi"
+import { MdOutlineCancel, MdCheck } from "react-icons/md"
+import Link from "next/link"
+import EmptyState from "@ui/cart/empty"
+import { useState } from "react"
+import showToast from "@ui/toast"
+import { addToCart, cancelReceiveOrder } from "@lib/actions"
+import { useStoreContext, useUIStateContext } from "@ui/contexts"
+import { useRouter } from "next/navigation"
+import Backdrop from "@ui/overlay/backdrop"
+import { MdOutlinePlace } from "react-icons/md"
+import Loading from "@ui/loading"
+import { useAnimation } from "@ui/hooks"
+import { transformInvoiceProducts } from "@lib/utils"
+import { useInvoices } from "@lib/hooks"
+import { mutate } from "swr"
 
 export default function OrderList({
   orderStatus,
   emptyState,
 }: {
-  orderStatus: ("waiting" | "processing" | "completed" | "cancelled")[];
-  emptyState: "toShipNReceive" | "cancelled" | "completed";
+  orderStatus: ("waiting" | "processing" | "completed" | "cancelled")[]
+  emptyState: "toShipNReceive" | "cancelled" | "completed"
 }) {
-  const { isLoading, invoices } = useInvoices();
-  const router = useRouter();
+  const { isLoading, invoices } = useInvoices()
+  const router = useRouter()
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
-    {},
-  );
-  const [isLoadingGlobal, setIsLoadingGlobal] = useState<boolean>(false);
+    {}
+  )
+  const [isLoadingGlobal, setIsLoadingGlobal] = useState<boolean>(false)
   const [invoiceData, setInvoiceData] = useState<{
-    invoiceId: string;
+    invoiceId: string
     products: {
-      productId: string;
-      quantity: number;
-      color: string;
-      size?: string;
-      discountedPriceDetails: [string, string];
-    }[];
-    status: "processing" | "waiting";
-  } | null>(null);
+      productId: string
+      quantity: number
+      color: string
+      size?: string
+      discountedPriceDetails: [string, string]
+    }[]
+    status: "processing" | "waiting"
+  } | null>(null)
   const [deliveryInfoData, setDeliveryInfoData] = useState<{
-    recipient: string;
-    phone: string;
-    address: string;
-    orderDate: Date;
-  } | null>(null);
-  const { isAnimating, triggerAnimation } = useAnimation();
-  const { state, setState } = useUIStateContext();
+    recipient: string
+    phone: string
+    address: string
+    orderDate: Date
+  } | null>(null)
+  const { isAnimating, triggerAnimation } = useAnimation()
+  const { state, setState } = useUIStateContext()
   const setButtonLoading = (key: string, isLoading: boolean) => {
-    setLoadingStates((prev) => ({ ...prev, [key]: isLoading }));
-  };
-  const { products } = useStoreContext();
+    setLoadingStates((prev) => ({ ...prev, [key]: isLoading }))
+  }
+  const { products } = useStoreContext()
 
   const invoicesFilter = invoices.filter(({ status }) =>
-    orderStatus.includes(status),
-  );
+    orderStatus.includes(status)
+  )
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading />
 
-  if (invoicesFilter.length === 0)
-    return <EmptyState emptyState={emptyState} />;
+  if (invoicesFilter.length === 0) return <EmptyState emptyState={emptyState} />
 
   const handleClose = () =>
     triggerAnimation(() => {
-      setState("isConfirmOrderOpen", false);
-      setState("isDeliveryInfoOpen", false);
-    });
+      setState("isConfirmOrderOpen", false)
+      setState("isDeliveryInfoOpen", false)
+    })
 
   const handleCancelReceive = async (
     invoiceId: string,
     products: {
-      productId: string;
-      quantity: number;
-      color: string;
-      size?: string;
-      discountedPriceDetails: [string, string];
+      productId: string
+      quantity: number
+      color: string
+      size?: string
+      discountedPriceDetails: [string, string]
     }[],
     status: "processing" | "waiting",
-    isConfirm: boolean = false,
+    isConfirm: boolean = false
   ) => {
     if (!isConfirm) {
-      setInvoiceData({ invoiceId, products, status });
-      setState("isConfirmOrderOpen", true);
-      return;
+      setInvoiceData({ invoiceId, products, status })
+      setState("isConfirmOrderOpen", true)
+      return
     }
 
-    const statusUrl = status === "processing" ? "completed" : "cancelled";
+    const statusUrl = status === "processing" ? "completed" : "cancelled"
 
-    setButtonLoading(invoiceId, true);
-    setIsLoadingGlobal(true);
+    setButtonLoading(invoiceId, true)
+    setIsLoadingGlobal(true)
     try {
-      const message = await cancelReceiveOrder(invoiceId, products, statusUrl);
+      const message = await cancelReceiveOrder(invoiceId, products, statusUrl)
 
       if (message === "Done.") {
-        await mutate("invoices");
-        router.push(`/purchase?tab=${statusUrl}`);
+        await mutate("invoices")
+        router.push(`/purchase?tab=${statusUrl}`)
         showToast(
           status === "processing" ? "Order Completed." : "Order Cancelled.",
-          "success",
-        );
+          "success"
+        )
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Cancel Receive Error: ", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Cancel Receive Error: ", error)
+      showToast("Something went wrong! Please try again.", "warning")
     } finally {
-      setButtonLoading(invoiceId, false);
-      setIsLoadingGlobal(false);
-      setInvoiceData(null);
+      setButtonLoading(invoiceId, false)
+      setIsLoadingGlobal(false)
+      setInvoiceData(null)
     }
-  };
+  }
 
   const handleBuyAgain = async (
     invoiceId: string,
     productId: string,
     color: string,
-    size: string,
+    size: string
   ) => {
-    const key = `${invoiceId}-${productId}-${size}`;
-    setButtonLoading(key, true);
-    setIsLoadingGlobal(true);
+    const key = `${invoiceId}-${productId}-${size}`
+    setButtonLoading(key, true)
+    setIsLoadingGlobal(true)
 
     try {
-      const message = await addToCart(productId, color, size);
+      const message = await addToCart(productId, color, size)
 
       if (message === "Done.") {
-        await mutate("cart");
-        setState("isCartOpen", true);
+        await mutate("cart")
+        setState("isCartOpen", true)
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Add to cart Error: ", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Add to cart Error: ", error)
+      showToast("Something went wrong! Please try again.", "warning")
     } finally {
-      setButtonLoading(key, false);
-      setIsLoadingGlobal(false);
+      setButtonLoading(key, false)
+      setIsLoadingGlobal(false)
     }
-  };
+  }
 
   return (
     <>
@@ -175,9 +174,9 @@ export default function OrderList({
                     invoiceData.invoiceId,
                     invoiceData.products,
                     invoiceData.status,
-                    true,
-                  );
-                  handleClose();
+                    true
+                  )
+                  handleClose()
                 }}
               >
                 Confirm
@@ -241,8 +240,8 @@ export default function OrderList({
           }) => {
             const combinedinvoiceProducts = transformInvoiceProducts(
               invoiceProducts,
-              products,
-            );
+              products
+            )
 
             return (
               <div key={invoiceId} className="relative border">
@@ -275,7 +274,7 @@ export default function OrderList({
                           size,
                           discountedPriceDetails,
                         },
-                        index,
+                        index
                       ) => (
                         <div
                           key={index}
@@ -311,7 +310,7 @@ export default function OrderList({
                                   invoiceId,
                                   productId,
                                   color,
-                                  size,
+                                  size
                                 )
                               }
                               disabled={
@@ -335,7 +334,7 @@ export default function OrderList({
                             </Button>
                           )}
                         </div>
-                      ),
+                      )
                     )}
                     <div className="flex justify-between">
                       <Button
@@ -346,8 +345,8 @@ export default function OrderList({
                             phone,
                             address,
                             orderDate,
-                          });
-                          setState("isDeliveryInfoOpen", true);
+                          })
+                          setState("isDeliveryInfoOpen", true)
                         }}
                       >
                         <MdOutlinePlace />
@@ -362,7 +361,7 @@ export default function OrderList({
                             handleCancelReceive(
                               invoiceId,
                               invoiceProducts,
-                              status,
+                              status
                             )
                           }
                           disabled={loadingStates[invoiceId] || isLoadingGlobal}
@@ -391,10 +390,10 @@ export default function OrderList({
                   </div>
                 </div>
               </div>
-            );
-          },
+            )
+          }
         )}
       </div>
     </>
-  );
+  )
 }

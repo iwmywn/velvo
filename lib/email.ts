@@ -1,9 +1,9 @@
-import nodemailer from "nodemailer";
+import nodemailer from "nodemailer"
 
 export async function sendEmail(
   email: string,
   token: string,
-  mode: "resetPassword" | "verifyEmail",
+  mode: "resetPassword" | "verifyEmail"
 ) {
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
@@ -12,18 +12,18 @@ export async function sendEmail(
       user: process.env.EMAIL_SERVER_USER,
       pass: process.env.EMAIL_SERVER_PASSWORD,
     },
-  });
+  })
 
-  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`;
+  const emailHandlerUrl = `${process.env.NEXT_PUBLIC_URL}/email-handler?mode=${mode}&email=${email}&token=${token}`
   const subject =
     mode === "verifyEmail"
       ? "Verify your Velvo account"
-      : "Reset your Velvo password";
+      : "Reset your Velvo password"
   const message =
     mode === "verifyEmail"
       ? "Thank you for joining Velvo! We just need one final step from you - please confirm your email address by clicking the button below to verify it and get started."
-      : "No one likes being locked out of their account, and we're here to help. Just click the button below to get started. If you didn't request a password reset, feel free to ignore this email.";
-  const btnText = mode === "verifyEmail" ? "Verify" : "Reset your password";
+      : "No one likes being locked out of their account, and we're here to help. Just click the button below to get started. If you didn't request a password reset, feel free to ignore this email."
+  const btnText = mode === "verifyEmail" ? "Verify" : "Reset your password"
 
   await transporter.sendMail({
     from: process.env.EMAIL_FROM,
@@ -56,5 +56,5 @@ export async function sendEmail(
       </tr>
     </table>
     `,
-  });
+  })
 }

@@ -1,28 +1,29 @@
-import type { Metadata } from "next";
-import "@/app/globals.css";
-import { montserrat } from "@ui/fonts";
-import Header from "@ui/header";
-import Footer from "@ui/footer";
-import Gap from "@ui/gap";
-import PopUp from "@ui/pop-up";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, Slide } from "react-toastify";
-import { siteConfig } from "@lib/config";
+import type { Metadata } from "next"
+import "@/app/globals.css"
+import { montserrat } from "@ui/fonts"
+import Header from "@ui/header"
+import Footer from "@ui/footer"
+import Gap from "@ui/gap"
+import PopUp from "@ui/pop-up"
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer, Slide } from "react-toastify"
+import { siteConfig } from "@lib/config"
 import {
   getBanners,
   getMainCategoriesWithSubcategories,
   getMainCategories,
   getProducts,
-} from "@lib/data";
+} from "@lib/data"
 import {
   AuthProvider,
   HeightProvider,
   StoreProvider,
   UIStateProvider,
-} from "@ui/contexts";
-import { cookies } from "next/headers";
+} from "@ui/contexts"
+import { cookies } from "next/headers"
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_URL!),
   title: {
     template: "%s | Velvo",
     default: siteConfig.maintenanceMode ? "Maintenance | Velvo" : "Velvo",
@@ -30,12 +31,12 @@ export const metadata: Metadata = {
   description: siteConfig.maintenanceMode
     ? "Website is under maintenance"
     : "Velvo is your ultimate online fashion destination, offering a wide range of high-quality clothing that caters to every style. From trendy streetwear to elegant pieces, we bring you the latest fashion trends to keep your wardrobe fresh and stylish.",
-};
+}
 
 export default async function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   if (siteConfig.maintenanceMode) {
     return (
@@ -50,7 +51,7 @@ export default async function RootLayout({
           </UIStateProvider>
         </body>
       </html>
-    );
+    )
   }
 
   const [products, banners, cookieStore, mainCategories, mainSubCategories] =
@@ -60,9 +61,9 @@ export default async function RootLayout({
       cookies(),
       getMainCategories(),
       getMainCategoriesWithSubcategories(),
-    ]);
-  const userId = cookieStore.get("userId")?.value;
-  const userImage = cookieStore.get("userImage")?.value;
+    ])
+  const userId = cookieStore.get("userId")?.value
+  const userImage = cookieStore.get("userImage")?.value
 
   return (
     <html lang="en">
@@ -110,5 +111,5 @@ export default async function RootLayout({
         </UIStateProvider>
       </body>
     </html>
-  );
+  )
 }

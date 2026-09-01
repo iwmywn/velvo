@@ -1,25 +1,25 @@
-"use client";
+"use client"
 
-import { useRef, useState } from "react";
-import Image from "next/image";
-import { formatCurrency, getPriceAfterDiscount } from "@lib/utils";
-import Button from "@ui/button";
-import { Product } from "@lib/definitions";
-import ImageTag from "@ui/image";
+import { useRef, useState } from "react"
+import Image from "next/image"
+import { formatCurrency, getPriceAfterDiscount } from "@lib/utils"
+import Button from "@ui/button"
+import { Product } from "@lib/definitions"
+import ImageTag from "@ui/image"
 import {
   useAuthContext,
   useHeightContext,
   useUIStateContext,
-} from "@ui/contexts";
-import { addToCart } from "@lib/actions";
-import showToast from "@ui/toast";
-import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore from "swiper";
-import "swiper/css";
-import ExpandableSections from "@ui/expandable";
-import { mutate } from "swr";
-import ProductFloat from "@ui/product/details/float";
+} from "@ui/contexts"
+import { addToCart } from "@lib/actions"
+import showToast from "@ui/toast"
+import { HiPlusSmall, HiMinusSmall } from "react-icons/hi2"
+import { Swiper, SwiperSlide } from "swiper/react"
+import SwiperCore from "swiper"
+import "swiper/css"
+import ExpandableSections from "@ui/expandable"
+import { mutate } from "swr"
+import ProductFloat from "@ui/product/details/float"
 
 export default function ProductDetails({ product }: { product: Product }) {
   const {
@@ -32,60 +32,60 @@ export default function ProductDetails({ product }: { product: Product }) {
     colors,
     keyFeatures,
     availableColors,
-  } = product;
-  const [selectedImage, setSelectedImage] = useState<string>(images[0]);
-  const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [selectedSize, setSelectedSize] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [quantity, setQuantity] = useState<number>(1);
-  const { userId } = useAuthContext();
-  const { heights } = useHeightContext();
-  const isObject = selectedColor && typeof colors[selectedColor] === "object";
-  const isNumber = selectedColor && typeof colors[selectedColor] === "number";
+  } = product
+  const [selectedImage, setSelectedImage] = useState<string>(images[0])
+  const [selectedColor, setSelectedColor] = useState<string | null>(null)
+  const [selectedSize, setSelectedSize] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [quantity, setQuantity] = useState<number>(1)
+  const { userId } = useAuthContext()
+  const { heights } = useHeightContext()
+  const isObject = selectedColor && typeof colors[selectedColor] === "object"
+  const isNumber = selectedColor && typeof colors[selectedColor] === "number"
   const remainingQuantity = selectedColor
     ? selectedSize && typeof colors[selectedColor] === "object"
       ? colors[selectedColor].sizes[selectedSize]
       : typeof colors[selectedColor] === "number"
         ? colors[selectedColor]
         : 0
-    : 0;
-  const isAvailable = selectedColor && availableColors.includes(selectedColor);
-  const formattedPrice = `$${formatCurrency(priceCents)}`;
-  const priceAfterDiscount = `$${getPriceAfterDiscount(priceCents, saleOff)}`;
-  const swiperRef = useRef<SwiperCore | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const { setState } = useUIStateContext();
+    : 0
+  const isAvailable = selectedColor && availableColors.includes(selectedColor)
+  const formattedPrice = `$${formatCurrency(priceCents)}`
+  const priceAfterDiscount = `$${getPriceAfterDiscount(priceCents, saleOff)}`
+  const swiperRef = useRef<SwiperCore | null>(null)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
+  const { setState } = useUIStateContext()
 
   const handleAddToCart = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
       const message = await addToCart(
         productId,
         selectedColor,
         selectedSize,
-        quantity,
-      );
+        quantity
+      )
 
       if (message === "Done.") {
-        await mutate("cart");
-        setState("isCartOpen", true);
+        await mutate("cart")
+        setState("isCartOpen", true)
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Add to cart Error: ", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Add to cart Error: ", error)
+      showToast("Something went wrong! Please try again.", "warning")
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
   const handleThumbnailClick = (img: string, index: number) => {
-    setSelectedImage(img);
-    swiperRef.current?.slideTo(index);
-  };
+    setSelectedImage(img)
+    swiperRef.current?.slideTo(index)
+  }
 
-  console.log(quantity);
+  console.log(quantity)
 
   return (
     <>
@@ -163,7 +163,7 @@ export default function ProductDetails({ product }: { product: Product }) {
             <p className="text-sm font-medium">Color</p>
             <div className="flex flex-wrap items-center gap-4">
               {Object.keys(colors).map((color) => {
-                const isAvai = availableColors.includes(color);
+                const isAvai = availableColors.includes(color)
 
                 return (
                   <label
@@ -182,15 +182,15 @@ export default function ProductDetails({ product }: { product: Product }) {
                       value={color}
                       checked={selectedColor === color}
                       onChange={() => {
-                        setSelectedColor(color);
-                        setSelectedSize(null);
-                        setQuantity(1);
+                        setSelectedColor(color)
+                        setSelectedSize(null)
+                        setQuantity(1)
                       }}
                       className="hidden"
                     />
                     <span className="uppercase select-none">{color}</span>
                   </label>
-                );
+                )
               })}
             </div>
 
@@ -206,7 +206,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                         Object.keys(colors[selectedColor].sizes).map((size) => {
                           const qty =
                             typeof colors[selectedColor] === "object" &&
-                            colors[selectedColor].sizes[size];
+                            colors[selectedColor].sizes[size]
 
                           return (
                             <label
@@ -225,14 +225,14 @@ export default function ProductDetails({ product }: { product: Product }) {
                                 value={size}
                                 checked={selectedSize === size}
                                 onChange={() => {
-                                  setSelectedSize(size);
-                                  setQuantity(1);
+                                  setSelectedSize(size)
+                                  setQuantity(1)
                                 }}
                                 className="hidden"
                               />
                               <span className="select-none">{size}</span>
                             </label>
-                          );
+                          )
                         })}
                       {(selectedSize || isNumber) && (
                         <span
@@ -317,5 +317,5 @@ export default function ProductDetails({ product }: { product: Product }) {
         </div>
       </div>
     </>
-  );
+  )
 }

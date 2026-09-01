@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { createContext, useContext, useState } from "react";
-import { useOverflow } from "@ui/hooks";
+import { createContext, useContext, useState } from "react"
+import { useOverflow } from "@ui/hooks"
 
 type UIStateKeys =
   | "isMenuOpen"
@@ -10,21 +10,19 @@ type UIStateKeys =
   | "isPopupOpen"
   | "isDeliveryInfoOpen"
   | "isConfirmOrderOpen"
-  | "isCheckoutOpen";
+  | "isCheckoutOpen"
 
 interface UIStateContextProps {
-  state: Record<UIStateKeys, boolean>;
-  setState: (key: UIStateKeys, value: boolean) => void;
+  state: Record<UIStateKeys, boolean>
+  setState: (key: UIStateKeys, value: boolean) => void
 }
 
-const UIStateContext = createContext<UIStateContextProps | undefined>(
-  undefined,
-);
+const UIStateContext = createContext<UIStateContextProps | undefined>(undefined)
 
 export const UIStateProvider = ({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) => {
   const [state, setStateInternal] = useState<Record<UIStateKeys, boolean>>({
     isMenuOpen: false,
@@ -34,25 +32,25 @@ export const UIStateProvider = ({
     isDeliveryInfoOpen: false,
     isConfirmOrderOpen: false,
     isCheckoutOpen: false,
-  });
-  const isAnyOpen = Object.values(state).some((value) => value);
+  })
+  const isAnyOpen = Object.values(state).some((value) => value)
   const setState = (key: UIStateKeys, value: boolean) => {
-    setStateInternal((prev) => ({ ...prev, [key]: value }));
-  };
+    setStateInternal((prev) => ({ ...prev, [key]: value }))
+  }
 
-  useOverflow(isAnyOpen);
+  useOverflow(isAnyOpen)
 
   return (
     <UIStateContext.Provider value={{ state, setState }}>
       {children}
     </UIStateContext.Provider>
-  );
-};
+  )
+}
 
 export const useUIStateContext = () => {
-  const cxt = useContext(UIStateContext);
+  const cxt = useContext(UIStateContext)
   if (!cxt) {
-    throw new Error("useUIState must be used within a UIStateProvider");
+    throw new Error("useUIState must be used within a UIStateProvider")
   }
-  return cxt;
-};
+  return cxt
+}

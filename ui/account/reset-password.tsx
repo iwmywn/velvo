@@ -1,36 +1,36 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import {
   formClass,
   boxClass,
   inputClass,
   labelClass,
   errorClass,
-} from "@ui/form-class";
-import { FormButton } from "@ui/button";
-import showToast from "@ui/toast";
-import { resetPasswordScheme } from "@/schemas";
-import { z } from "zod";
-import Loading from "@ui/loading";
-import { FaXmark } from "react-icons/fa6";
-import NotFound from "@/app/not-found";
-import Title from "@ui/account/title";
+} from "@ui/form-class"
+import { FormButton } from "@ui/button"
+import showToast from "@ui/toast"
+import { resetPasswordScheme } from "@/schemas"
+import { z } from "zod"
+import Loading from "@ui/loading"
+import { FaXmark } from "react-icons/fa6"
+import NotFound from "@/app/not-found"
+import Title from "@ui/account/title"
 
-type PasswordFormData = z.infer<typeof resetPasswordScheme>;
+type PasswordFormData = z.infer<typeof resetPasswordScheme>
 
 export default function ResetPassword({
   token,
   email,
 }: {
-  token: string | undefined;
-  email: string | undefined;
+  token: string | undefined
+  email: string | undefined
 }) {
-  const [loading, setLoading] = useState<boolean>(true);
-  const [status, setStatus] = useState<"success" | "error">("error");
-  const [message, setMessage] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true)
+  const [status, setStatus] = useState<"success" | "error">("error")
+  const [message, setMessage] = useState<string>("")
   const {
     register,
     handleSubmit,
@@ -43,29 +43,27 @@ export default function ResetPassword({
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   useEffect(() => {
     const fetchToken = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const res = await fetch(
-          `/api/find-token?email=${email}&token=${token}`,
-        );
-        const message = await res.json();
+        const res = await fetch(`/api/find-token?email=${email}&token=${token}`)
+        const message = await res.json()
 
-        if (res.ok) setStatus("success");
-        setMessage(message);
+        if (res.ok) setStatus("success")
+        setMessage(message)
       } catch (error) {
-        console.error("Verification Token Error: ", error);
-        setMessage("Something went wrong! Please try again.");
+        console.error("Verification Token Error: ", error)
+        setMessage("Something went wrong! Please try again.")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchToken();
-  }, [token, email]);
+    fetchToken()
+  }, [token, email])
 
   const onSubmit = async (data: PasswordFormData) => {
     try {
@@ -77,25 +75,25 @@ export default function ResetPassword({
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
-        },
-      );
+        }
+      )
 
-      const message = await res.json();
+      const message = await res.json()
 
       if (res.ok) {
-        showToast(message, "success");
-        reset();
+        showToast(message, "success")
+        reset()
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Reset password Error: ", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Reset password Error: ", error)
+      showToast("Something went wrong! Please try again.", "warning")
     }
-  };
+  }
 
   if (loading) {
-    return <Loading />;
+    return <Loading />
   }
 
   return (
@@ -155,5 +153,5 @@ export default function ResetPassword({
         <NotFound />
       )}
     </>
-  );
+  )
 }

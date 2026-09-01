@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import { useRef, useState } from "react";
-import { useElementHeight } from "@ui/hooks";
-import Link from "next/link";
-import { socialLinks, footerSections } from "@ui/data";
-import Button from "@ui/button";
-import { linkClass } from "@ui/form-class";
+import { useRef, useState } from "react"
+import { useElementHeight } from "@ui/hooks"
+import Link from "next/link"
+import { socialLinks, footerSections } from "@ui/data"
+import Button from "@ui/button"
+import { linkClass } from "@ui/form-class"
 
 export default function Footer() {
-  const ref = useRef<HTMLElement | null>(null);
-  const [email, setEmail] = useState<string>("");
+  const ref = useRef<HTMLElement | null>(null)
+  const [email, setEmail] = useState<string>("")
 
-  useElementHeight(ref);
+  useElementHeight(ref)
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault()
     // temporarily
-    setEmail("");
-  };
+    setEmail("")
+  }
 
   return (
     <footer
@@ -70,5 +70,5 @@ export default function Footer() {
         </span>
       </div>
     </footer>
-  );
+  )
 }

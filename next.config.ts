@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   images: {
@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-};
+  reactCompiler: true,
+  experimental: {
+    turbopackRustReactCompiler: true,
+    scrollRestoration: true,
+    cpus: 1,
+    inlineCss: true,
+  },
+}
 
-export default nextConfig;
+export default nextConfig

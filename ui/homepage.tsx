@@ -1,18 +1,18 @@
-"use client";
+"use client"
 
-import "swiper/css/bundle";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Autoplay, Pagination } from "swiper/modules";
-import Image from "next/image";
-import { useStoreContext } from "@ui/contexts";
-import { GrPrevious, GrNext } from "react-icons/gr";
-import ProductCard from "@ui/product/card";
-import Link from "next/link";
-import { Collection } from "@lib/definitions";
+import "swiper/css/bundle"
+import { Swiper, SwiperSlide } from "swiper/react"
+import { Navigation, Autoplay, Pagination } from "swiper/modules"
+import Image from "next/image"
+import { useStoreContext } from "@ui/contexts"
+import { GrPrevious, GrNext } from "react-icons/gr"
+import ProductCard from "@ui/product/card"
+import Link from "next/link"
+import { Collection } from "@lib/definitions"
 
 export default function Home({ collections }: { collections: Collection[] }) {
-  const { products, banners } = useStoreContext();
-  const lastTenProducts = products.slice(-10);
+  const { products, banners } = useStoreContext()
+  const lastTenProducts = products.slice(-10)
 
   return (
     <>
@@ -119,15 +119,15 @@ export default function Home({ collections }: { collections: Collection[] }) {
         ))}
       </div>
     </>
-  );
+  )
 }
 
 function SwiperNavButton({
   direction,
   className,
 }: {
-  direction: "prev" | "next";
-  className: string;
+  direction: "prev" | "next"
+  className: string
 }) {
   return (
     <div
@@ -135,5 +135,5 @@ function SwiperNavButton({
     >
       {direction === "prev" ? <GrPrevious size={16} /> : <GrNext size={16} />}
     </div>
-  );
+  )
 }

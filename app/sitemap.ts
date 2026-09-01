@@ -1,17 +1,17 @@
-import type { MetadataRoute } from "next";
+import type { MetadataRoute } from "next"
 import {
   getCollections,
   getMainCategoriesWithSubcategories,
   getMainCategories,
   getProducts,
-} from "@lib/data";
+} from "@lib/data"
 
-type Item = MetadataRoute.Sitemap[number];
+type Item = MetadataRoute.Sitemap[number]
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_URL
   if (!baseUrl) {
-    throw new Error("Environment variable NEXT_PUBLIC_URL is not defined.");
+    throw new Error("Environment variable NEXT_PUBLIC_URL is not defined.")
   }
   const [products, mainCategories, collections, mainSubCategories] =
     await Promise.all([
@@ -19,21 +19,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getMainCategories(),
       getCollections(),
       getMainCategoriesWithSubcategories(),
-    ]);
+    ])
 
   const defaultUrl = {
     url: baseUrl,
     lastModified: new Date(),
     changeFrequency: "always",
     priority: 1,
-  } satisfies Item;
+  } satisfies Item
 
   const productsUrl = {
     url: `${baseUrl}/products`,
     lastModified: new Date(),
     changeFrequency: "daily",
     priority: 0.6,
-  } satisfies Item;
+  } satisfies Item
 
   const collectionUrls = collections.map(
     ({ slug }) =>
@@ -42,8 +42,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.7,
-      }) satisfies Item,
-  );
+      }) satisfies Item
+  )
 
   const productUrls = products.map(
     ({ slug }) =>
@@ -52,8 +52,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.8,
-      }) satisfies Item,
-  );
+      }) satisfies Item
+  )
 
   const categoryUrls = mainCategories.map(
     ({ slug }) =>
@@ -62,8 +62,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: "daily",
         priority: 0.4,
-      }) satisfies Item,
-  );
+      }) satisfies Item
+  )
 
   const subCategoryUrls = mainSubCategories.flatMap(({ main, sub }) =>
     sub.map(
@@ -73,9 +73,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(),
           changeFrequency: "daily",
           priority: 0.5,
-        }) satisfies Item,
-    ),
-  );
+        }) satisfies Item
+    )
+  )
 
   return [
     defaultUrl,
@@ -84,5 +84,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...productUrls,
     ...categoryUrls,
     ...subCategoryUrls,
-  ];
+  ]
 }

@@ -1,8 +1,8 @@
-import EmailForm from "@ui/account/email-form";
-import { Metadata } from "next";
+import EmailForm from "@ui/account/email-form"
+import { Metadata } from "next"
 
 export function generateMetadata(): Metadata {
-  return { title: "Forgotten Password" };
+  return { title: "Forgotten Password" }
 }
 
 export default function ForgottenPasswordPage() {
@@ -12,5 +12,5 @@ export default function ForgottenPasswordPage() {
       enpoint="/api/forgotten-password"
       buttonText="RESET YOUR PASSWORD"
     />
-  );
+  )
 }

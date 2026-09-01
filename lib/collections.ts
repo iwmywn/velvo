@@ -1,4 +1,4 @@
-import { collection } from "@lib/mongodb";
+import { collection } from "@lib/mongodb"
 import {
   DBUser,
   DBInvoiceList,
@@ -8,36 +8,36 @@ import {
   DBAvatar,
   DBBanner,
   DBCollection,
-} from "@lib/definitions";
+} from "@lib/definitions"
 
 export async function getAvatarCollection() {
-  return await collection<DBAvatar>("avatars");
+  return await collection<DBAvatar>("avatars")
 }
 
 export async function getBannerCollection() {
-  return await collection<DBBanner>("banners");
+  return await collection<DBBanner>("banners")
 }
 
 export async function getCollectionCollection() {
-  return await collection<DBCollection>("collections");
+  return await collection<DBCollection>("collections")
 }
 
 export async function getUserCollection() {
-  return await collection<DBUser>("users");
+  return await collection<DBUser>("users")
 }
 
 export async function getInvoiceListCollection() {
-  return await collection<DBInvoiceList>("invoiceLists");
+  return await collection<DBInvoiceList>("invoiceLists")
 }
 
 export async function getCartCollection() {
-  return await collection<DBCart>("carts");
+  return await collection<DBCart>("carts")
 }
 
 export async function getCategoriesCollection() {
-  return await collection<DBCustomerCategories>("categories");
+  return await collection<DBCustomerCategories>("categories")
 }
 
 export async function getProductCollection() {
-  return await collection<DBProduct>("products");
+  return await collection<DBProduct>("products")
 }

@@ -1,56 +1,56 @@
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 import {
   getCollections,
   getProductIdsByCollection,
   getProducts,
-} from "@lib/data";
-import ProductList from "@ui/product/list";
-import NotFound from "@/app/not-found";
-import BreadCrumbs from "@ui/breadcrumbs";
+} from "@lib/data"
+import ProductList from "@ui/product/list"
+import NotFound from "@/app/not-found"
+import BreadCrumbs from "@ui/breadcrumbs"
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const [{ slug: collectionSlug }, collections] = await Promise.all([
     params,
     getCollections(),
-  ]);
+  ])
   const collectionName = collections.find(
-    (col) => col.slug === collectionSlug,
-  )?.name;
+    (col) => col.slug === collectionSlug
+  )?.name
 
   return {
     title: `${!collectionName ? "NOT FOUND" : `Collection / ${collectionName}`}`,
-  };
+  }
 }
 
 export default async function CollectionPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string }>
 }) {
   const [products, collections, { slug: collectionSlug }] = await Promise.all([
     getProducts(),
     getCollections(),
     params,
-  ]);
+  ])
   const collectionName = collections.find(
-    (col) => col.slug === collectionSlug,
-  )?.name;
+    (col) => col.slug === collectionSlug
+  )?.name
 
-  if (!collectionName) return <NotFound />;
+  if (!collectionName) return <NotFound />
 
-  const productIds = await getProductIdsByCollection(collectionSlug);
+  const productIds = await getProductIdsByCollection(collectionSlug)
   const productsByCollection = products.filter((product) =>
-    productIds.includes(product._id),
-  );
+    productIds.includes(product._id)
+  )
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "All Products", href: "/products" },
     { label: collectionName },
-  ];
+  ]
 
   return (
     <>
@@ -60,13 +60,13 @@ export default async function CollectionPage({
         title={`Collection / ${collectionName}`}
       />
     </>
-  );
+  )
 }
 
 export async function generateStaticParams() {
-  const collections = await getCollections();
+  const collections = await getCollections()
 
   return collections.map(({ slug }) => ({
     slug,
-  }));
+  }))
 }

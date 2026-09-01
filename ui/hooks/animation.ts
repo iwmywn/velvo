@@ -1,17 +1,17 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 
 export function useAnimation(duration: number = 250) {
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [isAnimating, setIsAnimating] = useState<boolean>(false)
 
   const triggerAnimation = (callback: () => void) => {
-    setIsAnimating(true);
+    setIsAnimating(true)
     setTimeout(() => {
-      setIsAnimating(false);
-      callback();
-    }, duration);
-  };
+      setIsAnimating(false)
+      callback()
+    }, duration)
+  }
 
-  return { isAnimating, triggerAnimation };
+  return { isAnimating, triggerAnimation }
 }

@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import { Product } from "@lib/definitions";
-import ProductCard from "@ui/product/card";
+import { Product } from "@lib/definitions"
+import ProductCard from "@ui/product/card"
 
 export default function ProductList({
   products,
   title,
 }: {
-  products: Product[];
-  title: string;
+  products: Product[]
+  title: string
 }) {
   return (
     <>
@@ -21,5 +21,5 @@ export default function ProductList({
         ))}
       </div>
     </>
-  );
+  )
 }

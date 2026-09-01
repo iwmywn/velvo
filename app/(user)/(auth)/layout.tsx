@@ -1,7 +1,7 @@
 export default function AuthLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div className="flex min-h-screen justify-center">
@@ -9,5 +9,5 @@ export default function AuthLayout({
         {children}
       </div>
     </div>
-  );
+  )
 }

@@ -1,16 +1,16 @@
-import { shuffleProduct } from "@lib/utils";
-import ProductList from "@ui/product/list";
-import BreadCrumbs from "@ui/breadcrumbs";
-import { getProducts } from "@lib/data";
-import { Metadata } from "next";
+import { shuffleProduct } from "@lib/utils"
+import ProductList from "@ui/product/list"
+import BreadCrumbs from "@ui/breadcrumbs"
+import { getProducts } from "@lib/data"
+import { Metadata } from "next"
 
 export function generateMetadata(): Metadata {
-  return { title: "All Products" };
+  return { title: "All Products" }
 }
 
 export default async function AllProductsPage() {
-  const products = await getProducts();
-  const allProducts = shuffleProduct(products);
+  const products = await getProducts()
+  const allProducts = shuffleProduct(products)
 
   return (
     <>
@@ -27,5 +27,5 @@ export default async function AllProductsPage() {
       />
       <ProductList products={allProducts} title="All Products" />
     </>
-  );
+  )
 }

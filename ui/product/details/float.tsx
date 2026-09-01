@@ -1,7 +1,7 @@
-import Button from "@ui/button";
-import Image from "next/image";
-import { RefObject, useEffect, useRef, useState } from "react";
-import { useAnimation } from "@ui/hooks";
+import Button from "@ui/button"
+import Image from "next/image"
+import { RefObject, useEffect, useRef, useState } from "react"
+import { useAnimation } from "@ui/hooks"
 
 export default function ProductFloat({
   name,
@@ -11,39 +11,39 @@ export default function ProductFloat({
   heights,
   buttonRef,
 }: {
-  name: string;
-  priceAfterDiscount: string;
-  src: string;
-  alt: string;
-  heights: number;
-  buttonRef: RefObject<HTMLButtonElement | null>;
+  name: string
+  priceAfterDiscount: string
+  src: string
+  alt: string
+  heights: number
+  buttonRef: RefObject<HTMLButtonElement | null>
 }) {
   const [isProductFloatVisible, setIsProductFloatVisible] =
-    useState<boolean>(false);
-  const isProductFloatVisibleRef = useRef<boolean>(isProductFloatVisible);
-  const { isAnimating, triggerAnimation } = useAnimation();
+    useState<boolean>(false)
+  const isProductFloatVisibleRef = useRef<boolean>(isProductFloatVisible)
+  const { isAnimating, triggerAnimation } = useAnimation()
 
   useEffect(() => {
-    isProductFloatVisibleRef.current = isProductFloatVisible;
-  }, [isProductFloatVisible]);
+    isProductFloatVisibleRef.current = isProductFloatVisible
+  }, [isProductFloatVisible])
 
   useEffect(() => {
     const handleScroll = () => {
       if (buttonRef.current) {
-        const rect = buttonRef.current.getBoundingClientRect();
-        const shouldShow = rect.top <= heights - 40;
+        const rect = buttonRef.current.getBoundingClientRect()
+        const shouldShow = rect.top <= heights - 40
 
         if (shouldShow !== isProductFloatVisibleRef.current) {
           if (!shouldShow)
-            triggerAnimation(() => setIsProductFloatVisible(false));
-          else setIsProductFloatVisible(true);
+            triggerAnimation(() => setIsProductFloatVisible(false))
+          else setIsProductFloatVisible(true)
         }
       }
-    };
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [heights, triggerAnimation]);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [buttonRef, heights, triggerAnimation])
 
   return (
     (isProductFloatVisible || isAnimating) && (
@@ -85,5 +85,5 @@ export default function ProductFloat({
         </div>
       </div>
     )
-  );
+  )
 }

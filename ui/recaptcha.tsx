@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import ReCAPTCHA from "react-google-recaptcha";
-import { createPortal } from "react-dom";
-import { useAnimation, useOverflow } from "@ui/hooks";
-import showToast from "@ui/toast";
+import ReCAPTCHA from "react-google-recaptcha"
+import { createPortal } from "react-dom"
+import { useAnimation, useOverflow } from "@ui/hooks"
+import showToast from "@ui/toast"
 
 interface ReCaptchaPopupProps {
-  onClose: () => void;
-  setRecaptchaToken: (token: string | null) => void;
-  overflow?: boolean;
+  onClose: () => void
+  setRecaptchaToken: (token: string | null) => void
+  overflow?: boolean
 }
 
 export default function ReCaptchaPopup({
@@ -16,27 +16,27 @@ export default function ReCaptchaPopup({
   setRecaptchaToken,
   overflow = true,
 }: ReCaptchaPopupProps) {
-  const { isAnimating, triggerAnimation } = useAnimation();
-  const animteAndClose = () => triggerAnimation(() => onClose());
+  const { isAnimating, triggerAnimation } = useAnimation()
+  const animteAndClose = () => triggerAnimation(() => onClose())
   const handleRecaptchaChange = async (token: string | null) => {
     if (!token) {
-      showToast("CAPTCHA verification failed! Please try again.", "warning");
-      return;
+      showToast("CAPTCHA verification failed! Please try again.", "warning")
+      return
     }
 
-    setRecaptchaToken(token);
+    setRecaptchaToken(token)
     setTimeout(() => {
-      animteAndClose();
-    }, 500);
-  };
+      animteAndClose()
+    }, 500)
+  }
 
   const handleClose = () => {
-    animteAndClose();
-    showToast("Please complete the CAPTCHA!", "warning");
-  };
+    animteAndClose()
+    showToast("Please complete the CAPTCHA!", "warning")
+  }
 
   //eslint-disable-next-line react-hooks/rules-of-hooks
-  if (overflow) useOverflow(!isAnimating);
+  if (overflow) useOverflow(!isAnimating)
 
   return createPortal(
     <div
@@ -54,6 +54,6 @@ export default function ReCaptchaPopup({
         />
       </div>
     </div>,
-    document.getElementById("popups")!,
-  );
+    document.getElementById("popups")!
+  )
 }

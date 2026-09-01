@@ -2,8 +2,8 @@ export default function SlidingContainer({
   isAnimating,
   children,
 }: {
-  isAnimating: boolean;
-  children: React.ReactNode;
+  isAnimating: boolean
+  children: React.ReactNode
 }) {
   return (
     <div
@@ -16,5 +16,5 @@ export default function SlidingContainer({
     >
       {children}
     </div>
-  );
+  )
 }

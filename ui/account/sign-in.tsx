@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import {
   formClass,
   boxClass,
@@ -9,14 +9,15 @@ import {
   labelClass,
   errorClass,
   linkClass,
-} from "@ui/form-class";
-import { FormButton } from "@ui/button";
-import showToast from "@ui/toast";
-import { signInSchema } from "@/schemas";
-import { z } from "zod";
-import Link from "next/link";
+} from "@ui/form-class"
+import { FormButton } from "@ui/button"
+import showToast from "@ui/toast"
+import { signInSchema } from "@/schemas"
+import { z } from "zod"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
 
-type SignInFormData = z.infer<typeof signInSchema>;
+type SignInFormData = z.infer<typeof signInSchema>
 
 export default function SignIn() {
   const {
@@ -30,7 +31,8 @@ export default function SignIn() {
       email: "",
       password: "",
     },
-  });
+  })
+  const router = useRouter()
 
   const onSubmit = async (data: SignInFormData) => {
     try {
@@ -40,23 +42,23 @@ export default function SignIn() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      });
+      })
 
-      const message = await res.json();
+      const message = await res.json()
 
       if (res.ok) {
-        const searchParams = new URLSearchParams(window.location.search);
-        const callbackUrl = searchParams.get("next") || "/";
+        const searchParams = new URLSearchParams(window.location.search)
+        const callbackUrl = searchParams.get("next") || "/"
 
-        window.location.href = callbackUrl;
+        router.push(callbackUrl)
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Sign in Error: ", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Sign in Error: ", error)
+      showToast("Something went wrong! Please try again.", "warning")
     }
-  };
+  }
 
   return (
     <>
@@ -112,5 +114,5 @@ export default function SignIn() {
         </Link>
       </div>
     </>
-  );
+  )
 }

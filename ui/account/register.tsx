@@ -1,26 +1,26 @@
-"use client";
+"use client"
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import {
   formClass,
   boxClass,
   inputClass,
   labelClass,
   errorClass,
-} from "@ui/form-class";
-import { FormButton } from "@ui/button";
-import showToast from "@ui/toast";
-import { registerSchema } from "@/schemas";
-import ReCaptchaPopup from "@ui/recaptcha";
-import { useState } from "react";
+} from "@ui/form-class"
+import { FormButton } from "@ui/button"
+import showToast from "@ui/toast"
+import { registerSchema } from "@/schemas"
+import ReCaptchaPopup from "@ui/recaptcha"
+import { useState } from "react"
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+type RegisterFormData = z.infer<typeof registerSchema>
 
 export default function Register() {
-  const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState<boolean>(false)
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
@@ -36,12 +36,12 @@ export default function Register() {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   const onSubmit = async (data: RegisterFormData) => {
     if (!showCaptcha && !recaptchaToken) {
-      setShowCaptcha(true);
-      return;
+      setShowCaptcha(true)
+      return
     }
 
     try {
@@ -51,24 +51,24 @@ export default function Register() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ ...data, recaptchaToken }),
-      });
+      })
 
-      const message = await res.json();
+      const message = await res.json()
 
       if (res.ok) {
-        showToast(message, "success");
-        reset();
+        showToast(message, "success")
+        reset()
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Register Error: ", error);
-      showToast("Something went wrong! Please try again.", "warning");
+      console.error("Register Error: ", error)
+      showToast("Something went wrong! Please try again.", "warning")
     } finally {
-      setRecaptchaToken(null);
-      setShowCaptcha(false);
+      setRecaptchaToken(null)
+      setShowCaptcha(false)
     }
-  };
+  }
 
   return (
     <>
@@ -177,5 +177,5 @@ export default function Register() {
         </form>
       </div>
     </>
-  );
+  )
 }

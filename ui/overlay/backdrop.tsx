@@ -1,13 +1,13 @@
-import { createPortal } from "react-dom";
+import { createPortal } from "react-dom"
 
 export default function Backdrop({
   isAnimating,
   onMouseDown,
   children,
 }: {
-  isAnimating: boolean;
-  onMouseDown: () => void;
-  children: React.ReactNode;
+  isAnimating: boolean
+  onMouseDown: () => void
+  children: React.ReactNode
 }) {
   const backdropContent = (
     <div
@@ -18,7 +18,7 @@ export default function Backdrop({
     >
       {children}
     </div>
-  );
+  )
 
-  return createPortal(backdropContent, document.getElementById("popups")!);
+  return createPortal(backdropContent, document.getElementById("popups")!)
 }

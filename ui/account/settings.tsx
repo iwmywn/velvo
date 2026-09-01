@@ -1,39 +1,40 @@
-"use client";
+"use client"
 
-import { useState, ReactNode } from "react";
-import Button, { FormButton } from "@ui/button";
-import Backdrop from "@ui/overlay/backdrop";
+import { useState, ReactNode } from "react"
+import Button, { FormButton } from "@ui/button"
+import Backdrop from "@ui/overlay/backdrop"
 import {
   changePasswordScheme,
   changeEmailScheme,
   deleteAccountScheme,
-} from "@/schemas";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import BreadCrumbs from "@ui/breadcrumbs";
+} from "@/schemas"
+import { z } from "zod"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import BreadCrumbs from "@ui/breadcrumbs"
 import {
   formClass,
   boxClass,
   inputClass,
   labelClass,
   errorClass,
-} from "@ui/form-class";
-import showToast from "@ui/toast";
-import { useAnimation, useOverflow } from "@ui/hooks";
+} from "@ui/form-class"
+import showToast from "@ui/toast"
+import { useAnimation, useOverflow } from "@ui/hooks"
+import { useRouter } from "next/navigation"
 
 interface SettingsProps {
-  handleClose: () => void;
+  handleClose: () => void
 }
 
 export default function AccountSettings() {
-  const { isAnimating, triggerAnimation } = useAnimation();
+  const { isAnimating, triggerAnimation } = useAnimation()
   const [isOpen, setIsOpen] = useState<
     "change-password" | "change-email" | "delete-account" | null
-  >(null);
-  const handleClose = () => triggerAnimation(() => setIsOpen(null));
+  >(null)
+  const handleClose = () => triggerAnimation(() => setIsOpen(null))
 
-  useOverflow(!!isOpen);
+  useOverflow(!!isOpen)
 
   return (
     <>
@@ -98,7 +99,7 @@ export default function AccountSettings() {
         </Row>
       </div>
     </>
-  );
+  )
 }
 
 function Row({ children }: { children: ReactNode }) {
@@ -106,10 +107,10 @@ function Row({ children }: { children: ReactNode }) {
     <div className="flex flex-col justify-between gap-3 rounded border p-4 text-center md:flex-row md:items-center md:border-0 md:p-0 md:text-left">
       {children}
     </div>
-  );
+  )
 }
 
-type ChangePasswordFormData = z.infer<typeof changePasswordScheme>;
+type ChangePasswordFormData = z.infer<typeof changePasswordScheme>
 
 function ChangePassword({ handleClose }: SettingsProps) {
   const {
@@ -124,7 +125,7 @@ function ChangePassword({ handleClose }: SettingsProps) {
       password: "",
       confirmPassword: "",
     },
-  });
+  })
 
   const onSubmit = async (data: ChangePasswordFormData) => {
     try {
@@ -134,21 +135,21 @@ function ChangePassword({ handleClose }: SettingsProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      });
+      })
 
-      const message = await res.json();
+      const message = await res.json()
 
       if (res.ok) {
-        showToast(message, "success");
-        handleClose();
+        showToast(message, "success")
+        handleClose()
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Change password Error: ", error);
-      showToast("Something went wrong! Try again later.", "warning");
+      console.error("Change password Error: ", error)
+      showToast("Something went wrong! Try again later.", "warning")
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={formClass}>
@@ -208,10 +209,10 @@ function ChangePassword({ handleClose }: SettingsProps) {
         buttonText="Change"
       />
     </form>
-  );
+  )
 }
 
-type ChangeEmailFormData = z.infer<typeof changeEmailScheme>;
+type ChangeEmailFormData = z.infer<typeof changeEmailScheme>
 
 function ChangeEmail({ handleClose }: SettingsProps) {
   const {
@@ -226,7 +227,7 @@ function ChangeEmail({ handleClose }: SettingsProps) {
       email: "",
       confirmEmail: "",
     },
-  });
+  })
 
   const onSubmit = async (data: ChangeEmailFormData) => {
     try {
@@ -236,21 +237,21 @@ function ChangeEmail({ handleClose }: SettingsProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      });
+      })
 
-      const message = await res.json();
+      const message = await res.json()
 
       if (res.ok) {
-        showToast(message, "success");
-        handleClose();
+        showToast(message, "success")
+        handleClose()
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Change email Error: ", error);
-      showToast("Something went wrong! Try again later.", "warning");
+      console.error("Change email Error: ", error)
+      showToast("Something went wrong! Try again later.", "warning")
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={formClass}>
@@ -307,10 +308,10 @@ function ChangeEmail({ handleClose }: SettingsProps) {
         buttonText="Change"
       />
     </form>
-  );
+  )
 }
 
-type DeleteAccountFormData = z.infer<typeof deleteAccountScheme>;
+type DeleteAccountFormData = z.infer<typeof deleteAccountScheme>
 
 function DeleteAccount({ handleClose }: SettingsProps) {
   const {
@@ -323,10 +324,11 @@ function DeleteAccount({ handleClose }: SettingsProps) {
     defaultValues: {
       password: "",
     },
-  });
+  })
+  const router = useRouter()
 
   const onSubmit = async (data: DeleteAccountFormData) => {
-    showToast("Deleting your account...", "success");
+    showToast("Deleting your account...", "success")
     try {
       const res = await fetch(`/api/delete-account`, {
         method: "DELETE",
@@ -334,23 +336,23 @@ function DeleteAccount({ handleClose }: SettingsProps) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      });
+      })
 
-      const message = await res.json();
+      const message = await res.json()
 
       if (res.ok) {
-        showToast(message, "success");
-        handleClose();
-        await fetch("/api/signout", { method: "POST" });
-        window.location.href = "/signin";
+        showToast(message, "success")
+        handleClose()
+        await fetch("/api/signout", { method: "POST" })
+        router.push("/signin")
       } else {
-        showToast(message, "warning");
+        showToast(message, "warning")
       }
     } catch (error) {
-      console.error("Delete account Error: ", error);
-      showToast("Something went wrong! Try again later.", "warning");
+      console.error("Delete account Error: ", error)
+      showToast("Something went wrong! Try again later.", "warning")
     }
-  };
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={formClass}>
@@ -382,5 +384,5 @@ function DeleteAccount({ handleClose }: SettingsProps) {
         buttonText="Delete"
       />
     </form>
-  );
+  )
 }

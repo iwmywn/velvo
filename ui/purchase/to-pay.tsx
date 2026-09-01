@@ -1,21 +1,21 @@
-import { getTotalPriceCents, transformCartProducts } from "@lib/utils";
-import ProductRow from "@ui/purchase/product-row";
-import Checkout from "@ui/purchase/checkout";
-import EmptyState from "@ui/cart/empty";
-import Loading from "@ui/loading";
-import { useCart } from "@lib/hooks";
-import { useStoreContext } from "@ui/contexts";
-import { useMemo } from "react";
+import { getTotalPriceCents, transformCartProducts } from "@lib/utils"
+import ProductRow from "@ui/purchase/product-row"
+import Checkout from "@ui/purchase/checkout"
+import EmptyState from "@ui/cart/empty"
+import Loading from "@ui/loading"
+import { useCart } from "@lib/hooks"
+import { useStoreContext } from "@ui/contexts"
+import { useMemo } from "react"
 
 export default function ToPay() {
-  const { cart, isLoading } = useCart();
-  const { products } = useStoreContext();
-  const combinedCartProducts = transformCartProducts(cart.products, products);
+  const { cart, isLoading } = useCart()
+  const { products } = useStoreContext()
+  const combinedCartProducts = transformCartProducts(cart.products, products)
   const totalPriceCents = useMemo(() => {
-    return getTotalPriceCents(combinedCartProducts);
-  }, [combinedCartProducts]);
+    return getTotalPriceCents(combinedCartProducts)
+  }, [combinedCartProducts])
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <Loading />
 
   return (
     <>
@@ -29,7 +29,7 @@ export default function ToPay() {
                 <div className="p-2" key={head}>
                   {head}
                 </div>
-              ),
+              )
             )}
           </div>
 
@@ -55,5 +55,5 @@ export default function ToPay() {
         </div>
       )}
     </>
-  );
+  )
 }

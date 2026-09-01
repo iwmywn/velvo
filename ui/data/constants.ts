@@ -1,6 +1,6 @@
-import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa"
 
-const baseImgUrl = "https://res.cloudinary.com/duobwq5xg/image/upload/";
+const baseImgUrl = "https://res.cloudinary.com/duobwq5xg/image/upload/"
 
 const footerSections = [
   {
@@ -29,7 +29,7 @@ const footerSections = [
       },
     ],
   },
-] as const;
+] as const
 
 const socialLinks = [
   {
@@ -48,6 +48,6 @@ const socialLinks = [
     icon: FaLinkedin,
     href: "####",
   },
-] as const;
+] as const
 
-export { baseImgUrl, footerSections, socialLinks };
+export { baseImgUrl, footerSections, socialLinks }
