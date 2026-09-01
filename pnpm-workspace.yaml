@@ -1,4 +1,8 @@
+packages:
+  - '.'
+
 allowBuilds:
+  'sharp': true
   unrs-resolver: true
 minimumReleaseAgeExclude:
   - '@next/env@16.3.4'
