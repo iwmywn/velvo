@@ -23,6 +23,7 @@ export default function SignIn() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid, isSubmitting },
   } = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
@@ -51,6 +52,8 @@ export default function SignIn() {
         const callbackUrl = searchParams.get("next") || "/"
 
         router.push(callbackUrl)
+        router.refresh()
+        reset()
       } else {
         showToast(message, "warning")
       }
