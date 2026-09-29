@@ -4,7 +4,6 @@ import { montserrat } from "@ui/fonts"
 import Header from "@ui/header"
 import Footer from "@ui/footer"
 import Gap from "@ui/gap"
-import PopUp from "@ui/pop-up"
 import "react-toastify/dist/ReactToastify.css"
 import { ToastContainer, Slide } from "react-toastify"
 import { siteConfig } from "@lib/config"
@@ -43,8 +42,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${montserrat.className} antialiased`}>
           <UIStateProvider>
-            <div id="popups" className="relative z-[9999]" />
-            <PopUp />
+            <div id="popups" className="relative z-9999" />
             <main className="flex min-h-screen items-center justify-center text-3xl font-bold">
               Be right back!
             </main>
@@ -76,7 +74,7 @@ export default async function RootLayout({
             mainSubCategories={mainSubCategories}
           >
             <AuthProvider userId={userId} userImage={userImage}>
-              <div id="popups" className="relative z-[9999]">
+              <div id="popups" className="relative z-9999">
                 <ToastContainer
                   closeButton={false}
                   hideProgressBar
@@ -94,7 +92,6 @@ export default async function RootLayout({
                   }}
                 />
               </div>
-              <PopUp />
               <HeightProvider>
                 <Header />
                 <Gap z={10} />

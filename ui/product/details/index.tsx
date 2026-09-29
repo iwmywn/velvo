@@ -134,7 +134,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                     loading="eager"
                     sizes="(min-width: 640px) 100vw, (min-width: 1024px) 80vw, 340px"
                     style={{ objectFit: "cover", objectPosition: "center" }}
-                    className="h-auto w-full sm:w-[340px]"
+                    className="h-auto w-full sm:w-85"
                   />
                 </div>
               </SwiperSlide>
@@ -172,7 +172,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                   >
                     {!isAvai && (
                       <span
-                        className={`absolute inset-0 before:absolute before:top-[50%] before:right-0 before:left-0 before:h-[1px] before:translate-y-[-50%] ${selectedColor === color ? "before:bg-black" : "before:bg-gray-200"}`}
+                        className={`absolute inset-0 before:absolute before:top-[50%] before:right-0 before:left-0 before:h-px before:translate-y-[-50%] ${selectedColor === color ? "before:bg-black" : "before:bg-gray-200"}`}
                       />
                     )}
 
@@ -216,7 +216,7 @@ export default function ProductDetails({ product }: { product: Product }) {
                             >
                               {qty === 0 && (
                                 <span
-                                  className={`absolute inset-0 before:absolute before:top-[50%] before:right-0 before:left-0 before:h-[1px] before:translate-y-[-50%] ${selectedSize === size ? "before:bg-black" : "before:bg-gray-200"}`}
+                                  className={`absolute inset-0 before:absolute before:top-[50%] before:right-0 before:left-0 before:h-px before:translate-y-[-50%] ${selectedSize === size ? "before:bg-black" : "before:bg-gray-200"}`}
                                 />
                               )}
                               <input

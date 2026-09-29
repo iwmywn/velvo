@@ -13,7 +13,7 @@ export default function NavMenu() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-black/80 ${isAnimating ? "animate-fade-out" : "animate-fade-in"}`}
+      className={`fixed inset-0 z-9999 bg-black/80 ${isAnimating ? "animate-fade-out" : "animate-fade-in"}`}
       onClick={handleCloseMenu}
     >
       <div
@@ -23,7 +23,7 @@ export default function NavMenu() {
         {mainCategories.map((mainCats, index) => (
           <Link
             key={index}
-            className="w-full py-[6px] text-center text-sm font-medium uppercase transition-all duration-300 hover:bg-slate-100"
+            className="w-full py-1.5 text-center text-sm font-medium uppercase transition-all duration-300 hover:bg-slate-100"
             href={`/${mainCats.slug}`}
             onClick={handleCloseMenu}
           >

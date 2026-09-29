@@ -70,7 +70,7 @@ export default function PurchaseOverview() {
       <BreadCrumbs breadcrumbs={breadcrumbs} />
       <div className="mt-5 overflow-x-auto">
         <div
-          className="relative z-[11] mb-5 block min-w-[250px] text-center text-sm font-medium lg:hidden"
+          className="relative z-11 mb-5 block min-w-62.5 text-center text-sm font-medium lg:hidden"
           onClick={(e) => {
             e.stopPropagation()
             setIsOpen(!isOpen)
@@ -80,7 +80,7 @@ export default function PurchaseOverview() {
             {tabs.find((tab) => tab.key === activeTabKey)?.label}
           </div>
           {isOpen && (
-            <div className="absolute top-[100%] left-0 mt-1 w-full border bg-white shadow-md">
+            <div className="absolute top-full left-0 mt-1 w-full border bg-white shadow-md">
               {tabsHTML}
             </div>
           )}

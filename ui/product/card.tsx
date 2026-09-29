@@ -26,11 +26,11 @@ export default function ProductCard({
       onMouseLeave={() => setCurrentImageIndex(0)}
     >
       {saleOff > 0 && (
-        <div className="absolute top-5 -left-2 z-[1] h-7 bg-red-600 px-[15px] py-[6px] text-xs font-semibold whitespace-nowrap text-white before:absolute before:right-auto before:-bottom-2 before:left-0 before:border-x-4 before:border-y-4 before:border-red-700 before:border-b-transparent before:border-l-transparent after:absolute after:top-0 after:-right-2 after:left-auto after:h-7 after:border-x-8 after:border-y-[14px] after:border-red-600 after:border-r-transparent">
+        <div className="absolute top-5 -left-2 z-1 h-7 bg-red-600 px-3.75 py-1.5 text-xs font-semibold whitespace-nowrap text-white before:absolute before:right-auto before:-bottom-2 before:left-0 before:border-x-4 before:border-y-4 before:border-red-700 before:border-b-transparent before:border-l-transparent after:absolute after:top-0 after:-right-2 after:left-auto after:h-7 after:border-x-8 after:border-y-14 after:border-red-600 after:border-r-transparent">
           {saleOff}% OFF
         </div>
       )}
-      <div className="flex h-[22.5rem] items-center justify-center overflow-hidden">
+      <div className="flex h-90 items-center justify-center overflow-hidden">
         <Image
           src={images[currentImageIndex]}
           alt={name}
