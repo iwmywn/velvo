@@ -20,7 +20,7 @@ const ActionButton = ({
   isDeleting: boolean
 }) => (
   <Button
-    className="gap-2 px-4 text-red-500 before:border-red-500 before:bg-white sm:max-w-[100px] sm:flex-1 sm:px-0"
+    className="gap-2 px-4 text-red-500 before:border-red-500 before:bg-white sm:max-w-25 sm:flex-1 sm:px-0"
     onClick={handleDeleteFromCart}
     disabled={isDeleting}
   >
@@ -124,7 +124,7 @@ export default function ProductRow({
       </div>
 
       <div className="flex items-center justify-between sm:justify-center">
-        <div className="flex w-full max-w-[100px] items-center border">
+        <div className="flex w-full max-w-25 items-center border">
           <button
             className="flex flex-1 items-center justify-center border-r py-2 transition-all duration-300 hover:bg-slate-100"
             onClick={handleRemoveFromCart}

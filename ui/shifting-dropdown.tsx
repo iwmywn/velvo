@@ -166,7 +166,7 @@ const CategoryContent = ({
       style={{
         left: `${calculateLeft()}px`,
       }}
-      className="absolute top-[calc(100%_+_16px)] z-10 max-w-max rounded-lg border bg-white px-6 py-4"
+      className="absolute top-[calc(100%+16px)] z-10 max-w-max rounded-lg border bg-white px-6 py-4"
     >
       <Bridge />
       <Nub />

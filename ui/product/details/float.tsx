@@ -55,7 +55,7 @@ export default function ProductFloat({
       >
         <div className="mx-8 flex w-full items-center justify-between gap-x-5 md:mx-20">
           <div className="flex min-w-0 items-center gap-x-2 sm:gap-x-4">
-            <span className="flex h-[70px] justify-center">
+            <span className="flex h-17.5 justify-center">
               <Image
                 src={src}
                 alt={alt}

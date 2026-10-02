@@ -15,7 +15,7 @@ export default function AccountMenu() {
   return (
     <div className="relative" onMouseLeave={() => setIsOpen(false)}>
       <div
-        className="relative flex h-[22px] w-[22px] cursor-pointer items-center justify-center md:h-6 md:w-6"
+        className="relative flex h-5.5 w-5.5 cursor-pointer items-center justify-center md:h-6 md:w-6"
         onMouseEnter={() => setIsOpen(true)}
         onClick={() => setIsOpen(true)}
       >
@@ -36,7 +36,7 @@ export default function AccountMenu() {
       <AnimatePresence>
         {isOpen && userId && (
           <motion.div
-            className="absolute top-[calc(100%_+_16px)] bg-white text-sm"
+            className="absolute top-[calc(100%+16px)] bg-white text-sm"
             initial={{ opacity: 0, y: -20, x: "-50%" }}
             animate={{
               opacity: 1,
@@ -48,7 +48,7 @@ export default function AccountMenu() {
             <div className="absolute -top-4 right-0 left-0 h-4" />
             <span className="absolute top-0 left-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rotate-45 rounded-tl border border-r-transparent border-b-transparent bg-white" />
             <div className="rounded-md border bg-white">
-              <div className="relative z-[11] flex flex-col">
+              <div className="relative z-11 flex flex-col">
                 <Link
                   href="/account"
                   className="px-4 py-2 text-nowrap hover:bg-slate-100"

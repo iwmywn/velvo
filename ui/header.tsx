@@ -38,7 +38,7 @@ export default function Header() {
         className="space-right fixed top-0 right-0 left-0 z-20 flex justify-center border-b bg-white/80 backdrop-blur"
       >
         <div className="mx-6 flex w-full items-center justify-between pt-4 pb-3 md:mx-16 md:pt-7 md:pb-4">
-          <div className="hidden max-w-[27rem] flex-1 gap-2 lg:flex lg:items-center">
+          <div className="hidden max-w-108 flex-1 gap-2 lg:flex lg:items-center">
             <CategoryDropDown />
           </div>
           <Link
@@ -55,7 +55,7 @@ export default function Header() {
               loading="eager"
             />
           </Link>
-          <div className="flex items-center justify-end gap-5 text-base lg:max-w-[27rem] lg:flex-1 lg:gap-10">
+          <div className="flex items-center justify-end gap-5 text-base lg:max-w-108 lg:flex-1 lg:gap-10">
             <CiSearch
               className="cursor-pointer text-[22px] md:text-2xl"
               onClick={() => setState("isSearchOpen", true)}

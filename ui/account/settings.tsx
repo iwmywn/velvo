@@ -41,7 +41,7 @@ export default function AccountSettings() {
       {!!isOpen && (
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
-            className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
+            className={`mx-6 w-full max-w-120 overflow-y-auto rounded-lg bg-white p-8 text-sm ${
               isAnimating ? "animate-zoom-out" : "animate-zoom-in"
             }`}
             onMouseDown={(e) => e.stopPropagation()}
@@ -66,9 +66,9 @@ export default function AccountSettings() {
       />
       <div className="mt-5 flex min-h-screen flex-col gap-y-2 text-sm md:gap-y-10">
         <Row>
-          <span className="flex-[2]">Change your password.</span>
+          <span className="flex-2">Change your password.</span>
           <Button
-            className="flex-shrink-0 md:w-56"
+            className="shrink-0 md:w-56"
             onClick={() => setIsOpen("change-password")}
           >
             Change Password
@@ -76,9 +76,9 @@ export default function AccountSettings() {
         </Row>
 
         <Row>
-          <span className="flex-[2]">Change your email.</span>
+          <span className="flex-2">Change your email.</span>
           <Button
-            className="flex-shrink-0 md:w-56"
+            className="shrink-0 md:w-56"
             onClick={() => setIsOpen("change-email")}
           >
             Change Email
@@ -91,7 +91,7 @@ export default function AccountSettings() {
             <p className="text-red-600">You can not undo this action!</p>
           </div>
           <Button
-            className="flex-shrink-0 md:w-56"
+            className="shrink-0 md:w-56"
             onClick={() => setIsOpen("delete-account")}
           >
             Delete Account

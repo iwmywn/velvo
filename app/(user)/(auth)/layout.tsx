@@ -5,7 +5,7 @@ export default function AuthLayout({
 }>) {
   return (
     <div className="flex min-h-screen justify-center">
-      <div className="flex w-full max-w-[30rem] flex-col items-center pt-5 text-sm">
+      <div className="flex w-full max-w-120 flex-col items-center pt-5 text-sm">
         {children}
       </div>
     </div>

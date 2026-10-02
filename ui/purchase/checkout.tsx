@@ -145,7 +145,7 @@ export default function Checkout({
   return (
     <>
       <Button
-        className="sm:max-w-[100px] sm:flex-1 sm:px-0"
+        className="sm:max-w-25 sm:flex-1 sm:px-0"
         onClick={() => setState("isCheckoutOpen", true)}
       >
         Checkout
@@ -160,7 +160,7 @@ export default function Checkout({
       {state.isCheckoutOpen && (
         <Backdrop isAnimating={isAnimating} onMouseDown={handleClose}>
           <div
-            className={`mx-6 w-full max-w-[30rem] overflow-y-auto rounded-lg bg-white p-8 text-sm ${
+            className={`mx-6 w-full max-w-120 overflow-y-auto rounded-lg bg-white p-8 text-sm ${
               isAnimating ? "animate-zoom-out" : "animate-zoom-in"
             }`}
             onMouseDown={(e) => e.stopPropagation()}
